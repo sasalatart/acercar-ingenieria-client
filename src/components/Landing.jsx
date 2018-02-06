@@ -7,12 +7,18 @@ class Landing extends Component {
   }
 
   render() {
-    return <h1>Landing</h1>;
+    return (
+      <div>
+        <h1>Landing</h1>
+        <button onClick={this.props.goToMajors}>Go to Majors</button>
+      </div>
+    );
   }
 }
 
 Landing.propTypes = {
   loadPinned: PropTypes.func.isRequired,
+  goToMajors: PropTypes.func.isRequired,
 };
 
 export default Landing;
