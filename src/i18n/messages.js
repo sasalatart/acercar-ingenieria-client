@@ -1,10 +1,18 @@
 export default {
   'en-US': {
-    'routing.landing': 'Go to the landing page',
-    'routing.majors': 'Go to Majors',
+    'routing.landing': 'Home',
+    'routing.signIn': 'Log In',
+    'routing.signUp': 'Sign Up',
+    'routing.articles': 'Articles',
+    'routing.questions': 'Frequently Asked Questions',
+    'routing.aboutUs': 'About Us',
   },
   'es-ES': {
-    'routing.landing': 'Ir a la página principal',
-    'routing.majors': 'Ir a Majors',
+    'routing.landing': 'Inicio',
+    'routing.signIn': 'Ingresar',
+    'routing.signUp': 'Crear cuenta',
+    'routing.articles': 'Artículos',
+    'routing.questions': 'Preguntas frecuentes',
+    'routing.aboutUs': 'Sobre nosotros',
   },
 };

@@ -12,6 +12,10 @@
   "env": {
     "jest/globals": true
   },
+  "rules": {
+    "strict": 0,
+    "react/no-typos": 0
+  },
   "globals": {
     "CustomEvent": true,
     "document": true

@@ -9,6 +9,7 @@
     "immutable": "^3.8.2",
     "normalizr": "^3.2.4",
     "prop-types": "^15.6.0",
+    "radium": "^0.21.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-intl": "^2.4.0",
