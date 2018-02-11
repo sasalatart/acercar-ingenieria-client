@@ -1,8 +1,11 @@
 import { Map } from 'immutable';
 import { denormalize } from 'normalizr';
 import { createSelector } from 'reselect';
+import { notification } from 'antd';
 import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
+import { goToLanding } from '../../routes';
+import messages from '../../i18n/messages';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
@@ -13,6 +16,7 @@ export const TYPES = {
   SET_TOKENS: 'sessions/SET_TOKENS',
   SIGN_IN: 'fetch::sessions/SIGN_IN',
   SIGN_UP: 'fetch::sessions/SIGN_UP',
+  CONFIRM_EMAIL: 'fetch::/sessions/CONFIRM_EMAIL',
   SIGN_OUT: 'fetch::sessions/SIGN_OUT',
 };
 
@@ -33,6 +37,43 @@ export function signIn(credentials) {
       url: '/auth/sign_in',
       data: credentials,
       responseSchema: usersSchema,
+    },
+  };
+}
+
+export function signUp(credentials, locale) {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.SIGN_UP,
+      payload: {
+        method: 'POST',
+        url: '/auth',
+        data: credentials,
+        onFulfilled: () => {
+          notification.info({
+            message: messages[locale]['auth.signUpOneMoreStep'],
+            description: messages[locale]['auth.signUpEmailSent'],
+            duration: 60,
+          });
+          dispatch(goToLanding());
+        },
+      },
+    });
+  };
+}
+
+export function confirmEmail(url, locale) {
+  return {
+    type: TYPES.CONFIRM_EMAIL,
+    payload: {
+      method: 'GET',
+      url,
+      onFulfilled: () => {
+        notification.success({
+          message: messages[locale]['auth.signUpEmailConfirmation'],
+          description: messages[locale]['auth.signUpEmailConfirmed'],
+        });
+      },
     },
   };
 }

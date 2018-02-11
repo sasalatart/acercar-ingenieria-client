@@ -10,6 +10,10 @@ const ROUTES = {
   ABOUT_US: '/about-us',
 };
 
+export function goToLanding() {
+  return push(ROUTES.LANDING);
+}
+
 export function goToSignIn() {
   return push(ROUTES.SIGN_IN);
 }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
 import ROUTES from '../../routes';
-import SignInForm from '../../containers/SignIn/Form';
+import SignUpForm from '../../containers/SignUp/Form';
 import { themeStyles } from '../../theme';
 
 const styles = {
@@ -14,23 +14,18 @@ const styles = {
   },
 };
 
-function SignIn({ intl: { formatMessage: t } }) {
+function SignUp({ intl: { formatMessage: t } }) {
   return (
     <div>
-      <h1 style={styles.title}>{t({ id: 'routing.signIn' })}</h1>
+      <h1 style={styles.title}>{t({ id: 'routing.signUp' })}</h1>
 
       <Row type="flex" justify="center">
         <Col sm={24} lg={12} xl={10}>
-          <SignInForm />
+          <SignUpForm />
 
           <p style={styles.extra}>
-            <Link to={ROUTES.SIGN_UP} href={ROUTES.SIGN_UP}>
-              {t({ id: 'auth.orSignUp' })}
-            </Link>
-          </p>
-          <p style={styles.extra}>
-            <Link to={ROUTES.SIGN_UP} href={ROUTES.SIGN_UP}>
-              {t({ id: 'auth.forgotPassword' })}
+            <Link to={ROUTES.SIGN_IN} href={ROUTES.SIGN_IN}>
+              {t({ id: 'auth.orSignIn' })}
             </Link>
           </p>
         </Col>
@@ -39,8 +34,8 @@ function SignIn({ intl: { formatMessage: t } }) {
   );
 }
 
-SignIn.propTypes = {
+SignUp.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(SignIn);
+export default injectIntl(SignUp);

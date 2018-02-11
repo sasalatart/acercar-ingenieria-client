@@ -11,6 +11,7 @@ import IntlProvider from './containers/IntlProvider';
 import Landing from './containers/Landing';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
+import EmailConfirmation from './containers/SignUp/EmailConfirmation';
 import Majors from './components/Majors';
 import Articles from './components/Articles';
 import Questions from './components/Questions';
@@ -38,6 +39,7 @@ export default function App() {
                 <Route exact path="/articles" component={Articles} />
                 <Route exact path="/questions" component={Questions} />
                 <Route exact path="/about-us" component={AboutUs} />
+                <Route exact path="/auth/confirmation" component={EmailConfirmation} />
               </Layout>
             </ConnectedRouter>
           </IntlProvider>
