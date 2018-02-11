@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Header from './Header';
+import Header from '../../containers/Layout/Header';
 import Footer from './Footer';
 import { colors, measures } from '../../theme';
 

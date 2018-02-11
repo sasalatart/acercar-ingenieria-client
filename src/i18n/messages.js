@@ -1,11 +1,18 @@
 export default {
   'en-US': {
     'routing.landing': 'Home',
-    'routing.signIn': 'Log In',
+    'routing.signIn': 'Sign In',
     'routing.signUp': 'Sign Up',
     'routing.articles': 'Articles',
     'routing.questions': 'Frequently Asked Questions',
     'routing.aboutUs': 'About Us',
+    'forms.required': 'Required',
+    'forms.pucEmail': 'Must be a @uc/@caiuc/@ing.puc email',
+    'forms.minLength': 'Must be at least {length} characters long',
+    'auth.orSignUp': 'Or Sign Up!',
+    'auth.forgotPassword': 'Forgot your password?',
+    'auth.signOut': 'Sign Out',
+    'forms.password': 'Password',
   },
   'es-ES': {
     'routing.landing': 'Inicio',
@@ -14,5 +21,12 @@ export default {
     'routing.articles': 'Artículos',
     'routing.questions': 'Preguntas frecuentes',
     'routing.aboutUs': 'Sobre nosotros',
+    'forms.required': 'Requerido',
+    'forms.pucEmail': 'Debe ser un email @uc/@caiuc/@ing.puc',
+    'forms.minLength': 'Debe tener al menos {length} caracteres',
+    'auth.orSignUp': '¡O crea una cuenta!',
+    'auth.forgotPassword': '¿Olvidaste tu contraseña?',
+    'auth.signOut': 'Cerrar Sesión',
+    'forms.password': 'Contraseña',
   },
 };

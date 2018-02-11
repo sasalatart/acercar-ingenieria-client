@@ -1,7 +1,9 @@
 import { Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/lib/constants';
+import mapValues from 'lodash/mapValues';
 
 const INITIAL_STATE = new Map({
+  users: new Map({}),
   announcements: new Map({}),
 });
 
@@ -11,10 +13,10 @@ export default function entitiesReducer(state = INITIAL_STATE, action) {
   }
 
   const { entities } = action.payload;
-  return Object.keys(entities).reduce(
-    (newState, entityName) => newState.mergeIn([entityName], entities[entityName]),
-    state,
-  );
+  return state.merge(mapValues(
+    entities,
+    (collection, collectionName) => state.get(collectionName).merge(new Map(collection)),
+  ));
 }
 
 export const getEntities = state => state.entities;

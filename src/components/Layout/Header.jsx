@@ -1,11 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { injectIntl, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import Radium from 'radium';
 import { Button } from 'antd';
 import ROUTES from '../../routes';
 import LocaleSelect from '../../containers/LocaleSelect';
 import HeaderLink from './HeaderLink';
+import { userShape } from '../../shapes';
 import { colors, measures } from '../../theme';
 import logo from '../../images/logo.png';
 
@@ -51,7 +53,7 @@ const styles = {
   },
 };
 
-function renderUpperHeader(intl) {
+function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl) {
   return (
     <div style={styles.upperHeader}>
       <Link to={ROUTES.LANDING} href={ROUTES.LANDING} style={styles.innerUpperHeader}>
@@ -62,16 +64,23 @@ function renderUpperHeader(intl) {
         </div>
       </Link>
       <div style={styles.innerUpperHeader}>
-        <Link to={ROUTES.SIGN_IN} href={ROUTES.SIGN_IN}>
-          <Button type="primary" size="large" icon="login" style={styles.button}>
-            {intl.formatMessage({ id: 'routing.signIn' })}
-          </Button>
-        </Link>
-        <Link to={ROUTES.SIGN_UP} href={ROUTES.SIGN_UP}>
-          <Button size="large" icon="rocket" style={styles.button} ghost>
-            {intl.formatMessage({ id: 'routing.signUp' })}
-          </Button>
-        </Link>
+        {currentUser
+          ? (
+            <Button type="danger" icon="logout" style={styles.button} onClick={signOut}>
+              {intl.formatMessage({ id: 'auth.signOut' })}
+            </Button>
+          )
+          : (
+            <div>
+              <Button type="primary" icon="login" style={styles.button} onClick={goToSignIn}>
+                {intl.formatMessage({ id: 'routing.signIn' })}
+              </Button>
+              <Button icon="rocket" style={styles.button} onClick={goToSignUp} ghost>
+                {intl.formatMessage({ id: 'routing.signUp' })}
+              </Button>
+            </div>
+          )
+        }
         <LocaleSelect style={styles.localeSelect} />
       </div>
     </div>
@@ -105,17 +114,27 @@ function renderLowerHeader(intl) {
   );
 }
 
-function Header({ intl }) {
+function Header({
+  currentUser, goToSignIn, goToSignUp, signOut, intl,
+}) {
   return (
     <div>
-      {renderUpperHeader(intl)}
+      {renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl)}
       {renderLowerHeader(intl)}
     </div>
   );
 }
 
 Header.propTypes = {
+  currentUser: userShape,
+  goToSignIn: PropTypes.func.isRequired,
+  goToSignUp: PropTypes.func.isRequired,
+  signOut: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(Radium(Header));
+Header.defaultProps = {
+  currentUser: undefined,
+};
+
+export default Radium(Header);

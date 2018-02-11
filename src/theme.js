@@ -3,10 +3,19 @@ export const colors = {
   primaryDark: '#40A9FF',
   secondaryLight: '#EEEEEE',
   primaryTextLight: 'white',
+  fieldPrefix: 'rgba(0, 0, 0, .25)',
 };
 
 export const measures = {
   paddingHorizontal: '75px',
+};
+
+export const themeStyles = {
+  title: {
+    fontSize: '3em',
+    textAlign: 'center',
+    marginBottom: '25px',
+  },
 };
 
 export const breakpoints = {

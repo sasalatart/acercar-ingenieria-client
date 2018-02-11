@@ -7,6 +7,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import root from './ducks';
+import fetchMiddleWare from './middlewares/fetch';
 
 const persistConfig = {
   transforms: [immutableTransform()],
@@ -20,17 +21,26 @@ export const history = createHistory();
 
 const middleware = [
   thunkMiddleware,
-  promiseMiddleware(),
   routerMiddleware(history),
+  fetchMiddleWare,
+  promiseMiddleware(),
 ];
 
+let store;
+let persistor;
 export default () => {
-  const store = createStore(
-    persistedReducer,
-    // eslint-disable-next-line no-underscore-dangle, no-undef
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-    applyMiddleware(...middleware),
-  );
-  const persistor = persistStore(store);
+  if (!store) {
+    store = createStore(
+      persistedReducer,
+      // eslint-disable-next-line no-underscore-dangle, no-undef
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+      applyMiddleware(...middleware),
+    );
+  }
+
+  if (!persistor) {
+    persistor = persistStore(store);
+  }
+
   return { store, persistor };
 };
