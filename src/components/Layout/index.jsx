@@ -13,8 +13,9 @@ const styles = {
   },
   body: {
     flex: 1,
-    paddingLeft: measures.paddingHorizontal,
-    paddingRight: measures.paddingHorizontal,
+    position: 'relative',
+    marginLeft: measures.paddingHorizontal,
+    marginRight: measures.paddingHorizontal,
   },
 };
 

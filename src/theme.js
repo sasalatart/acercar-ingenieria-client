@@ -1,7 +1,7 @@
 export const colors = {
   primaryLight: '#85C8FF',
   primaryDark: '#40A9FF',
-  secondaryLight: '#EEEEEE',
+  secondaryLight: '#FDFDFD',
   primaryTextLight: 'white',
   fieldPrefix: 'rgba(0, 0, 0, .25)',
 };
@@ -14,6 +14,12 @@ export const themeStyles = {
   title: {
     fontSize: '3em',
     textAlign: 'center',
+    marginBottom: '25px',
+  },
+  subTitle: {
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: '-25px',
     marginBottom: '25px',
   },
 };

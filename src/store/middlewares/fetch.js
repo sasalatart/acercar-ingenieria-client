@@ -14,11 +14,10 @@ const fetchMiddleware = store => next => (action) => {
     return next(action);
   }
 
+  const tokens = getTokens(store.getState());
+
   const params = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...getTokens(store.getState()),
-    },
+    headers: { 'Content-Type': 'application/json', ...tokens },
     ...humps.decamelizeKeys(pick(action.payload, REQUEST_KEYS)),
   };
 
@@ -26,7 +25,8 @@ const fetchMiddleware = store => next => (action) => {
     type: action.type,
     payload: axios(params)
       .then(({ data, headers }) => {
-        if (headers['access-token']) {
+        const newAccessToken = headers['access-token'];
+        if (newAccessToken && newAccessToken !== tokens['access-token']) {
           const newTokens = pick(headers, TOKEN_HEADERS);
           store.dispatch(setTokens(newTokens));
         }

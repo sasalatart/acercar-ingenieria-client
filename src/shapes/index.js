@@ -1,9 +1,16 @@
 import PropTypes from 'prop-types';
 
-export const avatarShape = PropTypes.shape({
+export const imageShape = PropTypes.shape({
   thumb: PropTypes.string,
   medium: PropTypes.string,
   large: PropTypes.string,
+});
+
+export const majorSummaryShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  logo: imageShape,
 });
 
 export const userShape = PropTypes.shape({
@@ -14,6 +21,9 @@ export const userShape = PropTypes.shape({
   generation: PropTypes.number.isRequired,
   bio: PropTypes.string,
   active: PropTypes.bool.isRequired,
-  avatar: avatarShape,
+  avatar: imageShape,
+  admin: PropTypes.bool,
+  majorsOfInterest: PropTypes.arrayOf(majorSummaryShape),
+  adminOfMajors: PropTypes.arrayOf(majorSummaryShape),
   createdAt: PropTypes.string.isRequired,
 });

@@ -5,6 +5,7 @@ import { intlShape } from 'react-intl';
 import Radium from 'radium';
 import { Button } from 'antd';
 import ROUTES from '../../routes';
+import UserAvatar from '../Profile/Avatar';
 import LocaleSelect from '../../containers/LocaleSelect';
 import HeaderLink from './HeaderLink';
 import { userShape } from '../../shapes';
@@ -66,9 +67,14 @@ function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl) {
       <div style={styles.innerUpperHeader}>
         {currentUser
           ? (
-            <Button type="danger" icon="logout" style={styles.button} onClick={signOut}>
-              {intl.formatMessage({ id: 'auth.signOut' })}
-            </Button>
+            <div>
+              <Link to={ROUTES.USER(currentUser.id)} href={ROUTES.USER(currentUser.id)}>
+                <UserAvatar user={currentUser} style={styles.button} />
+              </Link>
+              <Button type="danger" icon="logout" style={styles.button} onClick={signOut}>
+                {intl.formatMessage({ id: 'auth.signOut' })}
+              </Button>
+            </div>
           )
           : (
             <div>
