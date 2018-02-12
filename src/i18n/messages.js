@@ -1,74 +1,17 @@
-export default {
-  'en-US': {
-    'routing.landing': 'Home',
-    'routing.signIn': 'Sign In',
-    'routing.signUp': 'Sign Up',
-    'routing.articles': 'Articles',
-    'routing.questions': 'Frequently Asked Questions',
-    'routing.aboutUs': 'About Us',
-    'forms.required': 'Required',
-    'forms.pucEmail': 'Must be a @uc/@caiuc/@ing.puc email',
-    'forms.minLength': 'Must be at least {length} characters long',
-    'forms.maxLength': 'Must be at most {length} characters long',
-    'forms.isBetween': 'Must be between {min} and {max}',
-    'forms.isEqualTo': 'Must be equal to {target}',
-    'auth.orSignUp': 'Don\'t have an account?',
-    'auth.orSignIn': 'Already have an account?',
-    'auth.forgotPassword': 'Forgot your password?',
-    'auth.signOut': 'Sign Out',
-    'auth.signUpOneMoreStep': 'Just one more step!',
-    'auth.signUpEmailSent': 'A confirmation email has been sent to you. Once you confirm this email, you will be able to sign in.',
-    'auth.signUpEmailConfirmation': 'email confirmation success.',
-    'auth.signUpEmailConfirmed': 'Your email has been confirmed. You can now sign in to the platform.',
-    'forms.password': 'Password',
-    'forms.passwordConfirmation': 'Password confirmation',
-    'forms.firstName': 'First name',
-    'forms.lastName': 'Last name',
-    'forms.generation': 'Generation',
-    'majors.disciplinary': 'Disciplinary',
-    'majors.interdisciplinary': 'Interdisciplinary',
-    'admin.ofPlatform': 'Administrator of the platform',
-    'admin.ofMajor': 'Administrator of the major {major}',
-    'roles.student': 'Student',
-    'profile.generation': 'Generation {year}',
-    'profile.majorsOfInterest': 'Majors of interest',
-    'profile.joined': 'member of the platform since',
-    'profile.noMajorsOfInterest': 'No majors of interest',
-  },
-  'es-ES': {
-    'routing.landing': 'Inicio',
-    'routing.signIn': 'Ingresar',
-    'routing.signUp': 'Crear cuenta',
-    'routing.articles': 'Artículos',
-    'routing.questions': 'Preguntas frecuentes',
-    'routing.aboutUs': 'Sobre nosotros',
-    'forms.required': 'Requerido',
-    'forms.pucEmail': 'Debe ser un email @uc/@caiuc/@ing.puc',
-    'forms.minLength': 'Debe tener al menos {length} caracteres',
-    'forms.maxLength': 'Debe tener como máximo {length} caracteres',
-    'forms.isBetween': 'Debe estar entre {min} y {max}',
-    'forms.isEqualTo': 'Debe ser igual a {target}',
-    'auth.orSignUp': '¿Aún no tienes una cuenta?',
-    'auth.orSignIn': '¿Ya tienes una cuenta?',
-    'auth.forgotPassword': '¿Olvidaste tu contraseña?',
-    'auth.signOut': 'Cerrar Sesión',
-    'auth.signUpOneMoreStep': '¡Sólo un paso más!',
-    'auth.signUpEmailSent': 'Un email de confirmación fue enviado a tu correo electrónico. Una vez validada tu dirección, podrás ingresar a la plataforma con tu cuenta.',
-    'auth.signUpEmailConfirmation': 'Confirmación de dirección de correo existosa.',
-    'auth.signUpEmailConfirmed': 'Tu dirección de correo ha sido confirmada. Ahora puedes ingresar a la plataforma.',
-    'forms.password': 'Contraseña',
-    'forms.passwordConfirmation': 'Confirmación de contraseña',
-    'forms.firstName': 'Nombre(s)',
-    'forms.lastName': 'Apellido(s)',
-    'forms.generation': 'Generación',
-    'majors.disciplinary': 'Disciplinario',
-    'majors.interdisciplinary': 'Interdisciplinario',
-    'admin.ofPlatform': 'Administración de la plataforma',
-    'admin.ofMajor': 'Administración del major de {major}',
-    'roles.student': 'Estudiante',
-    'profile.generation': 'Generación {year}',
-    'profile.majorsOfInterest': 'Majors de interés',
-    'profile.joined': 'miembro de la plataforma desde',
-    'profile.noMajorsOfInterest': 'Sin majors de interés',
-  },
-};
+import routing from './routing';
+import forms from './forms';
+import auth from './auth';
+import profile from './profile';
+import majors from './majors';
+
+const enUS = 'en-US';
+const esES = 'es-ES';
+
+const messages = { [enUS]: {}, [esES]: {} };
+
+[routing, forms, auth, profile, majors].forEach((translations) => {
+  Object.assign(messages[enUS], translations[enUS]);
+  Object.assign(messages[esES], translations[esES]);
+});
+
+export default messages;

@@ -1,0 +1,28 @@
+export default {
+  'en-US': {
+    'forms.required': 'Required',
+    'forms.pucEmail': 'Must be a @uc/@caiuc/@ing.puc email',
+    'forms.minLength': 'Must be at least {length} characters long',
+    'forms.maxLength': 'Must be at most {length} characters long',
+    'forms.isBetween': 'Must be between {min} and {max}',
+    'forms.isEqualTo': 'Must be equal to {target}',
+    'forms.password': 'Password',
+    'forms.passwordConfirmation': 'Password confirmation',
+    'forms.firstName': 'First name',
+    'forms.lastName': 'Last name',
+    'forms.generation': 'Generation',
+  },
+  'es-ES': {
+    'forms.required': 'Requerido',
+    'forms.pucEmail': 'Debe ser un email @uc/@caiuc/@ing.puc',
+    'forms.minLength': 'Debe tener al menos {length} caracteres',
+    'forms.maxLength': 'Debe tener como máximo {length} caracteres',
+    'forms.isBetween': 'Debe estar entre {min} y {max}',
+    'forms.isEqualTo': 'Debe ser igual a {target}',
+    'forms.password': 'Contraseña',
+    'forms.passwordConfirmation': 'Confirmación de contraseña',
+    'forms.firstName': 'Nombre(s)',
+    'forms.lastName': 'Apellido(s)',
+    'forms.generation': 'Generación',
+  },
+};
