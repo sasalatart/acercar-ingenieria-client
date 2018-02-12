@@ -42,40 +42,38 @@ export function signIn(credentials) {
 }
 
 export function signUp(credentials, locale) {
-  return (dispatch) => {
+  return dispatch =>
     dispatch({
       type: TYPES.SIGN_UP,
       payload: {
         method: 'POST',
         url: '/auth',
         data: credentials,
-        onFulfilled: () => {
-          notification.info({
-            message: messages[locale]['auth.signUpOneMoreStep'],
-            description: messages[locale]['auth.signUpEmailSent'],
-            duration: 60,
-          });
-          dispatch(goToLanding());
-        },
       },
+    }).then(() => {
+      notification.info({
+        message: messages[locale]['auth.signUpOneMoreStep'],
+        description: messages[locale]['auth.signUpEmailSent'],
+        duration: 60,
+      });
+      dispatch(goToLanding());
     });
-  };
 }
 
 export function confirmEmail(url, locale) {
-  return {
-    type: TYPES.CONFIRM_EMAIL,
-    payload: {
-      method: 'GET',
-      url,
-      onFulfilled: () => {
-        notification.success({
-          message: messages[locale]['auth.signUpEmailConfirmation'],
-          description: messages[locale]['auth.signUpEmailConfirmed'],
-        });
+  return dispatch =>
+    dispatch({
+      type: TYPES.CONFIRM_EMAIL,
+      payload: {
+        method: 'GET',
+        url,
       },
-    },
-  };
+    }).then(() => {
+      notification.success({
+        message: messages[locale]['auth.signUpEmailConfirmation'],
+        description: messages[locale]['auth.signUpEmailConfirmed'],
+      });
+    });
 }
 
 export function signOut() {

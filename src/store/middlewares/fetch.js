@@ -31,10 +31,6 @@ const fetchMiddleware = store => next => (action) => {
           store.dispatch(setTokens(newTokens));
         }
 
-        if (action.payload.onFulfilled) {
-          action.payload.onFulfilled();
-        }
-
         const camelizedResponse = humps.camelizeKeys(data.data || data);
         return action.payload.responseSchema
           ? normalize(camelizedResponse, action.payload.responseSchema)
