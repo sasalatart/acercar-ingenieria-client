@@ -1,13 +1,55 @@
-import axios from 'axios';
 import humps from 'humps';
 import pick from 'lodash/pick';
 import get from 'lodash/get';
 import { normalize } from 'normalizr';
-import { notification } from 'antd';
-import { setTokens, getTokens } from '../ducks/sessions';
+import { getLocale } from '../ducks/i18n';
+import { signOut, setTokens, getTokens, getCurrentUserEntity } from '../ducks/sessions';
+import { displayNotification, NOTIFICATION_TYPES } from '../ducks/notifications';
+import messages from '../../i18n/messages';
 
+const REQUEST_KEYS = ['headers', 'method', 'url', 'body'];
 const TOKEN_HEADERS = ['access-token', 'token-type', 'client', 'expiry', 'uid'];
-const REQUEST_KEYS = ['headers', 'method', 'url', 'data'];
+
+function refreshTokens(response, store) {
+  const tokens = getTokens(store.getState());
+  const newExpiry = response.headers.get('expiry');
+  if (newExpiry && (!tokens.expiry || tokens.expiry < newExpiry)) {
+    const newTokens = {};
+    TOKEN_HEADERS.forEach((header) => { newTokens[header] = response.headers.get(header); });
+    store.dispatch(setTokens(newTokens));
+  }
+}
+
+async function parseResponse(body, responseSchema) {
+  const camelizedBody = humps.camelizeKeys(body.data || body);
+  return responseSchema ? normalize(camelizedBody, responseSchema) : camelizedBody;
+}
+
+async function parseError(status, body, store) {
+  const camelizedBody = humps.camelizeKeys(body);
+
+  const state = store.getState();
+  const locale = getLocale(state);
+  const loggedIn = !!getCurrentUserEntity(state);
+  const type = NOTIFICATION_TYPES.error;
+
+  let message;
+  let description;
+  if (status === 401 || status === 403) {
+    if (loggedIn) store.dispatch(signOut());
+    message = messages[locale]['errors.unauthorized'];
+    description = messages[locale]['errors.unauthorizedDescription'];
+  } else if (status >= 500) {
+    description = messages[locale]['errors.server'];
+  } else {
+    const { message: errorMessage, errors } = camelizedBody;
+    description = errorMessage || (errors.fullMessages || errors).join(', ');
+  }
+  message = message || 'Error';
+
+  store.dispatch(displayNotification({ message, description, type }));
+  return Promise.reject(message);
+}
 
 const fetchMiddleware = store => next => (action) => {
   if (!action.payload || !action.payload.method) {
@@ -15,37 +57,23 @@ const fetchMiddleware = store => next => (action) => {
   }
 
   const tokens = getTokens(store.getState());
-
   const params = {
     headers: { 'Content-Type': 'application/json', ...tokens },
     ...humps.decamelizeKeys(pick(action.payload, REQUEST_KEYS)),
   };
 
+  params.body = JSON.stringify(params.body);
+  const { url, ...rest } = params;
   return next({
     type: action.type,
-    payload: axios(params)
-      .then(({ data, headers }) => {
-        const newAccessToken = headers['access-token'];
-        if (newAccessToken && newAccessToken !== tokens['access-token']) {
-          const newTokens = pick(headers, TOKEN_HEADERS);
-          store.dispatch(setTokens(newTokens));
-        }
+    payload: window.fetch(url, rest)
+      .then(async (response) => {
+        refreshTokens(response, store);
+        const body = await response.json();
 
-        const camelizedResponse = humps.camelizeKeys(data.data || data);
-        return action.payload.responseSchema
-          ? normalize(camelizedResponse, action.payload.responseSchema)
-          : camelizedResponse;
-      })
-      .catch((error) => {
-        const camelizedErrors = humps.camelizeKeys(error);
-        const apiErrors = get(camelizedErrors.response, 'data.errors');
-        const description = (apiErrors.fullMessages || apiErrors).join(', ');
-
-        if (description) {
-          notification.error({ message: 'Error', description, duration: 20 });
-        }
-
-        return Promise.reject(error);
+        return response.status < 400
+          ? parseResponse(body, get(action.payload, 'responseSchema'))
+          : parseError(response.status, body, store);
       }),
   });
 };

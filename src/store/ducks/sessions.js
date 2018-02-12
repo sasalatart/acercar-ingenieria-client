@@ -1,10 +1,10 @@
 import { Map } from 'immutable';
 import { denormalize } from 'normalizr';
 import { createSelector } from 'reselect';
-import { notification } from 'antd';
 import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 import { goToLanding } from '../../routes';
+import { displayNotification } from '../ducks/notifications';
 import messages from '../../i18n/messages';
 
 const INITIAL_STATE = new Map({
@@ -35,7 +35,7 @@ export function signIn(credentials) {
     payload: {
       method: 'POST',
       url: '/auth/sign_in',
-      data: credentials,
+      body: credentials,
       responseSchema: usersSchema,
     },
   };
@@ -48,14 +48,14 @@ export function signUp(credentials, locale) {
       payload: {
         method: 'POST',
         url: '/auth',
-        data: credentials,
+        body: credentials,
       },
     }).then(() => {
-      notification.info({
+      dispatch(displayNotification({
         message: messages[locale]['auth.signUpOneMoreStep'],
         description: messages[locale]['auth.signUpEmailSent'],
         duration: 60,
-      });
+      }));
       dispatch(goToLanding());
     });
 }
@@ -69,10 +69,10 @@ export function confirmEmail(url, locale) {
         url,
       },
     }).then(() => {
-      notification.success({
+      dispatch(displayNotification({
         message: messages[locale]['auth.signUpEmailConfirmation'],
         description: messages[locale]['auth.signUpEmailConfirmed'],
-      });
+      }));
     });
 }
 

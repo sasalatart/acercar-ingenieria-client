@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "antd": "^3.2.0",
-    "axios": "^0.17.1",
     "history": "^4.7.2",
     "humps": "^2.0.1",
     "immutable": "^3.8.2",
+    "keymirror": "^0.1.1",
     "lodash": "^4.17.5",
     "normalizr": "^3.2.4",
     "prop-types": "^15.6.0",

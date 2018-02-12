@@ -8,6 +8,7 @@ import { routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 import root from './ducks';
 import fetchMiddleWare from './middlewares/fetch';
+import notificationsMiddleware from './middlewares/notifications';
 
 const persistConfig = {
   transforms: [immutableTransform()],
@@ -23,6 +24,7 @@ const middleware = [
   thunkMiddleware,
   routerMiddleware(history),
   fetchMiddleWare,
+  notificationsMiddleware,
   promiseMiddleware(),
 ];
 
