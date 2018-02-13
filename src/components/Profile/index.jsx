@@ -12,6 +12,10 @@ import { themeStyles } from '../../theme';
 const styles = {
   title: themeStyles.title,
   subtitle: themeStyles.subTitle,
+  cardWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   divider: {
     marginTop: '50px',
   },
@@ -62,7 +66,9 @@ class Profile extends Component {
     return (
       <Row type="flex" justify="center" gutter={8}>
         <Col md={6}>
-          <ProfileCard user={user} />
+          <div style={styles.cardWrapper}>
+            <ProfileCard user={user} />
+          </div>
         </Col>
         <Col md={18}>
           <h1 style={styles.title}>{user.firstName} {user.lastName}</h1>
