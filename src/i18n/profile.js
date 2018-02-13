@@ -1,5 +1,8 @@
 export default {
   'en-US': {
+    'profile.info': 'Profile',
+    'profile.notifications': 'Notifications',
+    'profile.edit': 'Edit',
     'admin.ofPlatform': 'Administrator of the platform',
     'admin.ofMajor': 'Administrator of the major {major}',
     'roles.student': 'Student',
@@ -9,6 +12,9 @@ export default {
     'profile.noMajorsOfInterest': 'No majors of interest',
   },
   'es-ES': {
+    'profile.info': 'Perfil',
+    'profile.notifications': 'Notificaciones',
+    'profile.edit': 'Editar',
     'admin.ofPlatform': 'Administración de la plataforma',
     'admin.ofMajor': 'Administración del major de {major}',
     'roles.student': 'Estudiante',

@@ -2,7 +2,7 @@ import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Avatar } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import { userShape } from '../../shapes';
+import { userShape } from '../../../shapes';
 
 function renderRole(role) {
   return (

@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Avatar } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import ROUTES from '../../routes';
-import { majorSummaryShape } from '../../shapes';
-import majorImage from '../../images/major.png';
+import ROUTES from '../../../routes';
+import { majorSummaryShape } from '../../../shapes';
+import majorImage from '../../../images/major.png';
 
 const styles = {
   noneOfInterest: {

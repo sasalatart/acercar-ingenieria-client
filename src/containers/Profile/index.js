@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { loadUser, getUserEntity } from '../../store/ducks/users';
+import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import Profile from '../../components/Profile';
 
 function mapStateToProps(state, ownProps) {
@@ -9,6 +10,7 @@ function mapStateToProps(state, ownProps) {
   return {
     userId: +params.userId,
     user: getUserEntity(state, params),
+    currentUser: getCurrentUserEntity(state),
   };
 }
 
