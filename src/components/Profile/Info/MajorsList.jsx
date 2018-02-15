@@ -20,7 +20,7 @@ function renderMajor(major, t) {
   return (
     <List.Item>
       <List.Item.Meta
-        avatar={<Avatar src={major.logo.thumb || majorImage} />}
+        avatar={<Avatar src={major.logo.thumb || majorImage} shape="square" />}
         title={<Link to={href} href={href}>{major.name}</Link>}
         description={t({ id: `majors.${major.category}` })}
       />
