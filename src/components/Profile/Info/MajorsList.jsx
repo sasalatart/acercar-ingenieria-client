@@ -5,7 +5,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { List, Avatar } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import ROUTES from '../../../routes';
-import { majorSummaryShape } from '../../../shapes';
+import { majorOfInterestShape } from '../../../shapes';
 import majorImage from '../../../images/major.png';
 
 const styles = {
@@ -28,15 +28,15 @@ function renderMajor(major, t) {
   );
 }
 
-function MajorsList({ majorSummaries, intl: { formatMessage: t } }) {
-  if (isEmpty(majorSummaries)) {
+function MajorsList({ majorsOfInterest, intl: { formatMessage: t } }) {
+  if (isEmpty(majorsOfInterest)) {
     return <h4 style={styles.noneOfInterest}>{t({ id: 'profile.noMajorsOfInterest' })}</h4>;
   }
 
   return (
     <List
       itemLayout="horizontal"
-      dataSource={majorSummaries}
+      dataSource={majorsOfInterest}
       renderItem={major => renderMajor(major, t)}
       bordered
     />
@@ -44,12 +44,12 @@ function MajorsList({ majorSummaries, intl: { formatMessage: t } }) {
 }
 
 MajorsList.propTypes = {
-  majorSummaries: PropTypes.arrayOf(majorSummaryShape),
+  majorsOfInterest: PropTypes.arrayOf(majorOfInterestShape),
   intl: intlShape.isRequired,
 };
 
 MajorsList.defaultProps = {
-  majorSummaries: [],
+  majorsOfInterest: [],
 };
 
 export default injectIntl(MajorsList);

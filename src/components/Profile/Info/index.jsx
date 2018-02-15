@@ -61,7 +61,7 @@ function ProfileInfo({ user, intl: { formatMessage: t } }) {
         <RolesList user={user} />
 
         <Divider style={styles.divider}>{t({ id: 'profile.majorsOfInterest' })}</Divider>
-        <MajorsList majorSummaries={user.majorsOfInterest} />
+        <MajorsList majorsOfInterest={user.majorsOfInterest} />
       </Col>
     </Row>
   );

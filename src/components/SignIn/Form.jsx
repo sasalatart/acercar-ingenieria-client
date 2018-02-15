@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
-import { Field } from 'redux-form/immutable';
+import { Field } from 'redux-form';
 import { Button, Icon } from 'antd';
 import { TextField } from '../Forms';
-import { required, pucEmail, minLength } from '../Forms/validators';
+import usersValidations from '../../validations/users';
 import { colors } from '../../theme';
 
 const styles = {
@@ -21,8 +21,6 @@ const fieldIcons = {
   password: <Icon type="lock" style={styles.fieldPrefix} />,
 };
 
-const MIN_LENGTH = 8;
-
 class SignInForm extends Component {
   static propTypes = {
     valid: PropTypes.bool.isRequired,
@@ -31,24 +29,26 @@ class SignInForm extends Component {
     intl: intlShape.isRequired,
   }
 
-  constructor(props) {
-    super(props);
-    this.setValidators();
+  componentWillMount() {
+    this.setValidators(this.props.intl.formatMessage);
   }
 
-  setValidators() {
-    const t = this.props.intl.formatMessage;
-    this.validators = {
-      required: required(t({ id: 'forms.required' })),
-      pucEmail: pucEmail(t({ id: 'forms.pucEmail' })),
-      minLength: minLength(t({ id: 'forms.minLength' }, { length: MIN_LENGTH }), MIN_LENGTH),
-    };
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.intl.locale !== this.props.intl.locale) {
+      this.setValidators(nextProps.intl.formatMessage);
+    }
+  }
+
+  setValidators(t) {
+    this.setState({ validators: usersValidations(t) });
   }
 
   render() {
     const {
       valid, submitting, handleSubmit, intl: { formatMessage: t },
     } = this.props;
+
+    const { validators } = this.state;
 
     return (
       <form onSubmit={handleSubmit}>
@@ -57,7 +57,7 @@ class SignInForm extends Component {
           component={TextField}
           placeholder="e-mail"
           prefix={fieldIcons.email}
-          validate={[this.validators.required, this.validators.pucEmail]}
+          validate={[validators.required, validators.pucEmail]}
         />
         <Field
           name="password"
@@ -65,7 +65,7 @@ class SignInForm extends Component {
           placeholder={t({ id: 'forms.password' })}
           prefix={fieldIcons.password}
           type="password"
-          validate={[this.validators.required, this.validators.minLength]}
+          validate={[validators.required, validators.minPasswordLength]}
         />
         <Button
           type="primary"

@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 import { goToLanding } from '../../routes';
-import { displayNotification } from '../ducks/notifications';
+import { displayNotification } from '../ducks/notifications';
 import messages from '../../i18n/messages';
 
 const INITIAL_STATE = new Map({

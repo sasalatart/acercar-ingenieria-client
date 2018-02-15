@@ -4,15 +4,28 @@ import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 
 const TYPES = {
-  LOAD_USER: 'fetch::users/LOAD_USER',
+  LOAD: 'fetch::users/LOAD',
+  UPDATE: 'fetch::users/UPDATE',
 };
 
 export function loadUser(userId) {
   return {
-    type: TYPES.LOAD_USER,
+    type: TYPES.LOAD,
     payload: {
       method: 'GET',
       url: `/users/${userId}`,
+      responseSchema: usersSchema,
+    },
+  };
+}
+
+export function update(userId, body) {
+  return {
+    type: TYPES.UPDATE,
+    payload: {
+      method: 'PUT',
+      url: `/users/${userId}`,
+      body,
       responseSchema: usersSchema,
     },
   };

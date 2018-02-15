@@ -3,13 +3,13 @@ export const required = message => value => (
 );
 
 export const minLength = (message, minValue) => value => (
-  value.length < minValue
+  value && value.length < minValue
     ? message
     : undefined
 );
 
 export const maxLength = (message, maxValue) => value => (
-  value.length > maxValue
+  value && value.length > maxValue
     ? message
     : undefined
 );

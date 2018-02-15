@@ -4,6 +4,8 @@ import { REHYDRATE } from 'redux-persist/lib/constants';
 const INITIAL_STATE = new Map({
   users: new Map({}),
   announcements: new Map({}),
+  majors: new Map({}),
+  majorsOfInterest: new Map({}),
   majorSummaries: new Map({}),
 });
 

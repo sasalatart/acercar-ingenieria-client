@@ -14,6 +14,7 @@ const persistConfig = {
   transforms: [immutableTransform()],
   key: 'root',
   storage,
+  blacklist: ['form'],
 };
 
 const persistedReducer = persistReducer(persistConfig, root);

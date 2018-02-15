@@ -1,17 +1,14 @@
 import { schema } from 'normalizr';
-import omit from 'lodash/omit';
+
+export const majorsSchema = new schema.Entity('majors');
 
 export const majorSummariesSchema = new schema.Entity('majorSummaries');
 
+export const majorsOfInterestSchema = new schema.Entity('majorsOfInterest');
+
 export const usersSchema = new schema.Entity('users', {
-  majorsOfInterest: [majorSummariesSchema],
+  majorsOfInterest: [majorsOfInterestSchema],
   adminOfMajors: [majorSummariesSchema],
-}, {
-  processStrategy: (value) => {
-    const newValue = omit(value, 'majors');
-    newValue.majorsOfInterest = value.majors;
-    return newValue;
-  },
 });
 
 export const announcementsSchema = new schema.Entity('announcements');

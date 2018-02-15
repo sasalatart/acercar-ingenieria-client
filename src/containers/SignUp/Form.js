@@ -1,4 +1,4 @@
-import { reduxForm } from 'redux-form/immutable';
+import { reduxForm } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import { signUp } from '../../store/ducks/sessions';
 import SignUpForm from '../../components/SignUp/Form';

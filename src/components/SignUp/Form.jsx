@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
-import { Field } from 'redux-form/immutable';
+import { Field } from 'redux-form';
 import { Button, Icon, Row, Col } from 'antd';
-import { TextField } from '../Forms';
-import {
-  required,
-  pucEmail,
-  minLength,
-  maxLength,
-  isBetween,
-  isEqualTo,
-} from '../Forms/validators';
+import { TextField, NumberField } from '../Forms';
+import usersValidations from '../../validations/users';
 import { colors } from '../../theme';
 
 const styles = {
   fieldPrefix: {
     color: colors.fieldPrefix,
+  },
+  generationInput: {
+    width: '100%',
   },
   submitButton: {
     width: '100%',
@@ -28,10 +24,6 @@ const fieldIcons = {
   password: <Icon type="lock" style={styles.fieldPrefix} />,
 };
 
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_NAME_LENGTH = 25;
-const MIN_GENERATION = 1904;
-const MAX_GENERATION = (new Date()).getFullYear();
 const GUTTER = 8;
 const COLUMN_LAYOUT = { sm: 24, lg: 12 };
 
@@ -44,38 +36,17 @@ class SignUpForm extends Component {
   }
 
   componentWillMount() {
-    this.setValidators();
+    this.setValidators(this.props.intl.formatMessage);
   }
 
-  setValidators() {
-    const t = this.props.intl.formatMessage;
-    this.setState({
-      validators: {
-        required: required(t({ id: 'forms.required' })),
-        pucEmail: pucEmail(t({ id: 'forms.pucEmail' })),
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.intl.locale !== this.props.intl.locale) {
+      this.setValidators(nextProps.intl.formatMessage);
+    }
+  }
 
-        minLength: minLength(
-          t({ id: 'forms.minLength' }, { length: MIN_PASSWORD_LENGTH }),
-          MIN_PASSWORD_LENGTH,
-        ),
-
-        maxLength: maxLength(
-          t({ id: 'forms.maxLength' }, { length: MAX_NAME_LENGTH }),
-          MAX_NAME_LENGTH,
-        ),
-
-        isBetween: isBetween(
-          t({ id: 'forms.isBetween' }, { min: MIN_GENERATION, max: MAX_GENERATION }),
-          MIN_GENERATION,
-          MAX_GENERATION,
-        ),
-
-        confirmsPassword: isEqualTo(
-          t({ id: 'forms.isEqualTo' }, { target: t({ id: 'forms.password' }) }),
-          'password',
-        ),
-      },
-    });
+  setValidators(t) {
+    this.setState({ validators: usersValidations(t) });
   }
 
   render() {
@@ -100,10 +71,10 @@ class SignUpForm extends Component {
           <Col {...COLUMN_LAYOUT}>
             <Field
               name="generation"
-              component={TextField}
+              component={NumberField}
               placeholder={t({ id: 'forms.generation' })}
-              type="number"
-              validate={[validators.required, validators.isBetween]}
+              validate={[validators.required, validators.isBetweenYears]}
+              style={styles.generationInput}
             />
           </Col>
         </Row>
@@ -113,7 +84,7 @@ class SignUpForm extends Component {
               name="firstName"
               component={TextField}
               placeholder={t({ id: 'forms.firstName' })}
-              validate={[validators.required, validators.maxLength]}
+              validate={[validators.required, validators.maxNameLength]}
             />
           </Col>
           <Col {...COLUMN_LAYOUT}>
@@ -121,7 +92,7 @@ class SignUpForm extends Component {
               name="lastName"
               component={TextField}
               placeholder={t({ id: 'forms.lastName' })}
-              validate={[validators.required, validators.maxLength]}
+              validate={[validators.required, validators.maxNameLength]}
             />
           </Col>
         </Row>
@@ -133,7 +104,7 @@ class SignUpForm extends Component {
               placeholder={t({ id: 'forms.password' })}
               prefix={fieldIcons.password}
               type="password"
-              validate={[validators.required, validators.minLength]}
+              validate={[validators.required, validators.minPasswordLength]}
             />
           </Col>
           <Col {...COLUMN_LAYOUT}>
@@ -143,7 +114,9 @@ class SignUpForm extends Component {
               placeholder={t({ id: 'forms.passwordConfirmation' })}
               prefix={fieldIcons.password}
               type="password"
-              validate={[validators.required, validators.minLength, validators.confirmsPassword]}
+              validate={[
+                validators.required, validators.minPasswordLength, validators.confirmsPassword,
+              ]}
             />
           </Col>
         </Row>

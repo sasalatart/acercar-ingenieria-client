@@ -6,6 +6,7 @@ export default {
     'routing.articles': 'Articles',
     'routing.questions': 'Frequently Asked Questions',
     'routing.aboutUs': 'About Us',
+    'routing.profileEdit': 'Edit Profile',
   },
   'es-ES': {
     'routing.landing': 'Inicio',
@@ -14,5 +15,6 @@ export default {
     'routing.articles': 'Artículos',
     'routing.questions': 'Preguntas frecuentes',
     'routing.aboutUs': 'Sobre nosotros',
+    'routing.profileEdit': 'Editar perfil',
   },
 };

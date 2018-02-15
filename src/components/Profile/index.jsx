@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Tabs, Icon } from 'antd';
 import { userShape } from '../../shapes';
-import Info from './Info';
+import ProfileInfo from './Info';
+import ProfileEdit from '../Profile/Edit';
 
 const { TabPane } = Tabs;
 
@@ -30,7 +31,7 @@ class Profile extends Component {
     } = this.props;
 
     if (userId !== currentUser.id) {
-      return <Info user={user} />;
+      return <ProfileInfo user={user} />;
     }
 
     const tabTitles = {
@@ -42,13 +43,13 @@ class Profile extends Component {
     return (
       <Tabs defaultActiveKey="1" size="large" tabPosition="left">
         <TabPane tab={tabTitles.info} key="1">
-          <Info user={currentUser} />
+          <ProfileInfo user={currentUser} />
         </TabPane>
         <TabPane tab={tabTitles.notifications} key="2">
           {t({ id: 'profile.notifications' })}
         </TabPane>
         <TabPane tab={tabTitles.edit} key="3">
-          {t({ id: 'profile.edit' })}
+          <ProfileEdit currentUser={currentUser} />
         </TabPane>
       </Tabs>
     );

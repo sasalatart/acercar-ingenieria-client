@@ -6,8 +6,29 @@ export const imageShape = PropTypes.shape({
   large: PropTypes.string,
 });
 
+export const majorShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  logo: imageShape,
+  shortDescription: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  videoUrlCode: PropTypes.string.isRequired,
+  commentsCount: PropTypes.number.isRequired,
+  createdAt: PropTypes.string.isRequired,
+});
+
 export const majorSummaryShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  logo: imageShape,
+});
+
+export const majorOfInterestShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  majorId: PropTypes.number.isRequired,
+  userId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   category: PropTypes.string.isRequired,
   logo: imageShape,
