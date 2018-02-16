@@ -4,7 +4,8 @@ import { intlShape } from 'react-intl';
 import { Tabs, Icon } from 'antd';
 import { userShape } from '../../shapes';
 import ProfileInfo from './Info';
-import ProfileEdit from '../Profile/Edit';
+import ProfileEdit from './Edit';
+import ChangePassword from './ChangePassword';
 
 const { TabPane } = Tabs;
 
@@ -38,6 +39,7 @@ class Profile extends Component {
       info: <span><Icon type="user" />{t({ id: 'profile.info' })}</span>,
       notifications: <span><Icon type="notification" />{t({ id: 'profile.notifications' })}</span>,
       edit: <span><Icon type="edit" />{t({ id: 'profile.edit' })}</span>,
+      changePassword: <span><Icon type="lock" />{t({ id: 'profile.changePassword' })}</span>,
     };
 
     return (
@@ -50,6 +52,9 @@ class Profile extends Component {
         </TabPane>
         <TabPane tab={tabTitles.edit} key="3">
           <ProfileEdit currentUser={currentUser} />
+        </TabPane>
+        <TabPane tab={tabTitles.changePassword} key="4">
+          <ChangePassword />
         </TabPane>
       </Tabs>
     );

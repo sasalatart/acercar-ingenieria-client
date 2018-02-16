@@ -7,6 +7,7 @@ export default {
     'routing.questions': 'Frequently Asked Questions',
     'routing.aboutUs': 'About Us',
     'routing.profileEdit': 'Edit Profile',
+    'routing.changePassword': 'Change Password',
   },
   'es-ES': {
     'routing.landing': 'Inicio',
@@ -16,5 +17,6 @@ export default {
     'routing.questions': 'Preguntas frecuentes',
     'routing.aboutUs': 'Sobre nosotros',
     'routing.profileEdit': 'Editar perfil',
+    'routing.changePassword': 'Cambiar contraseña',
   },
 };

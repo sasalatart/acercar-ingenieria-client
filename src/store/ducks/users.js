@@ -6,6 +6,7 @@ import { usersSchema } from '../../schemas';
 const TYPES = {
   LOAD: 'fetch::users/LOAD',
   UPDATE: 'fetch::users/UPDATE',
+  CHANGE_PASSWORD: 'fetch::users/CHANGE_PASSWORD',
 };
 
 export function loadUser(userId) {
@@ -27,6 +28,17 @@ export function update(userId, body) {
       url: `/users/${userId}`,
       body,
       responseSchema: usersSchema,
+    },
+  };
+}
+
+export function changePassword(body) {
+  return {
+    type: TYPES.CHANGE_PASSWORD,
+    payload: {
+      method: 'PUT',
+      url: '/auth/password',
+      body,
     },
   };
 }
