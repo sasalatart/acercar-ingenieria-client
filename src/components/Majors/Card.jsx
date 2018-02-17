@@ -14,12 +14,12 @@ const styles = {
 };
 
 function MajorCard({
-  name, category, logo, style, intl: { formatMessage: t },
+  name, category, logo, style, intl: { formatMessage: t }, ...rest
 }) {
   const cover = <img alt="major-logo" src={logo ? logo.medium : majorPlaceholder} />;
 
   return (
-    <Card cover={cover} style={{ ...styles.card, ...style }} hoverable>
+    <Card cover={cover} style={{ ...styles.card, ...style }} hoverable {...rest}>
       <Meta title={name} description={t({ id: `majors.${category}` })} />
     </Card>
   );

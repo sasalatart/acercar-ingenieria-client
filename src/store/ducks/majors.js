@@ -17,9 +17,28 @@ export function loadMajors() {
   };
 }
 
+export function loadMajor(majorId) {
+  return {
+    type: TYPES.LOAD,
+    payload: {
+      method: 'GET',
+      url: `/majors/${majorId}`,
+      responseSchema: majorsSchema,
+    },
+  };
+}
+
+export const getMajorId = (state, params) => params.majorId;
+
 export const getMajorEntities = createSelector(
   getEntities,
   entities => entities.get('majors'),
+);
+
+export const getMajorEntity = createSelector(
+  getMajorId,
+  getMajorEntities,
+  (majorId, majorEntities) => majorEntities.get(majorId),
 );
 
 function filterByCategory(majorEntities, categoryType) {

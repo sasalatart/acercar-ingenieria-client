@@ -25,24 +25,6 @@ const TAB_NAMES = keyMirror({
   disciplinaries: null, interdisciplinaries: null,
 });
 
-function renderMajors(majors) {
-  return (
-    <div style={styles.majorsList}>
-      {majors.map(({
-        id, name, category, logo,
-      }) => (
-        <MajorCard
-          key={id}
-          name={name}
-          category={category}
-          logo={logo}
-          style={styles.majorCard}
-        />
-      ))}
-    </div>
-  );
-}
-
 class Majors extends Component {
   static propTypes = {
     disciplinaryMajors: ImmutablePropTypes.listOf(majorShape).isRequired,
@@ -50,6 +32,7 @@ class Majors extends Component {
     location: locationShape.isRequired,
     loadMajors: PropTypes.func.isRequired,
     changeMajorsTab: PropTypes.func.isRequired,
+    goToMajor: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
@@ -67,6 +50,23 @@ class Majors extends Component {
     this.props.changeMajorsTab(key);
   }
 
+  renderMajors = majors => (
+    <div style={styles.majorsList}>
+      {majors.map(({
+        id, name, category, logo,
+      }) => (
+        <MajorCard
+          key={id}
+          name={name}
+          category={category}
+          logo={logo}
+          style={styles.majorCard}
+          onClick={() => this.props.goToMajor(id)}
+        />
+      ))}
+    </div>
+  )
+
   render() {
     const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
 
@@ -77,11 +77,11 @@ class Majors extends Component {
     return (
       <Tabs defaultActiveKey={this.getActiveTab()} size="large" tabPosition="left" onChange={this.handleTabChange}>
         <TabPane key={TAB_NAMES.disciplinaries} tab={t({ id: 'majors.disciplinaries' })}>
-          {renderMajors(disciplinaryMajors)}
+          {this.renderMajors(disciplinaryMajors)}
         </TabPane>
 
         <TabPane key={TAB_NAMES.interdisciplinaries} tab={t({ id: 'majors.interdisciplinaries' })}>
-          {renderMajors(interdisciplinaryMajors)}
+          {this.renderMajors(interdisciplinaryMajors)}
         </TabPane>
       </Tabs>
     );

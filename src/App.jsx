@@ -15,6 +15,7 @@ import SignUp from './components/SignUp';
 import EmailConfirmation from './containers/SignUp/EmailConfirmation';
 import Profile from './containers/Profile';
 import Majors from './containers/Majors';
+import Major from './containers/Major';
 import Articles from './components/Articles';
 import Questions from './components/Questions';
 import AboutUs from './components/AboutUs';
@@ -44,6 +45,7 @@ export default function App() {
                 <Route exact path="/profile" component={renderLoggedInRoute(Profile)} />
                 <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
                 <Route exact path="/majors" component={Majors} />
+                <Route exact path="/majors/:majorId" component={Major} />
                 <Route exact path="/articles" component={Articles} />
                 <Route exact path="/questions" component={Questions} />
                 <Route exact path="/about-us" component={AboutUs} />

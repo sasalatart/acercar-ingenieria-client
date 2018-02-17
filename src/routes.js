@@ -26,6 +26,10 @@ export function goToSignUp() {
   return push(ROUTES.SIGN_UP);
 }
 
+export function goToMajor(majorId) {
+  return push(ROUTES.MAJOR(majorId));
+}
+
 export function changeTab(uri, tab) {
   return replace(URI(uri).query({ tab }).toString());
 }
@@ -36,6 +40,16 @@ export function changeProfileTab(tab) {
 
 export function changeMajorsTab(tab) {
   return changeTab(ROUTES.MAJORS, tab);
+}
+
+export function changeMajorTab(majorId, tab) {
+  return changeTab(ROUTES.MAJOR(majorId), tab);
+}
+
+export function getActiveTab(search, tabNames, defaultTab) {
+  const urlSearchParams = new URLSearchParams(search);
+  const activeTab = urlSearchParams.get('tab');
+  return tabNames[activeTab] || defaultTab;
 }
 
 export default ROUTES;
