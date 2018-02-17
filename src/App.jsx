@@ -9,7 +9,7 @@ import configureStore, { history } from './store/configure-store';
 import LoggedOutRoute from './containers/Routes/LoggedOut';
 import LoggedInRoute from './containers/Routes/LoggedIn';
 import IntlProvider from './containers/IntlProvider';
-import Landing from './containers/Landing';
+import PinnedAnnouncements from './containers/Announcements/Pinned';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import EmailConfirmation from './containers/SignUp/EmailConfirmation';
@@ -38,7 +38,7 @@ export default function App() {
           <IntlProvider>
             <ConnectedRouter history={history}>
               <Layout>
-                <Route exact path="/" component={Landing} />
+                <Route exact path="/" component={PinnedAnnouncements} />
                 <Route exact path="/sign-in" render={renderLoggedOutRoute(SignIn)} />
                 <Route exact path="/sign-up" render={renderLoggedOutRoute(SignUp)} />
                 <Route exact path="/profile" component={renderLoggedInRoute(Profile)} />

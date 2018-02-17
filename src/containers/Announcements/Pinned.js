@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import {
-  loadPinned,
+  loadPinnedAnnouncements,
   getPinnedAnnouncements,
-} from '../store/ducks/announcements';
-import Landing from '../components/Landing';
+} from '../../store/ducks/announcements';
+import PinnedAnnouncements from '../../components/Announcements/Pinned';
 
 function mapStateToProps(state) {
   return {
@@ -12,10 +12,10 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  loadPinned,
+  loadPinnedAnnouncements,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Landing);
+)(PinnedAnnouncements);

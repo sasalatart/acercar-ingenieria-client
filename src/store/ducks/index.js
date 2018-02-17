@@ -4,6 +4,7 @@ import { reducer as formReducer } from 'redux-form';
 import i18n from './i18n';
 import entities from './entities';
 import sessions, { TYPES } from './sessions';
+import announcements from './announcements';
 
 const appReducer = combineReducers({
   router: routerReducer,
@@ -11,6 +12,7 @@ const appReducer = combineReducers({
   i18n,
   entities,
   sessions,
+  announcements,
 });
 
 export default function rootReducer(state, action) {

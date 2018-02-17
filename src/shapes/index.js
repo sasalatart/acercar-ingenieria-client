@@ -6,6 +6,14 @@ export const imageShape = PropTypes.shape({
   large: PropTypes.string,
 });
 
+export const announcementShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  text: PropTypes.string,
+  pinned: PropTypes.bool.isRequired,
+  picture: imageShape.isRequired,
+  createdAt: PropTypes.string.isRequired,
+});
+
 export const majorShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
