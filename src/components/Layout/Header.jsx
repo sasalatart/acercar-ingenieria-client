@@ -68,7 +68,7 @@ function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl) {
         {currentUser
           ? (
             <div>
-              <Link to={ROUTES.USER(currentUser.id)} href={ROUTES.USER(currentUser.id)}>
+              <Link to={ROUTES.PROFILE} href={ROUTES.PROFILE}>
                 <UserAvatar user={currentUser} style={styles.button} />
               </Link>
               <Button type="danger" icon="logout" style={styles.button} onClick={signOut}>

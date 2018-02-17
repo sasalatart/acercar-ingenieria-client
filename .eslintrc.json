@@ -11,6 +11,7 @@
     "jest"
   ],
   "env": {
+    "browser": true,
     "jest/globals": true
   },
   "rules": {
@@ -18,9 +19,6 @@
     "react/no-typos": 0
   },
   "globals": {
-    "CustomEvent": true,
-    "window": true,
-    "document": true,
-    "File": true
+    "CustomEvent": true
   }
 }

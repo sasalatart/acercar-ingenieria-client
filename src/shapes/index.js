@@ -48,3 +48,8 @@ export const userShape = PropTypes.shape({
   adminOfMajors: PropTypes.arrayOf(majorSummaryShape),
   createdAt: PropTypes.string.isRequired,
 });
+
+export const locationShape = PropTypes.shape({
+  pathname: PropTypes.string.isRequired,
+  search: PropTypes.string,
+});

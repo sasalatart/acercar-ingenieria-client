@@ -41,6 +41,7 @@ export default function App() {
                 <Route exact path="/" component={Landing} />
                 <Route exact path="/sign-in" render={renderLoggedOutRoute(SignIn)} />
                 <Route exact path="/sign-up" render={renderLoggedOutRoute(SignUp)} />
+                <Route exact path="/profile" component={renderLoggedInRoute(Profile)} />
                 <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
                 <Route exact path="/majors" component={Majors} />
                 <Route exact path="/articles" component={Articles} />

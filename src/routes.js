@@ -1,9 +1,11 @@
-import { push } from 'react-router-redux';
+import { push, replace } from 'react-router-redux';
+import URI from 'urijs';
 
 const ROUTES = {
   LANDING: '/',
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
+  PROFILE: '/profile',
   USER: id => `/users/${id}`,
   MAJORS: '/majors',
   MAJOR: id => `/majors/${id}`,
@@ -22,6 +24,14 @@ export function goToSignIn() {
 
 export function goToSignUp() {
   return push(ROUTES.SIGN_UP);
+}
+
+export function changeTab(uri, tab) {
+  return replace(URI(uri).query({ tab }).toString());
+}
+
+export function changeProfileTab(tab) {
+  return changeTab(ROUTES.PROFILE, tab);
 }
 
 export default ROUTES;
