@@ -6,7 +6,6 @@ import ROUTES from '../../routes';
 export default class EmailConfirmation extends Component {
   static propTypes = {
     confirmEmail: PropTypes.func.isRequired,
-    locale: PropTypes.string.isRequired,
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
       search: PropTypes.string.isRequired,
@@ -14,8 +13,8 @@ export default class EmailConfirmation extends Component {
   };
 
   componentWillMount() {
-    const { confirmEmail, locale, location: { pathname, search } } = this.props;
-    confirmEmail(`${pathname}${search}`, locale);
+    const { confirmEmail, location: { pathname, search } } = this.props;
+    confirmEmail(`${pathname}${search}`);
   }
 
   render() {

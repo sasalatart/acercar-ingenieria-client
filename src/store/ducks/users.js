@@ -1,6 +1,11 @@
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
+import {
+  profileUpdatedNotification,
+  passwordChangedNotification,
+} from './notifications';
+import { goToLanding } from '../../routes';
 import { usersSchema } from '../../schemas';
 
 const TYPES = {
@@ -21,26 +26,34 @@ export function loadUser(userId) {
 }
 
 export function update(userId, body) {
-  return {
-    type: TYPES.UPDATE,
-    payload: {
-      method: 'PUT',
-      url: `/users/${userId}`,
-      body,
-      responseSchema: usersSchema,
-    },
-  };
+  return async dispatch =>
+    dispatch({
+      type: TYPES.UPDATE,
+      payload: {
+        method: 'PUT',
+        url: `/users/${userId}`,
+        body,
+        responseSchema: usersSchema,
+      },
+    }).then(() => {
+      dispatch(profileUpdatedNotification());
+      dispatch(goToLanding());
+    });
 }
 
 export function changePassword(body) {
-  return {
-    type: TYPES.CHANGE_PASSWORD,
-    payload: {
-      method: 'PUT',
-      url: '/auth/password',
-      body,
-    },
-  };
+  return dispatch =>
+    dispatch({
+      type: TYPES.CHANGE_PASSWORD,
+      payload: {
+        method: 'PUT',
+        url: '/auth/password',
+        body,
+      },
+    }).then(() => {
+      dispatch(passwordChangedNotification());
+      dispatch(goToLanding());
+    });
 }
 
 export const getUsersData = state => state.users;

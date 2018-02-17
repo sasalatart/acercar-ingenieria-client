@@ -4,8 +4,10 @@ import { createSelector } from 'reselect';
 import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 import { goToLanding } from '../../routes';
-import { displayNotification } from '../ducks/notifications';
-import messages from '../../i18n/messages';
+import {
+  confirmationEmailSentNotification,
+  emailConfirmedNotification,
+} from './notifications';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
@@ -41,7 +43,7 @@ export function signIn(credentials) {
   };
 }
 
-export function signUp(credentials, locale) {
+export function signUp(credentials) {
   return dispatch =>
     dispatch({
       type: TYPES.SIGN_UP,
@@ -51,16 +53,12 @@ export function signUp(credentials, locale) {
         body: credentials,
       },
     }).then(() => {
-      dispatch(displayNotification({
-        message: messages[locale]['auth.signUpOneMoreStep'],
-        description: messages[locale]['auth.signUpEmailSent'],
-        duration: 60,
-      }));
+      dispatch(confirmationEmailSentNotification());
       dispatch(goToLanding());
     });
 }
 
-export function confirmEmail(url, locale) {
+export function confirmEmail(url) {
   return dispatch =>
     dispatch({
       type: TYPES.CONFIRM_EMAIL,
@@ -69,10 +67,7 @@ export function confirmEmail(url, locale) {
         url,
       },
     }).then(() => {
-      dispatch(displayNotification({
-        message: messages[locale]['auth.signUpEmailConfirmation'],
-        description: messages[locale]['auth.signUpEmailConfirmed'],
-      }));
+      dispatch(emailConfirmedNotification());
     });
 }
 

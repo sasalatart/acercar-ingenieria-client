@@ -7,7 +7,7 @@ import { normalize } from 'normalizr';
 import objectToFormData from 'object-to-formdata';
 import { getLocale } from '../ducks/i18n';
 import { signOut, setTokens, getTokens, getCurrentUserEntity } from '../ducks/sessions';
-import { displayNotification, NOTIFICATION_TYPES } from '../ducks/notifications';
+import { displayErrorNotification } from '../ducks/notifications';
 import messages from '../../i18n/messages';
 
 const TOKEN_HEADERS = ['access-token', 'token-type', 'client', 'expiry', 'uid'];
@@ -34,7 +34,6 @@ async function parseError(status, body, store) {
   const state = store.getState();
   const locale = getLocale(state);
   const loggedIn = !!getCurrentUserEntity(state);
-  const type = NOTIFICATION_TYPES.error;
 
   let message;
   let description;
@@ -50,7 +49,7 @@ async function parseError(status, body, store) {
   }
   message = message || 'Error';
 
-  store.dispatch(displayNotification({ message, description, type }));
+  store.dispatch(displayErrorNotification({ message, description }));
   return Promise.reject(message);
 }
 

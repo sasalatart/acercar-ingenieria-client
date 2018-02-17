@@ -5,7 +5,7 @@ import SignUpForm from '../../components/SignUp/Form';
 
 const form = reduxForm({
   form: 'signUp',
-  onSubmit: (values, dispatch, props) => dispatch(signUp(values, props.intl.locale)),
+  onSubmit: (values, dispatch) => dispatch(signUp(values)),
 })(SignUpForm);
 
 export default injectIntl(form);
