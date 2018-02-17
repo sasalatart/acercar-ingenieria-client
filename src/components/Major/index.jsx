@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Tabs, Icon } from 'antd';
 import keyMirror from 'keymirror';
+import MajorInfo from './Info';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { themeStyles } from '../../theme';
@@ -33,7 +34,7 @@ class Major extends Component {
   static propTypes = {
     majorId: PropTypes.number.isRequired,
     major: majorShape,
-    currentUser: userShape.isRequired,
+    currentUser: userShape,
     activeTab: PropTypes.string.isRequired,
     loadMajor: PropTypes.func.isRequired,
     changeMajorTab: PropTypes.func.isRequired,
@@ -42,6 +43,7 @@ class Major extends Component {
 
   static defaultProps = {
     major: undefined,
+    currentUser: undefined,
   }
 
   componentWillMount() {
@@ -72,7 +74,7 @@ class Major extends Component {
             key={TAB_NAMES.info}
             tab={renderTabTitle('info-circle', t({ id: 'majors.info' }))}
           >
-            {t({ id: 'majors.info' })}
+            <MajorInfo major={major} />
           </TabPane>
 
           {adminPrivileges &&

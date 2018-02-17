@@ -21,7 +21,7 @@ export const majorShape = PropTypes.shape({
   logo: imageShape,
   shortDescription: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  videoUrlCode: PropTypes.string.isRequired,
+  videoUrl: PropTypes.string.isRequired,
   commentsCount: PropTypes.number.isRequired,
   createdAt: PropTypes.string.isRequired,
 });

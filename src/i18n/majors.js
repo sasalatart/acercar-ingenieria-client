@@ -13,6 +13,9 @@ export default {
     'majors.articles': 'Articles',
     'majors.comments': 'Comments',
     'majors.email': 'Send Email',
+    'majors.review': 'Short Description',
+    'majors.ofType': 'Type: {type}',
+    'majors.moreInfo': 'More Information',
   },
   'es-ES': {
     'majors.disciplinary': 'Disciplinario',
@@ -28,5 +31,8 @@ export default {
     'majors.articles': 'Artículos',
     'majors.comments': 'Comentarios',
     'majors.email': 'Enviar email',
+    'majors.review': 'Reseña',
+    'majors.ofType': 'Tipo: {type}',
+    'majors.moreInfo': 'Más información',
   },
 };
