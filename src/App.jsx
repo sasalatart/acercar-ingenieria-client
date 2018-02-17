@@ -14,7 +14,7 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import EmailConfirmation from './containers/SignUp/EmailConfirmation';
 import Profile from './containers/Profile';
-import Majors from './components/Majors';
+import Majors from './containers/Majors';
 import Articles from './components/Articles';
 import Questions from './components/Questions';
 import AboutUs from './components/AboutUs';

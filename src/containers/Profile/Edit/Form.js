@@ -3,7 +3,7 @@ import { reduxForm } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import pick from 'lodash/pick';
 import { update } from '../../../store/ducks/users';
-import { load, getMajorsEntities } from '../../../store/ducks/majors';
+import { loadMajors, getMajorEntities } from '../../../store/ducks/majors';
 import ProfileEditForm from '../../../components/Profile/Edit/Form';
 
 const FIELDS = [
@@ -31,7 +31,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     userId: currentUser.id,
-    majors: getMajorsEntities(state),
+    majors: getMajorEntities(state),
     initialValues: {
       ...pick(currentUser, FIELDS),
       majorUsersAttributes: currentUser.majorsOfInterest.map(({ majorId }) => majorId),
@@ -40,7 +40,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const mapDispatchToProps = { loadMajors: load };
+const mapDispatchToProps = { loadMajors };
 
 const form = reduxForm({
   form: 'profileEdit',

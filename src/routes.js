@@ -34,4 +34,8 @@ export function changeProfileTab(tab) {
   return changeTab(ROUTES.PROFILE, tab);
 }
 
+export function changeMajorsTab(tab) {
+  return changeTab(ROUTES.MAJORS, tab);
+}
+
 export default ROUTES;
