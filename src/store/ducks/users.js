@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
+import URI from 'urijs';
 import { getEntities } from './entities';
 import {
   profileUpdatedNotification,
@@ -14,12 +15,15 @@ import { usersSchema } from '../../schemas';
 
 const INITIAL_STATE = Map({
   currentTab: undefined,
+  majorUsersPagination: new Map({}),
+  majorUsersPaginationMeta: new Map({}),
 });
 
 const TYPES = {
   LOAD: 'fetch::users/LOAD',
   UPDATE: 'fetch::users/UPDATE',
   CHANGE_PASSWORD: 'fetch::users/CHANGE_PASSWORD',
+  LOAD_FROM_MAJOR: 'fetch::users/LOAD_FROM_MAJOR',
   SET_TAB: 'users/SET_TAB',
 };
 
@@ -75,10 +79,28 @@ export function changePassword(body) {
     });
 }
 
+export function loadMajorUsers(majorId, page = 1) {
+  return {
+    type: TYPES.LOAD_FROM_MAJOR,
+    payload: {
+      method: 'GET',
+      url: URI(`/majors/${majorId}/users`).query({ page }).toString(),
+      urlParams: { majorId, page },
+      responseSchema: [usersSchema],
+    },
+  };
+}
+
 export default function usersReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case TYPES.SET_TAB:
       return state.set('currentTab', action.payload.tab);
+    case `${TYPES.LOAD_FROM_MAJOR}_FULFILLED`: {
+      const { pagination, result, request: { urlParams: { majorId } } } = action.payload;
+      return state
+        .mergeIn(['majorUsersPagination', majorId], new Map({ [pagination.page]: result }))
+        .setIn(['majorUsersPaginationMeta', majorId], pagination);
+    }
     default:
       return state;
   }
@@ -87,6 +109,10 @@ export default function usersReducer(state = INITIAL_STATE, action) {
 export const getUsersData = state => state.users;
 
 export const getUserId = (state, params) => params.userId;
+
+export const getMajorId = (state, params) => params.majorId;
+
+export const getPage = (state, params) => params.page;
 
 export const getUserEntity = createSelector(
   getUserId,
@@ -97,4 +123,25 @@ export const getUserEntity = createSelector(
 export const getProfileTab = createSelector(
   getUsersData,
   usersData => usersData.get('currentTab'),
+);
+
+export const getPagedMajorUserIds = createSelector(
+  getMajorId,
+  getPage,
+  getUsersData,
+  (majorId, page, usersData) =>
+    usersData.getIn(['majorUsersPagination', majorId, String(page)]),
+);
+
+export const getPagedMajorUserEntities = createSelector(
+  getPagedMajorUserIds,
+  getEntities,
+  (userIds, entities) =>
+    denormalize(userIds, [usersSchema], entities),
+);
+
+export const getMajorUsersPaginationMeta = createSelector(
+  getMajorId,
+  getUsersData,
+  (majorId, usersData) => usersData.getIn(['majorUsersPaginationMeta', majorId]),
 );

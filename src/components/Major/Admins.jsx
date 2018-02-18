@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Pagination } from 'antd';
 import isEmpty from 'lodash/isEmpty';
+import PaginationControls from '../Pagination';
 import ProfileCard from '../Profile/Card';
 import Spinner from '../Spinner';
 import { paginationShape, userShape } from '../../shapes';
 
 const styles = {
-  paginationWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
   cardsWrapper: {
     display: 'flex',
     justifyContent: 'space-around',
+    flexWrap: 'wrap',
   },
   adminCard: {
     margin: '15px 5px',
@@ -42,30 +39,10 @@ class MajorAdmins extends Component {
     loadMajorAdmins(majorId, pagination && pagination.page);
   }
 
-  onPageChange = (page) => {
+  handlePageChange = (page) => {
     const { majorId, loadMajorAdmins, addQueryToMajorPath } = this.props;
     addQueryToMajorPath(majorId, { page });
     loadMajorAdmins(majorId, page);
-  }
-
-  renderPaginationControls() {
-    const { pagination } = this.props;
-
-    if (!pagination) {
-      return null;
-    }
-
-    return (
-      <div style={styles.paginationWrapper}>
-        <Pagination
-          current={pagination.page}
-          pageSize={pagination.perPage}
-          total={pagination.totalRecords}
-          onChange={this.onPageChange}
-          hideOnSinglePage
-        />
-      </div>
-    );
   }
 
   renderProfileCards() {
@@ -87,7 +64,7 @@ class MajorAdmins extends Component {
   }
 
   render() {
-    const { majorAdmins, intl: { formatMessage: t } } = this.props;
+    const { pagination, majorAdmins, intl: { formatMessage: t } } = this.props;
 
     if (isEmpty(majorAdmins)) {
       return <Spinner />;
@@ -96,9 +73,12 @@ class MajorAdmins extends Component {
     return (
       <div>
         <h1>{t({ id: 'admins' })}</h1>
-        {this.renderPaginationControls()}
-        {this.renderProfileCards()}
-        {this.renderPaginationControls()}
+        <PaginationControls
+          pagination={pagination}
+          onPageChange={this.handlePageChange}
+        >
+          {this.renderProfileCards()}
+        </PaginationControls>
       </div>
     );
   }

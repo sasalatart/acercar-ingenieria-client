@@ -5,6 +5,7 @@ import { Tabs, Icon } from 'antd';
 import MajorInfo from './Info';
 import EditForm from '../../containers/Major/Edit';
 import MajorAdmins from '../../containers/Major/Admins';
+import MajorUsers from '../../containers/Major/Users';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { MAJOR_TAB_NAMES as TAB_NAMES } from '../../routes';
@@ -25,7 +26,7 @@ class Major extends Component {
     majorId: PropTypes.number.isRequired,
     major: majorShape,
     currentUser: userShape,
-    activeTab: PropTypes.string.isRequired,
+    activeTab: PropTypes.string,
     loadMajor: PropTypes.func.isRequired,
     setMajorTab: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
@@ -34,6 +35,7 @@ class Major extends Component {
   static defaultProps = {
     major: undefined,
     currentUser: undefined,
+    activeTab: undefined,
   }
 
   componentWillMount() {
@@ -95,7 +97,7 @@ class Major extends Component {
               key={TAB_NAMES.interestedUsers}
               tab={renderTabTitle('team', t({ id: 'majors.interestedUsers' }))}
             >
-              {t({ id: 'majors.interestedUsers' })}
+              <MajorUsers />
             </TabPane>
           }
 
