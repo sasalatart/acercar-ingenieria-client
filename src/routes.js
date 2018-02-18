@@ -1,5 +1,6 @@
 import { push, replace } from 'react-router-redux';
 import URI from 'urijs';
+import { TAB_NAMES as MAJOR_TABS } from './components/Major';
 
 const ROUTES = {
   LANDING: '/',
@@ -42,7 +43,7 @@ export function changeMajorsTab(tab) {
   return changeTab(ROUTES.MAJORS, tab);
 }
 
-export function changeMajorTab(majorId, tab) {
+export function changeMajorTab(majorId, tab = MAJOR_TABS.info) {
   return changeTab(ROUTES.MAJOR(majorId), tab);
 }
 

@@ -1,9 +1,12 @@
 import { createSelector } from 'reselect';
 import { majorsSchema } from '../../schemas';
 import { getEntities } from './entities';
+import { majorEditedNotification } from './notifications';
+import { changeMajorTab } from '../../routes';
 
 export const TYPES = {
   LOAD: 'fetch::majors/LOAD',
+  UPDATE: 'fetch::majors/UPDATE',
 };
 
 export function loadMajors() {
@@ -26,6 +29,22 @@ export function loadMajor(majorId) {
       responseSchema: majorsSchema,
     },
   };
+}
+
+export function updateMajor(majorId, body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.UPDATE,
+      payload: {
+        method: 'PUT',
+        url: `/majors/${majorId}`,
+        body,
+        responseSchema: majorsSchema,
+      },
+    }).then(() => {
+      dispatch(majorEditedNotification());
+      dispatch(changeMajorTab(majorId));
+    });
 }
 
 export const getMajorId = (state, params) => params.majorId;

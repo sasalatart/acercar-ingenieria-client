@@ -3,6 +3,8 @@ import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
+import { Editor } from 'react-draft-wysiwyg';
+import { stateFromContent } from '../Forms/RichTextInput';
 import { majorShape } from '../../shapes';
 
 const styles = {
@@ -30,7 +32,7 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
       </Row>
 
       <Divider>{t({ id: 'majors.moreInfo' })}</Divider>
-      <div dangerouslySetInnerHTML={{ __html: major.description }} />
+      <Editor editorState={stateFromContent(major.description)} readOnly toolbarHidden />
     </div>
   );
 }

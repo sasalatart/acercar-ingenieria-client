@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import { Route } from 'react-router-dom';
 import { StyleRoot } from 'radium';
 import 'antd/dist/antd.min.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import configureStore, { history } from './store/configure-store';
 import LoggedOutRoute from './containers/Routes/LoggedOut';
 import LoggedInRoute from './containers/Routes/LoggedIn';

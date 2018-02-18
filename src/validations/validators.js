@@ -26,6 +26,12 @@ export const pucEmail = message => value => (
     : undefined
 );
 
+export const url = message => value => (
+  value && !/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i.test(value)
+    ? message
+    : undefined
+);
+
 export const isEqualTo = (message, target) => (value, allValues) => (
   value !== allValues[target]
     ? message

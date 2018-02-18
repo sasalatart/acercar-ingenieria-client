@@ -4,6 +4,7 @@ import { intlShape } from 'react-intl';
 import { Tabs, Icon } from 'antd';
 import keyMirror from 'keymirror';
 import MajorInfo from './Info';
+import EditForm from '../../containers/Major/Edit';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { themeStyles } from '../../theme';
@@ -69,7 +70,7 @@ class Major extends Component {
       <div>
         <h1 style={styles.title}>{major.name}</h1>
 
-        <Tabs defaultActiveKey={this.props.activeTab} size="large" tabPosition="left" onChange={this.handleTabChange}>
+        <Tabs activeKey={this.props.activeTab} size="large" tabPosition="left" onChange={this.handleTabChange}>
           <TabPane
             key={TAB_NAMES.info}
             tab={renderTabTitle('info-circle', t({ id: 'majors.info' }))}
@@ -82,7 +83,7 @@ class Major extends Component {
               key={TAB_NAMES.edit}
               tab={renderTabTitle('edit', t({ id: 'majors.edit' }))}
             >
-              {t({ id: 'majors.edit' })}
+              <EditForm major={major} />
             </TabPane>
           }
 

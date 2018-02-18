@@ -7,6 +7,7 @@ export default {
     'notifications.passwordChanged.message': 'Password Changed',
     'notifications.passwordChanged.description': 'You can now log into the platform with your new password.',
     'notifications.profileUpdated.message': 'Your profile has been edited.',
+    'notifications.majorUpdated.message': 'The major has been updated.',
   },
   'es-ES': {
     'notifications.signUpOneMoreStep.message': '¡Sólo un paso más!',
@@ -16,5 +17,6 @@ export default {
     'notifications.passwordChanged.message': 'Contraseña cambiada',
     'notifications.passwordChanged.description': 'Ahora puedes ingresar a la plataforma con tu nueva contraseña.',
     'notifications.profileUpdated.message': 'Has editado tu perfil',
+    'notifications.majorUpdated.message': 'Has actualizado el major.',
   },
 };

@@ -1,7 +1,12 @@
 import { Input, InputNumber } from 'antd';
 import createComponent from './BaseComponent';
 import CustomSelect from './CustomSelect';
+import CustomRadio from './CustomRadio';
 import mapError, { customMap } from './map-error';
+
+const eventMap = customMap(({ input: { onChange } }) => ({
+  onChange: v => onChange(v.target.value),
+}));
 
 const textFieldMap = customMap(({ input: { onChange } }) => ({
   onChange: v => onChange(v.nativeEvent.target.value),
@@ -19,10 +24,4 @@ export const TextField = createComponent(Input, textFieldMap);
 export const NumberField = createComponent(InputNumber, mapError);
 export const TextArea = createComponent(Input.TextArea, textFieldMap);
 export const SelectField = createComponent(CustomSelect, selectFieldMap);
-
-export default {
-  TextField,
-  NumberField,
-  TextArea,
-  SelectField,
-};
+export const RadioField = createComponent(CustomRadio, eventMap);

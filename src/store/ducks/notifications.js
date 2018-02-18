@@ -78,3 +78,12 @@ export function emailConfirmedNotification() {
     }));
   };
 }
+
+export function majorEditedNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.majorUpdated.message'],
+    }));
+  };
+}
