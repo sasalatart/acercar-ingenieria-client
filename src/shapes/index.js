@@ -68,3 +68,12 @@ export const paginationShape = PropTypes.shape({
   perPage: PropTypes.number.isRequired,
   totalRecords: PropTypes.number.isRequired,
 });
+
+export const questionShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  question: PropTypes.string.isRequired,
+  answer: PropTypes.string,
+  author: PropTypes.shape(userShape).isRequired,
+  major: PropTypes.shape(majorSummaryShape),
+  pinned: PropTypes.bool.isRequired,
+});

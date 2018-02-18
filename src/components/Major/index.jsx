@@ -6,6 +6,7 @@ import MajorInfo from './Info';
 import EditForm from '../../containers/Major/Edit';
 import MajorAdmins from '../../containers/Major/Admins';
 import MajorUsers from '../../containers/Major/Users';
+import AnsweredQuestions from '../../containers/Major/AnsweredQuestions';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { MAJOR_TAB_NAMES as TAB_NAMES } from '../../routes';
@@ -105,7 +106,7 @@ class Major extends Component {
             key={TAB_NAMES.questions}
             tab={renderTabTitle('question-circle', t({ id: 'majors.questions' }))}
           >
-            {t({ id: 'majors.questions' })}
+            <AnsweredQuestions />
           </TabPane>
 
           {adminPrivileges &&

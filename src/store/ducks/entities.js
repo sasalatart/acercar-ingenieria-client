@@ -7,6 +7,7 @@ const INITIAL_STATE = new Map({
   majors: new Map({}),
   majorsOfInterest: new Map({}),
   majorSummaries: new Map({}),
+  questions: new Map({}),
 });
 
 export default function entitiesReducer(state = INITIAL_STATE, action) {
