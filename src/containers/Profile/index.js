@@ -1,8 +1,12 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { loadUser, getUserEntity } from '../../store/ducks/users';
+import {
+  loadUser,
+  setProfileTab,
+  getUserEntity,
+  getProfileTab,
+} from '../../store/ducks/users';
 import { getCurrentUserEntity } from '../../store/ducks/sessions';
-import { changeProfileTab } from '../../routes';
 import Profile from '../../components/Profile';
 
 function mapStateToProps(state, ownProps) {
@@ -14,12 +18,13 @@ function mapStateToProps(state, ownProps) {
     userId,
     user: getUserEntity(state, ({ userId })),
     currentUser,
+    activeTab: getProfileTab(state),
   };
 }
 
 const mapDispatchToProps = {
   loadUser,
-  changeProfileTab,
+  setProfileTab,
 };
 
 export default injectIntl(connect(

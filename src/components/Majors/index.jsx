@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Tabs } from 'antd';
-import keyMirror from 'keymirror';
 import MajorCard from './Card';
 import Spinner from '../Spinner';
-import { majorShape, locationShape } from '../../shapes';
+import { majorShape } from '../../shapes';
+import { MAJORS_TAB_NAMES as TAB_NAMES } from '../../routes';
 
 const { TabPane } = Tabs;
 
@@ -21,33 +21,25 @@ const styles = {
   },
 };
 
-const TAB_NAMES = keyMirror({
-  disciplinaries: null, interdisciplinaries: null,
-});
-
 class Majors extends Component {
   static propTypes = {
     disciplinaryMajors: ImmutablePropTypes.listOf(majorShape).isRequired,
     interdisciplinaryMajors: ImmutablePropTypes.listOf(majorShape).isRequired,
-    location: locationShape.isRequired,
     loadMajors: PropTypes.func.isRequired,
-    changeMajorsTab: PropTypes.func.isRequired,
     goToMajor: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
+  };
+
+  state = {
+    activeTab: TAB_NAMES.disciplinaries,
   };
 
   componentWillMount() {
     this.props.loadMajors();
   }
 
-  getActiveTab() {
-    const urlSearchParams = new URLSearchParams(this.props.location.search);
-    const activeTab = urlSearchParams.get('tab');
-    return TAB_NAMES[activeTab] || TAB_NAMES.disciplinaries;
-  }
-
   handleTabChange = (key) => {
-    this.props.changeMajorsTab(key);
+    this.setState({ activeTab: key });
   }
 
   renderMajors = majors => (
@@ -75,7 +67,12 @@ class Majors extends Component {
     }
 
     return (
-      <Tabs defaultActiveKey={this.getActiveTab()} size="large" tabPosition="left" onChange={this.handleTabChange}>
+      <Tabs
+        activeKey={this.state.activeTab}
+        size="large"
+        tabPosition="left"
+        onChange={this.handleTabChange}
+      >
         <TabPane key={TAB_NAMES.disciplinaries} tab={t({ id: 'majors.disciplinaries' })}>
           {this.renderMajors(disciplinaryMajors)}
         </TabPane>

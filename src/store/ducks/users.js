@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
@@ -5,13 +6,21 @@ import {
   profileUpdatedNotification,
   passwordChangedNotification,
 } from './notifications';
-import { goToLanding } from '../../routes';
+import ROUTES, {
+  PROFILE_TAB_NAMES as TAB_NAMES,
+  addQueryToUri,
+} from '../../routes';
 import { usersSchema } from '../../schemas';
+
+const INITIAL_STATE = Map({
+  currentTab: undefined,
+});
 
 const TYPES = {
   LOAD: 'fetch::users/LOAD',
   UPDATE: 'fetch::users/UPDATE',
   CHANGE_PASSWORD: 'fetch::users/CHANGE_PASSWORD',
+  SET_TAB: 'users/SET_TAB',
 };
 
 export function loadUser(userId) {
@@ -22,6 +31,16 @@ export function loadUser(userId) {
       url: `/users/${userId}`,
       responseSchema: usersSchema,
     },
+  };
+}
+
+export function setProfileTab(tab) {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.SET_TAB,
+      payload: { tab },
+    });
+    dispatch(addQueryToUri(ROUTES.PROFILE, { tab }));
   };
 }
 
@@ -37,7 +56,7 @@ export function update(userId, body) {
       },
     }).then(() => {
       dispatch(profileUpdatedNotification());
-      dispatch(goToLanding());
+      dispatch(setProfileTab(TAB_NAMES.info));
     });
 }
 
@@ -52,8 +71,17 @@ export function changePassword(body) {
       },
     }).then(() => {
       dispatch(passwordChangedNotification());
-      dispatch(goToLanding());
+      dispatch(setProfileTab(TAB_NAMES.info));
     });
+}
+
+export default function usersReducer(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case TYPES.SET_TAB:
+      return state.set('currentTab', action.payload.tab);
+    default:
+      return state;
+  }
 }
 
 export const getUsersData = state => state.users;
@@ -64,4 +92,9 @@ export const getUserEntity = createSelector(
   getUserId,
   getEntities,
   (userId, entities) => denormalize(userId, usersSchema, entities),
+);
+
+export const getProfileTab = createSelector(
+  getUsersData,
+  usersData => usersData.get('currentTab'),
 );

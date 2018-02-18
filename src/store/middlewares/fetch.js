@@ -23,9 +23,29 @@ function refreshTokens(response, store) {
   }
 }
 
-async function parseResponse(body, responseSchema) {
+async function parseResponse(body, headers, payload) {
+  const responseSchema = get(payload, 'responseSchema');
   const camelizedBody = humps.camelizeKeys(body.data || body);
-  return responseSchema ? normalize(camelizedBody, responseSchema) : camelizedBody;
+  const parsedResponse = responseSchema
+    ? normalize(camelizedBody, responseSchema)
+    : camelizedBody;
+
+  Object.assign(parsedResponse, { request: payload });
+
+  const perPage = +headers.get('per-page');
+  if (perPage) {
+    const total = +headers.get('total');
+    const pagination = {
+      page: +payload.urlParams.page,
+      totalPages: Math.ceil(total / perPage),
+      perPage,
+      totalRecords: total,
+    };
+
+    Object.assign(parsedResponse, { pagination });
+  }
+
+  return parsedResponse;
 }
 
 async function parseError(status, body, store) {
@@ -106,7 +126,7 @@ const fetchMiddleware = store => next => (action) => {
         const body = await response.json();
 
         return response.status < 400
-          ? parseResponse(body, get(action.payload, 'responseSchema'))
+          ? parseResponse(body, response.headers, action.payload)
           : parseError(response.status, body, store);
       }),
   });

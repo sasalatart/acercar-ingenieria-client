@@ -61,3 +61,10 @@ export const locationShape = PropTypes.shape({
   pathname: PropTypes.string.isRequired,
   search: PropTypes.string,
 });
+
+export const paginationShape = PropTypes.shape({
+  page: PropTypes.number.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  perPage: PropTypes.number.isRequired,
+  totalRecords: PropTypes.number.isRequired,
+});

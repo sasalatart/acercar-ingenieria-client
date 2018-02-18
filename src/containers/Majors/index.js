@@ -5,7 +5,7 @@ import {
   getDisciplinaryMajors,
   getInterdisciplinaryMajors,
 } from '../../store/ducks/majors';
-import { changeMajorsTab, goToMajor } from '../../routes';
+import { goToMajor } from '../../routes';
 import Majors from '../../components/Majors';
 
 function mapStateToProps(state) {
@@ -17,7 +17,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   loadMajors,
-  changeMajorsTab,
   goToMajor,
 };
 

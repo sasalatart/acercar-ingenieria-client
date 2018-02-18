@@ -1,9 +1,13 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { getCurrentUserEntity } from '../../store/ducks/sessions';
-import { loadMajor, getMajorEntity } from '../../store/ducks/majors';
-import { changeMajorTab, getActiveTab } from '../../routes';
-import Major, { TAB_NAMES } from '../../components/Major';
+import {
+  loadMajor,
+  setMajorTab,
+  getMajorEntity,
+  getMajorTab,
+} from '../../store/ducks/majors';
+import Major from '../../components/Major';
 
 function mapStateToProps(state, ownProps) {
   const { params } = ownProps.match;
@@ -12,13 +16,13 @@ function mapStateToProps(state, ownProps) {
     majorId: +params.majorId,
     major: getMajorEntity(state, params),
     currentUser: getCurrentUserEntity(state),
-    activeTab: getActiveTab(ownProps.location.search, TAB_NAMES, TAB_NAMES.info),
+    activeTab: getMajorTab(state),
   };
 }
 
 const mapDispatchToProps = {
   loadMajor,
-  changeMajorTab,
+  setMajorTab,
 };
 
 export default injectIntl(connect(

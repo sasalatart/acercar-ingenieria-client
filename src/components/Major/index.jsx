@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Tabs, Icon } from 'antd';
-import keyMirror from 'keymirror';
 import MajorInfo from './Info';
 import EditForm from '../../containers/Major/Edit';
+import MajorAdmins from '../../containers/Major/Admins';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
+import { MAJOR_TAB_NAMES as TAB_NAMES } from '../../routes';
 import { themeStyles } from '../../theme';
 
 const { TabPane } = Tabs;
@@ -14,18 +15,6 @@ const { TabPane } = Tabs;
 const styles = {
   title: themeStyles.title,
 };
-
-export const TAB_NAMES = keyMirror({
-  info: null,
-  edit: null,
-  admins: null,
-  interestedUsers: null,
-  questions: null,
-  pendingQuestions: null,
-  articles: null,
-  comments: null,
-  email: null,
-});
 
 function renderTabTitle(type, title) {
   return <span><Icon type={type} />{title}</span>;
@@ -38,7 +27,7 @@ class Major extends Component {
     currentUser: userShape,
     activeTab: PropTypes.string.isRequired,
     loadMajor: PropTypes.func.isRequired,
-    changeMajorTab: PropTypes.func.isRequired,
+    setMajorTab: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
@@ -53,7 +42,7 @@ class Major extends Component {
   }
 
   handleTabChange = (key) => {
-    this.props.changeMajorTab(this.props.majorId, key);
+    this.props.setMajorTab(this.props.majorId, key);
   }
 
   render() {
@@ -70,7 +59,12 @@ class Major extends Component {
       <div>
         <h1 style={styles.title}>{major.name}</h1>
 
-        <Tabs activeKey={this.props.activeTab} size="large" tabPosition="left" onChange={this.handleTabChange}>
+        <Tabs
+          activeKey={this.props.activeTab || TAB_NAMES.info}
+          size="large"
+          tabPosition="left"
+          onChange={this.handleTabChange}
+        >
           <TabPane
             key={TAB_NAMES.info}
             tab={renderTabTitle('info-circle', t({ id: 'majors.info' }))}
@@ -92,7 +86,7 @@ class Major extends Component {
               key={TAB_NAMES.admins}
               tab={renderTabTitle('star-o', t({ id: 'majors.admins' }))}
             >
-              {t({ id: 'majors.admins' })}
+              <MajorAdmins />
             </TabPane>
           }
 

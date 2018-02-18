@@ -5,6 +5,9 @@ import i18n from './i18n';
 import entities from './entities';
 import sessions, { TYPES } from './sessions';
 import announcements from './announcements';
+import users from './users';
+import majors from './majors';
+import admins from './admins';
 
 const appReducer = combineReducers({
   router: routerReducer,
@@ -13,6 +16,9 @@ const appReducer = combineReducers({
   entities,
   sessions,
   announcements,
+  users,
+  majors,
+  admins,
 });
 
 export default function rootReducer(state, action) {

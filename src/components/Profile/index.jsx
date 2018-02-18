@@ -2,50 +2,37 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Tabs, Icon } from 'antd';
-import keyMirror from 'keymirror';
-import { userShape, locationShape } from '../../shapes';
+import { userShape } from '../../shapes';
 import ProfileInfo from './Info';
 import ProfileEdit from './Edit';
 import ChangePassword from './ChangePassword';
+import { PROFILE_TAB_NAMES as TAB_NAMES } from '../../routes';
 
 const { TabPane } = Tabs;
-
-const TAB_NAMES = keyMirror({
-  info: null, notifications: null, edit: null, changePassword: null,
-});
 
 class Profile extends Component {
   static propTypes = {
     userId: PropTypes.number.isRequired,
     user: userShape,
     currentUser: userShape.isRequired,
+    activeTab: PropTypes.string,
     loadUser: PropTypes.func.isRequired,
-    changeProfileTab: PropTypes.func.isRequired,
-    location: locationShape.isRequired,
+    setProfileTab: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
   static defaultProps = {
     user: undefined,
+    activeTab: undefined,
   };
 
   componentWillMount() {
     this.props.loadUser(this.props.userId);
   }
 
-  getActiveTab() {
-    const urlSearchParams = new URLSearchParams(this.props.location.search);
-    const activeTab = urlSearchParams.get('tab');
-    return TAB_NAMES[activeTab] || TAB_NAMES.Info;
-  }
-
-  handleTabChange = (key) => {
-    this.props.changeProfileTab(key);
-  }
-
   render() {
     const {
-      user, userId, currentUser, intl: { formatMessage: t },
+      user, userId, currentUser, setProfileTab, intl: { formatMessage: t },
     } = this.props;
 
     if (userId !== currentUser.id) {
@@ -53,7 +40,12 @@ class Profile extends Component {
     }
 
     return (
-      <Tabs defaultActiveKey={this.getActiveTab()} size="large" tabPosition="left" onChange={this.handleTabChange}>
+      <Tabs
+        activeKey={this.props.activeTab || TAB_NAMES.info}
+        size="large"
+        tabPosition="left"
+        onChange={setProfileTab}
+      >
         <TabPane
           key={TAB_NAMES.info}
           tab={<span><Icon type="user" />{t({ id: 'profile.info' })}</span>}
