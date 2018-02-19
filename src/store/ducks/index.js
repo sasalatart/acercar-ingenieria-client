@@ -24,7 +24,7 @@ const appReducer = combineReducers({
 });
 
 export default function rootReducer(state, action) {
-  return action.type === `${TYPES.SIGN_OUT}_FULFILLED`
+  return action.type === `${TYPES.SIGN_OUT}_PENDING`
     ? appReducer(undefined, action)
     : appReducer(state, action);
 }

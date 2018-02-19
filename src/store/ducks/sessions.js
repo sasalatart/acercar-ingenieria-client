@@ -72,12 +72,15 @@ export function confirmEmail(url) {
 }
 
 export function signOut() {
-  return {
-    type: TYPES.SIGN_OUT,
-    payload: {
-      method: 'DELETE',
-      url: '/auth/sign_out',
-    },
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.SIGN_OUT,
+      payload: {
+        method: 'DELETE',
+        url: '/auth/sign_out',
+      },
+    });
+    dispatch(goToLanding());
   };
 }
 

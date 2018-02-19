@@ -6,17 +6,29 @@ import isEmpty from 'lodash/isEmpty';
 import { normalize } from 'normalizr';
 import objectToFormData from 'object-to-formdata';
 import { getLocale } from '../ducks/i18n';
-import { signOut, setTokens, getTokens, getCurrentUserEntity } from '../ducks/sessions';
+import {
+  TYPES,
+  signOut,
+  setTokens,
+  getTokens,
+  getCurrentUserEntity,
+} from '../ducks/sessions';
 import { displayErrorNotification } from '../ducks/notifications';
 import messages from '../../i18n/messages';
 
 const TOKEN_HEADERS = ['access-token', 'token-type', 'client', 'expiry', 'uid'];
 const REQUEST_KEYS = ['headers', 'method', 'url', 'body'];
 
-function refreshTokens(response, store) {
-  const tokens = getTokens(store.getState());
+function refreshTokens(response, store, actionType) {
+  const state = store.getState();
+
+  const loggedIn = !!getCurrentUserEntity(state) || actionType === TYPES.SIGN_IN;
+
+  const tokens = getTokens(state);
   const newExpiry = response.headers.get('expiry');
-  if (newExpiry && (!tokens.expiry || tokens.expiry < newExpiry)) {
+  const refreshedToken = newExpiry && (!tokens.expiry || tokens.expiry < newExpiry);
+
+  if (loggedIn && refreshedToken) {
     const newTokens = {};
     TOKEN_HEADERS.forEach((header) => { newTokens[header] = response.headers.get(header); });
     store.dispatch(setTokens(newTokens));
@@ -122,7 +134,7 @@ const fetchMiddleware = store => next => (action) => {
     type: action.type,
     payload: window.fetch(url, rest)
       .then(async (response) => {
-        refreshTokens(response, store);
+        refreshTokens(response, store, action.type);
         const body = await response.json();
 
         return response.status < 400
