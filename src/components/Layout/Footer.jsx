@@ -10,6 +10,7 @@ const styles = {
     minHeight: '36px',
     paddingLeft: measures.paddingHorizontal,
     paddingRight: measures.paddingHorizontal,
+    marginTop: '25px',
   },
   text: {
     color: colors.primaryTextLight,
