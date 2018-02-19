@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { addQueryToMajorPath } from '../../store/ducks/majors';
 import {
   loadMajorUsers,
-  getPagedMajorUserEntities,
+  getMajorUserEntities,
   getMajorUsersPaginationMeta,
 } from '../../store/ducks/users';
 import { getActivePage } from '../../routes';
@@ -20,7 +20,7 @@ function mapStateToProps(state, ownProps) {
   return {
     majorId,
     pagination: getMajorUsersPaginationMeta(state, params),
-    majorUsers: getPagedMajorUserEntities(state, params),
+    majorUsers: getMajorUserEntities(state, params),
   };
 }
 

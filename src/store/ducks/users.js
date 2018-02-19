@@ -12,11 +12,16 @@ import ROUTES, {
   addQueryToUri,
 } from '../../routes';
 import { usersSchema } from '../../schemas';
+import { majorPaging } from './paginations';
+
+const majorsPagingFns = majorPaging(state => state.users, usersSchema);
 
 const INITIAL_STATE = Map({
   currentTab: undefined,
-  majorUsersPagination: new Map({}),
-  majorUsersPaginationMeta: new Map({}),
+  pagination: new Map({
+    majors: new Map({}),
+    majorsMeta: new Map({}),
+  }),
 });
 
 const TYPES = {
@@ -95,12 +100,8 @@ export default function usersReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case TYPES.SET_TAB:
       return state.set('currentTab', action.payload.tab);
-    case `${TYPES.LOAD_FROM_MAJOR}_FULFILLED`: {
-      const { pagination, result, request: { urlParams: { majorId } } } = action.payload;
-      return state
-        .mergeIn(['majorUsersPagination', majorId], new Map({ [pagination.page]: result }))
-        .setIn(['majorUsersPaginationMeta', majorId], pagination);
-    }
+    case `${TYPES.LOAD_FROM_MAJOR}_FULFILLED`:
+      return majorsPagingFns.update(state, action.payload);
     default:
       return state;
   }
@@ -109,10 +110,6 @@ export default function usersReducer(state = INITIAL_STATE, action) {
 export const getUsersData = state => state.users;
 
 export const getUserId = (state, params) => params.userId;
-
-export const getMajorId = (state, params) => params.majorId;
-
-export const getPage = (state, params) => params.page;
 
 export const getUserEntity = createSelector(
   getUserId,
@@ -125,23 +122,6 @@ export const getProfileTab = createSelector(
   usersData => usersData.get('currentTab'),
 );
 
-export const getPagedMajorUserIds = createSelector(
-  getMajorId,
-  getPage,
-  getUsersData,
-  (majorId, page, usersData) =>
-    usersData.getIn(['majorUsersPagination', majorId, String(page)]),
-);
+export const getMajorUserEntities = majorsPagingFns.getPagedEntities;
 
-export const getPagedMajorUserEntities = createSelector(
-  getPagedMajorUserIds,
-  getEntities,
-  (userIds, entities) =>
-    denormalize(userIds, [usersSchema], entities),
-);
-
-export const getMajorUsersPaginationMeta = createSelector(
-  getMajorId,
-  getUsersData,
-  (majorId, usersData) => usersData.getIn(['majorUsersPaginationMeta', majorId]),
-);
+export const getMajorUsersPaginationMeta = majorsPagingFns.getMeta;

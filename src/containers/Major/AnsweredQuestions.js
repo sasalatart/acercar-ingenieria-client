@@ -4,8 +4,8 @@ import { injectIntl } from 'react-intl';
 import { addQueryToMajorPath } from '../../store/ducks/majors';
 import {
   loadAnsweredMajorQuestions,
-  getPagedAnsweredMajorQuestionEntities,
-  getAnsweredMajorQuestionsPaginationMeta,
+  getAnsweredEntities,
+  getAnsweredPaginationMeta,
 } from '../../store/ducks/questions';
 import { getActivePage } from '../../routes';
 import MajorQuestions from '../../components/Major/Questions';
@@ -19,8 +19,8 @@ function mapStateToProps(state, ownProps) {
 
   return {
     majorId,
-    pagination: getAnsweredMajorQuestionsPaginationMeta(state, params),
-    majorQuestions: getPagedAnsweredMajorQuestionEntities(state, params),
+    pagination: getAnsweredPaginationMeta(state, params),
+    majorQuestions: getAnsweredEntities(state, params),
   };
 }
 

@@ -1,13 +1,17 @@
 import { Map } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
 import URI from 'urijs';
-import { getEntities } from './entities';
 import { questionsSchema } from '../../schemas';
+import { majorPaging } from './paginations';
+
+const majorsAnsweredPagingFns = majorPaging(state => state.questions, questionsSchema, ['answered'], ['answeredMeta']);
 
 const INITIAL_STATE = new Map({
-  answeredMajorQuestionsPagination: new Map({}),
-  answeredMajorQuestionsPaginationMeta: new Map({}),
+  pagination: new Map({
+    majors: new Map({
+      answered: new Map({}),
+      answeredMeta: new Map({}),
+    }),
+  }),
 });
 
 const TYPES = {
@@ -28,12 +32,8 @@ export function loadAnsweredMajorQuestions(majorId, page = 1) {
 
 export default function questionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD_ANSWERED_FROM_MAJOR}_FULFILLED`: {
-      const { pagination, result, request: { urlParams: { majorId } } } = action.payload;
-      return state
-        .mergeIn(['answeredMajorQuestionsPagination', majorId], new Map({ [pagination.page]: result }))
-        .setIn(['answeredMajorQuestionsPaginationMeta', majorId], pagination);
-    }
+    case `${TYPES.LOAD_ANSWERED_FROM_MAJOR}_FULFILLED`:
+      return majorsAnsweredPagingFns.update(state, action.payload);
     default:
       return state;
   }
@@ -41,27 +41,6 @@ export default function questionsReducer(state = INITIAL_STATE, action) {
 
 export const getQuestionsData = state => state.questions;
 
-export const getMajorId = (state, params) => params.majorId;
+export const getAnsweredEntities = majorsAnsweredPagingFns.getPagedEntities;
 
-export const getPage = (state, params) => params.page;
-
-export const getPagedAnsweredMajorQuestionIds = createSelector(
-  getMajorId,
-  getPage,
-  getQuestionsData,
-  (majorId, page, questionsData) =>
-    questionsData.getIn(['answeredMajorQuestionsPagination', majorId, String(page)]),
-);
-
-export const getPagedAnsweredMajorQuestionEntities = createSelector(
-  getPagedAnsweredMajorQuestionIds,
-  getEntities,
-  (questionIds, entities) =>
-    denormalize(questionIds, [questionsSchema], entities),
-);
-
-export const getAnsweredMajorQuestionsPaginationMeta = createSelector(
-  getMajorId,
-  getQuestionsData,
-  (majorId, questionsData) => questionsData.getIn(['answeredMajorQuestionsPaginationMeta', majorId]),
-);
+export const getAnsweredPaginationMeta = majorsAnsweredPagingFns.getMeta;

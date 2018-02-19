@@ -1,13 +1,15 @@
 import { Map } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
 import URI from 'urijs';
-import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
+import { majorPaging } from './paginations';
 
-const INITIAL_STATE = new Map({
-  majorAdminsPagination: new Map({}),
-  majorAdminsPaginationMeta: new Map({}),
+const majorsPagingFns = majorPaging(state => state.admins, usersSchema);
+
+const INITIAL_STATE = Map({
+  pagination: new Map({
+    majors: new Map({}),
+    majorsMeta: new Map({}),
+  }),
 });
 
 const TYPES = {
@@ -28,40 +30,13 @@ export function loadMajorAdmins(majorId, page = 1) {
 
 export default function adminsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD_FROM_MAJOR}_FULFILLED`: {
-      const { pagination, result, request: { urlParams: { majorId } } } = action.payload;
-      return state
-        .mergeIn(['majorAdminsPagination', majorId], new Map({ [pagination.page]: result }))
-        .setIn(['majorAdminsPaginationMeta', majorId], pagination);
-    }
+    case `${TYPES.LOAD_FROM_MAJOR}_FULFILLED`:
+      return majorsPagingFns.update(state, action.payload);
     default:
       return state;
   }
 }
 
-export const getAdminsData = state => state.admins;
+export const getMajorAdminEntities = majorsPagingFns.getPagedEntities;
 
-export const getMajorId = (state, params) => params.majorId;
-
-export const getPage = (state, params) => params.page;
-
-export const getPagedMajorAdminIds = createSelector(
-  getMajorId,
-  getPage,
-  getAdminsData,
-  (majorId, page, adminsData) =>
-    adminsData.getIn(['majorAdminsPagination', majorId, String(page)]),
-);
-
-export const getPagedMajorAdminEntities = createSelector(
-  getPagedMajorAdminIds,
-  getEntities,
-  (userIds, entities) =>
-    denormalize(userIds, [usersSchema], entities),
-);
-
-export const getMajorAdminsPaginationMeta = createSelector(
-  getMajorId,
-  getAdminsData,
-  (majorId, adminsData) => adminsData.getIn(['majorAdminsPaginationMeta', majorId]),
-);
+export const getMajorAdminsPaginationMeta = majorsPagingFns.getMeta;
