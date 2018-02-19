@@ -8,6 +8,7 @@ const styles = {
   paginationWrapper: {
     display: 'flex',
     justifyContent: 'center',
+    margin: '15px 0',
   },
 };
 
