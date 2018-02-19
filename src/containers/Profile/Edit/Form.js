@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import pick from 'lodash/pick';
-import { update } from '../../../store/ducks/users';
+import { updateProfile } from '../../../store/ducks/sessions';
 import { loadMajors, getMajorEntities } from '../../../store/ducks/majors';
 import ProfileEditForm from '../../../components/Profile/Edit/Form';
 
@@ -44,7 +44,7 @@ const mapDispatchToProps = { loadMajors };
 
 const form = reduxForm({
   form: 'profileEdit',
-  onSubmit: (values, dispatch, props) => dispatch(update(
+  onSubmit: (values, dispatch, props) => dispatch(updateProfile(
     props.userId,
     processValues(values, props.currentUser),
   )),

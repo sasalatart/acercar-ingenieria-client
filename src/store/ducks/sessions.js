@@ -3,15 +3,22 @@ import { denormalize } from 'normalizr';
 import { createSelector } from 'reselect';
 import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
-import { goToLanding } from '../../routes';
 import {
   confirmationEmailSentNotification,
   emailConfirmedNotification,
+  profileUpdatedNotification,
+  passwordChangedNotification,
 } from './notifications';
+import ROUTES, {
+  PROFILE_TAB_NAMES as TAB_NAMES,
+  goToLanding,
+  addQueryToUri,
+} from '../../routes';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
   tokens: {},
+  currentTab: undefined,
 });
 
 export const TYPES = {
@@ -20,6 +27,9 @@ export const TYPES = {
   SIGN_UP: 'fetch::sessions/SIGN_UP',
   CONFIRM_EMAIL: 'fetch::/sessions/CONFIRM_EMAIL',
   SIGN_OUT: 'fetch::sessions/SIGN_OUT',
+  UPDATE: 'fetch::users/UPDATE',
+  CHANGE_PASSWORD: 'fetch::users/CHANGE_PASSWORD',
+  SET_TAB: 'users/SET_TAB',
 };
 
 export function setTokens(tokens) {
@@ -84,12 +94,55 @@ export function signOut() {
   };
 }
 
+export function setProfileTab(tab) {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.SET_TAB,
+      payload: { tab },
+    });
+    dispatch(addQueryToUri(ROUTES.PROFILE, { tab }));
+  };
+}
+
+export function updateProfile(userId, body) {
+  return async dispatch =>
+    dispatch({
+      type: TYPES.UPDATE,
+      payload: {
+        method: 'PUT',
+        url: `/users/${userId}`,
+        body,
+        responseSchema: usersSchema,
+      },
+    }).then(() => {
+      dispatch(profileUpdatedNotification());
+      dispatch(setProfileTab(TAB_NAMES.info));
+    });
+}
+
+export function changePassword(body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.CHANGE_PASSWORD,
+      payload: {
+        method: 'PUT',
+        url: '/auth/password',
+        body,
+      },
+    }).then(() => {
+      dispatch(passwordChangedNotification());
+      dispatch(setProfileTab(TAB_NAMES.info));
+    });
+}
+
 export default function sessionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case TYPES.SET_TOKENS:
       return state.set('tokens', action.payload.tokens);
     case `${TYPES.SIGN_IN}_FULFILLED`:
       return state.set('currentUserId', action.payload.result);
+    case TYPES.SET_TAB:
+      return state.set('currentTab', action.payload.tab);
     default:
       return state;
   }
@@ -112,4 +165,9 @@ export const getCurrentUserEntity = createSelector(
   getEntities,
   (currentUserId, entities) =>
     denormalize(currentUserId, usersSchema, entities),
+);
+
+export const getProfileTab = createSelector(
+  getSessionsData,
+  usersData => usersData.get('currentTab'),
 );

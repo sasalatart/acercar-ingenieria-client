@@ -1,6 +1,6 @@
 import { reduxForm } from 'redux-form';
 import { injectIntl } from 'react-intl';
-import { changePassword } from '../../../store/ducks/users';
+import { changePassword } from '../../../store/ducks/sessions';
 import ChangePasswordForm from '../../../components/Profile/ChangePassword/Form';
 
 const form = reduxForm({

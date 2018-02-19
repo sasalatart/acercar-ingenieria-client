@@ -2,11 +2,13 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import {
   loadUser,
-  setProfileTab,
   getUserEntity,
-  getProfileTab,
 } from '../../store/ducks/users';
-import { getCurrentUserEntity } from '../../store/ducks/sessions';
+import {
+  setProfileTab,
+  getCurrentUserEntity,
+  getProfileTab,
+} from '../../store/ducks/sessions';
 import Profile from '../../components/Profile';
 
 function mapStateToProps(state, ownProps) {
