@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Layout, Menu, Icon } from 'antd';
 import MajorInfo from './Info';
-import EditForm from '../../containers/Major/Edit';
+import Edit from './Edit';
 import MajorAdmins from '../../containers/Major/Admins';
 import MajorUsers from '../../containers/Major/Users';
 import AnsweredQuestions from '../../containers/Major/AnsweredQuestions';
@@ -144,7 +144,7 @@ class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.edit}
-              render={() => <EditForm major={major} />}
+              render={() => <Edit major={major} />}
             />
           }
 

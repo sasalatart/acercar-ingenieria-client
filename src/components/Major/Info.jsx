@@ -1,4 +1,3 @@
-/* eslint-disable react/no-danger */
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
@@ -8,7 +7,7 @@ import { stateFromContent } from '../Forms/RichTextInput';
 import { majorShape } from '../../shapes';
 
 const styles = {
-  videoContainer: {
+  mediaContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -18,18 +17,24 @@ const styles = {
 function MajorInfo({ major, intl: { formatMessage: t } }) {
   return (
     <div>
+      <h1>{major.name}</h1>
       <Divider>{t({ id: 'majors.review' })}</Divider>
       <Row type="flex" align="middle" gutter={24}>
-        <Col sm={12}>
+        <Col sm={8}>
+          <div style={styles.mediaContainer}>
+            <img src={major.logo.medium} alt="major-logo" />
+          </div>
+        </Col>
+        <Col sm={16}>
           <p>{t({ id: 'majors.ofType' }, { type: t({ id: `majors.${major.category}` }) })}</p>
           <p>{major.shortDescription}</p>
         </Col>
-        <Col sm={12}>
-          <div style={styles.videoContainer}>
-            <ReactPlayer url={major.videoUrl} height={240} controls />
-          </div>
-        </Col>
       </Row>
+
+      <Divider>Video</Divider>
+      <div style={styles.mediaContainer}>
+        <ReactPlayer url={major.videoUrl} controls />
+      </div>
 
       <Divider>{t({ id: 'majors.moreInfo' })}</Divider>
       <Editor editorState={stateFromContent(major.description)} readOnly toolbarHidden />
