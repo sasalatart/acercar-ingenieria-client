@@ -51,7 +51,7 @@ export const getPage = createSelector(
   getSearch,
   (search) => {
     const urlSearchParams = new URLSearchParams(search);
-    return urlSearchParams.get('page') || 1;
+    return +urlSearchParams.get('page') || 1;
   },
 );
 
