@@ -87,7 +87,7 @@ class Profile extends Component {
     return (
       <Layout style={styles.layout}>
         <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
-          <Menu activeKey={activeMenuKey} onClick={({ key }) => replaceRoute(key)}>
+          <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)}>
             {this.renderMenuItem(menus.info)}
             {this.renderMenuItem(menus.notifications)}
             {this.renderMenuItem(menus.edit)}
