@@ -22,6 +22,17 @@ export const themeStyles = {
     marginTop: '-25px',
     marginBottom: '25px',
   },
+  innerLayout: {
+    background: colors.secondaryLight,
+    padding: '24px 0',
+  },
+  innerSider: {
+    background: colors.secondaryLight,
+    marginRight: '25px',
+  },
+  innerContent: {
+    padding: '0 24px',
+  },
 };
 
 export const breakpoints = {

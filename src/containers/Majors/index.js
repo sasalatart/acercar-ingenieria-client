@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import { goToMajor } from '../../store/ducks/routes';
 import {
   loadMajors,
   getDisciplinaryMajors,
   getInterdisciplinaryMajors,
 } from '../../store/ducks/majors';
-import { goToMajor } from '../../routes';
 import Majors from '../../components/Majors';
 
 function mapStateToProps(state) {

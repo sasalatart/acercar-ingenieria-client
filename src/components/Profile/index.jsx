@@ -1,79 +1,111 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Route } from 'react-router-dom';
 import { intlShape } from 'react-intl';
-import { Tabs, Icon } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 import { userShape } from '../../shapes';
 import ProfileInfo from './Info';
 import ProfileEdit from './Edit';
 import ChangePassword from './ChangePassword';
-import { PROFILE_TAB_NAMES as TAB_NAMES } from '../../routes';
+import { getProfilePaths } from '../../routes';
+import { themeStyles } from '../../theme';
 
-const { TabPane } = Tabs;
+const { Sider, Content } = Layout;
+
+const styles = {
+  layout: themeStyles.innerLayout,
+  sider: themeStyles.innerSider,
+  content: themeStyles.innerContent,
+};
 
 class Profile extends Component {
   static propTypes = {
     userId: PropTypes.number.isRequired,
     user: userShape,
     currentUser: userShape.isRequired,
-    activeTab: PropTypes.string,
+    activeMenuKey: PropTypes.string.isRequired,
     loadUser: PropTypes.func.isRequired,
-    setProfileTab: PropTypes.func.isRequired,
+    replaceRoute: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
   static defaultProps = {
     user: undefined,
-    activeTab: undefined,
   };
 
   componentWillMount() {
     this.props.loadUser(this.props.userId);
   }
 
+  getMenus() {
+    const { intl: { formatMessage: t } } = this.props;
+
+    return {
+      info: {
+        key: this.profileKeys.info,
+        icon: 'user',
+        text: t({ id: 'profile.info' }),
+      },
+      notifications: {
+        key: this.profileKeys.notifications,
+        icon: 'notification',
+        text: t({ id: 'profile.notifications' }),
+      },
+      edit: {
+        key: this.profileKeys.edit,
+        icon: 'edit',
+        text: t({ id: 'profile.edit' }),
+      },
+      password: {
+        key: this.profileKeys.password,
+        icon: 'lock',
+        text: t({ id: 'profile.changePassword' }),
+      },
+    };
+  }
+
+  profileKeys = getProfilePaths().keys;
+
+  renderMenuItem = ({ key, icon, text }) => (
+    <Menu.Item key={key}>
+      <Icon type={icon} />
+      <span>{text}</span>
+    </Menu.Item>
+  )
+
   render() {
     const {
-      user, userId, currentUser, setProfileTab, intl: { formatMessage: t },
+      userId, user, currentUser, activeMenuKey, replaceRoute,
     } = this.props;
 
     if (userId !== currentUser.id) {
       return <ProfileInfo user={user} />;
     }
 
+    const menus = this.getMenus();
+
     return (
-      <Tabs
-        activeKey={this.props.activeTab || TAB_NAMES.info}
-        size="large"
-        tabPosition="left"
-        onChange={setProfileTab}
-      >
-        <TabPane
-          key={TAB_NAMES.info}
-          tab={<span><Icon type="user" />{t({ id: 'profile.info' })}</span>}
-        >
-          <ProfileInfo user={currentUser} />
-        </TabPane>
+      <Layout style={styles.layout}>
+        <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
+          <Menu activeKey={activeMenuKey} onClick={({ key }) => replaceRoute(key)}>
+            {this.renderMenuItem(menus.info)}
+            {this.renderMenuItem(menus.notifications)}
+            {this.renderMenuItem(menus.edit)}
+            {this.renderMenuItem(menus.password)}
+          </Menu>
+        </Sider>
 
-        <TabPane
-          key={TAB_NAMES.notifications}
-          tab={<span><Icon type="notification" />{t({ id: 'profile.notifications' })}</span>}
-        >
-          {t({ id: 'profile.notifications' })}
-        </TabPane>
+        <Content style={styles.content}>
+          <Route
+            exact
+            path={this.profileKeys.info}
+            render={() => <ProfileInfo user={currentUser} />}
+          />
 
-        <TabPane
-          key={TAB_NAMES.edit}
-          tab={<span><Icon type="edit" />{t({ id: 'profile.edit' })}</span>}
-        >
-          <ProfileEdit currentUser={currentUser} />
-        </TabPane>
-
-        <TabPane
-          key={TAB_NAMES.changePassword}
-          tab={<span><Icon type="lock" />{t({ id: 'profile.changePassword' })}</span>}
-        >
-          <ChangePassword />
-        </TabPane>
-      </Tabs>
+          <Route exact path={this.profileKeys.edit} component={ProfileEdit} />
+          <Route exact path={this.profileKeys.password} component={ChangePassword} />
+        </Content>
+      </Layout>
     );
   }
 }

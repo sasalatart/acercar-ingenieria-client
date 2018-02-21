@@ -9,16 +9,14 @@ import {
   profileUpdatedNotification,
   passwordChangedNotification,
 } from './notifications';
-import ROUTES, {
-  PROFILE_TAB_NAMES as TAB_NAMES,
+import {
   goToLanding,
-  addQueryToUri,
-} from '../../routes';
+  goToProfile,
+} from './routes';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
   tokens: {},
-  currentTab: undefined,
 });
 
 export const TYPES = {
@@ -94,16 +92,6 @@ export function signOut() {
   };
 }
 
-export function setProfileTab(tab) {
-  return (dispatch) => {
-    dispatch({
-      type: TYPES.SET_TAB,
-      payload: { tab },
-    });
-    dispatch(addQueryToUri(ROUTES.PROFILE, { tab }));
-  };
-}
-
 export function updateProfile(userId, body) {
   return async dispatch =>
     dispatch({
@@ -116,7 +104,7 @@ export function updateProfile(userId, body) {
       },
     }).then(() => {
       dispatch(profileUpdatedNotification());
-      dispatch(setProfileTab(TAB_NAMES.info));
+      dispatch(goToProfile());
     });
 }
 
@@ -131,7 +119,7 @@ export function changePassword(body) {
       },
     }).then(() => {
       dispatch(passwordChangedNotification());
-      dispatch(setProfileTab(TAB_NAMES.info));
+      dispatch(goToProfile());
     });
 }
 
@@ -141,8 +129,6 @@ export default function sessionsReducer(state = INITIAL_STATE, action) {
       return state.set('tokens', action.payload.tokens);
     case `${TYPES.SIGN_IN}_FULFILLED`:
       return state.set('currentUserId', action.payload.result);
-    case TYPES.SET_TAB:
-      return state.set('currentTab', action.payload.tab);
     default:
       return state;
   }
@@ -165,9 +151,4 @@ export const getCurrentUserEntity = createSelector(
   getEntities,
   (currentUserId, entities) =>
     denormalize(currentUserId, usersSchema, entities),
-);
-
-export const getProfileTab = createSelector(
-  getSessionsData,
-  usersData => usersData.get('currentTab'),
 );

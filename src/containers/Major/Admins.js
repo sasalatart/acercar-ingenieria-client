@@ -1,36 +1,36 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import { addQueryToMajorPath } from '../../store/ducks/majors';
+import {
+  goToUser,
+  addQueryToCurrentUri,
+  getPage,
+} from '../../store/ducks/routes';
 import {
   loadMajorAdmins,
   getMajorAdminEntities,
   getMajorAdminsPaginationMeta,
 } from '../../store/ducks/admins';
-import { goToUser, getActivePage } from '../../routes';
 import MajorAdmins from '../../components/Major/Admins';
 
 function mapStateToProps(state, ownProps) {
-  const { match, location } = ownProps;
-  const majorId = +match.params.majorId;
-  const activePage = getActivePage(location.search);
-
-  const params = { majorId, page: activePage };
+  const { majorId } = ownProps;
+  const defaultPage = getPage(state);
+  const props = { majorId, page: defaultPage };
 
   return {
-    majorId,
-    pagination: getMajorAdminsPaginationMeta(state, params),
-    majorAdmins: getMajorAdminEntities(state, params),
+    defaultPage,
+    pagination: getMajorAdminsPaginationMeta(state, props),
+    majorAdmins: getMajorAdminEntities(state, props),
   };
 }
 
 const mapDispatchToProps = {
   loadMajorAdmins,
   goToUser,
-  addQueryToMajorPath,
+  addQueryToCurrentUri,
 };
 
-export default injectIntl(withRouter(connect(
+export default injectIntl(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MajorAdmins)));
+)(MajorAdmins));

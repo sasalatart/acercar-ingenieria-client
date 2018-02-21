@@ -11,9 +11,10 @@ class MajorQuestions extends Component {
   static propTypes = {
     majorId: PropTypes.number.isRequired,
     pagination: paginationShape,
+    defaultPage: PropTypes.number.isRequired,
     majorQuestions: PropTypes.arrayOf(questionShape),
     loadAnsweredMajorQuestions: PropTypes.func.isRequired,
-    addQueryToMajorPath: PropTypes.func.isRequired,
+    addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -23,13 +24,13 @@ class MajorQuestions extends Component {
   }
 
   componentWillMount() {
-    const { majorId, pagination, loadAnsweredMajorQuestions } = this.props;
-    loadAnsweredMajorQuestions(majorId, pagination && pagination.page);
+    const { majorId, defaultPage, loadAnsweredMajorQuestions } = this.props;
+    loadAnsweredMajorQuestions(majorId, defaultPage);
   }
 
   handlePageChange = (page) => {
-    const { majorId, loadAnsweredMajorQuestions, addQueryToMajorPath } = this.props;
-    addQueryToMajorPath(majorId, { page });
+    const { majorId, loadAnsweredMajorQuestions, addQueryToCurrentUri } = this.props;
+    addQueryToCurrentUri({ page });
     loadAnsweredMajorQuestions(majorId, page);
   }
 

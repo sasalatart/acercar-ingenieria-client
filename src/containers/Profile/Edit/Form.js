@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import pick from 'lodash/pick';
-import { updateProfile } from '../../../store/ducks/sessions';
+import { updateProfile, getCurrentUserEntity } from '../../../store/ducks/sessions';
 import { loadMajors, getMajorEntities } from '../../../store/ducks/majors';
 import ProfileEditForm from '../../../components/Profile/Edit/Form';
 
@@ -26,11 +26,11 @@ function processValues(values, currentUser) {
   };
 }
 
-function mapStateToProps(state, ownProps) {
-  const { currentUser } = ownProps;
+function mapStateToProps(state) {
+  const currentUser = getCurrentUserEntity(state);
 
   return {
-    userId: currentUser.id,
+    currentUser,
     majors: getMajorEntities(state),
     initialValues: {
       ...pick(currentUser, FIELDS),
@@ -45,7 +45,7 @@ const mapDispatchToProps = { loadMajors };
 const form = reduxForm({
   form: 'profileEdit',
   onSubmit: (values, dispatch, props) => dispatch(updateProfile(
-    props.userId,
+    props.currentUser.id,
     processValues(values, props.currentUser),
   )),
 })(ProfileEditForm);

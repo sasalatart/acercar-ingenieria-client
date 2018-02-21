@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Route } from 'react-router-dom';
 import { intlShape } from 'react-intl';
-import { Tabs, Icon } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 import MajorInfo from './Info';
 import EditForm from '../../containers/Major/Edit';
 import MajorAdmins from '../../containers/Major/Admins';
@@ -9,47 +10,103 @@ import MajorUsers from '../../containers/Major/Users';
 import AnsweredQuestions from '../../containers/Major/AnsweredQuestions';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
-import { MAJOR_TAB_NAMES as TAB_NAMES } from '../../routes';
+import { getMajorPaths } from '../../routes';
 import { themeStyles } from '../../theme';
 
-const { TabPane } = Tabs;
+const { Sider, Content } = Layout;
 
 const styles = {
-  title: themeStyles.title,
+  layout: themeStyles.innerLayout,
+  sider: themeStyles.innerSider,
+  content: themeStyles.innerContent,
 };
-
-function renderTabTitle(type, title) {
-  return <span><Icon type={type} />{title}</span>;
-}
 
 class Major extends Component {
   static propTypes = {
     majorId: PropTypes.number.isRequired,
     major: majorShape,
     currentUser: userShape,
-    activeTab: PropTypes.string,
+    activeMenuKey: PropTypes.string.isRequired,
     loadMajor: PropTypes.func.isRequired,
-    setMajorTab: PropTypes.func.isRequired,
+    replaceRoute: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
   static defaultProps = {
     major: undefined,
     currentUser: undefined,
-    activeTab: undefined,
   }
 
-  componentWillMount() {
-    const { loadMajor, majorId } = this.props;
-    loadMajor(majorId);
+  componentDidMount() {
+    this.props.loadMajor(this.props.majorId);
   }
 
-  handleTabChange = (key) => {
-    this.props.setMajorTab(this.props.majorId, key);
+  getMenus() {
+    const { intl: { formatMessage: t } } = this.props;
+
+    return {
+      info: {
+        key: this.majorKeys.info,
+        icon: 'info-circle',
+        text: t({ id: 'majors.info' }),
+      },
+      edit: {
+        key: this.majorKeys.edit,
+        icon: 'edit',
+        text: t({ id: 'majors.edit' }),
+      },
+      admins: {
+        key: this.majorKeys.admins,
+        icon: 'star-o',
+        text: t({ id: 'majors.admins' }),
+      },
+      users: {
+        key: this.majorKeys.users,
+        icon: 'team',
+        text: t({ id: 'majors.interestedUsers' }),
+      },
+      answeredQuestions: {
+        key: this.majorKeys.answeredQuestions,
+        icon: 'question-circle',
+        text: t({ id: 'majors.questions' }),
+      },
+      pendingQuestions: {
+        key: this.majorKeys.pendingQuestions,
+        icon: 'question-circle-o',
+        text: t({ id: 'majors.pendingQuestions' }),
+      },
+      articles: {
+        key: this.majorKeys.articles,
+        icon: 'file-text',
+        text: t({ id: 'majors.articles' }),
+      },
+      comments: {
+        key: this.majorKeys.comments,
+        icon: 'message',
+        text: t({ id: 'majors.comments' }),
+      },
+      email: {
+        key: this.majorKeys.email,
+        icon: 'mail',
+        text: t({ id: 'majors.email' }),
+      },
+    };
   }
+
+  majorKeys = getMajorPaths(this.props.majorId).keys;
+  majorRoutes = getMajorPaths(this.props.majorId).routes;
+
+  renderMenuItem = ({ key, icon, text }) => (
+    <Menu.Item key={key}>
+      <Icon type={icon} />
+      <span>{text}</span>
+    </Menu.Item>
+  )
 
   render() {
-    const { major, currentUser, intl: { formatMessage: t } } = this.props;
+    const {
+      majorId, major, currentUser, activeMenuKey, replaceRoute,
+    } = this.props;
 
     if (!major) {
       return <Spinner />;
@@ -58,92 +115,62 @@ class Major extends Component {
     const adminPrivileges = currentUser
       && (currentUser.admin || currentUser.adminOfMajors.includes(major.id));
 
+    const menus = this.getMenus();
+
     return (
-      <div>
-        <h1 style={styles.title}>{major.name}</h1>
+      <Layout style={styles.layout}>
+        <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
+          <Menu activeKey={activeMenuKey} onClick={({ key }) => replaceRoute(key)}>
+            {this.renderMenuItem(menus.info)}
+            {adminPrivileges && this.renderMenuItem(menus.edit)}
+            {currentUser && this.renderMenuItem(menus.admins)}
+            {currentUser && this.renderMenuItem(menus.users)}
+            {this.renderMenuItem(menus.answeredQuestions)}
+            {adminPrivileges && this.renderMenuItem(menus.pendingQuestions)}
+            {this.renderMenuItem(menus.articles)}
+            {currentUser && this.renderMenuItem(menus.comments)}
+            {adminPrivileges && this.renderMenuItem(menus.email)}
+          </Menu>
+        </Sider>
 
-        <Tabs
-          activeKey={this.props.activeTab || TAB_NAMES.info}
-          size="large"
-          tabPosition="left"
-          onChange={this.handleTabChange}
-        >
-          <TabPane
-            key={TAB_NAMES.info}
-            tab={renderTabTitle('info-circle', t({ id: 'majors.info' }))}
-          >
-            <MajorInfo major={major} />
-          </TabPane>
+        <Content style={styles.content}>
+          <Route
+            exact
+            path={this.majorRoutes.info}
+            render={() => <MajorInfo major={major} />}
+          />
 
           {adminPrivileges &&
-            <TabPane
-              key={TAB_NAMES.edit}
-              tab={renderTabTitle('edit', t({ id: 'majors.edit' }))}
-            >
-              <EditForm major={major} />
-            </TabPane>
+            <Route
+              exact
+              path={this.majorRoutes.edit}
+              render={() => <EditForm major={major} />}
+            />
           }
 
           {currentUser &&
-            <TabPane
-              key={TAB_NAMES.admins}
-              tab={renderTabTitle('star-o', t({ id: 'majors.admins' }))}
-            >
-              <MajorAdmins />
-            </TabPane>
+            <Route
+              exact
+              path={this.majorRoutes.admins}
+              render={() => <MajorAdmins majorId={majorId} />}
+            />
           }
 
           {currentUser &&
-            <TabPane
-              key={TAB_NAMES.interestedUsers}
-              tab={renderTabTitle('team', t({ id: 'majors.interestedUsers' }))}
-            >
-              <MajorUsers />
-            </TabPane>
+            <Route
+              exact
+              path={this.majorRoutes.users}
+              render={() => <MajorUsers majorId={majorId} />}
+            />
           }
 
-          <TabPane
-            key={TAB_NAMES.questions}
-            tab={renderTabTitle('question-circle', t({ id: 'majors.questions' }))}
-          >
-            <AnsweredQuestions />
-          </TabPane>
-
-          {adminPrivileges &&
-            <TabPane
-              key={TAB_NAMES.pendingQuestions}
-              tab={renderTabTitle('question-circle-o', t({ id: 'majors.pendingQuestions' }))}
-            >
-              {t({ id: 'majors.pendingQuestions' })}
-            </TabPane>
-          }
-
-          <TabPane
-            key={TAB_NAMES.articles}
-            tab={renderTabTitle('file-text', t({ id: 'majors.articles' }))}
-          >
-            {t({ id: 'majors.articles' })}
-          </TabPane>
-
-          {currentUser &&
-            <TabPane
-              key={TAB_NAMES.comments}
-              tab={renderTabTitle('message', t({ id: 'majors.comments' }))}
-            >
-              {t({ id: 'majors.comments' })}
-            </TabPane>
-          }
-
-          {adminPrivileges &&
-            <TabPane
-              key={TAB_NAMES.email}
-              tab={renderTabTitle('mail', t({ id: 'majors.email' }))}
-            >
-              {t({ id: 'majors.email' })}
-            </TabPane>
-          }
-        </Tabs>
-      </div>
+          <Route
+            exact
+            path={this.majorRoutes.answeredQuestions}
+            render={() => <AnsweredQuestions majorId={majorId} />}
+          />
+        </Content>
+      </Layout>
     );
   }
 }

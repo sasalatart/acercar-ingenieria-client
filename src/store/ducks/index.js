@@ -6,7 +6,6 @@ import entities from './entities';
 import sessions, { TYPES } from './sessions';
 import announcements from './announcements';
 import users from './users';
-import majors from './majors';
 import admins from './admins';
 import questions from './questions';
 
@@ -18,7 +17,6 @@ const appReducer = combineReducers({
   sessions,
   announcements,
   users,
-  majors,
   admins,
   questions,
 });

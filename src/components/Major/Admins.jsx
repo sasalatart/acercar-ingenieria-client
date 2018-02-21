@@ -21,11 +21,12 @@ const styles = {
 class MajorAdmins extends Component {
   static propTypes = {
     majorId: PropTypes.number.isRequired,
+    defaultPage: PropTypes.number.isRequired,
     pagination: paginationShape,
     majorAdmins: PropTypes.arrayOf(userShape),
     loadMajorAdmins: PropTypes.func.isRequired,
     goToUser: PropTypes.func.isRequired,
-    addQueryToMajorPath: PropTypes.func.isRequired,
+    addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -35,13 +36,13 @@ class MajorAdmins extends Component {
   }
 
   componentWillMount() {
-    const { majorId, pagination, loadMajorAdmins } = this.props;
-    loadMajorAdmins(majorId, pagination && pagination.page);
+    const { majorId, defaultPage, loadMajorAdmins } = this.props;
+    loadMajorAdmins(majorId, defaultPage);
   }
 
   handlePageChange = (page) => {
-    const { majorId, loadMajorAdmins, addQueryToMajorPath } = this.props;
-    addQueryToMajorPath(majorId, { page });
+    const { majorId, loadMajorAdmins, addQueryToCurrentUri } = this.props;
+    addQueryToCurrentUri({ page });
     loadMajorAdmins(majorId, page);
   }
 

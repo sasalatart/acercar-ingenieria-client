@@ -1,35 +1,34 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import { addQueryToMajorPath } from '../../store/ducks/majors';
+import {
+  addQueryToCurrentUri,
+  getPage,
+} from '../../store/ducks/routes';
 import {
   loadAnsweredMajorQuestions,
   getAnsweredEntities,
   getAnsweredPaginationMeta,
 } from '../../store/ducks/questions';
-import { getActivePage } from '../../routes';
 import MajorQuestions from '../../components/Major/Questions';
 
 function mapStateToProps(state, ownProps) {
-  const { match, location } = ownProps;
-  const majorId = +match.params.majorId;
-  const activePage = getActivePage(location.search);
-
-  const params = { majorId, page: activePage };
+  const { majorId } = ownProps;
+  const defaultPage = getPage(state);
+  const props = { majorId, page: defaultPage };
 
   return {
-    majorId,
-    pagination: getAnsweredPaginationMeta(state, params),
-    majorQuestions: getAnsweredEntities(state, params),
+    defaultPage,
+    pagination: getAnsweredPaginationMeta(state, props),
+    majorQuestions: getAnsweredEntities(state, props),
   };
 }
 
 const mapDispatchToProps = {
   loadAnsweredMajorQuestions,
-  addQueryToMajorPath,
+  addQueryToCurrentUri,
 };
 
-export default injectIntl(withRouter(connect(
+export default injectIntl(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MajorQuestions)));
+)(MajorQuestions));

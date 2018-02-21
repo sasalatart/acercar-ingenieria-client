@@ -1,16 +1,8 @@
-import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { majorsSchema } from '../../schemas';
+import { goToMajor } from './routes';
 import { getEntities } from './entities';
 import { majorEditedNotification } from './notifications';
-import ROUTES, {
-  MAJOR_TAB_NAMES as TAB_NAMES,
-  addQueryToUri,
-} from '../../routes';
-
-const INITIAL_STATE = Map({
-  currentTab: undefined,
-});
 
 export const TYPES = {
   LOAD: 'fetch::majors/LOAD',
@@ -40,24 +32,6 @@ export function loadMajor(majorId) {
   };
 }
 
-export function setMajorTab(majorId, tab) {
-  return (dispatch) => {
-    dispatch({
-      type: TYPES.SET_TAB,
-      payload: { tab },
-    });
-    dispatch(addQueryToUri(ROUTES.MAJOR(majorId), { tab }));
-  };
-}
-
-export function addQueryToMajorPath(majorId, query) {
-  return (dispatch, getState) => {
-    // eslint-disable-next-line no-use-before-define
-    const currentTab = getMajorTab(getState());
-    dispatch(addQueryToUri(ROUTES.MAJOR(majorId), { ...query, tab: currentTab }));
-  };
-}
-
 export function updateMajor(majorId, body) {
   return dispatch =>
     dispatch({
@@ -70,17 +44,8 @@ export function updateMajor(majorId, body) {
       },
     }).then(() => {
       dispatch(majorEditedNotification());
-      dispatch(setMajorTab(majorId, TAB_NAMES.info));
+      dispatch(goToMajor(majorId));
     });
-}
-
-export default function majorsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case TYPES.SET_TAB:
-      return state.set('currentTab', action.payload.tab);
-    default:
-      return state;
-  }
 }
 
 export const getMajorsData = state => state.majors;
@@ -112,9 +77,4 @@ export const getDisciplinaryMajors = createSelector(
 export const getInterdisciplinaryMajors = createSelector(
   getMajorEntities,
   majorEntities => filterByCategory(majorEntities, 'interdisciplinary'),
-);
-
-export const getMajorTab = createSelector(
-  getMajorsData,
-  majorsData => majorsData.get('currentTab'),
 );

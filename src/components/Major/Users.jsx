@@ -17,9 +17,10 @@ class MajorUsers extends Component {
   static propTypes = {
     majorId: PropTypes.number.isRequired,
     pagination: paginationShape,
+    defaultPage: PropTypes.number.isRequired,
     majorUsers: PropTypes.arrayOf(userShape),
     loadMajorUsers: PropTypes.func.isRequired,
-    addQueryToMajorPath: PropTypes.func.isRequired,
+    addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -29,13 +30,13 @@ class MajorUsers extends Component {
   }
 
   componentWillMount() {
-    const { majorId, pagination, loadMajorUsers } = this.props;
-    loadMajorUsers(majorId, pagination && pagination.page);
+    const { majorId, defaultPage, loadMajorUsers } = this.props;
+    loadMajorUsers(majorId, defaultPage);
   }
 
   handlePageChange = (page) => {
-    const { majorId, loadMajorUsers, addQueryToMajorPath } = this.props;
-    addQueryToMajorPath(majorId, { page });
+    const { majorId, loadMajorUsers, addQueryToCurrentUri } = this.props;
+    addQueryToCurrentUri({ page });
     loadMajorUsers(majorId, page);
   }
 
