@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Button, Row, Col } from 'antd';
-import { TextField, TextArea, RadioField } from '../Forms';
+import { Row, Col } from 'antd';
+import { TextField, TextArea, RadioField, SubmitButton } from '../Forms';
 import PictureInput from '../Forms/PictureInput';
 import RichTextInput from '../Forms/RichTextInput';
 import majorsValidations from '../../validations/majors';
@@ -17,9 +17,6 @@ const styles = {
   categoriesWrapper: {
     display: 'flex',
     justifyContent: 'flex-end',
-  },
-  submitButton: {
-    width: '100%',
   },
 };
 
@@ -118,15 +115,7 @@ class MajorEditForm extends Component {
           component={RichTextInput}
           editorProps={{ placeholder: t({ id: 'forms.description' }) }}
         />
-        <Button
-          type="primary"
-          htmlType="submit"
-          disabled={!valid}
-          loading={submitting}
-          style={styles.submitButton}
-        >
-          {t({ id: 'forms.submit' })}
-        </Button>
+        <SubmitButton disabled={!valid} loading={submitting} />
       </form>
     );
   }

@@ -25,3 +25,4 @@ export const NumberField = createComponent(InputNumber, mapError);
 export const TextArea = createComponent(Input.TextArea, textFieldMap);
 export const SelectField = createComponent(CustomSelect, selectFieldMap);
 export const RadioField = createComponent(CustomRadio, eventMap);
+export { default as SubmitButton } from './SubmitButton';

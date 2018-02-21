@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Button, Icon, Row, Col } from 'antd';
-import { TextField, NumberField } from '../Forms';
+import { Icon, Row, Col } from 'antd';
+import { TextField, NumberField, SubmitButton } from '../Forms';
 import usersValidations from '../../validations/users';
 import { colors } from '../../theme';
 
@@ -12,9 +12,6 @@ const styles = {
     color: colors.fieldPrefix,
   },
   generationInput: {
-    width: '100%',
-  },
-  submitButton: {
     width: '100%',
   },
 };
@@ -120,15 +117,7 @@ class SignUpForm extends Component {
             />
           </Col>
         </Row>
-        <Button
-          type="primary"
-          htmlType="submit"
-          disabled={!valid}
-          loading={submitting}
-          style={styles.submitButton}
-        >
-          {t({ id: 'routing.signUp' })}
-        </Button>
+        <SubmitButton disabled={!valid} loading={submitting} />
       </form>
     );
   }

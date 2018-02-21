@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Alert, Button, Icon, Row, Col } from 'antd';
-import { TextField, NumberField, TextArea, SelectField } from '../../Forms';
+import { Alert, Icon, Row, Col } from 'antd';
+import { TextField, NumberField, TextArea, SelectField, SubmitButton } from '../../Forms';
 import PictureInput from '../../Forms/PictureInput';
 import Spinner from '../../Spinner';
 import usersValidations from '../../../validations/users';
@@ -24,10 +24,6 @@ const styles = {
   avatarFieldWrapper: {
     display: 'flex',
     justifyContent: 'center',
-  },
-  submitButton: {
-    width: '100%',
-    marginTop: '25px',
   },
 };
 
@@ -176,15 +172,7 @@ class ProfileEditForm extends Component {
               }}
             />
           </div>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={!valid}
-            loading={submitting}
-            style={styles.submitButton}
-          >
-            {t({ id: 'forms.submit' })}
-          </Button>
+          <SubmitButton disabled={!valid} loading={submitting} />
         </form>
       </div>
     );

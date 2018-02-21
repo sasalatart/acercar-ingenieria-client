@@ -2,17 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Button, Icon } from 'antd';
-import { TextField } from '../../Forms';
+import { Icon } from 'antd';
+import { TextField, SubmitButton } from '../../Forms';
 import usersValidations from '../../../validations/users';
 import { colors } from '../../../theme';
 
 const styles = {
   fieldPrefix: {
     color: colors.fieldPrefix,
-  },
-  submitButton: {
-    width: '100%',
   },
 };
 
@@ -69,15 +66,7 @@ class ChangePasswordForm extends Component {
             validators.required, validators.minPasswordLength, validators.confirmsPassword,
           ]}
         />
-        <Button
-          type="primary"
-          htmlType="submit"
-          disabled={!valid}
-          loading={submitting}
-          style={styles.submitButton}
-        >
-          {t({ id: 'forms.submit' })}
-        </Button>
+        <SubmitButton disabled={!valid} loading={submitting} />
       </form>
     );
   }
