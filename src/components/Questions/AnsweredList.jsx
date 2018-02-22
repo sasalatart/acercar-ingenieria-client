@@ -20,6 +20,9 @@ const styles = {
     display: 'flex',
     justifyContent: 'flex-end',
   },
+  editButton: {
+    marginRight: '5px',
+  },
 };
 
 function setStyle(pinned) {
@@ -29,7 +32,14 @@ function setStyle(pinned) {
 }
 
 function QuestionsList({
-  currentUser, questions, majorId, page, destroyingIds, onDestroy, intl: { formatMessage: t },
+  currentUser,
+  questions,
+  majorId,
+  page,
+  destroyingIds,
+  onEditClicked,
+  onDestroyClicked,
+  intl: { formatMessage: t },
 }) {
   const hasAdminPrivileges = currentUser
     && (currentUser.admin || (majorId && currentUser.adminOfMajors.includes(majorId)));
@@ -43,11 +53,14 @@ function QuestionsList({
           {answer}
           {hasAdminPrivileges &&
             <div style={styles.actions}>
+              <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
+                {t({ id: 'forms.edit' })}
+              </Button>
               <Popconfirm
                 title={t({ id: 'forms.confirm.message' })}
                 okText={t({ id: 'forms.confirm.yes' })}
                 cancelText={t({ id: 'forms.confirm.cancel' })}
-                onConfirm={() => onDestroy(id, majorId, page)}
+                onConfirm={() => onDestroyClicked(id, majorId, page)}
               >
                 <Button type="danger" icon="delete" loading={destroyingIds.has(id)}>
                   {t({ id: 'forms.delete' })}
@@ -67,7 +80,8 @@ QuestionsList.propTypes = {
   questions: ImmutablePropTypes.setOf(questionShape).isRequired,
   page: PropTypes.number.isRequired,
   destroyingIds: ImmutablePropTypes.setOf(PropTypes.number).isRequired,
-  onDestroy: PropTypes.func.isRequired,
+  onEditClicked: PropTypes.func.isRequired,
+  onDestroyClicked: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 

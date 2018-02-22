@@ -17,7 +17,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  onDestroy: destroyQuestion,
+  onDestroyClicked: destroyQuestion,
 };
 
 export default injectIntl(connect(

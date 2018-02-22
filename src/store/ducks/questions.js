@@ -1,11 +1,13 @@
 import { Map, Set } from 'immutable';
 import { createSelector } from 'reselect';
+import { denormalize } from 'normalizr';
 import URI from 'urijs';
 import { questionsSchema } from '../../schemas';
-import { removeEntity } from './entities';
+import { getEntities, removeEntity } from './entities';
 import { majorPaging } from './paginations';
 import {
   questionCreatedNotification,
+  questionUpdatedNotification,
   questionDestroyedNotification,
 } from './notifications';
 
@@ -24,6 +26,7 @@ const INITIAL_STATE = new Map({
 const TYPES = {
   LOAD_ANSWERED_FROM_MAJOR: 'fetch::questions/LOAD_ANSWERED_FROM_MAJOR',
   CREATE: 'fetch::questions/CREATE',
+  UPDATE: 'fetch::questions/UPDATE',
   DESTROY: 'fetch::questions/DESTROY',
   SET_DESTROYING: 'questions/SET_DESTROYING',
 };
@@ -53,6 +56,22 @@ export function createQuestion(values, majorId) {
       },
     }).then(() => {
       dispatch(questionCreatedNotification());
+    });
+}
+
+export function updateQuestion(values, majorId, id) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.UPDATE,
+      payload: {
+        method: 'PUT',
+        url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
+        urlParams: { id, majorId },
+        body: values,
+        responseSchema: questionsSchema,
+      },
+    }).then(() => {
+      dispatch(questionUpdatedNotification());
     });
 }
 
@@ -96,6 +115,14 @@ export default function questionsReducer(state = INITIAL_STATE, action) {
 }
 
 export const getQuestionsData = state => state.questions;
+
+const getQuestionId = (state, params) => params.questionId;
+
+export const getQuestionEntity = createSelector(
+  getQuestionId,
+  getEntities,
+  (questionId, entities) => denormalize(questionId, questionsSchema, entities),
+);
 
 export const getAnsweredEntities = majorsAnsweredPagingFns.getPagedEntities;
 

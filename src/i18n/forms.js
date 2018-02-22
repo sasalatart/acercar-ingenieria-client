@@ -31,6 +31,7 @@ export default {
     'forms.proposeOne': 'Propose one',
     'forms.beforeCreatingQuestionAlert.message': 'Before creating this question...',
     'forms.beforeCreatingQuestionAlert.description': 'Consider that it will be subject to approval (and answering) from the admins, which could take a while.',
+    'forms.edit': 'Edit',
     'forms.delete': 'Delete',
   },
   'es-ES': {
@@ -65,6 +66,7 @@ export default {
     'forms.proposeOne': 'Proponer una',
     'forms.beforeCreatingQuestionAlert.message': 'Antes de crear esta pregunta...',
     'forms.beforeCreatingQuestionAlert.description': 'Considera que debe ser aprobada (y respondida) por los administradores, lo cual puede tomar un tiempo.',
+    'forms.edit': 'Editar',
     'forms.delete': 'Eliminar',
   },
 };

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
-import { Alert, Button, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import PaginationControls from '../Pagination';
-import NewForm from '../../containers/Questions/NewForm';
+import Form from '../../containers/Questions/Form';
 import AnsweredQuestionsList from '../../containers/Questions/AnsweredList';
 import Spinner from '../Spinner';
 import { userShape, paginationShape, questionShape } from '../../shapes';
@@ -13,9 +13,6 @@ const styles = {
   titleWrapper: {
     display: 'flex',
     justifyContent: 'space-between',
-  },
-  alert: {
-    marginBottom: '24px',
   },
 };
 
@@ -55,8 +52,12 @@ class AnsweredQuestions extends Component {
     this.setState({ formVisible: true });
   }
 
+  handleEditClicked = (id) => {
+    this.setState({ formVisible: true, editingId: id });
+  }
+
   handleFormClose = () => {
-    this.setState({ formVisible: false });
+    this.setState({ formVisible: false, editingId: undefined });
   }
 
   render() {
@@ -67,6 +68,8 @@ class AnsweredQuestions extends Component {
     if (!questions || questions.isEmpty()) {
       return <Spinner />;
     }
+
+    const { editingId } = this.state;
 
     return (
       <div>
@@ -79,23 +82,21 @@ class AnsweredQuestions extends Component {
         </div>
 
         <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
-          <AnsweredQuestionsList questions={questions} majorId={majorId} />
+          <AnsweredQuestionsList
+            questions={questions}
+            majorId={majorId}
+            onEditClicked={this.handleEditClicked}
+          />
         </PaginationControls>
 
         <Modal
-          title={t({ id: 'questions.new' })}
+          title={editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' })}
           visible={this.state.formVisible}
           footer={null}
           onCancel={this.handleFormClose}
+          destroyOnClose
         >
-          <Alert
-            type="warning"
-            message={t({ id: 'forms.beforeCreatingQuestionAlert.message' })}
-            description={t({ id: 'forms.beforeCreatingQuestionAlert.description' })}
-            style={styles.alert}
-            showIcon
-          />
-          <NewForm majorId={majorId} onSubmitSuccess={this.handleFormClose} />
+          <Form id={editingId} majorId={majorId} onSubmitSuccess={this.handleFormClose} />
         </Modal>
       </div>
     );

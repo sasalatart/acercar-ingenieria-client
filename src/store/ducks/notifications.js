@@ -97,6 +97,15 @@ export function questionCreatedNotification() {
   };
 }
 
+export function questionUpdatedNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.questionUpdated.message'],
+    }));
+  };
+}
+
 export function questionDestroyedNotification() {
   return (dispatch, getState) => {
     const locale = getLocale(getState());
