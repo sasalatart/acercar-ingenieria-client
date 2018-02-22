@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../Pagination';
 import ProfileCard from '../Profile/Card';
 import Spinner from '../Spinner';
@@ -23,7 +23,7 @@ class MajorAdmins extends Component {
     majorId: PropTypes.number.isRequired,
     defaultPage: PropTypes.number.isRequired,
     pagination: paginationShape,
-    majorAdmins: PropTypes.arrayOf(userShape),
+    majorAdmins: ImmutablePropTypes.setOf(userShape),
     loadMajorAdmins: PropTypes.func.isRequired,
     goToUser: PropTypes.func.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
@@ -67,17 +67,14 @@ class MajorAdmins extends Component {
   render() {
     const { pagination, majorAdmins, intl: { formatMessage: t } } = this.props;
 
-    if (isEmpty(majorAdmins)) {
+    if (!majorAdmins || majorAdmins.isEmpty()) {
       return <Spinner />;
     }
 
     return (
       <div>
         <h1>{t({ id: 'admins' })}</h1>
-        <PaginationControls
-          pagination={pagination}
-          onPageChange={this.handlePageChange}
-        >
+        <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
           {this.renderProfileCards()}
         </PaginationControls>
       </div>

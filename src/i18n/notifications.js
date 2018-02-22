@@ -9,6 +9,7 @@ export default {
     'notifications.profileUpdated.message': 'Your profile has been edited.',
     'notifications.majorUpdated.message': 'The major has been updated.',
     'notifications.questionCreated.message': 'Your question has been created.',
+    'notifications.questionDestroyed.message': 'The question has been deleted.',
   },
   'es-ES': {
     'notifications.signUpOneMoreStep.message': '¡Sólo un paso más!',
@@ -20,5 +21,6 @@ export default {
     'notifications.profileUpdated.message': 'Has editado tu perfil',
     'notifications.majorUpdated.message': 'Has actualizado el major.',
     'notifications.questionCreated.message': 'Tu pregunta frecuente ha sido creada.',
+    'notifications.questionDestroyed.message': 'La pregunta ha sido eliminada.',
   },
 };

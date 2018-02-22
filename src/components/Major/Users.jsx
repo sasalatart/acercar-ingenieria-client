@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List } from 'antd';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../Pagination';
 import ProfileAvatar from '../Profile/Avatar';
 import Spinner from '../Spinner';
@@ -18,7 +18,7 @@ class MajorUsers extends Component {
     majorId: PropTypes.number.isRequired,
     pagination: paginationShape,
     defaultPage: PropTypes.number.isRequired,
-    majorUsers: PropTypes.arrayOf(userShape),
+    majorUsers: ImmutablePropTypes.setOf(userShape),
     loadMajorUsers: PropTypes.func.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
@@ -62,7 +62,7 @@ class MajorUsers extends Component {
     return (
       <List
         itemLayout="horizontal"
-        dataSource={this.props.majorUsers}
+        dataSource={this.props.majorUsers.toArray()}
         renderItem={this.renderMajorUser}
       />
     );
@@ -71,17 +71,14 @@ class MajorUsers extends Component {
   render() {
     const { pagination, majorUsers, intl: { formatMessage: t } } = this.props;
 
-    if (isEmpty(majorUsers)) {
+    if (!majorUsers || majorUsers.isEmpty()) {
       return <Spinner />;
     }
 
     return (
       <div>
         <h1>{t({ id: 'majors.interestedUsers' })}</h1>
-        <PaginationControls
-          pagination={pagination}
-          onPageChange={this.handlePageChange}
-        >
+        <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
           {this.renderMajorUsers()}
         </PaginationControls>
       </div>

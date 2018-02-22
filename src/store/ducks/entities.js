@@ -10,7 +10,26 @@ const INITIAL_STATE = new Map({
   questions: new Map({}),
 });
 
+const TYPES = {
+  REMOVE: 'entities/REMOVE',
+};
+
+export function removeEntity(collection, key) {
+  return {
+    type: TYPES.REMOVE,
+    payload: {
+      collection,
+      key,
+    },
+  };
+}
+
 export default function entitiesReducer(state = INITIAL_STATE, action) {
+  if (action.type === TYPES.REMOVE) {
+    const { payload: { collection, key } } = action;
+    return state.deleteIn([collection, String(key)]);
+  }
+
   if (!action.payload || !action.payload.entities || action.type === REHYDRATE) {
     return state;
   }

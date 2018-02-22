@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse } from 'antd';
-import { questionShape } from '../../shapes';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import { injectIntl, intlShape } from 'react-intl';
+import { Button, Collapse, Popconfirm } from 'antd';
+import { userShape, questionShape } from '../../shapes';
 import { colors } from '../../theme';
 
 const { Panel } = Collapse;
@@ -14,6 +16,10 @@ const styles = {
   pinned: {
     backgroundColor: colors.primaryLight,
   },
+  actions: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
 };
 
 function setStyle(pinned) {
@@ -22,7 +28,12 @@ function setStyle(pinned) {
     : styles.panel;
 }
 
-function QuestionsList({ questions }) {
+function QuestionsList({
+  currentUser, questions, majorId, page, destroyingIds, onDestroy, intl: { formatMessage: t },
+}) {
+  const hasAdminPrivileges = currentUser
+    && (currentUser.admin || (majorId && currentUser.adminOfMajors.includes(majorId)));
+
   return (
     <Collapse bordered={false}>
       {questions.map(({
@@ -30,6 +41,20 @@ function QuestionsList({ questions }) {
       }) => (
         <Panel key={id} header={question} style={setStyle(pinned)}>
           {answer}
+          {hasAdminPrivileges &&
+            <div style={styles.actions}>
+              <Popconfirm
+                title={t({ id: 'forms.confirm.message' })}
+                okText={t({ id: 'forms.confirm.yes' })}
+                cancelText={t({ id: 'forms.confirm.cancel' })}
+                onConfirm={() => onDestroy(id, majorId, page)}
+              >
+                <Button type="danger" icon="delete" loading={destroyingIds.has(id)}>
+                  {t({ id: 'forms.delete' })}
+                </Button>
+              </Popconfirm>
+            </div>
+          }
         </Panel>
       ))}
     </Collapse>
@@ -37,7 +62,18 @@ function QuestionsList({ questions }) {
 }
 
 QuestionsList.propTypes = {
-  questions: PropTypes.arrayOf(questionShape).isRequired,
+  currentUser: userShape,
+  majorId: PropTypes.number,
+  questions: ImmutablePropTypes.setOf(questionShape).isRequired,
+  page: PropTypes.number.isRequired,
+  destroyingIds: ImmutablePropTypes.setOf(PropTypes.number).isRequired,
+  onDestroy: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default QuestionsList;
+QuestionsList.defaultProps = {
+  currentUser: undefined,
+  majorId: undefined,
+};
+
+export default injectIntl(QuestionsList);

@@ -96,3 +96,12 @@ export function questionCreatedNotification() {
     }));
   };
 }
+
+export function questionDestroyedNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.questionDestroyed.message'],
+    }));
+  };
+}

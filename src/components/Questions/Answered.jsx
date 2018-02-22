@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Alert, Button, Modal } from 'antd';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../Pagination';
 import NewForm from '../../containers/Questions/NewForm';
-import AnsweredQuestionsList from '../Questions/AnsweredList';
+import AnsweredQuestionsList from '../../containers/Questions/AnsweredList';
 import Spinner from '../Spinner';
 import { userShape, paginationShape, questionShape } from '../../shapes';
 
@@ -25,7 +25,7 @@ class AnsweredQuestions extends Component {
     majorId: PropTypes.number,
     pagination: paginationShape,
     defaultPage: PropTypes.number.isRequired,
-    questions: PropTypes.arrayOf(questionShape),
+    questions: ImmutablePropTypes.setOf(questionShape),
     loadAnsweredQuestions: PropTypes.func.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
@@ -64,7 +64,7 @@ class AnsweredQuestions extends Component {
       currentUser, majorId, pagination, questions, intl: { formatMessage: t },
     } = this.props;
 
-    if (isEmpty(questions)) {
+    if (!questions || questions.isEmpty()) {
       return <Spinner />;
     }
 
@@ -79,7 +79,7 @@ class AnsweredQuestions extends Component {
         </div>
 
         <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
-          <AnsweredQuestionsList questions={questions} />
+          <AnsweredQuestionsList questions={questions} majorId={majorId} />
         </PaginationControls>
 
         <Modal

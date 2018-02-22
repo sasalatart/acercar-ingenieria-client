@@ -135,7 +135,7 @@ const fetchMiddleware = store => next => (action) => {
     payload: window.fetch(url, rest)
       .then(async (response) => {
         refreshTokens(response, store, action.type);
-        const body = await response.json();
+        const body = response.status === 204 ? {} : await response.json();
 
         return response.status < 400
           ? parseResponse(body, response.headers, action.payload)

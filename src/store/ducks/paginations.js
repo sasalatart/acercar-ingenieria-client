@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { Map } from 'immutable';
+import { Map, OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
@@ -41,8 +41,15 @@ export function majorPaging(dataSelector, schema, partialPagingPath, partialMeta
     update: (state, payload) => {
       const { pagination, result, request: { urlParams: { majorId } } } = payload;
       return state
-        .mergeIn([...pagingPath, majorId], new Map({ [pagination.page]: result }))
+        .mergeIn([...pagingPath, majorId], new Map({ [pagination.page]: new OrderedSet(result) }))
         .setIn([...metaPath, majorId], pagination);
+    },
+
+    destroy: (state, { id, majorId, page }) => {
+      return state.updateIn(
+        [...pagingPath, majorId, String(page)],
+        pagedData => pagedData.delete(id),
+      );
     },
   };
 }

@@ -1,8 +1,13 @@
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
+import { createSelector } from 'reselect';
 import URI from 'urijs';
 import { questionsSchema } from '../../schemas';
+import { removeEntity } from './entities';
 import { majorPaging } from './paginations';
-import { questionCreatedNotification } from './notifications';
+import {
+  questionCreatedNotification,
+  questionDestroyedNotification,
+} from './notifications';
 
 const majorsAnsweredPagingFns = majorPaging(state => state.questions, questionsSchema, ['answered'], ['answeredMeta']);
 
@@ -13,11 +18,14 @@ const INITIAL_STATE = new Map({
       answeredMeta: new Map({}),
     }),
   }),
+  destroyingIds: new Set(),
 });
 
 const TYPES = {
   LOAD_ANSWERED_FROM_MAJOR: 'fetch::questions/LOAD_ANSWERED_FROM_MAJOR',
   CREATE: 'fetch::questions/CREATE',
+  DESTROY: 'fetch::questions/DESTROY',
+  SET_DESTROYING: 'questions/SET_DESTROYING',
 };
 
 export function loadAnsweredMajorQuestions(page = 1, majorId) {
@@ -48,10 +56,40 @@ export function createQuestion(values, majorId) {
     });
 }
 
+function setDestroyingQuestion(id) {
+  return {
+    type: TYPES.SET_DESTROYING,
+    payload: { id },
+  };
+}
+
+export function destroyQuestion(id, majorId, page) {
+  return (dispatch) => {
+    dispatch(setDestroyingQuestion(id));
+    return dispatch({
+      type: TYPES.DESTROY,
+      payload: {
+        method: 'DELETE',
+        url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
+        urlParams: { id, majorId, page },
+      },
+    }).then(() => {
+      dispatch(questionDestroyedNotification());
+      dispatch(removeEntity('questions', id));
+    });
+  };
+}
+
 export default function questionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_ANSWERED_FROM_MAJOR}_FULFILLED`:
       return majorsAnsweredPagingFns.update(state, action.payload);
+    case `${TYPES.DESTROY}_FULFILLED`:
+      return majorsAnsweredPagingFns
+        .destroy(state, action.payload.request.urlParams)
+        .update('destroyingIds', ids => ids.delete(action.payload.request.urlParams.id));
+    case TYPES.SET_DESTROYING:
+      return state.update('destroyingIds', ids => ids.add(action.payload.id));
     default:
       return state;
   }
@@ -62,3 +100,8 @@ export const getQuestionsData = state => state.questions;
 export const getAnsweredEntities = majorsAnsweredPagingFns.getPagedEntities;
 
 export const getAnsweredPaginationMeta = majorsAnsweredPagingFns.getMeta;
+
+export const getDestroyingIds = createSelector(
+  getQuestionsData,
+  questionsData => questionsData.get('destroyingIds'),
+);
