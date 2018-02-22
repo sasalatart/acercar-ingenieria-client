@@ -1,4 +1,4 @@
-import { Input, InputNumber } from 'antd';
+import { Checkbox, Input, InputNumber } from 'antd';
 import createComponent from './BaseComponent';
 import CustomSelect from './CustomSelect';
 import CustomRadio from './CustomRadio';
@@ -25,4 +25,5 @@ export const NumberField = createComponent(InputNumber, mapError);
 export const TextArea = createComponent(Input.TextArea, textFieldMap);
 export const SelectField = createComponent(CustomSelect, selectFieldMap);
 export const RadioField = createComponent(CustomRadio, eventMap);
+export const CheckboxField = createComponent(Checkbox, eventMap);
 export { default as SubmitButton } from './SubmitButton';

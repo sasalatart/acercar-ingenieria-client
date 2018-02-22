@@ -2,6 +2,7 @@ import { Map } from 'immutable';
 import URI from 'urijs';
 import { questionsSchema } from '../../schemas';
 import { majorPaging } from './paginations';
+import { questionCreatedNotification } from './notifications';
 
 const majorsAnsweredPagingFns = majorPaging(state => state.questions, questionsSchema, ['answered'], ['answeredMeta']);
 
@@ -16,9 +17,10 @@ const INITIAL_STATE = new Map({
 
 const TYPES = {
   LOAD_ANSWERED_FROM_MAJOR: 'fetch::questions/LOAD_ANSWERED_FROM_MAJOR',
+  CREATE: 'fetch::questions/CREATE',
 };
 
-export function loadAnsweredMajorQuestions(majorId, page = 1) {
+export function loadAnsweredMajorQuestions(page = 1, majorId) {
   return {
     type: TYPES.LOAD_ANSWERED_FROM_MAJOR,
     payload: {
@@ -28,6 +30,22 @@ export function loadAnsweredMajorQuestions(majorId, page = 1) {
       responseSchema: [questionsSchema],
     },
   };
+}
+
+export function createQuestion(values, majorId) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.CREATE,
+      payload: {
+        method: 'POST',
+        url: majorId ? `/majors/${majorId}/questions` : '/questions',
+        urlParams: { majorId },
+        body: values,
+        responseSchema: questionsSchema,
+      },
+    }).then(() => {
+      dispatch(questionCreatedNotification());
+    });
 }
 
 export default function questionsReducer(state = INITIAL_STATE, action) {

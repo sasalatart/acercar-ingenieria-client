@@ -87,3 +87,12 @@ export function majorEditedNotification() {
     }));
   };
 }
+
+export function questionCreatedNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.questionCreated.message'],
+    }));
+  };
+}

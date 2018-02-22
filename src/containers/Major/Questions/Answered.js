@@ -3,13 +3,14 @@ import { injectIntl } from 'react-intl';
 import {
   addQueryToCurrentUri,
   getPage,
-} from '../../store/ducks/routes';
+} from '../../../store/ducks/routes';
+import { getCurrentUserEntity } from '../../../store/ducks/sessions';
 import {
   loadAnsweredMajorQuestions,
   getAnsweredEntities,
   getAnsweredPaginationMeta,
-} from '../../store/ducks/questions';
-import MajorQuestions from '../../components/Major/Questions';
+} from '../../../store/ducks/questions';
+import AnsweredQuestions from '../../../components/Questions/Answered';
 
 function mapStateToProps(state, ownProps) {
   const { majorId } = ownProps;
@@ -17,18 +18,19 @@ function mapStateToProps(state, ownProps) {
   const props = { majorId, page: defaultPage };
 
   return {
+    currentUser: getCurrentUserEntity(state),
     defaultPage,
     pagination: getAnsweredPaginationMeta(state, props),
-    majorQuestions: getAnsweredEntities(state, props),
+    questions: getAnsweredEntities(state, props),
   };
 }
 
 const mapDispatchToProps = {
-  loadAnsweredMajorQuestions,
+  loadAnsweredQuestions: loadAnsweredMajorQuestions,
   addQueryToCurrentUri,
 };
 
 export default injectIntl(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MajorQuestions));
+)(AnsweredQuestions));

@@ -7,7 +7,7 @@ import MajorInfo from './Info';
 import Edit from './Edit';
 import MajorAdmins from '../../containers/Major/Admins';
 import MajorUsers from '../../containers/Major/Users';
-import AnsweredQuestions from '../../containers/Major/AnsweredQuestions';
+import AnsweredQuestions from '../../containers/Major/Questions/Answered';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { getMajorPaths } from '../../routes';
@@ -68,12 +68,12 @@ class Major extends Component {
       answeredQuestions: {
         key: this.majorKeys.answeredQuestions,
         icon: 'question-circle',
-        text: t({ id: 'majors.questions' }),
+        text: t({ id: 'questions' }),
       },
       pendingQuestions: {
         key: this.majorKeys.pendingQuestions,
         icon: 'question-circle-o',
-        text: t({ id: 'majors.pendingQuestions' }),
+        text: t({ id: 'questions.pending' }),
       },
       articles: {
         key: this.majorKeys.articles,
