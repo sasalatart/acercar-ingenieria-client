@@ -8,6 +8,7 @@ import Edit from './Edit';
 import MajorAdmins from '../../containers/Major/Admins';
 import MajorUsers from '../../containers/Major/Users';
 import Questions from '../../containers/Questions';
+import Articles from '../Articles';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { getMajorPaths } from '../../routes';
@@ -177,6 +178,12 @@ class Major extends Component {
               render={() => <Questions majorId={majorId} pending />}
             />
           }
+
+          <Route
+            exact
+            path={this.majorRoutes.articles}
+            render={() => <Articles majorId={majorId} />}
+          />
         </Content>
       </Layout>
     );

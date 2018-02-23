@@ -5,6 +5,7 @@ import auth from './auth';
 import profile from './profile';
 import majors from './majors';
 import questions from './questions';
+import articles from './articles';
 import admins from './admins';
 import errors from './errors';
 
@@ -13,7 +14,7 @@ const esES = 'es-ES';
 
 const messages = { [enUS]: {}, [esES]: {} };
 
-[routing, forms, notifications, auth, profile, majors, questions, admins, errors]
+[routing, forms, notifications, auth, profile, majors, questions, articles, admins, errors]
   .forEach((translations) => {
     Object.assign(messages[enUS], translations[enUS]);
     Object.assign(messages[esES], translations[esES]);

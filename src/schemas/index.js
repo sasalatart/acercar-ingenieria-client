@@ -17,3 +17,8 @@ export const questionsSchema = new schema.Entity('questions', {
   author: usersSchema,
   major: majorSummariesSchema,
 });
+
+export const articlesSchema = new schema.Entity('articles', {
+  author: usersSchema,
+  majorSummary: majorSummariesSchema,
+});

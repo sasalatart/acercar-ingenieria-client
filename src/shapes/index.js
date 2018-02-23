@@ -77,3 +77,15 @@ export const questionShape = PropTypes.shape({
   major: majorSummaryShape,
   pinned: PropTypes.bool.isRequired,
 });
+
+export const articleShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  picture: imageShape,
+  shortDescription: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  author: userShape.isRequired,
+  majorSummary: majorSummaryShape,
+  likesCount: PropTypes.number.isRequired,
+  commentsCount: PropTypes.number.isRequired,
+});
