@@ -15,7 +15,7 @@ export const announcementsSchema = new schema.Entity('announcements');
 
 export const questionsSchema = new schema.Entity('questions', {
   author: usersSchema,
-  major: majorSummariesSchema,
+  majorSummary: majorSummariesSchema,
 });
 
 export const articlesSchema = new schema.Entity('articles', {
