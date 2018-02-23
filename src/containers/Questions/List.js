@@ -3,10 +3,10 @@ import { injectIntl } from 'react-intl';
 import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import { getPage } from '../../store/ducks/routes';
 import {
-  destroyQuestion,
+  destroyQuestionFactory,
   getDestroyingIds,
 } from '../../store/ducks/questions';
-import AnsweredList from '../../components/Questions/AnsweredList';
+import List from '../../components/Questions/List';
 
 function mapStateToProps(state) {
   return {
@@ -16,11 +16,14 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = {
-  onDestroyClicked: destroyQuestion,
-};
+function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    onDestroyClicked: (id, majorId, page) =>
+      dispatch(destroyQuestionFactory(ownProps.pending)(id, majorId, page)),
+  };
+}
 
 export default injectIntl(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AnsweredList));
+)(List));

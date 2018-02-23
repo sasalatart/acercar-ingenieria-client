@@ -5,7 +5,7 @@ import { intlShape } from 'react-intl';
 import { Button, Modal } from 'antd';
 import PaginationControls from '../Pagination';
 import Form from '../../containers/Questions/Form';
-import AnsweredQuestionsList from '../../containers/Questions/AnsweredList';
+import List from '../../containers/Questions/List';
 import Spinner from '../Spinner';
 import { userShape, paginationShape, questionShape } from '../../shapes';
 
@@ -23,7 +23,8 @@ class AnsweredQuestions extends Component {
     pagination: paginationShape,
     defaultPage: PropTypes.number.isRequired,
     questions: ImmutablePropTypes.setOf(questionShape),
-    loadAnsweredQuestions: PropTypes.func.isRequired,
+    pending: PropTypes.bool,
+    loadQuestions: PropTypes.func.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
@@ -33,19 +34,20 @@ class AnsweredQuestions extends Component {
     majorId: undefined,
     pagination: undefined,
     questions: undefined,
+    pending: false,
   }
 
   state = { formVisible: false };
 
   componentWillMount() {
-    const { majorId, defaultPage, loadAnsweredQuestions } = this.props;
-    loadAnsweredQuestions(defaultPage, majorId);
+    const { majorId, defaultPage, loadQuestions } = this.props;
+    loadQuestions(defaultPage, majorId);
   }
 
   handlePageChange = (page) => {
-    const { majorId, loadAnsweredQuestions, addQueryToCurrentUri } = this.props;
+    const { majorId, loadQuestions, addQueryToCurrentUri } = this.props;
     addQueryToCurrentUri({ page });
-    loadAnsweredQuestions(page, majorId);
+    loadQuestions(page, majorId);
   }
 
   handleProposeClicked = () => {
@@ -62,7 +64,7 @@ class AnsweredQuestions extends Component {
 
   render() {
     const {
-      currentUser, majorId, pagination, questions, intl: { formatMessage: t },
+      currentUser, majorId, pagination, questions, pending, intl: { formatMessage: t },
     } = this.props;
 
     if (!questions || questions.isEmpty()) {
@@ -74,17 +76,18 @@ class AnsweredQuestions extends Component {
     return (
       <div>
         <div style={styles.titleWrapper}>
-          <h1>{t({ id: 'questions' })}</h1>
-          {currentUser &&
+          <h1>{pending ? t({ id: 'questions.pending' }) : t({ id: 'questions' })}</h1>
+          {currentUser && !pending &&
             <Button type="primary" icon="form" size="large" onClick={this.handleProposeClicked}>
               {t({ id: 'forms.proposeOne' })}
             </Button>}
         </div>
 
         <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
-          <AnsweredQuestionsList
+          <List
             questions={questions}
             majorId={majorId}
+            pending={pending}
             onEditClicked={this.handleEditClicked}
           />
         </PaginationControls>

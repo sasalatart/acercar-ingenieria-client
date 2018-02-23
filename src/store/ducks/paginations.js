@@ -45,11 +45,7 @@ export function majorPaging(dataSelector, schema, partialPagingPath, partialMeta
         .setIn([...metaPath, majorId], pagination);
     },
 
-    destroy: (state, { id, majorId, page }) => {
-      return state.updateIn(
-        [...pagingPath, majorId, String(page)],
-        pagedData => pagedData.delete(id),
-      );
-    },
+    destroy: (state, { id, majorId, page }) =>
+      state.updateIn([...pagingPath, majorId, String(page)], pagedData => pagedData.delete(id)),
   };
 }
