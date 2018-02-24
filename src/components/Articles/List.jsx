@@ -6,6 +6,7 @@ import { List } from 'antd';
 import PaginationControls from '../Pagination';
 import IconText from '../IconText';
 import LikeButton from '../../containers/LikeButton';
+import DestroyButton from '../../containers/Articles/DestroyButton';
 import { paginationShape, articleShape } from '../../shapes';
 import articlePlaceholder from '../../images/article.png';
 
@@ -18,6 +19,7 @@ export default class ArticlesList extends Component {
     defaultPage: PropTypes.number.isRequired,
     pagination: paginationShape,
     articles: ImmutablePropTypes.setOf(articleShape),
+    hasAdminPrivileges: PropTypes.bool.isRequired,
     loadArticles: PropTypes.func.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
   }
@@ -39,28 +41,31 @@ export default class ArticlesList extends Component {
     loadArticles(page, majorId);
   }
 
-  renderListItem = ({
-    id, title, author, shortDescription, likedByCurrentUser, picture, likesCount, commentsCount,
-  }) => {
+  renderListItem = (article) => {
     const actions = [
-      <IconText type="message" text={commentsCount} />,
+      <IconText type="message" text={article.commentsCount} />,
       <LikeButton
         collectionName="articles"
-        resourceId={id}
-        likedByCurrentUser={likedByCurrentUser}
-        likesCount={likesCount}
+        resourceId={article.id}
+        likedByCurrentUser={article.likedByCurrentUser}
+        likesCount={article.likesCount}
       />,
     ];
 
-    const imageSrc = picture ? picture.medium : articlePlaceholder;
+    const { hasAdminPrivileges, majorId, defaultPage } = this.props;
+    if (hasAdminPrivileges) {
+      actions.push(<DestroyButton id={article.id} majorId={majorId} page={defaultPage} iconOnly />);
+    }
+
+    const imageSrc = article.picture ? article.picture.medium : articlePlaceholder;
     const image = <img alt="summary-logo" src={imageSrc} />;
 
-    const authorName = `${author.firstName} ${author.lastName}`;
+    const authorName = `${article.author.firstName} ${article.author.lastName}`;
 
     return (
-      <Item key={id} actions={actions} extra={image}>
-        <Meta title={title} description={authorName} />
-        {shortDescription}
+      <Item key={article.id} actions={actions} extra={image}>
+        <Meta title={article.title} description={authorName} />
+        {article.shortDescription}
       </Item>
     );
   }

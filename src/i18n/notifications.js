@@ -11,6 +11,7 @@ export default {
     'notifications.questionCreated.message': 'Your question has been created.',
     'notifications.questionUpdated.message': 'The question has been updated.',
     'notifications.questionDestroyed.message': 'The question has been deleted.',
+    'notifications.articleDestroyed.message': 'The article has been deleted.',
   },
   'es-ES': {
     'notifications.signUpOneMoreStep.message': '¡Sólo un paso más!',
@@ -24,5 +25,6 @@ export default {
     'notifications.questionCreated.message': 'Tu pregunta frecuente ha sido creada.',
     'notifications.questionUpdated.message': 'La pregunta ha sido editada.',
     'notifications.questionDestroyed.message': 'La pregunta ha sido eliminada.',
+    'notifications.articleDestroyed.message': 'El artículo ha sido eliminado.',
   },
 };

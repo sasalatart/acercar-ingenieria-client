@@ -158,6 +158,6 @@ const getOptionalMajorId = (state, params) => params && params.majorId;
 export const getHasAdminPrivileges = createSelector(
   getCurrentUserEntity,
   getOptionalMajorId,
-  (currentUser, majorId) => currentUser
+  (currentUser, majorId) => !!currentUser
     && (currentUser.admin || (majorId && currentUser.adminOfMajors.includes(majorId))),
 );

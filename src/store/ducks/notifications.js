@@ -114,3 +114,12 @@ export function questionDestroyedNotification() {
     }));
   };
 }
+
+export function articleDestroyedNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.articleDestroyed.message'],
+    }));
+  };
+}

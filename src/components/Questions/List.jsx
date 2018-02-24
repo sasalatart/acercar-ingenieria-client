@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button, Collapse, Popconfirm } from 'antd';
+import { Button, Collapse } from 'antd';
 import { userShape, questionShape } from '../../shapes';
 import { colors } from '../../theme';
+import DestroyButton from '../../containers/Questions/DestroyButton';
 
 const { Panel } = Collapse;
 
@@ -36,9 +37,8 @@ function QuestionsList({
   questions,
   majorId,
   page,
-  destroyingIds,
+  pending,
   onEditClicked,
-  onDestroyClicked,
   intl: { formatMessage: t },
 }) {
   const hasAdminPrivileges = currentUser
@@ -56,16 +56,7 @@ function QuestionsList({
               <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
                 {t({ id: 'forms.edit' })}
               </Button>
-              <Popconfirm
-                title={t({ id: 'forms.confirm.message' })}
-                okText={t({ id: 'forms.confirm.yes' })}
-                cancelText={t({ id: 'forms.confirm.cancel' })}
-                onConfirm={() => onDestroyClicked(id, majorId, page)}
-              >
-                <Button type="danger" icon="delete" loading={destroyingIds.has(id)}>
-                  {t({ id: 'forms.delete' })}
-                </Button>
-              </Popconfirm>
+              <DestroyButton id={id} majorId={majorId} page={page} pending={pending} />
             </div>
           }
         </Panel>
@@ -79,9 +70,8 @@ QuestionsList.propTypes = {
   majorId: PropTypes.number,
   questions: ImmutablePropTypes.setOf(questionShape).isRequired,
   page: PropTypes.number.isRequired,
-  destroyingIds: ImmutablePropTypes.setOf(PropTypes.number).isRequired,
+  pending: PropTypes.bool.isRequired,
   onEditClicked: PropTypes.func.isRequired,
-  onDestroyClicked: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 
