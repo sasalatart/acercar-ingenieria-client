@@ -5,6 +5,7 @@ import { Set } from 'immutable';
 import { List } from 'antd';
 import PaginationControls from '../Pagination';
 import IconText from '../IconText';
+import LikeButton from '../../containers/LikeButton';
 import { paginationShape, articleShape } from '../../shapes';
 import articlePlaceholder from '../../images/article.png';
 
@@ -38,21 +39,28 @@ export default class ArticlesList extends Component {
     loadArticles(page, majorId);
   }
 
-  renderListItem = (article) => {
+  renderListItem = ({
+    id, title, author, shortDescription, likedByCurrentUser, picture, likesCount, commentsCount,
+  }) => {
     const actions = [
-      <IconText type="like-o" text={article.likesCount} />,
-      <IconText type="message" text={article.commentsCount} />,
+      <IconText type="message" text={commentsCount} />,
+      <LikeButton
+        collectionName="articles"
+        resourceId={id}
+        likedByCurrentUser={likedByCurrentUser}
+        likesCount={likesCount}
+      />,
     ];
 
-    const imageSrc = article.picture ? article.picture.medium : articlePlaceholder;
+    const imageSrc = picture ? picture.medium : articlePlaceholder;
     const image = <img alt="summary-logo" src={imageSrc} />;
 
-    const authorName = `${article.author.firstName} ${article.author.lastName}`;
+    const authorName = `${author.firstName} ${author.lastName}`;
 
     return (
-      <Item key={article.id} actions={actions} extra={image}>
-        <Meta title={article.title} description={authorName} />
-        {article.shortDescription}
+      <Item key={id} actions={actions} extra={image}>
+        <Meta title={title} description={authorName} />
+        {shortDescription}
       </Item>
     );
   }

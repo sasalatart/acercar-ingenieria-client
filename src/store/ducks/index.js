@@ -9,6 +9,7 @@ import users from './users';
 import admins from './admins';
 import questions from './questions';
 import articles from './articles';
+import likes from './likes';
 
 const appReducer = combineReducers({
   router: routerReducer,
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   admins,
   questions,
   articles,
+  likes,
 });
 
 export default function rootReducer(state, action) {

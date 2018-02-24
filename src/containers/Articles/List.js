@@ -15,13 +15,13 @@ function mapStateToProps(state, ownProps) {
   const pagingFns = getPagingFns(ownProps.majorId);
 
   const defaultPage = getPage(state);
-  const props = { majorId: ownProps.majorId, page: defaultPage };
+  const params = { majorId: ownProps.majorId, page: defaultPage };
 
   return {
+    hasAdminPrivileges: getHasAdminPrivileges(state, params),
     defaultPage,
-    hasAdminPrivileges: getHasAdminPrivileges(state, props),
-    pagination: pagingFns.getMeta(state, props),
-    articles: pagingFns.getPagedEntities(state, props),
+    pagination: pagingFns.getMeta(state, params),
+    articles: pagingFns.getPagedEntities(state, params),
   };
 }
 

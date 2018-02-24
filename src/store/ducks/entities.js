@@ -1,5 +1,6 @@
 import { Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/lib/constants';
+import { createSelector } from 'reselect';
 
 const INITIAL_STATE = new Map({
   users: new Map({}),
@@ -11,8 +12,20 @@ const INITIAL_STATE = new Map({
 });
 
 const TYPES = {
+  UPDATE: 'entities/UPDATE',
   REMOVE: 'entities/REMOVE',
 };
+
+export function updateEntities(collectionName, entities) {
+  return {
+    type: TYPES.UPDATE,
+    payload: {
+      entities: {
+        [collectionName]: entities,
+      },
+    },
+  };
+}
 
 export function removeEntity(collection, key) {
   return {
@@ -49,3 +62,13 @@ export default function entitiesReducer(state = INITIAL_STATE, action) {
 }
 
 export const getEntities = state => state.entities;
+
+const getCollectionName = (state, params) => params.collectionName;
+const getResourceId = (state, params) => params.resourceId;
+
+export const getEntity = createSelector(
+  getEntities,
+  getCollectionName,
+  getResourceId,
+  (entities, collectionName, resourceId) => entities.getIn([collectionName, String(resourceId)]),
+);
