@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
-import ROUTES from '../../routes';
+import RedirectToLanding from '../Routes/RedirectToLanding';
 
 export default class EmailConfirmation extends Component {
   static propTypes = {
@@ -18,6 +17,6 @@ export default class EmailConfirmation extends Component {
   }
 
   render() {
-    return <Redirect to={{ pathname: ROUTES.LANDING }} />;
+    return <RedirectToLanding />;
   }
 }

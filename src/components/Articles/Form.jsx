@@ -38,7 +38,6 @@ class ArticleForm extends Component {
     previousAttachments: PropTypes.arrayOf(attachmentShape).isRequired,
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
-    loadArticle: PropTypes.func,
     loadMajors: PropTypes.func.isRequired,
     loadCategories: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -47,20 +46,13 @@ class ArticleForm extends Component {
 
   static defaultProps = {
     articleId: undefined,
-    loadArticle: undefined,
   }
 
   componentWillMount() {
-    const {
-      loadArticle, loadMajors, loadCategories, intl,
-    } = this.props;
+    const { loadMajors, loadCategories, intl } = this.props;
 
-    if (loadArticle) {
-      loadArticle();
-    }
     loadMajors();
     loadCategories();
-
     this.setValidators(intl.formatMessage);
   }
 

@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import LoggedOutRoute from './containers/Routes/LoggedOut';
 import LoggedInRoute from './containers/Routes/LoggedIn';
+import ArticlePrivilegesRoute from './containers/Routes/ArticlePrivileges';
 import PinnedAnnouncements from './containers/Announcements/Pinned';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
@@ -26,6 +27,10 @@ function renderLoggedInRoute(component) {
   return props => <LoggedInRoute {...props} component={component} />;
 }
 
+function renderArticlePrivilegesRoute(component) {
+  return props => <ArticlePrivilegesRoute {...props} component={component} />;
+}
+
 export default function Router() {
   return (
     <ConnectedRouter history={history}>
@@ -38,11 +43,11 @@ export default function Router() {
           <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
           <Route exact path="/majors" component={Majors} />
           <Route exact path="/majors/:majorId/articles/:articleId" component={Article} />
-          <Route exact path="/majors/:majorId/articles/:articleId/edit" component={ArticleForm} />
+          <Route exact path="/majors/:majorId/articles/:articleId/edit" render={renderArticlePrivilegesRoute(ArticleForm)} />
           <Route path="/majors/:majorId" component={Major} />
           <Route exact path="/articles/:articleId" component={Article} />
           <Route exact path="/articles/new" component={ArticleForm} />
-          <Route exact path="/articles/:articleId/edit" component={ArticleForm} />
+          <Route exact path="/articles/:articleId/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
           <Route exact path="/articles" component={Articles} />
           <Route exact path="/questions" component={Questions} />
           <Route exact path="/about-us" component={AboutUs} />

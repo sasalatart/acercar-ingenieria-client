@@ -14,7 +14,6 @@ import {
   getCategoryOptions,
 } from '../../store/ducks/categories';
 import {
-  loadArticle,
   createArticle,
   updateArticle,
   getArticleEntity,
@@ -27,14 +26,17 @@ const FIELDS = [
 ];
 
 function mapStateToProps(state, ownProps) {
-  const { articleId } = ownProps.match.params;
-  const article = getArticleEntity(state, ownProps.match.params);
+  const { params } = ownProps.match;
+  const articleId = +params.articleId;
+
+  const article = getArticleEntity(state, params);
   const majorOptions = getMajorOptions(state);
   const categoryOptions = getCategoryOptions(state);
+  const loading = (!!articleId && !article) || !majorOptions.length || !categoryOptions.length;
 
   return {
-    articleId: +articleId,
-    loading: (!!articleId && !article) || !majorOptions.length || !categoryOptions.length,
+    articleId,
+    loading,
     initialValues: articleId ? omitBy(pick(article, FIELDS), isNil) : {},
     majorOptions,
     categoryOptions,
@@ -43,17 +45,10 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { majorId, articleId } = ownProps.match.params;
-
-  const loadArticleFn = () => dispatch(loadArticle(articleId, majorId));
-
-  return {
-    loadArticle: articleId && loadArticleFn,
-    loadMajors: () => dispatch(loadMajors()),
-    loadCategories: () => dispatch(loadCategories()),
-  };
-}
+const mapDispatchToProps = {
+  loadMajors,
+  loadCategories,
+};
 
 function processValues(values) {
   const categoryList = values.categoryList

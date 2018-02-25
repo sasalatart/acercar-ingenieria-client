@@ -1,16 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
-import ROUTES from '../../routes';
+import { Route } from 'react-router-dom';
+import RedirectToLanding from '../Routes/RedirectToLanding';
 
 function Restricted({ component: Component, restrictedCondition, ...rest }) {
   return (
     <Route
       {...rest}
-      render={() => (
-        restrictedCondition
-          ? <Component {...rest} />
-          : <Redirect to={{ pathname: ROUTES.LANDING }} />)}
+      render={() => (restrictedCondition ? <Component {...rest} /> : <RedirectToLanding />)}
     />
   );
 }
