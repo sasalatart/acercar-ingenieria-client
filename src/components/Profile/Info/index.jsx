@@ -5,13 +5,11 @@ import { userShape } from '../../../shapes';
 import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
-import DateWithFormat from '../../DateWithFormat';
 import Spinner from '../../Spinner';
-import { themeStyles } from '../../../theme';
+import Title from '../../Layout/Title';
+import SubTitle from '../../Layout/SubTitle';
 
 const styles = {
-  title: themeStyles.title,
-  subtitle: themeStyles.subTitle,
   cardWrapper: {
     display: 'flex',
     alignItems: 'center',
@@ -22,14 +20,6 @@ const styles = {
     marginTop: '50px',
   },
 };
-
-function renderGenerationSpan(user, t) {
-  return <span>{t({ id: 'profile.generation' }, { year: user.generation })}</span>;
-}
-
-function renderJoinedSpan(user, t) {
-  return <span>{t({ id: 'profile.joined' })} <DateWithFormat dateString={user.createdAt} /></span>;
-}
 
 function ProfileInfo({ user, intl: { formatMessage: t } }) {
   if (!user) {
@@ -44,10 +34,8 @@ function ProfileInfo({ user, intl: { formatMessage: t } }) {
         </div>
       </Col>
       <Col md={18}>
-        <h1 style={styles.title}>{user.firstName} {user.lastName}</h1>
-        <h3 style={styles.subtitle}>
-          {renderGenerationSpan(user, t)}, {renderJoinedSpan(user, t)}
-        </h3>
+        <Title text={`${user.firstName} ${user.lastName}`} />
+        <SubTitle text={t({ id: 'profile.generation' }, { year: user.generation })} />
 
         <Divider>Roles</Divider>
         <RolesList user={user} />

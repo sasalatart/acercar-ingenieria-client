@@ -13,12 +13,11 @@ import {
   SubmitButton,
 } from '../Forms';
 import Spinner from '../Spinner';
+import Title from '../Layout/Title';
 import { optionShape, attachmentShape } from '../../shapes';
 import articlesValidations from '../../validations/articles';
-import { themeStyles } from '../../theme';
 
 const styles = {
-  title: themeStyles.title,
   fileInputWrapper: {
     display: 'flex',
     justifyContent: 'center',
@@ -97,7 +96,7 @@ class ArticleForm extends Component {
 
     return (
       <div>
-        <h1 style={styles.title}>{t({ id: `articles.${articleId ? 'edit' : 'new'}` })}</h1>
+        <Title text={t({ id: `articles.${articleId ? 'edit' : 'new'}` })} />
         <form onSubmit={handleSubmit}>
           <Field
             name="title"

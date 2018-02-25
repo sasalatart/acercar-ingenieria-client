@@ -4,10 +4,9 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
 import ROUTES from '../../routes';
 import SignUpForm from '../../containers/SignUp/Form';
-import { themeStyles } from '../../theme';
+import Title from '../Layout/Title';
 
 const styles = {
-  title: themeStyles.title,
   extra: {
     margin: '15px 0 0 0',
     textAlign: 'center',
@@ -17,7 +16,7 @@ const styles = {
 function SignUp({ intl: { formatMessage: t } }) {
   return (
     <div>
-      <h1 style={styles.title}>{t({ id: 'routing.signUp' })}</h1>
+      <Title text={t({ id: 'routing.signUp' })} />
 
       <Row type="flex" justify="center">
         <Col sm={24} lg={12} xl={10}>
