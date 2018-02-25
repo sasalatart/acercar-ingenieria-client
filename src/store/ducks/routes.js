@@ -27,6 +27,14 @@ export function goToMajor(majorId) {
   return push(ROUTES.MAJOR(majorId));
 }
 
+export function goToArticles(majorId) {
+  return push(ROUTES.ARTICLES(majorId));
+}
+
+export function goToArticle(id, majorId) {
+  return push(ROUTES.ARTICLE(id, majorId));
+}
+
 export function addQueryToCurrentUri(query) {
   return (dispatch, getState) => {
     // eslint-disable-next-line no-use-before-define

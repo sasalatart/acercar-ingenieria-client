@@ -102,7 +102,7 @@ function renderLowerHeader(intl) {
         icon="pushpin"
       />
       <HeaderLink
-        to={ROUTES.ARTICLES}
+        to={ROUTES.ARTICLES()}
         text={intl.formatMessage({ id: 'routing.articles' })}
         icon="file-text"
       />

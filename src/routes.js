@@ -9,7 +9,8 @@ const ROUTES = {
   USER: id => `/users/${id}`,
   MAJORS: '/majors',
   MAJOR: id => `/majors/${id}`,
-  ARTICLES: '/articles',
+  ARTICLES: majorId => (majorId ? `/majors/${majorId}/articles` : '/articles'),
+  ARTICLE: (id, majorId) => (majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`),
   QUESTIONS: '/questions',
   ABOUT_US: '/about-us',
 };

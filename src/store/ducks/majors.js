@@ -78,3 +78,11 @@ export const getInterdisciplinaryMajors = createSelector(
   getMajorEntities,
   majorEntities => filterByCategory(majorEntities, 'interdisciplinary'),
 );
+
+export const getMajorOptions = createSelector(
+  getMajorEntities,
+  majorEntities => ([
+    { key: 0, value: null, label: 'None' },
+    ...majorEntities.toArray().map(({ id, name }) => ({ key: id, value: id, label: name })),
+  ]),
+);

@@ -9,6 +9,7 @@ import users from './users';
 import admins from './admins';
 import questions from './questions';
 import articles from './articles';
+import categories from './categories';
 import likes from './likes';
 
 const appReducer = combineReducers({
@@ -22,6 +23,7 @@ const appReducer = combineReducers({
   admins,
   questions,
   articles,
+  categories,
   likes,
 });
 

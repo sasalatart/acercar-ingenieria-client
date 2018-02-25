@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Row, Col } from 'antd';
-import { TextField, TextArea, RadioField, SubmitButton } from '../Forms';
-import PictureInput from '../Forms/PictureInput';
-import RichTextInput from '../Forms/RichTextInput';
+import {
+  TextField,
+  TextArea,
+  RichTextField,
+  PictureField,
+  RadioField,
+  SubmitButton,
+} from '../Forms';
 import majorsValidations from '../../validations/majors';
 
 const styles = {
@@ -102,7 +107,7 @@ class MajorEditForm extends Component {
         <div style={styles.logoFieldWrapper}>
           <Field
             name="logo"
-            component={PictureInput}
+            component={PictureField}
             imagePlaceholder={currentLogoURL}
             instructions={{
               changePicture: t({ id: 'forms.changeLogo' }),
@@ -112,7 +117,7 @@ class MajorEditForm extends Component {
         </div>
         <Field
           name="description"
-          component={RichTextInput}
+          component={RichTextField}
           editorProps={{ placeholder: t({ id: 'forms.description' }) }}
         />
         <SubmitButton disabled={!valid} loading={submitting} />

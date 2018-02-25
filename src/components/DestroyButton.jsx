@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { Icon, Button, Popconfirm } from 'antd';
 
 function DestroyButton({
@@ -22,14 +22,15 @@ function DestroyButton({
 }
 
 DestroyButton.propTypes = {
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   iconOnly: PropTypes.bool,
   onDestroy: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 
 DestroyButton.defaultProps = {
+  loading: false,
   iconOnly: false,
 };
 
-export default DestroyButton;
+export default injectIntl(DestroyButton);

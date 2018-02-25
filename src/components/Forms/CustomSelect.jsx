@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select } from 'antd';
+import { optionShape } from '../../shapes';
 
 const { Option } = Select;
 
@@ -20,13 +21,7 @@ function CustomSelect(props) {
 }
 
 CustomSelect.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-  })).isRequired,
+  options: PropTypes.arrayOf(optionShape).isRequired,
 };
 
 export default CustomSelect;

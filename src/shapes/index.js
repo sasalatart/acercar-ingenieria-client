@@ -6,6 +6,17 @@ export const imageShape = PropTypes.shape({
   large: PropTypes.string,
 });
 
+export const attachmentShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  attachableType: PropTypes.string.isRequired,
+  attachableId: PropTypes.number.isRequired,
+  documentFileName: PropTypes.string.isRequired,
+  documentContentType: PropTypes.string.isRequired,
+  documentFileSize: PropTypes.number.isRequired,
+  url: PropTypes.string.isRequired,
+  createdAt: PropTypes.string.isRequired,
+});
+
 export const announcementShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   text: PropTypes.string,
@@ -76,6 +87,7 @@ export const questionShape = PropTypes.shape({
   author: userShape.isRequired,
   major: majorSummaryShape,
   pinned: PropTypes.bool.isRequired,
+  createdAt: PropTypes.string.isRequired,
 });
 
 export const articleShape = PropTypes.shape({
@@ -86,6 +98,22 @@ export const articleShape = PropTypes.shape({
   content: PropTypes.string.isRequired,
   author: userShape.isRequired,
   majorSummary: majorSummaryShape,
+  categoryList: PropTypes.arrayOf(PropTypes.string),
   likesCount: PropTypes.number.isRequired,
   commentsCount: PropTypes.number.isRequired,
+  createdAt: PropTypes.string.isRequired,
+});
+
+export const categoryShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  createdAt: PropTypes.string.isRequired,
+});
+
+export const optionShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
 });

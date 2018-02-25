@@ -9,6 +9,8 @@ const INITIAL_STATE = new Map({
   majorsOfInterest: new Map({}),
   majorSummaries: new Map({}),
   questions: new Map({}),
+  articles: new Map({}),
+  categories: new Map({}),
 });
 
 const TYPES = {

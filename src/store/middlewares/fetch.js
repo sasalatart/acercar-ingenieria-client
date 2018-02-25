@@ -92,12 +92,46 @@ function getFileKeys(body) {
 
   const fileKeys = [];
   Object.keys(body).forEach((key) => {
-    if (body[key] instanceof File) {
-      fileKeys.push(key);
-    }
+    const data = body[key];
+    const isFile = data instanceof File || (data instanceof Array && data[0] instanceof File);
+    if (isFile) fileKeys.push(key);
   });
 
   return fileKeys;
+}
+
+function buildFormData(payload, params, fileKeys) {
+  const initialData = omit(params.body, fileKeys);
+
+  fileKeys.forEach((fileKey) => {
+    if (payload.body[fileKey] instanceof File) {
+      return;
+    }
+
+    payload.body[fileKey].forEach((file, index) => {
+      // eslint-disable-next-line no-underscore-dangle
+      if (!file._destroy) return;
+      initialData[fileKey] = initialData[fileKey] || {};
+      initialData[fileKey][index] = file;
+    });
+  });
+
+  const formData = objectToFormData(initialData);
+
+  fileKeys.forEach((fileKey) => {
+    if (payload.body[fileKey] instanceof File) {
+      formData.append(fileKey, payload.body[fileKey]);
+      return;
+    }
+
+    payload.body[fileKey]
+      .filter(({ _destroy }) => !_destroy)
+      .forEach((file, index) => {
+        formData.append(`${fileKey}[${index}][document]`, file);
+      });
+  });
+
+  return formData;
 }
 
 function buildParams(payload, tokens) {
@@ -111,11 +145,7 @@ function buildParams(payload, tokens) {
     params.headers['Content-Type'] = 'application/json';
     params.body = JSON.stringify(params.body);
   } else {
-    const formData = objectToFormData(omit(params.body, fileKeys));
-    fileKeys.forEach((fileKey) => {
-      formData.append(fileKey, payload.body[fileKey]);
-    });
-    params.body = formData;
+    params.body = buildFormData(payload, params, fileKeys);
   }
 
   return params;

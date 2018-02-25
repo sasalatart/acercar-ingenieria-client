@@ -4,8 +4,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert, Icon, Row, Col } from 'antd';
-import { TextField, NumberField, TextArea, SelectField, SubmitButton } from '../../Forms';
-import PictureInput from '../../Forms/PictureInput';
+import {
+  TextField,
+  NumberField,
+  TextArea,
+  PictureField,
+  SelectField,
+  SubmitButton,
+} from '../../Forms';
 import Spinner from '../../Spinner';
 import usersValidations from '../../../validations/users';
 import { majorShape } from '../../../shapes';
@@ -164,7 +170,7 @@ class ProfileEditForm extends Component {
           <div style={styles.avatarFieldWrapper}>
             <Field
               name="avatar"
-              component={PictureInput}
+              component={PictureField}
               imagePlaceholder={currentAvatarURL}
               instructions={{
                 changePicture: t({ id: 'forms.changeAvatar' }),

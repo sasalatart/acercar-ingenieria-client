@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { destroyQuestionFactory, getDestroyingIds } from '../../store/ducks/questions';
 import DestroyButton from '../../components/DestroyButton';
 
@@ -19,7 +18,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-export default injectIntl(connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(DestroyButton));
+)(DestroyButton);

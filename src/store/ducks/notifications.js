@@ -115,6 +115,24 @@ export function questionDestroyedNotification() {
   };
 }
 
+export function articleCreatedNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.articleCreated.message'],
+    }));
+  };
+}
+
+export function articleUpdatedNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.articleUpdated.message'],
+    }));
+  };
+}
+
 export function articleDestroyedNotification() {
   return (dispatch, getState) => {
     const locale = getLocale(getState());

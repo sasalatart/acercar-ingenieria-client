@@ -22,3 +22,5 @@ export const articlesSchema = new schema.Entity('articles', {
   author: usersSchema,
   majorSummary: majorSummariesSchema,
 });
+
+export const categoriesSchema = new schema.Entity('categories');
