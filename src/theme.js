@@ -33,6 +33,11 @@ export const themeStyles = {
   innerContent: {
     padding: '0 24px',
   },
+  mediaContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 };
 
 export const breakpoints = {

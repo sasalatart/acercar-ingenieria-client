@@ -1,10 +1,11 @@
 import React from 'react';
-import { injectIntl, FormattedDate, intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import { userShape } from '../../../shapes';
 import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
+import DateWithFormat from '../../DateWithFormat';
 import Spinner from '../../Spinner';
 import { themeStyles } from '../../../theme';
 
@@ -27,16 +28,7 @@ function renderGenerationSpan(user, t) {
 }
 
 function renderJoinedSpan(user, t) {
-  const formattedDate = (
-    <FormattedDate
-      value={new Date(user.createdAt)}
-      year="2-digit"
-      month="2-digit"
-      day="2-digit"
-    />
-  );
-
-  return <span>{t({ id: 'profile.joined' })} {formattedDate}</span>;
+  return <span>{t({ id: 'profile.joined' })} <DateWithFormat dateString={user.createdAt} /></span>;
 }
 
 function ProfileInfo({ user, intl: { formatMessage: t } }) {

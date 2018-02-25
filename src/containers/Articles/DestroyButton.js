@@ -9,10 +9,10 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { id, majorId, page } = ownProps;
+  const { id, majorId } = ownProps;
 
   return {
-    onDestroy: () => dispatch(destroyArticle(id, majorId, page)),
+    onDestroy: () => dispatch(destroyArticle(id, majorId)),
   };
 }
 

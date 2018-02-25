@@ -11,6 +11,7 @@ import EmailConfirmation from './containers/SignUp/EmailConfirmation';
 import Profile from './containers/Profile';
 import Majors from './containers/Majors';
 import Major from './containers/Major';
+import Article from './containers/Article';
 import Articles from './components/Articles';
 import Questions from './components/Questions';
 import ArticleForm from './containers/Articles/Form';
@@ -36,7 +37,10 @@ export default function Router() {
           <Route path="/profile" component={renderLoggedInRoute(Profile)} />
           <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
           <Route exact path="/majors" component={Majors} />
+          <Route exact path="/majors/:majorId/articles/:articleId" component={Article} />
+          <Route exact path="/majors/:majorId/articles/:articleId/edit" component={ArticleForm} />
           <Route path="/majors/:majorId" component={Major} />
+          <Route exact path="/articles/:articleId" component={Article} />
           <Route exact path="/articles/new" component={ArticleForm} />
           <Route exact path="/articles/:articleId/edit" component={ArticleForm} />
           <Route exact path="/articles" component={Articles} />

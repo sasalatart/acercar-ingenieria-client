@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Link } from 'react-router-dom';
 import { Set } from 'immutable';
 import { List } from 'antd';
 import PaginationControls from '../Pagination';
@@ -8,6 +9,7 @@ import IconText from '../IconText';
 import LikeButton from '../../containers/LikeButton';
 import DestroyButton from '../../containers/Articles/DestroyButton';
 import { paginationShape, articleShape } from '../../shapes';
+import ROUTES from '../../routes';
 import articlePlaceholder from '../../images/article.png';
 
 const { Item } = List;
@@ -49,22 +51,31 @@ export default class ArticlesList extends Component {
         resourceId={article.id}
         likedByCurrentUser={article.likedByCurrentUser}
         likesCount={article.likesCount}
+        iconOnly
       />,
     ];
 
-    const { hasAdminPrivileges, majorId, defaultPage } = this.props;
+    const { hasAdminPrivileges, majorId } = this.props;
     if (hasAdminPrivileges) {
-      actions.push(<DestroyButton id={article.id} majorId={majorId} page={defaultPage} iconOnly />);
+      actions.push(<DestroyButton id={article.id} majorId={majorId} iconOnly />);
     }
+
+    const titleHref = ROUTES.ARTICLE(article.id, article.majorId);
+    const title = <Link to={titleHref} href={titleHref}>{article.title}</Link>;
 
     const imageSrc = article.picture ? article.picture.medium : articlePlaceholder;
     const image = <img alt="summary-logo" src={imageSrc} />;
 
-    const authorName = `${article.author.firstName} ${article.author.lastName}`;
+    const authorHref = ROUTES.USER(article.author.id);
+    const authorName = (
+      <Link to={authorHref} href={authorHref}>
+        {`${article.author.firstName} ${article.author.lastName}`}
+      </Link>
+    );
 
     return (
       <Item key={article.id} actions={actions} extra={image}>
-        <Meta title={article.title} description={authorName} />
+        <Meta title={title} description={authorName} />
         {article.shortDescription}
       </Item>
     );

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import noop from 'lodash/noop';
 import { getCurrentUserEntity } from '../store/ducks/sessions';
 import {
   like,
@@ -9,22 +10,31 @@ import LikeButton from '../components/LikeButton';
 
 function mapStateToProps(state, ownProps) {
   return {
-    currentUser: getCurrentUserEntity(state),
+    loggedIn: !!getCurrentUserEntity(state),
     likingOrUnliking: getResourceLikeLoading(state, ownProps),
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { collectionName, resourceId } = ownProps;
+const mapDispatchToProps = {
+  like,
+  unlike,
+};
+
+function mergeProps(stateProps, dispatchProps, ownProps) {
+  const { collectionName, resourceId, likedByCurrentUser } = ownProps;
+
+  const onClickFn = likedByCurrentUser ? dispatchProps.unlike : dispatchProps.like;
 
   return {
-    onLike: () => dispatch(like(collectionName, resourceId)),
-    onUnlike: () => dispatch(unlike(collectionName, resourceId)),
+    ...ownProps,
+    ...stateProps,
+    onClick: stateProps.loggedIn ? () => onClickFn(collectionName, resourceId) : noop,
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
+  mergeProps,
 )(LikeButton);
 

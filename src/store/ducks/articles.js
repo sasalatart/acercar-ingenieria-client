@@ -128,10 +128,12 @@ export default function articlesReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return getPagingFns(action.payload.request.urlParams.majorId).update(state, action.payload);
-    case `${TYPES.DESTROY}_FULFILLED`:
+    case `${TYPES.DESTROY}_FULFILLED`: {
+      const { urlParams } = action.payload.request;
       return getPagingFnsFromAction(action.payload)
-        .destroy(state, action.payload.request.urlParams)
-        .update('destroyingIds', ids => ids.delete(action.payload.request.urlParams.id));
+        .destroy(state, urlParams)
+        .update('destroyingIds', ids => ids.delete(urlParams.id));
+    }
     case TYPES.SET_DESTROYING:
       return state.update('destroyingIds', ids => ids.add(action.payload.id));
     default:

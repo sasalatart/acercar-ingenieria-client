@@ -2,16 +2,12 @@ import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
-import { Editor } from 'react-draft-wysiwyg';
-import { stateFromContent } from '../Forms/RichTextInput';
+import RichText from '../RichText';
 import { majorShape } from '../../shapes';
+import { themeStyles } from '../../theme';
 
 const styles = {
-  mediaContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  mediaContainer: themeStyles.mediaContainer,
 };
 
 function MajorInfo({ major, intl: { formatMessage: t } }) {
@@ -37,7 +33,7 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
       </div>
 
       <Divider>{t({ id: 'majors.moreInfo' })}</Divider>
-      <Editor editorState={stateFromContent(major.description)} readOnly toolbarHidden />
+      <RichText content={major.description} />
     </div>
   );
 }

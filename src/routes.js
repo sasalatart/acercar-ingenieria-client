@@ -9,8 +9,18 @@ const ROUTES = {
   USER: id => `/users/${id}`,
   MAJORS: '/majors',
   MAJOR: id => `/majors/${id}`,
-  ARTICLES: majorId => (majorId ? `/majors/${majorId}/articles` : '/articles'),
-  ARTICLE: (id, majorId) => (majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`),
+  ARTICLES: majorId => (majorId
+    ? `/majors/${majorId}/articles`
+    : '/articles'
+  ),
+  ARTICLE: (id, majorId) => (majorId
+    ? `/majors/${majorId}/articles/${id}`
+    : `/articles/${id}`
+  ),
+  ARTICLE_EDIT: (id, majorId) => (majorId
+    ? `/majors/${majorId}/articles/${id}/edit`
+    : `/articles/${id}/edit`
+  ),
   QUESTIONS: '/questions',
   ABOUT_US: '/about-us',
 };
