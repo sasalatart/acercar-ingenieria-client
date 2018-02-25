@@ -1,11 +1,11 @@
-import { Map, Set } from 'immutable';
+import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
 import { categoriesSchema } from '../../schemas';
 
 const INITIAL_STATE = Map({
-  activeCategoryIds: Set(),
+  activeCategoryIds: [],
 });
 
 const TYPES = {
@@ -42,7 +42,8 @@ const getActiveCategoryIds = createSelector(
 export const getCategoryEntities = createSelector(
   getActiveCategoryIds,
   getEntities,
-  (activeCategoryIds, entities) => denormalize(activeCategoryIds, [categoriesSchema], entities),
+  (activeCategoryIds, entities) =>
+    denormalize(activeCategoryIds, [categoriesSchema], entities),
 );
 
 export const getCategoryOptions = createSelector(

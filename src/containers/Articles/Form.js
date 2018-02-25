@@ -29,13 +29,15 @@ const FIELDS = [
 function mapStateToProps(state, ownProps) {
   const { articleId } = ownProps.match.params;
   const article = getArticleEntity(state, ownProps.match.params);
+  const majorOptions = getMajorOptions(state);
+  const categoryOptions = getCategoryOptions(state);
 
   return {
     articleId: +articleId,
-    loading: !!articleId && !article,
+    loading: (!!articleId && !article) || !majorOptions.length || !categoryOptions.length,
     initialValues: articleId ? omitBy(pick(article, FIELDS), isNil) : {},
-    majorOptions: getMajorOptions(state),
-    categoryOptions: getCategoryOptions(state),
+    majorOptions,
+    categoryOptions,
     currentPictureURL: get(article, 'picture.medium', articlePlaceholder),
     previousAttachments: get(article, 'attachments', []),
   };
@@ -62,6 +64,7 @@ function processValues(values) {
 
 const form = reduxForm({
   form: 'article',
+  enableReinitialize: true,
   onSubmit: (values, dispatch, props) => {
     const { articleId } = props.match.params;
 
