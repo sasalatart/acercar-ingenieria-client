@@ -4,15 +4,16 @@ import { denormalize } from 'normalizr';
 import URI from 'urijs';
 import { questionsSchema } from '../../schemas';
 import { getEntities, removeEntity } from './entities';
-import { majorPaging } from './paginations';
+import { nestedPagingFnsFactory } from './paginations';
 import {
   questionCreatedNotification,
   questionUpdatedNotification,
   questionDestroyedNotification,
 } from './notifications';
 
-const majorsAnsweredPagingFns = majorPaging(state => state.questions, questionsSchema, ['answered'], ['answeredMeta']);
-const majorsPendingPagingFns = majorPaging(state => state.questions, questionsSchema, ['pending'], ['pendingMeta']);
+const commonParams = ['questions', questionsSchema, 'majors'];
+const majorsAnsweredPagingFns = nestedPagingFnsFactory(...commonParams, 'answered');
+const majorsPendingPagingFns = nestedPagingFnsFactory(...commonParams, 'pending');
 
 const INITIAL_STATE = new Map({
   pagination: new Map({

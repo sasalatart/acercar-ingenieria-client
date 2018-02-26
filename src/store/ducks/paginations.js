@@ -4,25 +4,23 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
 
-export function majorPaging(dataSelector, schema, partialPagingPath, partialMetaPath) {
-  const basePagingPath = ['pagination', 'majors'];
+export function nestedPagingFnsFactory(resourceName, schema, baseResourceName, suffix) {
+  const basePagingPath = ['pagination', baseResourceName];
+  const pagingPath = basePagingPath.concat(suffix ? [suffix] : []);
+  const metaPath = suffix
+    ? basePagingPath.concat([`${suffix}Meta`])
+    : ['pagination', `${baseResourceName}Meta`];
 
-  const pagingPath = partialPagingPath
-    ? [...basePagingPath, ...partialPagingPath]
-    : basePagingPath;
-
-  const metaPath = partialMetaPath
-    ? [...basePagingPath, ...partialMetaPath]
-    : ['pagination', 'majorsMeta'];
-
-  const getMajorId = (state, params) => params.majorId;
+  const baseResourceIdName = `${baseResourceName.slice(0, -1)}Id`;
+  const dataSelector = state => state[resourceName];
+  const getBaseResourceId = (state, params) => params[baseResourceIdName];
   const getPage = (state, params) => params.page;
 
   const getPagedIds = createSelector(
-    getMajorId,
+    getBaseResourceId,
     getPage,
     dataSelector,
-    (majorId, page, data) => data.getIn([...pagingPath, majorId, String(page)]),
+    (baseResourceId, page, data) => data.getIn([...pagingPath, baseResourceId, String(page)]),
   );
 
   return {
@@ -33,26 +31,32 @@ export function majorPaging(dataSelector, schema, partialPagingPath, partialMeta
     ),
 
     getMeta: createSelector(
-      getMajorId,
+      getBaseResourceId,
       dataSelector,
-      (majorId, data) => data.getIn([...metaPath, majorId]),
+      (baseResourceId, data) => data.getIn([...metaPath, baseResourceId]),
     ),
 
     update: (state, payload) => {
-      const { pagination, result, request: { urlParams: { majorId } } } = payload;
+      const { pagination, result, request: { urlParams } } = payload;
+      const baseResourceId = urlParams[baseResourceIdName];
+
+      const ids = new OrderedSet(result);
       return state
-        .mergeIn([...pagingPath, majorId], new Map({ [pagination.page]: new OrderedSet(result) }))
-        .setIn([...metaPath, majorId], pagination);
+        .mergeIn([...pagingPath, baseResourceId], new Map({ [pagination.page]: ids }))
+        .setIn([...metaPath, baseResourceId], pagination);
     },
 
-    destroy: (state, { id, majorId }) => {
-      const majorPages = state.getIn([...pagingPath, majorId]);
-      if (!majorPages) return state;
+    destroy: (state, urlParams) => {
+      const { id } = urlParams;
+      const baseResourceId = urlParams[baseResourceIdName];
 
-      const page = majorPages.findKey(pages => pages.has(id));
-      if (!page) return state;
+      const pages = state.getIn([...pagingPath, baseResourceId]);
+      if (!pages) return state;
 
-      return state.updateIn([...pagingPath, majorId, page], pagedData => pagedData.delete(id));
+      const pageIndex = pages.findKey(page => page.has(id));
+      if (!pageIndex) return state;
+
+      return state.updateIn([...pagingPath, baseResourceId, pageIndex], ids => ids.delete(id));
     },
   };
 }

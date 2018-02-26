@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
 import { removeEntity, getEntities } from './entities';
-import { majorPaging } from './paginations';
+import { nestedPagingFnsFactory } from './paginations';
 import {
   articleCreatedNotification,
   articleUpdatedNotification,
@@ -12,7 +12,7 @@ import {
 import { goToArticles, goToArticle } from './routes';
 import { articlesSchema } from '../../schemas';
 
-const majorsPagingFns = majorPaging(state => state.articles, articlesSchema);
+const majorsPagingFns = nestedPagingFnsFactory('articles', articlesSchema, 'majors');
 
 const INITIAL_STATE = new Map({
   pagination: new Map({

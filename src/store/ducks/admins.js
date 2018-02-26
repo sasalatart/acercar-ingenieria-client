@@ -1,9 +1,9 @@
 import { Map } from 'immutable';
 import URI from 'urijs';
 import { usersSchema } from '../../schemas';
-import { majorPaging } from './paginations';
+import { nestedPagingFnsFactory } from './paginations';
 
-const majorsPagingFns = majorPaging(state => state.admins, usersSchema);
+const majorsPagingFns = nestedPagingFnsFactory('admins', usersSchema, 'majors');
 
 const INITIAL_STATE = Map({
   pagination: new Map({

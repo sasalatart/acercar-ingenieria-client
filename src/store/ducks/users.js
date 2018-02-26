@@ -4,9 +4,9 @@ import { denormalize } from 'normalizr';
 import URI from 'urijs';
 import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
-import { majorPaging } from './paginations';
+import { nestedPagingFnsFactory } from './paginations';
 
-const majorsPagingFns = majorPaging(state => state.users, usersSchema);
+const majorsPagingFns = nestedPagingFnsFactory('users', usersSchema, 'majors');
 
 const INITIAL_STATE = Map({
   pagination: new Map({
