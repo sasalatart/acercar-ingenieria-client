@@ -6,6 +6,7 @@ import { Tag, Row, Col, Divider } from 'antd';
 import get from 'lodash/get';
 import Spinner from '../Spinner';
 import ArticleActionBar from '../../containers/Article/ActionBar';
+import Comments from '../../containers/Comments';
 import Title from '../Layout/Title';
 import SubTitle from '../Layout/SubTitle';
 import RichText from '../RichText';
@@ -99,7 +100,7 @@ export default class Article extends Component {
     const { loading, article } = this.props;
 
     if (loading) {
-      return <Spinner />;
+      return <Spinner absolute />;
     }
 
     return (
@@ -128,6 +129,8 @@ export default class Article extends Component {
         <Divider />
 
         <RichText content={article.content} />
+
+        <Comments baseResourceName="articles" baseResourceId={article.id} />
       </div>
     );
   }

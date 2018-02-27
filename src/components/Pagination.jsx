@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Pagination } from 'antd';
 import get from 'lodash/get';
+import Spinner from './Spinner';
 import { paginationShape } from '../shapes';
 
 const styles = {
@@ -14,9 +15,10 @@ const styles = {
 
 export default class PaginationControls extends Component {
   static propTypes = {
+    loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
+    render: PropTypes.func.isRequired,
     onPageChange: PropTypes.func.isRequired,
-    children: PropTypes.node.isRequired,
   }
 
   static defaultProps = {
@@ -46,17 +48,19 @@ export default class PaginationControls extends Component {
     );
   }
 
-  render() {
-    const { pagination, children } = this.props;
+  renderContent() {
+    return this.props.loading ? <Spinner /> : this.props.render();
+  }
 
-    if (!pagination) {
-      return children;
+  render() {
+    if (!this.props.pagination) {
+      return this.renderContent();
     }
 
     return (
       <div>
         {this.renderPaginationTag()}
-        {children}
+        {this.renderContent()}
         {this.renderPaginationTag()}
       </div>
     );

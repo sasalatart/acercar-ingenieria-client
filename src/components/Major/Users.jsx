@@ -6,7 +6,6 @@ import { injectIntl, intlShape } from 'react-intl';
 import { List } from 'antd';
 import PaginationControls from '../Pagination';
 import ProfileAvatar from '../Profile/Avatar';
-import Spinner from '../Spinner';
 import { paginationShape, userShape } from '../../shapes';
 import ROUTES from '../../routes';
 
@@ -58,29 +57,26 @@ class MajorUsers extends Component {
     );
   }
 
-  renderMajorUsers() {
-    return (
-      <List
-        itemLayout="horizontal"
-        dataSource={this.props.majorUsers.toArray()}
-        renderItem={this.renderMajorUser}
-      />
-    );
-  }
+  renderMajorUsers = () => (
+    <List
+      itemLayout="horizontal"
+      dataSource={this.props.majorUsers.toArray()}
+      renderItem={this.renderMajorUser}
+    />
+  );
 
   render() {
     const { pagination, majorUsers, intl: { formatMessage: t } } = this.props;
 
-    if (!majorUsers || majorUsers.isEmpty()) {
-      return <Spinner />;
-    }
-
     return (
       <div>
         <h1>{t({ id: 'majors.interestedUsers' })}</h1>
-        <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
-          {this.renderMajorUsers()}
-        </PaginationControls>
+        <PaginationControls
+          pagination={pagination}
+          loading={!majorUsers || majorUsers.isEmpty()}
+          onPageChange={this.handlePageChange}
+          render={this.renderMajorUsers}
+        />
       </div>
     );
   }

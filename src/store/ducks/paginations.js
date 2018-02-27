@@ -4,6 +4,10 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
 
+export function getBaseResourceIdName(baseResourceName) {
+  return `${baseResourceName.slice(0, -1)}Id`;
+}
+
 export function nestedPagingFnsFactory(resourceName, schema, baseResourceName, suffix) {
   const basePagingPath = ['pagination', baseResourceName];
   const pagingPath = basePagingPath.concat(suffix ? [suffix] : []);
@@ -11,7 +15,7 @@ export function nestedPagingFnsFactory(resourceName, schema, baseResourceName, s
     ? basePagingPath.concat([`${suffix}Meta`])
     : ['pagination', `${baseResourceName}Meta`];
 
-  const baseResourceIdName = `${baseResourceName.slice(0, -1)}Id`;
+  const baseResourceIdName = getBaseResourceIdName(baseResourceName);
   const dataSelector = state => state[resourceName];
   const getBaseResourceId = (state, params) => params[baseResourceIdName];
   const getPage = (state, params) => params.page;
@@ -33,7 +37,8 @@ export function nestedPagingFnsFactory(resourceName, schema, baseResourceName, s
     getMeta: createSelector(
       getBaseResourceId,
       dataSelector,
-      (baseResourceId, data) => data.getIn([...metaPath, baseResourceId]),
+      (baseResourceId, data) =>
+        data.getIn([...metaPath, baseResourceId]),
     ),
 
     update: (state, payload) => {

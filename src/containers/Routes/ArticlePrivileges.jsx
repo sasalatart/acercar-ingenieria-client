@@ -24,7 +24,7 @@ class ArticlePrivileges extends Component {
 
   render() {
     if (this.props.loading) {
-      return <Spinner />;
+      return <Spinner absolute />;
     }
 
     return <Restricted {...this.props} />;

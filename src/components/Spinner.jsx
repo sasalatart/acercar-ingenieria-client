@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Spin } from 'antd';
 
 const styles = {
@@ -6,16 +7,28 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  absolute: {
     height: '100%',
     width: '100%',
     position: 'absolute',
   },
 };
 
-export default function Spinner() {
+function Spinner({ absolute }) {
   return (
-    <div style={styles.wrapper}>
+    <div style={absolute ? { ...styles.wrapper, ...styles.absolute } : styles.wrapper}>
       <Spin size="large" />
     </div>
   );
 }
+
+Spinner.propTypes = {
+  absolute: PropTypes.bool,
+};
+
+Spinner.defaultProps = {
+  absolute: false,
+};
+
+export default Spinner;

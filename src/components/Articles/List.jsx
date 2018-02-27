@@ -81,18 +81,25 @@ export default class ArticlesList extends Component {
     );
   }
 
+  renderList = () => (
+    <List
+      itemLayout="vertical"
+      size="large"
+      dataSource={this.props.articles.toArray()}
+      renderItem={this.renderListItem}
+    />
+  );
+
   render() {
     const { pagination, articles } = this.props;
 
     return (
-      <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
-        <List
-          itemLayout="vertical"
-          size="large"
-          dataSource={articles.toArray()}
-          renderItem={this.renderListItem}
-        />
-      </PaginationControls>
+      <PaginationControls
+        pagination={pagination}
+        loading={!articles || !articles.size}
+        onPageChange={this.handlePageChange}
+        render={this.renderList}
+      />
     );
   }
 }

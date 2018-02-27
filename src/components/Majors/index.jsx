@@ -63,7 +63,7 @@ class Majors extends Component {
     const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
 
     if (!disciplinaryMajors.size && interdisciplinaryMajors.size) {
-      return <Spinner />;
+      return <Spinner absolute />;
     }
 
     return (

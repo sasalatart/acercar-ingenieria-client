@@ -30,7 +30,7 @@ export default class PinnedAnnouncements extends Component {
     const { announcements } = this.props;
 
     if (isEmpty(announcements)) {
-      return <Spinner />;
+      return <Spinner absolute />;
     }
 
     return (

@@ -83,7 +83,7 @@ class ArticleForm extends Component {
     const { validators } = this.state;
 
     if (loading) {
-      return <Spinner />;
+      return <Spinner absolute />;
     }
 
     return (

@@ -6,7 +6,6 @@ import { Button, Modal } from 'antd';
 import PaginationControls from '../Pagination';
 import Form from '../../containers/Questions/Form';
 import List from '../../containers/Questions/List';
-import Spinner from '../Spinner';
 import { userShape, paginationShape, questionShape } from '../../shapes';
 
 const styles = {
@@ -62,14 +61,23 @@ class AnsweredQuestions extends Component {
     this.setState({ formVisible: false, editingId: undefined });
   }
 
+  renderQuestions = () => {
+    const { questions, majorId, pending } = this.props;
+
+    return (
+      <List
+        questions={questions}
+        majorId={majorId}
+        pending={pending}
+        onEditClicked={this.handleEditClicked}
+      />
+    );
+  };
+
   render() {
     const {
       currentUser, majorId, pagination, questions, pending, intl: { formatMessage: t },
     } = this.props;
-
-    if (!questions || questions.isEmpty()) {
-      return <Spinner />;
-    }
 
     const { editingId } = this.state;
 
@@ -83,14 +91,12 @@ class AnsweredQuestions extends Component {
             </Button>}
         </div>
 
-        <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
-          <List
-            questions={questions}
-            majorId={majorId}
-            pending={pending}
-            onEditClicked={this.handleEditClicked}
-          />
-        </PaginationControls>
+        <PaginationControls
+          pagination={pagination}
+          loading={!questions || questions.isEmpty()}
+          onPageChange={this.handlePageChange}
+          render={this.renderQuestions}
+        />
 
         <Modal
           title={editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' })}

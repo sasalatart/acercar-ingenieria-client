@@ -106,7 +106,7 @@ class ProfileEditForm extends Component {
     } = this.props;
 
     if (!majors) {
-      return <Spinner />;
+      return <Spinner absolute />;
     }
 
     const { validators } = this.state;

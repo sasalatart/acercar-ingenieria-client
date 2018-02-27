@@ -4,7 +4,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
 import PaginationControls from '../Pagination';
 import ProfileCard from '../Profile/Card';
-import Spinner from '../Spinner';
 import { paginationShape, userShape } from '../../shapes';
 
 const styles = {
@@ -46,7 +45,7 @@ class MajorAdmins extends Component {
     loadMajorAdmins(majorId, page);
   }
 
-  renderProfileCards() {
+  renderProfileCards = () => {
     const { majorAdmins, goToUser } = this.props;
 
     return (
@@ -67,16 +66,15 @@ class MajorAdmins extends Component {
   render() {
     const { pagination, majorAdmins, intl: { formatMessage: t } } = this.props;
 
-    if (!majorAdmins || majorAdmins.isEmpty()) {
-      return <Spinner />;
-    }
-
     return (
       <div>
         <h1>{t({ id: 'admins' })}</h1>
-        <PaginationControls pagination={pagination} onPageChange={this.handlePageChange}>
-          {this.renderProfileCards()}
-        </PaginationControls>
+        <PaginationControls
+          pagination={pagination}
+          loading={!majorAdmins || majorAdmins.isEmpty()}
+          onPageChange={this.handlePageChange}
+          render={this.renderProfileCards}
+        />
       </div>
     );
   }

@@ -23,7 +23,7 @@ const styles = {
 
 function ProfileInfo({ user, intl: { formatMessage: t } }) {
   if (!user) {
-    return <Spinner />;
+    return <Spinner absolute />;
   }
 
   return (

@@ -160,6 +160,8 @@ const fetchMiddleware = store => next => (action) => {
   const params = buildParams(action.payload, tokens);
 
   const { url, ...rest } = params;
+
+  next(action);
   return next({
     type: action.type,
     payload: window.fetch(url, rest)

@@ -110,7 +110,7 @@ class Major extends Component {
     } = this.props;
 
     if (!major) {
-      return <Spinner />;
+      return <Spinner absolute />;
     }
 
     const adminPrivileges = currentUser

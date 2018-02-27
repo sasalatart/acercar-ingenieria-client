@@ -117,3 +117,23 @@ export const optionShape = PropTypes.shape({
     PropTypes.number,
   ]),
 });
+
+const sharedCommentShape = {
+  id: PropTypes.number.isRequired,
+  author: userShape.isRequired,
+  commentableType: PropTypes.string.isRequired,
+  commentableId: PropTypes.number.isRequired,
+  content: PropTypes.string.isRequired,
+  likesCount: PropTypes.number.isRequired,
+  createdAt: PropTypes.string.isRequired,
+};
+
+export const childCommentShape = PropTypes.shape({
+  ...sharedCommentShape,
+  parentCommentId: PropTypes.number.isRequired,
+});
+
+export const commentShape = PropTypes.shape({
+  ...sharedCommentShape,
+  childComments: PropTypes.arrayOf(childCommentShape),
+});
