@@ -5,7 +5,7 @@ import noop from 'lodash/noop';
 
 const styles = {
   icon: {
-    marginRight: '8px',
+    marginRight: '6px',
   },
 };
 

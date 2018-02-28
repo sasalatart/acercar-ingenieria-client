@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider } from 'antd';
 import { commentShape } from '../../shapes';
+import LikeButton from '../../containers/LikeButton';
 import ProfileAvatar from '../Profile/Avatar';
 import DateWithFormat from '../DateWithFormat';
 
@@ -31,10 +32,13 @@ const styles = {
 
 function CommentBox({
   comment: {
+    id,
     author,
     content,
     parentCommentId,
     childComments,
+    likesCount,
+    likedByCurrentUser,
     createdAt,
   },
 }) {
@@ -49,6 +53,15 @@ function CommentBox({
           <p style={styles.content}>{content}</p>
         </div>
         <div>
+          <LikeButton
+            key="like"
+            collectionName="comments"
+            resourceId={id}
+            likedByCurrentUser={likedByCurrentUser}
+            likesCount={likesCount}
+            iconOnly
+          />
+          <Divider type="vertical" />
           <a href="/edit" >edit</a>
           <Divider type="vertical" />
           <a href="/delete">delete</a>

@@ -125,6 +125,7 @@ const sharedCommentShape = {
   commentableId: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
   likesCount: PropTypes.number.isRequired,
+  likedByCurrentUser: PropTypes.bool.isRequired,
   createdAt: PropTypes.string.isRequired,
 };
 

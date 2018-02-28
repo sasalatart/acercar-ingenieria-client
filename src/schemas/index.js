@@ -25,7 +25,7 @@ export const articlesSchema = new schema.Entity('articles', {
 
 export const categoriesSchema = new schema.Entity('categories');
 
-export const childCommentsSchema = new schema.Entity('childComments', {
+export const childCommentsSchema = new schema.Entity('comments', {
   author: usersSchema,
 });
 
