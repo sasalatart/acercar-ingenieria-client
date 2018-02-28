@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import {
   loadArticle,
   getArticleEntity,
@@ -11,6 +12,7 @@ function mapStateToProps(state, ownProps) {
   const article = getArticleEntity(state, ownProps.match.params);
 
   return {
+    loggedIn: !!getCurrentUserEntity(state),
     loading: !!articleId && !article,
     article,
   };

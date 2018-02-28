@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Set } from 'immutable';
-import CommentBox from './CommentBox';
+import Comment from '../../containers/Comments/Comment';
 import PaginationControls from '../Pagination';
 import { paginationShape, commentShape } from '../../shapes';
 
@@ -30,7 +30,7 @@ export default class Comments extends Component {
   }
 
   renderComments = () =>
-    this.props.comments.map(comment => <CommentBox key={comment.id} comment={comment} />);
+    this.props.comments.map(comment => <Comment key={comment.id} comment={comment} />);
 
   render() {
     const { loading, pagination } = this.props;

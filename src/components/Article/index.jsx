@@ -37,6 +37,7 @@ const styles = {
 
 export default class Article extends Component {
   static propTypes = {
+    loggedIn: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     article: articleShape,
     loadArticle: PropTypes.func.isRequired,
@@ -97,7 +98,7 @@ export default class Article extends Component {
   }
 
   render() {
-    const { loading, article } = this.props;
+    const { loggedIn, loading, article } = this.props;
 
     if (loading) {
       return <Spinner absolute />;
@@ -130,7 +131,7 @@ export default class Article extends Component {
 
         <RichText content={article.content} />
 
-        <Comments baseResourceName="articles" baseResourceId={article.id} />
+        {loggedIn && <Comments baseResourceName="articles" baseResourceId={article.id} />}
       </div>
     );
   }
