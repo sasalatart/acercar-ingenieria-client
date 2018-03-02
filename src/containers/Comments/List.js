@@ -1,20 +1,18 @@
 import { connect } from 'react-redux';
-import {
-  addQueryToCurrentUri,
-  getPage,
-} from '../../store/ducks/routes';
+import { getPage } from '../../store/ducks/routes';
+import { getBaseResourceIdName } from '../../store/ducks/paginations';
 import {
   loadComments,
   getPagingFns,
 } from '../../store/ducks/comments';
-import Comments from '../../components/Comments';
+import CommentsList from '../../components/Comments/List';
 
 function mapStateToProps(state, ownProps) {
   const { baseResourceName, baseResourceId } = ownProps;
   const page = getPage(state);
 
-  const params = { [`${baseResourceName.slice(0, -1)}Id`]: baseResourceId, page };
-  const pagingFns = getPagingFns(params);
+  const params = { [getBaseResourceIdName(baseResourceName)]: baseResourceId, page };
+  const pagingFns = getPagingFns(baseResourceName);
   const comments = pagingFns.getPagedEntities(state, params);
 
   return {
@@ -26,7 +24,6 @@ function mapStateToProps(state, ownProps) {
 
 const mapDispatchToProps = {
   loadComments,
-  addQueryToCurrentUri,
 };
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
@@ -45,4 +42,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
-)(Comments);
+)(CommentsList);

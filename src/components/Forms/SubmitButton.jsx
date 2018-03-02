@@ -15,7 +15,7 @@ const styles = {
 };
 
 function SubmitButton({
-  disabled, loading, size, intl: { formatMessage: t },
+  disabled, loading, size, style, intl: { formatMessage: t },
 }) {
   return (
     <div style={styles.wrapper}>
@@ -25,7 +25,7 @@ function SubmitButton({
         disabled={disabled}
         loading={loading}
         size={size}
-        style={styles.submitButton}
+        style={{ ...styles.submitButton, ...style }}
       >
         {t({ id: 'forms.submit' })}
       </Button>
@@ -37,11 +37,13 @@ SubmitButton.propTypes = {
   disabled: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   size: PropTypes.string,
+  style: PropTypes.shape({}),
   intl: intlShape.isRequired,
 };
 
 SubmitButton.defaultProps = {
   size: 'large',
+  style: {},
 };
 
 export default injectIntl(SubmitButton);

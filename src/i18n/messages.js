@@ -7,6 +7,7 @@ import majors from './majors';
 import questions from './questions';
 import articles from './articles';
 import categories from './categories';
+import comments from './comments';
 import admins from './admins';
 import errors from './errors';
 
@@ -25,6 +26,7 @@ const messages = { [enUS]: {}, [esES]: {} };
   questions,
   articles,
   categories,
+  comments,
   admins,
   errors,
 ].forEach((translations) => {

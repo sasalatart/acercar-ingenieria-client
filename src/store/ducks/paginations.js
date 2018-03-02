@@ -63,5 +63,13 @@ export function nestedPagingFnsFactory(resourceName, schema, baseResourceName, s
 
       return state.updateIn([...pagingPath, baseResourceId, pageIndex], ids => ids.delete(id));
     },
+
+    addToPagination(state, baseResourceId, id, page) {
+      const setToAdd = new OrderedSet([id]);
+      return state.updateIn(
+        [...pagingPath, baseResourceId, String(page)],
+        pages => (pages ? setToAdd.merge(pages) : setToAdd),
+      );
+    },
   };
 }

@@ -1,47 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Set } from 'immutable';
-import Comment from '../../containers/Comments/Comment';
-import PaginationControls from '../Pagination';
-import { paginationShape, commentShape } from '../../shapes';
+import { injectIntl, intlShape } from 'react-intl';
+import { Divider } from 'antd';
+import NewForm from '../../containers/Comments/NewForm';
+import List from '../../containers/Comments/List';
+import SubTitle from '../Layout/SubTitle';
 
-export default class Comments extends Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    pagination: paginationShape,
-    comments: ImmutablePropTypes.setOf(commentShape),
-    loadComments: PropTypes.func.isRequired,
-    addQueryToCurrentUri: PropTypes.func.isRequired,
-  }
+function CommentsSection({ baseResourceName, baseResourceId, intl: { formatMessage: t } }) {
+  const commonProps = { baseResourceName, baseResourceId };
 
-  static defaultProps = {
-    pagination: undefined,
-    comments: new Set(),
-  }
-
-  componentDidMount() {
-    this.props.loadComments();
-  }
-
-  handlePageChange = (page) => {
-    this.props.addQueryToCurrentUri({ page });
-    this.props.loadComments(page);
-  }
-
-  renderComments = () =>
-    this.props.comments.map(comment => <Comment key={comment.id} comment={comment} />);
-
-  render() {
-    const { loading, pagination } = this.props;
-
-    return (
-      <PaginationControls
-        pagination={pagination}
-        loading={loading}
-        onPageChange={this.handlePageChange}
-        render={this.renderComments}
-      />
-    );
-  }
+  return (
+    <div>
+      <Divider />
+      <SubTitle text={t({ id: 'comments' })} />
+      <NewForm {...commonProps} />
+      <Divider />
+      <List {...commonProps} />
+    </div>
+  );
 }
+
+CommentsSection.propTypes = {
+  baseResourceName: PropTypes.string.isRequired,
+  baseResourceId: PropTypes.number.isRequired,
+  intl: intlShape.isRequired,
+};
+
+export default injectIntl(CommentsSection);

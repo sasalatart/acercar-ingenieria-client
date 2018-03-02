@@ -6,11 +6,11 @@ import { Tag, Row, Col, Divider } from 'antd';
 import get from 'lodash/get';
 import Spinner from '../Spinner';
 import ArticleActionBar from '../../containers/Article/ActionBar';
-import Comments from '../../containers/Comments';
 import Title from '../Layout/Title';
 import SubTitle from '../Layout/SubTitle';
 import RichText from '../RichText';
 import DateWithFormat from '../DateWithFormat';
+import Comments from '../Comments';
 import { articleShape } from '../../shapes';
 import { colors, themeStyles } from '../../theme';
 import ROUTES from '../../routes';
@@ -131,7 +131,9 @@ export default class Article extends Component {
 
         <RichText content={article.content} />
 
-        {loggedIn && <Comments baseResourceName="articles" baseResourceId={article.id} />}
+        {loggedIn &&
+          <Comments baseResourceName="articles" baseResourceId={article.id} />
+        }
       </div>
     );
   }

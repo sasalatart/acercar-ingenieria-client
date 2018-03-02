@@ -42,7 +42,7 @@ export function like(collectionName, resourceId) {
       const entity = getEntity(getState(), { collectionName, resourceId });
       entity.likesCount += 1;
       entity.likedByCurrentUser = true;
-      dispatch(updateEntities(collectionName, entity));
+      dispatch(updateEntities(collectionName, { [resourceId]: { ...entity } }));
     });
   };
 }
@@ -61,7 +61,7 @@ export function unlike(collectionName, resourceId) {
       const entity = getEntity(getState(), { collectionName, resourceId });
       entity.likesCount -= 1;
       entity.likedByCurrentUser = false;
-      dispatch(updateEntities(collectionName, entity));
+      dispatch(updateEntities(collectionName, { [resourceId]: { ...entity } }));
     });
   };
 }

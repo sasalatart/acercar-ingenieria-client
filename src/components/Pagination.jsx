@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Pagination } from 'antd';
-import get from 'lodash/get';
+import noop from 'lodash/noop';
 import Spinner from './Spinner';
 import { paginationShape } from '../shapes';
 
@@ -16,31 +16,41 @@ const styles = {
 export default class PaginationControls extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    current: PropTypes.number,
     pagination: paginationShape,
+    addQueryToCurrentUri: PropTypes.func.isRequired,
+    loadFn: PropTypes.func.isRequired,
     render: PropTypes.func.isRequired,
-    onPageChange: PropTypes.func.isRequired,
+    onPageChange: PropTypes.func,
   }
 
   static defaultProps = {
+    current: 1,
     pagination: undefined,
+    onPageChange: noop,
   }
 
-  state = { page: get(this.props.pagination, 'page', 1) };
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.current !== this.props.current) {
+      this.props.loadFn();
+    }
+  }
 
   handlePageChange = (page) => {
-    this.setState({ page });
-    this.props.onPageChange(page);
+    this.props.addQueryToCurrentUri({ page });
+    this.props.loadFn(page);
+    this.props.onPageChange();
   }
 
   renderPaginationTag() {
-    const { pagination } = this.props;
+    const { current, pagination: { perPage, totalRecords } } = this.props;
 
     return (
       <div style={styles.paginationWrapper}>
         <Pagination
-          current={this.state.page}
-          pageSize={pagination.perPage}
-          total={pagination.totalRecords}
+          current={current}
+          pageSize={perPage}
+          total={totalRecords}
           onChange={this.handlePageChange}
           hideOnSinglePage
         />
