@@ -16,7 +16,7 @@ const TYPES = {
   LOAD_FROM_MAJOR: 'fetch::admins/LOAD_FROM_MAJOR',
 };
 
-export function loadMajorAdmins(majorId, page = 1) {
+export function loadMajorAdmins(page, majorId) {
   return {
     type: TYPES.LOAD_FROM_MAJOR,
     payload: {

@@ -6,7 +6,7 @@ import { Layout, Menu, Icon } from 'antd';
 import MajorInfo from './Info';
 import Edit from './Edit';
 import MajorAdmins from '../../containers/Major/Admins';
-import MajorUsers from '../../containers/Major/Users';
+import Users from '../../containers/Users/List';
 import Questions from '../../containers/Questions';
 import Articles from '../Articles';
 import Spinner from '../Spinner';
@@ -161,7 +161,7 @@ class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.users}
-              render={() => <MajorUsers majorId={majorId} />}
+              render={() => <Users majorId={majorId} />}
             />
           }
 

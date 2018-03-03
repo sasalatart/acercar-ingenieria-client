@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import {
   goToUser,
-  addQueryToCurrentUri,
   getPage,
 } from '../../store/ducks/routes';
 import {
@@ -14,21 +13,23 @@ import MajorAdmins from '../../components/Major/Admins';
 
 function mapStateToProps(state, ownProps) {
   const { majorId } = ownProps;
-  const defaultPage = getPage(state);
-  const props = { majorId, page: defaultPage };
+  const params = { majorId, page: getPage(state) };
+
+  const majorAdmins = getMajorAdminEntities(state, params);
 
   return {
-    defaultPage,
-    pagination: getMajorAdminsPaginationMeta(state, props),
-    majorAdmins: getMajorAdminEntities(state, props),
+    loading: !majorAdmins || majorAdmins.isEmpty(),
+    pagination: getMajorAdminsPaginationMeta(state, params),
+    majorAdmins,
   };
 }
 
-const mapDispatchToProps = {
-  loadMajorAdmins,
-  goToUser,
-  addQueryToCurrentUri,
-};
+function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    loadMajorAdmins: (page = 1) => dispatch(loadMajorAdmins(page, ownProps.majorId)),
+    goToUser: id => dispatch(goToUser(id)),
+  };
+}
 
 export default injectIntl(connect(
   mapStateToProps,

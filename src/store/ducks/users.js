@@ -17,7 +17,7 @@ const INITIAL_STATE = Map({
 
 const TYPES = {
   LOAD: 'fetch::users/LOAD',
-  LOAD_FROM_MAJOR: 'fetch::users/LOAD_FROM_MAJOR',
+  LOAD_INDEX: 'fetch::users/LOAD_INDEX',
 };
 
 export function loadUser(userId) {
@@ -31,9 +31,9 @@ export function loadUser(userId) {
   };
 }
 
-export function loadMajorUsers(majorId, page = 1) {
+export function loadUsers(page, majorId) {
   return {
-    type: TYPES.LOAD_FROM_MAJOR,
+    type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
       url: URI(`/majors/${majorId}/users`).query({ page }).toString(),
@@ -43,10 +43,16 @@ export function loadMajorUsers(majorId, page = 1) {
   };
 }
 
+export function getPagingFns(majorId) {
+  return majorId
+    ? majorsPagingFns
+    : undefined;
+}
+
 export default function usersReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD_FROM_MAJOR}_FULFILLED`:
-      return majorsPagingFns.update(state, action.payload);
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
+      return getPagingFns(action.payload.request.urlParams.majorId).update(state, action.payload);
     default:
       return state;
   }
@@ -61,7 +67,3 @@ export const getUserEntity = createSelector(
   getEntities,
   (userId, entities) => denormalize(userId, usersSchema, entities),
 );
-
-export const getMajorUserEntities = majorsPagingFns.getPagedEntities;
-
-export const getMajorUsersPaginationMeta = majorsPagingFns.getMeta;

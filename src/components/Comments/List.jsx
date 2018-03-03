@@ -19,10 +19,6 @@ export default class CommentsList extends Component {
     comments: new Set(),
   }
 
-  componentDidMount() {
-    this.props.loadComments();
-  }
-
   renderComments = () =>
     this.props.comments.map(comment => <Comment key={comment.id} comment={comment} />);
 

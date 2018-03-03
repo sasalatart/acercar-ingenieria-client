@@ -5,8 +5,8 @@ import { intlShape } from 'react-intl';
 import { Button, Modal } from 'antd';
 import PaginationControls from '../Pagination';
 import Form from '../../containers/Questions/Form';
-import List from '../../containers/Questions/List';
-import { userShape, paginationShape, questionShape } from '../../shapes';
+import QuestionsList from '../../containers/Questions/List';
+import { paginationShape, questionShape } from '../../shapes';
 
 const styles = {
   titleWrapper: {
@@ -15,21 +15,19 @@ const styles = {
   },
 };
 
-class AnsweredQuestions extends Component {
+class Questions extends Component {
   static propTypes = {
-    currentUser: userShape,
+    loggedIn: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
     pagination: paginationShape,
-    defaultPage: PropTypes.number.isRequired,
     questions: ImmutablePropTypes.setOf(questionShape),
     pending: PropTypes.bool,
     loadQuestions: PropTypes.func.isRequired,
-    addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
   static defaultProps = {
-    currentUser: undefined,
     majorId: undefined,
     pagination: undefined,
     questions: undefined,
@@ -37,17 +35,6 @@ class AnsweredQuestions extends Component {
   }
 
   state = { formVisible: false };
-
-  componentWillMount() {
-    const { majorId, defaultPage, loadQuestions } = this.props;
-    loadQuestions(defaultPage, majorId);
-  }
-
-  handlePageChange = (page) => {
-    const { majorId, loadQuestions, addQueryToCurrentUri } = this.props;
-    addQueryToCurrentUri({ page });
-    loadQuestions(page, majorId);
-  }
 
   handleProposeClicked = () => {
     this.setState({ formVisible: true });
@@ -65,7 +52,7 @@ class AnsweredQuestions extends Component {
     const { questions, majorId, pending } = this.props;
 
     return (
-      <List
+      <QuestionsList
         questions={questions}
         majorId={majorId}
         pending={pending}
@@ -74,18 +61,33 @@ class AnsweredQuestions extends Component {
     );
   };
 
+  renderFormModal() {
+    const { majorId, intl: { formatMessage: t } } = this.props;
+    const { formVisible, editingId } = this.state;
+
+    return (
+      <Modal
+        title={editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' })}
+        visible={formVisible}
+        footer={null}
+        onCancel={this.handleFormClose}
+        destroyOnClose
+      >
+        <Form id={editingId} majorId={majorId} onSubmitSuccess={this.handleFormClose} />
+      </Modal>
+    );
+  }
+
   render() {
     const {
-      currentUser, majorId, pagination, questions, pending, intl: { formatMessage: t },
+      loggedIn, loading, pagination, pending, loadQuestions, intl: { formatMessage: t },
     } = this.props;
-
-    const { editingId } = this.state;
 
     return (
       <div>
         <div style={styles.titleWrapper}>
           <h1>{pending ? t({ id: 'questions.pending' }) : t({ id: 'questions' })}</h1>
-          {currentUser && !pending &&
+          {loggedIn && !pending &&
             <Button type="primary" icon="form" size="large" onClick={this.handleProposeClicked}>
               {t({ id: 'forms.proposeOne' })}
             </Button>}
@@ -93,23 +95,15 @@ class AnsweredQuestions extends Component {
 
         <PaginationControls
           pagination={pagination}
-          loading={!questions || questions.isEmpty()}
-          onPageChange={this.handlePageChange}
+          loading={loading}
+          loadFn={loadQuestions}
           render={this.renderQuestions}
         />
 
-        <Modal
-          title={editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' })}
-          visible={this.state.formVisible}
-          footer={null}
-          onCancel={this.handleFormClose}
-          destroyOnClose
-        >
-          <Form id={editingId} majorId={majorId} onSubmitSuccess={this.handleFormClose} />
-        </Modal>
+        {this.renderFormModal()}
       </div>
     );
   }
 }
 
-export default AnsweredQuestions;
+export default Questions;

@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import {
-  addQueryToCurrentUri,
-  getPage,
-} from '../../store/ducks/routes';
+import { getPage } from '../../store/ducks/routes';
 import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import {
   loadQuestionsFactory,
@@ -13,24 +10,23 @@ import Questions from '../../components/Questions';
 
 function mapStateToProps(state, ownProps) {
   const { majorId, pending } = ownProps;
-  const defaultPage = getPage(state);
-  const props = { majorId, page: defaultPage };
+  const params = { majorId, page: getPage(state) };
 
   const pagingFns = getPagingFns(pending, majorId);
+  const questions = pagingFns.getPagedEntities(state, params);
 
   return {
-    currentUser: getCurrentUserEntity(state),
-    defaultPage,
-    pagination: pagingFns.getMeta(state, props),
-    questions: pagingFns.getPagedEntities(state, props),
+    loading: !questions || questions.isEmpty(),
+    loggedIn: !!getCurrentUserEntity(state),
+    pagination: pagingFns.getMeta(state, params),
+    questions,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    loadQuestions: (page, majorId) =>
-      dispatch(loadQuestionsFactory(ownProps.pending)(page, majorId)),
-    addQueryToCurrentUri: query => dispatch(addQueryToCurrentUri(query)),
+    loadQuestions: (page = 1) =>
+      dispatch(loadQuestionsFactory(ownProps.pending)(page, ownProps.majorId)),
   };
 }
 

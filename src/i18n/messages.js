@@ -2,7 +2,7 @@ import routing from './routing';
 import forms from './forms';
 import notifications from './notifications';
 import auth from './auth';
-import profile from './profile';
+import users from './users';
 import majors from './majors';
 import questions from './questions';
 import articles from './articles';
@@ -21,7 +21,7 @@ const messages = { [enUS]: {}, [esES]: {} };
   forms,
   notifications,
   auth,
-  profile,
+  users,
   majors,
   questions,
   articles,

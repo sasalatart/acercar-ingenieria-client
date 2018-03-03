@@ -30,15 +30,18 @@ export default class PaginationControls extends Component {
     onPageChange: noop,
   }
 
+  componentDidMount() {
+    this.props.loadFn(this.props.current);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.current !== this.props.current) {
-      this.props.loadFn();
+      this.props.loadFn(nextProps.current);
     }
   }
 
   handlePageChange = (page) => {
     this.props.addQueryToCurrentUri({ page });
-    this.props.loadFn(page);
     this.props.onPageChange();
   }
 

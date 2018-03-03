@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
-import PaginationControls from '../Pagination';
+import PaginationControls from '../../containers/Pagination';
 import ProfileCard from '../Profile/Card';
 import { paginationShape, userShape } from '../../shapes';
 
@@ -19,30 +19,17 @@ const styles = {
 
 class MajorAdmins extends Component {
   static propTypes = {
-    majorId: PropTypes.number.isRequired,
-    defaultPage: PropTypes.number.isRequired,
+    loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
     majorAdmins: ImmutablePropTypes.setOf(userShape),
     loadMajorAdmins: PropTypes.func.isRequired,
     goToUser: PropTypes.func.isRequired,
-    addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
   static defaultProps = {
     pagination: undefined,
     majorAdmins: undefined,
-  }
-
-  componentWillMount() {
-    const { majorId, defaultPage, loadMajorAdmins } = this.props;
-    loadMajorAdmins(majorId, defaultPage);
-  }
-
-  handlePageChange = (page) => {
-    const { majorId, loadMajorAdmins, addQueryToCurrentUri } = this.props;
-    addQueryToCurrentUri({ page });
-    loadMajorAdmins(majorId, page);
   }
 
   renderProfileCards = () => {
@@ -64,15 +51,17 @@ class MajorAdmins extends Component {
   }
 
   render() {
-    const { pagination, majorAdmins, intl: { formatMessage: t } } = this.props;
+    const {
+      loading, pagination, loadMajorAdmins, intl: { formatMessage: t },
+    } = this.props;
 
     return (
       <div>
         <h1>{t({ id: 'admins' })}</h1>
         <PaginationControls
           pagination={pagination}
-          loading={!majorAdmins || majorAdmins.isEmpty()}
-          onPageChange={this.handlePageChange}
+          loading={loading}
+          loadFn={loadMajorAdmins}
           render={this.renderProfileCards}
         />
       </div>

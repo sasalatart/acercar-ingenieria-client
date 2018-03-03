@@ -1,5 +1,6 @@
 export default {
   'en-US': {
+    users: 'Users',
     'profile.info': 'Profile',
     'profile.notifications': 'Notifications',
     'profile.edit': 'Edit',
@@ -13,6 +14,7 @@ export default {
     'profile.noMajorsOfInterest': 'No majors of interest',
   },
   'es-ES': {
+    users: 'Usuarios',
     'profile.info': 'Perfil',
     'profile.notifications': 'Notificaciones',
     'profile.edit': 'Editar',
