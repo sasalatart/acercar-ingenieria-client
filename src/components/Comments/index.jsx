@@ -4,15 +4,13 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Divider } from 'antd';
 import NewForm from '../../containers/Comments/NewForm';
 import List from '../../containers/Comments/List';
-import SubTitle from '../Layout/SubTitle';
 
 function CommentsSection({ baseResourceName, baseResourceId, intl: { formatMessage: t } }) {
   const commonProps = { baseResourceName, baseResourceId };
 
   return (
     <div>
-      <Divider />
-      <SubTitle text={t({ id: 'comments' })} />
+      <h1>{t({ id: 'comments' })}</h1>
       <NewForm {...commonProps} />
       <Divider />
       <List {...commonProps} />

@@ -128,11 +128,13 @@ export default class Article extends Component {
         </Row>
 
         <Divider />
-
         <RichText content={article.content} />
 
         {loggedIn &&
-          <Comments baseResourceName="articles" baseResourceId={article.id} />
+          <div>
+            <Divider />
+            <Comments baseResourceName="articles" baseResourceId={article.id} />
+          </div>
         }
       </div>
     );

@@ -9,6 +9,7 @@ import MajorAdmins from '../../containers/Major/Admins';
 import Users from '../../containers/Users/List';
 import Questions from '../../containers/Questions';
 import Articles from '../Articles';
+import Comments from '../Comments';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { getMajorPaths } from '../../routes';
@@ -184,6 +185,14 @@ class Major extends Component {
             path={this.majorRoutes.articles}
             render={() => <Articles majorId={majorId} />}
           />
+
+          {currentUser &&
+            <Route
+              exact
+              path={this.majorRoutes.comments}
+              render={() => <Comments baseResourceName="majors" baseResourceId={majorId} />}
+            />
+          }
         </Content>
       </Layout>
     );
