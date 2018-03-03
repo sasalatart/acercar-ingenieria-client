@@ -2,11 +2,15 @@ import { createSelector } from 'reselect';
 import { majorsSchema } from '../../schemas';
 import { goToMajor } from './routes';
 import { getEntities } from './entities';
-import { majorEditedNotification } from './notifications';
+import {
+  majorEditedNotification,
+  emailSentNotification,
+} from './notifications';
 
 export const TYPES = {
   LOAD: 'fetch::majors/LOAD',
   UPDATE: 'fetch::majors/UPDATE',
+  BROADCAST: 'fetch::majors/BROADCAST',
   SET_TAB: 'majors/SET_TAB',
 };
 
@@ -44,6 +48,21 @@ export function updateMajor(majorId, body) {
       },
     }).then(() => {
       dispatch(majorEditedNotification());
+      dispatch(goToMajor(majorId));
+    });
+}
+
+export function sendEmail(majorId, body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.BROADCAST,
+      payload: {
+        method: 'POST',
+        url: `/majors/${majorId}/broadcast`,
+        body,
+      },
+    }).then(() => {
+      dispatch(emailSentNotification());
       dispatch(goToMajor(majorId));
     });
 }

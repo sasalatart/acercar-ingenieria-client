@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fieldInputPropTypes } from 'redux-form';
 import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
 import { Editor } from 'react-draft-wysiwyg';
 
 const styles = {
@@ -14,6 +15,10 @@ const styles = {
 
 export function stateFromContent(content) {
   return EditorState.createWithContent(convertFromRaw(JSON.parse(content)));
+}
+
+export function htmlFromContent(content) {
+  return stateToHTML(stateFromContent(content).getCurrentContent());
 }
 
 class RichTextInput extends Component {

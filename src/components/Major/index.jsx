@@ -10,6 +10,7 @@ import Users from '../../containers/Users/List';
 import Questions from '../../containers/Questions';
 import Articles from '../Articles';
 import Comments from '../Comments';
+import Email from './Email';
 import Spinner from '../Spinner';
 import { majorShape, userShape } from '../../shapes';
 import { getMajorPaths } from '../../routes';
@@ -191,6 +192,14 @@ class Major extends Component {
               exact
               path={this.majorRoutes.comments}
               render={() => <Comments baseResourceName="majors" baseResourceId={majorId} />}
+            />
+          }
+
+          {adminPrivileges &&
+            <Route
+              exact
+              path={this.majorRoutes.email}
+              render={() => <Email majorId={majorId} />}
             />
           }
         </Content>

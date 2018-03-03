@@ -141,3 +141,12 @@ export function articleDestroyedNotification() {
     }));
   };
 }
+
+export function emailSentNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displaySuccessNotification({
+      message: messages[locale]['notifications.emailSent.message'],
+    }));
+  };
+}

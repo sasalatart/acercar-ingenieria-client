@@ -14,6 +14,7 @@ export default {
     'notifications.articleCreated.message': 'The article has been created.',
     'notifications.articleUpdated.message': 'The article has been updated.',
     'notifications.articleDestroyed.message': 'The article has been deleted.',
+    'notifications.emailSent.message': 'Your email has been sent.',
   },
   'es-ES': {
     'notifications.signUpOneMoreStep.message': '¡Sólo un paso más!',
@@ -30,5 +31,6 @@ export default {
     'notifications.articleCreated.message': 'El artículo ha sido creado.',
     'notifications.articleUpdated.message': 'El artículo ha sido editado.',
     'notifications.articleDestroyed.message': 'El artículo ha sido eliminado.',
+    'notifications.emailSent.message': 'El email ha sido enviado.',
   },
 };
