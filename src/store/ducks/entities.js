@@ -2,7 +2,7 @@ import { Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import { createSelector } from 'reselect';
 
-const INITIAL_STATE = new Map({
+export const INITIAL_STATE = new Map({
   users: new Map({}),
   announcements: new Map({}),
   majors: new Map({}),
