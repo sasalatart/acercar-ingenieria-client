@@ -2,10 +2,7 @@ import { createSelector } from 'reselect';
 import { majorsSchema } from '../../schemas';
 import { goToMajor } from './routes';
 import { getEntities } from './entities';
-import {
-  majorEditedNotification,
-  emailSentNotification,
-} from './notifications';
+import { resourceSuccessNotification } from './notifications';
 
 export const TYPES = {
   LOAD: 'fetch::majors/LOAD',
@@ -47,7 +44,7 @@ export function updateMajor(majorId, body) {
         responseSchema: majorsSchema,
       },
     }).then(() => {
-      dispatch(majorEditedNotification());
+      dispatch(resourceSuccessNotification('major', 'updated'));
       dispatch(goToMajor(majorId));
     });
 }
@@ -62,7 +59,7 @@ export function sendEmail(majorId, body) {
         body,
       },
     }).then(() => {
-      dispatch(emailSentNotification());
+      dispatch(resourceSuccessNotification('email', 'sent'));
       dispatch(goToMajor(majorId));
     });
 }

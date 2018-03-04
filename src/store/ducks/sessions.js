@@ -5,9 +5,7 @@ import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 import {
   confirmationEmailSentNotification,
-  emailConfirmedNotification,
-  profileUpdatedNotification,
-  passwordChangedNotification,
+  resourceSuccessNotification,
 } from './notifications';
 import {
   goToLanding,
@@ -75,7 +73,7 @@ export function confirmEmail(url) {
         url,
       },
     }).then(() => {
-      dispatch(emailConfirmedNotification());
+      dispatch(resourceSuccessNotification('email', 'confirmed'));
     });
 }
 
@@ -103,7 +101,7 @@ export function updateProfile(userId, body) {
         responseSchema: usersSchema,
       },
     }).then(() => {
-      dispatch(profileUpdatedNotification());
+      dispatch(resourceSuccessNotification('profile', 'updated'));
       dispatch(goToProfile());
     });
 }
@@ -118,7 +116,7 @@ export function changePassword(body) {
         body,
       },
     }).then(() => {
-      dispatch(passwordChangedNotification());
+      dispatch(resourceSuccessNotification('password', 'updated'));
       dispatch(goToProfile());
     });
 }

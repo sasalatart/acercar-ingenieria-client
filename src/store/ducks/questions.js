@@ -12,11 +12,7 @@ import {
   pagingFnsFactory,
   nestedPagingFnsFactory,
 } from './paginations';
-import {
-  questionCreatedNotification,
-  questionUpdatedNotification,
-  questionDestroyedNotification,
-} from './notifications';
+import { resourceSuccessNotification } from './notifications';
 
 const commonMajorParams = ['questions', questionsSchema, 'majors'];
 const majorsAnsweredPagingFns = nestedPagingFnsFactory(...commonMajorParams, 'answered');
@@ -91,7 +87,7 @@ export function createQuestion(values, majorId) {
         responseSchema: questionsSchema,
       },
     }).then(({ value: { result } }) => {
-      dispatch(questionCreatedNotification());
+      dispatch(resourceSuccessNotification('question', 'created'));
       dispatch(addQuestionToPagination(result, majorId, !values.answer));
     });
 }
@@ -108,7 +104,7 @@ export function updateQuestion(values, majorId, id) {
         responseSchema: questionsSchema,
       },
     }).then(() => {
-      dispatch(questionUpdatedNotification());
+      dispatch(resourceSuccessNotification('question', 'updated'));
     });
 }
 
@@ -130,7 +126,7 @@ export function destroyQuestion(id, majorId, pending) {
         urlParams: { id, majorId },
       },
     }).then(() => {
-      dispatch(questionDestroyedNotification());
+      dispatch(resourceSuccessNotification('question', 'destroyed'));
       dispatch(removeEntity('questions', id));
     });
   };

@@ -7,12 +7,11 @@ import {
   pagingFnsFactory,
   nestedPagingFnsFactory,
 } from './paginations';
+import { resourceSuccessNotification } from './notifications';
 import {
-  articleCreatedNotification,
-  articleUpdatedNotification,
-  articleDestroyedNotification,
-} from './notifications';
-import { goToArticles, goToArticle } from './routes';
+  goToArticles,
+  goToArticle,
+} from './routes';
 import { articlesSchema } from '../../schemas';
 
 const platformPagingFns = pagingFnsFactory('articles', articlesSchema);
@@ -76,7 +75,7 @@ export function createArticle(body, majorId) {
         responseSchema: articlesSchema,
       },
     }).then(() => {
-      dispatch(articleCreatedNotification());
+      dispatch(resourceSuccessNotification('article', 'created'));
       dispatch(goToArticles(majorId));
     });
 }
@@ -92,7 +91,7 @@ export function updateArticle(body, articleId, majorId) {
         responseSchema: articlesSchema,
       },
     }).then(() => {
-      dispatch(articleUpdatedNotification());
+      dispatch(resourceSuccessNotification('article', 'updated'));
       dispatch(goToArticle(articleId, majorId));
     });
 }
@@ -115,7 +114,7 @@ export function destroyArticle(id, majorId, page) {
         urlParams: { id, majorId, page },
       },
     }).then(() => {
-      dispatch(articleDestroyedNotification());
+      dispatch(resourceSuccessNotification('article', 'destroyed'));
       dispatch(removeEntity('articles', id));
     });
   };
