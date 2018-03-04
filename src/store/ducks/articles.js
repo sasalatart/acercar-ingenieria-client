@@ -3,7 +3,10 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
 import { removeEntity, getEntities } from './entities';
-import { nestedPagingFnsFactory } from './paginations';
+import {
+  pagingFnsFactory,
+  nestedPagingFnsFactory,
+} from './paginations';
 import {
   articleCreatedNotification,
   articleUpdatedNotification,
@@ -12,10 +15,13 @@ import {
 import { goToArticles, goToArticle } from './routes';
 import { articlesSchema } from '../../schemas';
 
+const platformPagingFns = pagingFnsFactory('articles', articlesSchema);
 const majorsPagingFns = nestedPagingFnsFactory('articles', articlesSchema, 'majors');
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
+    platform: new Map({}),
+    platformMeta: new Map({}),
     majors: new Map({}),
     majorsMeta: new Map({}),
   }),
@@ -116,7 +122,7 @@ export function destroyArticle(id, majorId, page) {
 }
 
 export function getPagingFns(isOfMajor) {
-  return isOfMajor ? majorsPagingFns : undefined;
+  return isOfMajor ? majorsPagingFns : platformPagingFns;
 }
 
 function getPagingFnsFromAction(payload) {

@@ -79,7 +79,9 @@ export function pagingFnsFactory(resourceName, schema, suffix) {
   const basePagingPath = ['pagination', 'platform'];
   const pagingPath = ['pagination', 'platform'].concat(suffix ? [suffix] : []);
 
-  const metaPath = basePagingPath.concat([`${suffix || resourceName}Meta`]);
+  const metaPath = suffix
+    ? basePagingPath.concat([`${suffix}Meta`])
+    : ['pagination', 'platformMeta'];
 
   const dataSelector = state => state[resourceName];
   const getPage = (state, params) => String(params.page);
