@@ -24,8 +24,10 @@ const platformPendingPagingFns = pagingFnsFactory(...commonPlatformParams, 'pend
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
-    majors: new Map({}),
     platform: new Map({}),
+    platformMeta: new Map({}),
+    majors: new Map({}),
+    majorsMeta: new Map({}),
   }),
   destroyingIds: new Set(),
 });

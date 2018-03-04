@@ -38,8 +38,10 @@ export function nestedPagingFnsFactory(resourceName, schema, baseResourceName, s
     getMeta: createSelector(
       getBaseResourceId,
       dataSelector,
-      (baseResourceId, data) =>
-        data.getIn([...metaPath, baseResourceId]),
+      (baseResourceId, data) => {
+        const meta = data.getIn([...metaPath, baseResourceId]);
+        return Map.isMap(meta) ? undefined : meta;
+      },
     ),
 
     update: (state, payload) => {
@@ -101,7 +103,10 @@ export function pagingFnsFactory(resourceName, schema, suffix) {
 
     getMeta: createSelector(
       dataSelector,
-      data => data.getIn(metaPath),
+      (data) => {
+        const meta = data.getIn(metaPath);
+        return Map.isMap(meta) ? undefined : meta;
+      },
     ),
 
     update: (state, { pagination, result }) =>
