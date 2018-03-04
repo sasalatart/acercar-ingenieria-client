@@ -1,13 +1,18 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { getCurrentUserEntity } from '../../store/ducks/sessions';
+import { getHasAdminPrivileges } from '../../store/ducks/sessions';
 import { getPage } from '../../store/ducks/routes';
+import { getPagingFns } from '../../store/ducks/questions';
 import List from '../../components/Questions/List';
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  const { majorId, pending } = ownProps;
+  const page = getPage(state);
+  const params = { majorId, page };
+
   return {
-    currentUser: getCurrentUserEntity(state),
-    page: getPage(state),
+    hasAdminPrivileges: getHasAdminPrivileges(state, params),
+    questions: getPagingFns(pending, majorId).getPagedEntities(state, params),
   };
 }
 

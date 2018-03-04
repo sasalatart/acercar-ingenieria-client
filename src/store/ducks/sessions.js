@@ -153,11 +153,11 @@ export const getCurrentUserEntity = createSelector(
     denormalize(currentUserId, usersSchema, entities),
 );
 
-const getOptionalMajorId = (state, params) => params && params.majorId;
+const getMajorId = (state, params) => params && params.majorId;
 
 export const getHasAdminPrivileges = createSelector(
   getCurrentUserEntity,
-  getOptionalMajorId,
+  getMajorId,
   (currentUser, majorId) => !!currentUser
-    && (currentUser.admin || (majorId && currentUser.adminOfMajors.includes(majorId))),
+    && (currentUser.admin || !!(majorId && currentUser.adminOfMajors.includes(majorId))),
 );

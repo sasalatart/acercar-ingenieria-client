@@ -192,9 +192,10 @@ export default function commentsReducer(state = INITIAL_STATE, action) {
     case TYPES.SET_DESTROYING:
       return state.update('destroyingIds', ids => ids.add(action.payload.id));
     case TYPES.ADD_TO_PAGINATION: {
-      const { baseResourceId, id, page } = action.payload;
-      return getPagingFns(action.payload.baseResourceName)
-        .addToPagination(state, baseResourceId, id, page);
+      const {
+        baseResourceName, baseResourceId, id, page,
+      } = action.payload;
+      return getPagingFns(baseResourceName).addToPagination(state, id, page, baseResourceId);
     }
     default:
       return state;

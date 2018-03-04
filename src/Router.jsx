@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import LoggedOutRoute from './containers/Routes/LoggedOut';
 import LoggedInRoute from './containers/Routes/LoggedIn';
+import QuestionsPrivilegesRoute from './containers/Routes/QuestionsPrivileges';
 import ArticlePrivilegesRoute from './containers/Routes/ArticlePrivileges';
 import PinnedAnnouncements from './containers/Announcements/Pinned';
 import SignIn from './components/SignIn';
@@ -14,7 +15,7 @@ import Majors from './containers/Majors';
 import Major from './containers/Major';
 import Article from './containers/Article';
 import Articles from './components/Articles';
-import Questions from './components/Questions';
+import Questions from './containers/Questions';
 import ArticleForm from './containers/Articles/Form';
 import AboutUs from './components/AboutUs';
 import Layout from './components/Layout';
@@ -25,6 +26,10 @@ function renderLoggedOutRoute(component) {
 
 function renderLoggedInRoute(component) {
   return props => <LoggedInRoute {...props} component={component} />;
+}
+
+function renderQuestionsPrivilegesRoute(component) {
+  return props => <QuestionsPrivilegesRoute {...props} component={component} />;
 }
 
 function renderArticlePrivilegesRoute(component) {
@@ -49,7 +54,7 @@ export default function Router() {
           <Route exact path="/articles/new" component={ArticleForm} />
           <Route exact path="/articles/:articleId/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
           <Route exact path="/articles" component={Articles} />
-          <Route exact path="/questions" component={Questions} />
+          <Route exact path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
           <Route exact path="/about-us" component={AboutUs} />
           <Route exact path="/auth/confirmation" component={EmailConfirmation} />
         </Switch>

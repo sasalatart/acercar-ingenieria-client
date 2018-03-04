@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Layout, Menu, Icon } from 'antd';
+import QuestionsPrivilegesRoute from '../../containers/Routes/QuestionsPrivileges';
 import MajorInfo from './Info';
 import Edit from './Edit';
 import MajorAdmins from '../../containers/Major/Admins';
@@ -68,15 +69,10 @@ class Major extends Component {
         icon: 'team',
         text: t({ id: 'majors.interestedUsers' }),
       },
-      answeredQuestions: {
-        key: this.majorKeys.answeredQuestions,
+      questions: {
+        key: this.majorKeys.questions,
         icon: 'question-circle',
         text: t({ id: 'questions' }),
-      },
-      pendingQuestions: {
-        key: this.majorKeys.pendingQuestions,
-        icon: 'question-circle-o',
-        text: t({ id: 'questions.pending' }),
       },
       articles: {
         key: this.majorKeys.articles,
@@ -128,8 +124,7 @@ class Major extends Component {
             {adminPrivileges && this.renderMenuItem(menus.edit)}
             {currentUser && this.renderMenuItem(menus.admins)}
             {currentUser && this.renderMenuItem(menus.users)}
-            {this.renderMenuItem(menus.answeredQuestions)}
-            {adminPrivileges && this.renderMenuItem(menus.pendingQuestions)}
+            {this.renderMenuItem(menus.questions)}
             {this.renderMenuItem(menus.articles)}
             {currentUser && this.renderMenuItem(menus.comments)}
             {adminPrivileges && this.renderMenuItem(menus.email)}
@@ -169,17 +164,9 @@ class Major extends Component {
 
           <Route
             exact
-            path={this.majorRoutes.answeredQuestions}
-            render={() => <Questions majorId={majorId} />}
+            path={`${this.majorRoutes.questions}/:pending?`}
+            render={() => <QuestionsPrivilegesRoute component={Questions} />}
           />
-
-          {adminPrivileges &&
-            <Route
-              exact
-              path={this.majorRoutes.pendingQuestions}
-              render={() => <Questions majorId={majorId} pending />}
-            />
-          }
 
           <Route
             exact

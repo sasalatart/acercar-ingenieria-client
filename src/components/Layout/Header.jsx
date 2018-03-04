@@ -107,7 +107,7 @@ function renderLowerHeader(intl) {
         icon="file-text"
       />
       <HeaderLink
-        to={ROUTES.QUESTIONS}
+        to={ROUTES.QUESTIONS()}
         text={intl.formatMessage({ id: 'routing.questions' })}
         icon="question-circle"
       />

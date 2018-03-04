@@ -1,28 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
-import { Button, Modal } from 'antd';
-import PaginationControls from '../Pagination';
+import { Modal } from 'antd';
+import PaginationControls from '../../containers/Pagination';
 import Form from '../../containers/Questions/Form';
+import QuestionsActionBar from '../../containers/Questions/ActionBar';
 import QuestionsList from '../../containers/Questions/List';
-import { paginationShape, questionShape } from '../../shapes';
-
-const styles = {
-  titleWrapper: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-};
+import Title from '../Layout/Title';
+import { paginationShape } from '../../shapes';
 
 class Questions extends Component {
   static propTypes = {
-    loggedIn: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
+    pending: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    questions: ImmutablePropTypes.setOf(questionShape),
-    pending: PropTypes.bool,
     loadQuestions: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
@@ -30,11 +22,15 @@ class Questions extends Component {
   static defaultProps = {
     majorId: undefined,
     pagination: undefined,
-    questions: undefined,
-    pending: false,
   }
 
   state = { formVisible: false };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.pending !== this.props.pending) {
+      nextProps.loadQuestions();
+    }
+  }
 
   handleProposeClicked = () => {
     this.setState({ formVisible: true });
@@ -47,19 +43,6 @@ class Questions extends Component {
   handleFormClose = () => {
     this.setState({ formVisible: false, editingId: undefined });
   }
-
-  renderQuestions = () => {
-    const { questions, majorId, pending } = this.props;
-
-    return (
-      <QuestionsList
-        questions={questions}
-        majorId={majorId}
-        pending={pending}
-        onEditClicked={this.handleEditClicked}
-      />
-    );
-  };
 
   renderFormModal() {
     const { majorId, intl: { formatMessage: t } } = this.props;
@@ -80,24 +63,29 @@ class Questions extends Component {
 
   render() {
     const {
-      loggedIn, loading, pagination, pending, loadQuestions, intl: { formatMessage: t },
+      majorId, pending, loading, pagination, loadQuestions, intl: { formatMessage: t },
     } = this.props;
 
     return (
       <div>
-        <div style={styles.titleWrapper}>
-          <h1>{pending ? t({ id: 'questions.pending' }) : t({ id: 'questions' })}</h1>
-          {loggedIn && !pending &&
-            <Button type="primary" icon="form" size="large" onClick={this.handleProposeClicked}>
-              {t({ id: 'forms.proposeOne' })}
-            </Button>}
-        </div>
+        <QuestionsActionBar
+          majorId={majorId}
+          pending={pending}
+          onProposeClicked={this.handleProposeClicked}
+        />
+        <Title text={pending ? t({ id: 'questions.pending' }) : t({ id: 'questions' })} />
 
         <PaginationControls
           pagination={pagination}
           loading={loading}
           loadFn={loadQuestions}
-          render={this.renderQuestions}
+          render={() => (
+            <QuestionsList
+              majorId={majorId}
+              pending={pending}
+              onEditClicked={this.handleEditClicked}
+            />
+          )}
         />
 
         {this.renderFormModal()}

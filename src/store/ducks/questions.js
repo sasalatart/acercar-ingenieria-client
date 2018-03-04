@@ -3,26 +3,33 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
 import { questionsSchema } from '../../schemas';
+import {
+  addQueryToCurrentUri,
+  getPage,
+} from './routes';
 import { getEntities, removeEntity } from './entities';
-import { nestedPagingFnsFactory } from './paginations';
+import {
+  pagingFnsFactory,
+  nestedPagingFnsFactory,
+} from './paginations';
 import {
   questionCreatedNotification,
   questionUpdatedNotification,
   questionDestroyedNotification,
 } from './notifications';
 
-const commonParams = ['questions', questionsSchema, 'majors'];
-const majorsAnsweredPagingFns = nestedPagingFnsFactory(...commonParams, 'answered');
-const majorsPendingPagingFns = nestedPagingFnsFactory(...commonParams, 'pending');
+const commonMajorParams = ['questions', questionsSchema, 'majors'];
+const majorsAnsweredPagingFns = nestedPagingFnsFactory(...commonMajorParams, 'answered');
+const majorsPendingPagingFns = nestedPagingFnsFactory(...commonMajorParams, 'pending');
+
+const commonPlatformParams = ['questions', questionsSchema];
+const platformAnsweredPagingFns = pagingFnsFactory(...commonPlatformParams, 'answered');
+const platformPendingPagingFns = pagingFnsFactory(...commonPlatformParams, 'pending');
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
-    majors: new Map({
-      answered: new Map({}),
-      answeredMeta: new Map({}),
-      pending: new Map({}),
-      pendingMeta: new Map({}),
-    }),
+    majors: new Map({}),
+    platform: new Map({}),
   }),
   destroyingIds: new Set(),
 });
@@ -35,24 +42,40 @@ const TYPES = {
   DESTROY_ANSWERED: 'fetch::questions/DESTROY_ANSWERED',
   DESTROY_UNANSWERED: 'fetch::questions/DESTROY_UNANSWERED',
   SET_DESTROYING: 'questions/SET_DESTROYING',
+  ADD_TO_PAGINATION: 'questions/ADD_TO_PAGINATION',
 };
 
-export function loadQuestionsFactory(pending) {
-  return function loadQuestions(page = 1, majorId) {
-    const urlSuffix = pending ? '/pending' : '';
-    const uri = majorId
-      ? URI(`/majors/${majorId}/questions${urlSuffix}`)
-      : URI(`/questions${urlSuffix}`);
+export function loadQuestions(page = 1, majorId, pending) {
+  const urlSuffix = pending ? '/pending' : '';
+  const uri = majorId
+    ? URI(`/majors/${majorId}/questions${urlSuffix}`)
+    : URI(`/questions${urlSuffix}`);
 
-    return {
-      type: pending ? TYPES.LOAD_UNANSWERED : TYPES.LOAD_ANSWERED,
+  return {
+    type: pending ? TYPES.LOAD_UNANSWERED : TYPES.LOAD_ANSWERED,
+    payload: {
+      method: 'GET',
+      url: uri.query({ page }).toString(),
+      urlParams: { page, majorId },
+      responseSchema: [questionsSchema],
+    },
+  };
+}
+
+function addQuestionToPagination(id, majorId, pending, page = 1) {
+  return (dispatch, getState) => {
+    const currentPage = getPage(getState());
+
+    if (currentPage && currentPage !== page) {
+      dispatch(addQueryToCurrentUri({ page }));
+    }
+
+    return dispatch({
+      type: TYPES.ADD_TO_PAGINATION,
       payload: {
-        method: 'GET',
-        url: uri.query({ page }).toString(),
-        urlParams: { page, majorId },
-        responseSchema: [questionsSchema],
+        id, majorId, pending, page,
       },
-    };
+    });
   };
 }
 
@@ -67,8 +90,9 @@ export function createQuestion(values, majorId) {
         body: values,
         responseSchema: questionsSchema,
       },
-    }).then(() => {
+    }).then(({ value: { result } }) => {
       dispatch(questionCreatedNotification());
+      dispatch(addQuestionToPagination(result, majorId, !values.answer));
     });
 }
 
@@ -95,33 +119,29 @@ function setDestroyingQuestion(id) {
   };
 }
 
-export function destroyQuestionFactory(pending) {
-  return function destroyQuestion(id, majorId, page) {
-    return (dispatch) => {
-      dispatch(setDestroyingQuestion(id));
-      return dispatch({
-        type: pending ? TYPES.DESTROY_UNANSWERED : TYPES.DESTROY_ANSWERED,
-        payload: {
-          method: 'DELETE',
-          url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-          urlParams: { id, majorId, page },
-        },
-      }).then(() => {
-        dispatch(questionDestroyedNotification());
-        dispatch(removeEntity('questions', id));
-      });
-    };
+export function destroyQuestion(id, majorId, pending) {
+  return (dispatch) => {
+    dispatch(setDestroyingQuestion(id));
+    return dispatch({
+      type: pending ? TYPES.DESTROY_UNANSWERED : TYPES.DESTROY_ANSWERED,
+      payload: {
+        method: 'DELETE',
+        url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
+        urlParams: { id, majorId },
+      },
+    }).then(() => {
+      dispatch(questionDestroyedNotification());
+      dispatch(removeEntity('questions', id));
+    });
   };
 }
 
 export function getPagingFns(isUnanswered, isOfMajor) {
-  if (isUnanswered && isOfMajor) {
-    return majorsPendingPagingFns;
-  } else if (isOfMajor) {
-    return majorsAnsweredPagingFns;
+  if (isOfMajor) {
+    return isUnanswered ? majorsPendingPagingFns : majorsAnsweredPagingFns;
   }
 
-  return undefined;
+  return isUnanswered ? platformPendingPagingFns : platformAnsweredPagingFns;
 }
 
 function getPagingFnsFromAction(type, payload) {
@@ -142,6 +162,12 @@ export default function questionsReducer(state = INITIAL_STATE, action) {
         .update('destroyingIds', ids => ids.delete(action.payload.request.urlParams.id));
     case TYPES.SET_DESTROYING:
       return state.update('destroyingIds', ids => ids.add(action.payload.id));
+    case TYPES.ADD_TO_PAGINATION: {
+      const {
+        id, majorId, pending, page,
+      } = action.payload;
+      return getPagingFns(pending, majorId).addToPagination(state, id, page, majorId);
+    }
     default:
       return state;
   }

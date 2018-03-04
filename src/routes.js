@@ -21,7 +21,14 @@ const ROUTES = {
     ? `/majors/${majorId}/articles/${id}/edit`
     : `/articles/${id}/edit`
   ),
-  QUESTIONS: '/questions',
+  QUESTIONS: majorId => (majorId
+    ? `/majors/${majorId}/questions`
+    : '/questions'
+  ),
+  PENDING_QUESTIONS: majorId => (majorId
+    ? `/majors/${majorId}/questions/pending`
+    : '/questions/pending'
+  ),
   ABOUT_US: '/about-us',
 };
 
@@ -48,8 +55,7 @@ export const getMajorPaths = (majorId) => {
     edit: '/edit',
     admins: '/admins',
     users: '/users',
-    answeredQuestions: '/questions',
-    pendingQuestions: '/questions/pending',
+    questions: '/questions',
     articles: '/articles',
     comments: '/comments',
     email: '/email',

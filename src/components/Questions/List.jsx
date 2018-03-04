@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
 import { Button, Collapse } from 'antd';
-import { userShape, questionShape } from '../../shapes';
+import { questionShape } from '../../shapes';
 import { colors } from '../../theme';
 import DestroyButton from '../../containers/Questions/DestroyButton';
 
@@ -33,17 +33,13 @@ function setStyle(pinned) {
 }
 
 function QuestionsList({
-  currentUser,
+  hasAdminPrivileges,
   questions,
   majorId,
-  page,
   pending,
   onEditClicked,
   intl: { formatMessage: t },
 }) {
-  const hasAdminPrivileges = currentUser
-    && (currentUser.admin || (majorId && currentUser.adminOfMajors.includes(majorId)));
-
   return (
     <Collapse bordered={false}>
       {questions.map(({
@@ -56,7 +52,7 @@ function QuestionsList({
               <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
                 {t({ id: 'forms.edit' })}
               </Button>
-              <DestroyButton id={id} majorId={majorId} page={page} pending={pending} />
+              <DestroyButton id={id} majorId={majorId} pending={pending} />
             </div>
           }
         </Panel>
@@ -66,17 +62,15 @@ function QuestionsList({
 }
 
 QuestionsList.propTypes = {
-  currentUser: userShape,
+  hasAdminPrivileges: PropTypes.bool.isRequired,
   majorId: PropTypes.number,
-  questions: ImmutablePropTypes.setOf(questionShape).isRequired,
-  page: PropTypes.number.isRequired,
   pending: PropTypes.bool.isRequired,
+  questions: ImmutablePropTypes.setOf(questionShape).isRequired,
   onEditClicked: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 
 QuestionsList.defaultProps = {
-  currentUser: undefined,
   majorId: undefined,
 };
 

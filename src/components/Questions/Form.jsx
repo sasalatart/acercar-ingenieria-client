@@ -81,7 +81,7 @@ class QuestionForm extends Component {
               name="answer"
               component={TextArea}
               placeholder={t({ id: 'forms.answer' })}
-              validate={[validators.required, validators.minLength, validators.maxAnswerLength]}
+              validate={[validators.minLength, validators.maxAnswerLength]}
             />
           }
           {hasAdminPrivileges &&
