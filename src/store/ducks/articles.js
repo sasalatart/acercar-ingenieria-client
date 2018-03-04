@@ -103,7 +103,7 @@ function setDestroyingArticle(id) {
   };
 }
 
-export function destroyArticle(id, majorId, page) {
+export function destroyArticle(id, majorId) {
   return (dispatch) => {
     dispatch(setDestroyingArticle(id));
     return dispatch({
@@ -111,7 +111,7 @@ export function destroyArticle(id, majorId, page) {
       payload: {
         method: 'DELETE',
         url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-        urlParams: { id, majorId, page },
+        urlParams: { id, majorId },
       },
     }).then(() => {
       dispatch(resourceSuccessNotification('article', 'destroyed'));
