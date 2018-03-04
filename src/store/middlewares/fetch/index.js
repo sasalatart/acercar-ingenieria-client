@@ -19,6 +19,9 @@ const fetchMiddleware = store => next => (action) => {
     type: action.type,
     payload: window.fetch(url, rest)
       .then(async (response) => {
+        const responseContentType = response.headers.get('content-type');
+        if (responseContentType.includes('text/html')) return Promise.resolve();
+
         refreshTokens(response, store, action.type);
         const body = response.status === 204 ? {} : await response.json();
 
