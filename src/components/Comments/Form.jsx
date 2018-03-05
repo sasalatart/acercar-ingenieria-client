@@ -9,6 +9,7 @@ const styles = {
   wrapper: {
     display: 'flex',
     alignItems: 'center',
+    marginTop: '10px',
   },
   content: {
     flex: 1,
@@ -16,7 +17,7 @@ const styles = {
   },
   submitButton: {
     minWidth: '150px',
-    marginLeft: '5px',
+    margin: '0 0 24px 5px',
   },
 };
 
@@ -56,14 +57,15 @@ class CommentForm extends Component {
 
     return (
       <form onSubmit={handleSubmit} style={{ ...styles.wrapper, ...style }}>
-        <Field
-          name="content"
-          component={TextArea}
-          placeholder={t({ id: 'forms.content' })}
-          validate={[validators.required, validators.maxLength]}
-          disabled={submitting}
-          style={styles.content}
-        />
+        <div style={styles.content}>
+          <Field
+            name="content"
+            component={TextArea}
+            placeholder={t({ id: 'forms.content' })}
+            validate={[validators.required, validators.maxLength]}
+            disabled={submitting}
+          />
+        </div>
         <SubmitButton
           disabled={!valid || submitting}
           loading={submitting}

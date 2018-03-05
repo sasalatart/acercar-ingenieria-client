@@ -42,7 +42,7 @@ const styles = {
   cancelButtonWrapper: {
     display: 'flex',
     alignItems: 'center',
-    marginLeft: '5px',
+    margin: '10px 0 24px 5px',
   },
   answerButton: {
     marginTop: '10px',

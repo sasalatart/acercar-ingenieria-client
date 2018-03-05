@@ -12,7 +12,6 @@ export default function createComponent(AntdComponent, mapProps) {
       validateStatus,
       hasFeedback = true,
       colon,
-      style,
       ...rest
     } = mapProps(props);
 
@@ -26,7 +25,6 @@ export default function createComponent(AntdComponent, mapProps) {
         validateStatus={validateStatus}
         hasFeedback={hasFeedback}
         colon={colon}
-        style={style}
       >
         <AntdComponent {...rest} />
       </FormItem>
