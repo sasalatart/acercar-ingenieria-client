@@ -1,19 +1,30 @@
+import { Map, Set } from 'immutable';
 import { createSelector } from 'reselect';
+import { denormalize } from 'normalizr';
 import { majorsSchema } from '../../schemas';
 import { goToMajor } from './routes';
-import { getEntities } from './entities';
+import {
+  removeEntity,
+  getEntities,
+} from './entities';
 import { resourceSuccessNotification } from './notifications';
 
+const INITIAL_STATE = new Map({
+  activeIds: new Set(),
+  destroyingIds: new Set(),
+});
+
 export const TYPES = {
+  LOAD_INDEX: 'fetch::majors/LOAD_INDEX',
   LOAD: 'fetch::majors/LOAD',
   UPDATE: 'fetch::majors/UPDATE',
+  DESTROY: 'fetch::majors/DESTROY',
   BROADCAST: 'fetch::majors/BROADCAST',
-  SET_TAB: 'majors/SET_TAB',
 };
 
 export function loadMajors() {
   return {
-    type: TYPES.LOAD,
+    type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
       url: '/majors',
@@ -22,30 +33,47 @@ export function loadMajors() {
   };
 }
 
-export function loadMajor(majorId) {
+export function loadMajor(id) {
   return {
     type: TYPES.LOAD,
     payload: {
       method: 'GET',
-      url: `/majors/${majorId}`,
+      url: `/majors/${id}`,
+      urlParams: { id },
       responseSchema: majorsSchema,
     },
   };
 }
 
-export function updateMajor(majorId, body) {
+export function updateMajor(id, body) {
   return dispatch =>
     dispatch({
       type: TYPES.UPDATE,
       payload: {
         method: 'PUT',
-        url: `/majors/${majorId}`,
+        url: `/majors/${id}`,
+        urlParams: { id },
         body,
         responseSchema: majorsSchema,
       },
     }).then(() => {
       dispatch(resourceSuccessNotification('major', 'updated'));
-      dispatch(goToMajor(majorId));
+      dispatch(goToMajor(id));
+    });
+}
+
+export function destroyMajor(id) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.DESTROY,
+      payload: {
+        method: 'DELETE',
+        url: `/majors/${id}`,
+        urlParams: { id },
+      },
+    }).then(() => {
+      dispatch(removeEntity('majors', id));
+      dispatch(resourceSuccessNotification('major', 'destroyed'));
     });
 }
 
@@ -64,25 +92,48 @@ export function sendEmail(majorId, body) {
     });
 }
 
-export const getMajorsData = state => state.majors;
+export default function majorsReducer(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
+      return state.set('activeIds', new Set(action.payload.result));
+    case TYPES.DESTROY: {
+      const { id } = action.payload.urlParams;
+      return state.update('destroyingIds', ids => ids.add(id));
+    }
+    case `${TYPES.DESTROY}_FULFILLED`: {
+      const { id } = action.payload.request.urlParams;
+      return state
+        .update('activeIds', ids => ids.delete(id))
+        .update('destroyingIds', ids => ids.delete(id));
+    }
+    default:
+      return state;
+  }
+}
 
-export const getMajorId = (state, params) => params.majorId;
+const getMajorsData = state => state.majors;
+
+const getMajorId = (state, params) => params.majorId;
+
+const getActiveIds = createSelector(
+  getMajorsData,
+  majorsData => majorsData.get('activeIds'),
+);
 
 export const getMajorEntities = createSelector(
+  getActiveIds,
   getEntities,
-  entities => entities.get('majors'),
+  (activeIds, entities) => denormalize(activeIds, [majorsSchema], entities),
 );
 
 export const getMajorEntity = createSelector(
   getMajorId,
-  getMajorEntities,
-  (majorId, majorEntities) => majorEntities.get(majorId),
+  getEntities,
+  (majorId, entities) => entities.getIn(['majors', majorId]),
 );
 
 function filterByCategory(majorEntities, categoryType) {
-  return majorEntities
-    .toList()
-    .filter(({ category }) => category === categoryType);
+  return majorEntities.filter(({ category }) => category === categoryType);
 }
 
 export const getDisciplinaryMajors = createSelector(
@@ -101,4 +152,9 @@ export const getMajorOptions = createSelector(
     { key: 0, value: null, label: 'None' },
     ...majorEntities.toArray().map(({ id, name }) => ({ key: id, value: id, label: name })),
   ]),
+);
+
+export const getDestroyingIds = createSelector(
+  getMajorsData,
+  majorsData => majorsData.get('destroyingIds'),
 );

@@ -2,31 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
-import { Tabs } from 'antd';
-import MajorCard from './Card';
-import Spinner from '../Spinner';
+import { Tabs, List } from 'antd';
+import MajorItem from './Item';
 import { majorShape } from '../../shapes';
 import { MAJORS_TAB_NAMES as TAB_NAMES } from '../../routes';
 
 const { TabPane } = Tabs;
 
-const styles = {
-  majorsList: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexFlow: 'row wrap',
-  },
-  majorCard: {
-    margin: '15px 5px',
-  },
-};
-
-class Majors extends Component {
+class MajorsList extends Component {
   static propTypes = {
-    disciplinaryMajors: ImmutablePropTypes.listOf(majorShape).isRequired,
-    interdisciplinaryMajors: ImmutablePropTypes.listOf(majorShape).isRequired,
+    hasAdminPrivileges: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    disciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
+    interdisciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
     loadMajors: PropTypes.func.isRequired,
-    goToMajor: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
@@ -34,7 +23,7 @@ class Majors extends Component {
     activeTab: TAB_NAMES.disciplinaries,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadMajors();
   }
 
@@ -42,29 +31,22 @@ class Majors extends Component {
     this.setState({ activeTab: key });
   }
 
-  renderMajors = majors => (
-    <div style={styles.majorsList}>
-      {majors.map(({
-        id, name, category, logo,
-      }) => (
-        <MajorCard
-          key={id}
-          name={name}
-          category={category}
-          logo={logo}
-          style={styles.majorCard}
-          onClick={() => this.props.goToMajor(id)}
-        />
-      ))}
-    </div>
-  )
+  renderMajors(majors) {
+    const { loading, hasAdminPrivileges } = this.props;
+
+    return (
+      <List
+        itemLayout="horizontal"
+        size="large"
+        loading={loading}
+        dataSource={majors.toJS()}
+        renderItem={major => <MajorItem major={major} hasAdminPrivileges={hasAdminPrivileges} />}
+      />
+    );
+  }
 
   render() {
     const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
-
-    if (!disciplinaryMajors.size && interdisciplinaryMajors.size) {
-      return <Spinner absolute />;
-    }
 
     return (
       <Tabs
@@ -85,4 +67,4 @@ class Majors extends Component {
   }
 }
 
-export default Majors;
+export default MajorsList;

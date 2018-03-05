@@ -10,6 +10,7 @@ import sessions, { TYPES } from './sessions';
 import announcements from './announcements';
 import users from './users';
 import admins from './admins';
+import majors from './majors';
 import questions from './questions';
 import articles from './articles';
 import categories from './categories';
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
   announcements,
   users,
   admins,
+  majors,
   questions,
   articles,
   categories,

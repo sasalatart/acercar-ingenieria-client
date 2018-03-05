@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { goToMajor } from '../../store/ducks/routes';
+import { getHasAdminPrivileges } from '../../store/ducks/sessions';
 import {
   loadMajors,
   getDisciplinaryMajors,
@@ -9,15 +9,19 @@ import {
 import Majors from '../../components/Majors';
 
 function mapStateToProps(state) {
+  const disciplinaryMajors = getDisciplinaryMajors(state);
+  const interdisciplinaryMajors = getInterdisciplinaryMajors(state);
+
   return {
-    disciplinaryMajors: getDisciplinaryMajors(state),
-    interdisciplinaryMajors: getInterdisciplinaryMajors(state),
+    hasAdminPrivileges: getHasAdminPrivileges(state),
+    loading: !disciplinaryMajors.size && !interdisciplinaryMajors.size,
+    disciplinaryMajors,
+    interdisciplinaryMajors,
   };
 }
 
 const mapDispatchToProps = {
   loadMajors,
-  goToMajor,
 };
 
 export default injectIntl(connect(
