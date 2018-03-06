@@ -17,6 +17,7 @@ const INITIAL_STATE = new Map({
 export const TYPES = {
   LOAD_INDEX: 'fetch::majors/LOAD_INDEX',
   LOAD: 'fetch::majors/LOAD',
+  CREATE: 'fetch::majors/CREATE',
   UPDATE: 'fetch::majors/UPDATE',
   DESTROY: 'fetch::majors/DESTROY',
   BROADCAST: 'fetch::majors/BROADCAST',
@@ -43,6 +44,22 @@ export function loadMajor(id) {
       responseSchema: majorsSchema,
     },
   };
+}
+
+export function createMajor(body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.CREATE,
+      payload: {
+        method: 'POST',
+        url: '/majors',
+        body,
+        responseSchema: majorsSchema,
+      },
+    }).then(({ value: { result } }) => {
+      dispatch(resourceSuccessNotification('major', 'created'));
+      dispatch(goToMajor(result));
+    });
 }
 
 export function updateMajor(id, body) {

@@ -1,20 +1,24 @@
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
-import EditForm from '../../containers/Major/EditForm';
+import EditForm from '../../containers/Major/Form';
+import ActionBar from '../../containers/Layout/ActionBar';
+import Title from '../Layout/Title';
 import { majorShape } from '../../shapes';
 
-function MajorInfo({ major, intl: { formatMessage: t } }) {
+function MajorEdit({ major, intl: { formatMessage: t } }) {
   return (
     <div>
-      <h1>{t({ id: 'majors.edit' })}</h1>
+      <ActionBar />
+      <Title text={t({ id: 'majors.edit' })} />
+
       <EditForm major={major} />
     </div>
   );
 }
 
-MajorInfo.propTypes = {
+MajorEdit.propTypes = {
   major: majorShape.isRequired,
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(MajorInfo);
+export default injectIntl(MajorEdit);

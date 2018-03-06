@@ -23,6 +23,10 @@ export function goToUser(userId) {
   return push(ROUTES.USER(userId));
 }
 
+export function goToMajorsNew() {
+  return push(ROUTES.MAJORS_NEW);
+}
+
 export function goToMajor(majorId) {
   return push(ROUTES.MAJOR(majorId));
 }

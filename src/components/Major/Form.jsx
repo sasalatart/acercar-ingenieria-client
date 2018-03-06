@@ -29,7 +29,7 @@ const GUTTER = 8;
 const COLUMN_LAYOUT = { sm: 24, lg: 12 };
 const CATEGORIES = ['disciplinary', 'interdisciplinary'];
 
-class MajorEditForm extends Component {
+class MajorForm extends Component {
   static propTypes = {
     currentLogoURL: PropTypes.string,
     valid: PropTypes.bool.isRequired,
@@ -126,4 +126,4 @@ class MajorEditForm extends Component {
   }
 }
 
-export default MajorEditForm;
+export default MajorForm;

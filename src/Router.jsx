@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import LoggedOutRoute from './containers/Routes/LoggedOut';
 import LoggedInRoute from './containers/Routes/LoggedIn';
+import AdminRoute from './containers/Routes/Admin';
 import QuestionsPrivilegesRoute from './containers/Routes/QuestionsPrivileges';
 import ArticlePrivilegesRoute from './containers/Routes/ArticlePrivileges';
 import PinnedAnnouncements from './containers/Announcements/Pinned';
@@ -13,6 +14,7 @@ import EmailConfirmation from './containers/SignUp/EmailConfirmation';
 import Profile from './containers/Profile';
 import Majors from './containers/Majors';
 import Major from './containers/Major';
+import NewMajor from './components/Majors/New';
 import Article from './containers/Article';
 import Articles from './components/Articles';
 import Questions from './containers/Questions';
@@ -26,6 +28,10 @@ function renderLoggedOutRoute(component) {
 
 function renderLoggedInRoute(component) {
   return props => <LoggedInRoute {...props} component={component} />;
+}
+
+function renderAdminRoute(component) {
+  return props => <AdminRoute {...props} component={component} />;
 }
 
 function renderQuestionsPrivilegesRoute(component) {
@@ -47,6 +53,7 @@ export default function Router() {
           <Route path="/profile" component={renderLoggedInRoute(Profile)} />
           <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
           <Route exact path="/majors" component={Majors} />
+          <Route exact path="/majors/new" render={renderAdminRoute(NewMajor)} />
           <Route exact path="/majors/:majorId/articles/:articleId" component={Article} />
           <Route exact path="/majors/:majorId/articles/:articleId/edit" render={renderArticlePrivilegesRoute(ArticleForm)} />
           <Route path="/majors/:majorId" component={Major} />

@@ -8,6 +8,7 @@ const ROUTES = {
   PROFILE: '/profile',
   USER: id => `/users/${id}`,
   MAJORS: '/majors',
+  MAJORS_NEW: '/majors/new',
   MAJOR: id => `/majors/${id}`,
   MAJOR_EDIT: id => `/majors/${id}/edit`,
   ARTICLES: majorId => (majorId

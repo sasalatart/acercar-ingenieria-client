@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Tabs, List } from 'antd';
+import MajorsActionBar from '../../containers/Majors/ActionBar';
+import Title from '../Layout/Title';
 import MajorItem from './Item';
 import { majorShape } from '../../shapes';
 import { MAJORS_TAB_NAMES as TAB_NAMES } from '../../routes';
@@ -49,20 +51,20 @@ class MajorsList extends Component {
     const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
 
     return (
-      <Tabs
-        activeKey={this.state.activeTab}
-        size="large"
-        tabPosition="left"
-        onChange={this.handleTabChange}
-      >
-        <TabPane key={TAB_NAMES.disciplinaries} tab={t({ id: 'majors.disciplinaries' })}>
-          {this.renderMajors(disciplinaryMajors)}
-        </TabPane>
+      <div>
+        <MajorsActionBar />
+        <Title text="Majors" />
 
-        <TabPane key={TAB_NAMES.interdisciplinaries} tab={t({ id: 'majors.interdisciplinaries' })}>
-          {this.renderMajors(interdisciplinaryMajors)}
-        </TabPane>
-      </Tabs>
+        <Tabs activeKey={this.state.activeTab} size="large" onChange={this.handleTabChange}>
+          <TabPane key={TAB_NAMES.disciplinaries} tab={t({ id: 'majors.disciplinaries' })}>
+            {this.renderMajors(disciplinaryMajors)}
+          </TabPane>
+
+          <TabPane key={TAB_NAMES.interdisciplinaries} tab={t({ id: 'majors.interdisciplinaries' })}>
+            {this.renderMajors(interdisciplinaryMajors)}
+          </TabPane>
+        </Tabs>
+      </div>
     );
   }
 }
