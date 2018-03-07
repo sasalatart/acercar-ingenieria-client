@@ -15,6 +15,10 @@ const ROUTES = {
     ? `/majors/${majorId}/articles`
     : '/articles'
   ),
+  ARTICLES_NEW: majorId => (majorId
+    ? `/majors/${majorId}/articles/new`
+    : '/articles/new'
+  ),
   ARTICLE: (id, majorId) => (majorId
     ? `/majors/${majorId}/articles/${id}`
     : `/articles/${id}`

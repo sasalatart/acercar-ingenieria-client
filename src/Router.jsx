@@ -50,19 +50,26 @@ export default function Router() {
           <Route exact path="/" component={PinnedAnnouncements} />
           <Route exact path="/sign-in" render={renderLoggedOutRoute(SignIn)} />
           <Route exact path="/sign-up" render={renderLoggedOutRoute(SignUp)} />
+
           <Route path="/profile" component={renderLoggedInRoute(Profile)} />
           <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
+
           <Route exact path="/majors" component={Majors} />
           <Route exact path="/majors/new" render={renderAdminRoute(NewMajor)} />
+          <Route exact path="/majors/:majorId/articles/new" component={ArticleForm} />
           <Route exact path="/majors/:majorId/articles/:articleId" component={Article} />
           <Route exact path="/majors/:majorId/articles/:articleId/edit" render={renderArticlePrivilegesRoute(ArticleForm)} />
           <Route path="/majors/:majorId" component={Major} />
-          <Route exact path="/articles/:articleId" component={Article} />
-          <Route exact path="/articles/new" component={ArticleForm} />
-          <Route exact path="/articles/:articleId/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
+
           <Route exact path="/articles" component={Articles} />
+          <Route exact path="/articles/new" component={ArticleForm} />
+          <Route exact path="/articles/:articleId" component={Article} />
+          <Route exact path="/articles/:articleId/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
+
           <Route exact path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
+
           <Route exact path="/about-us" component={AboutUs} />
+
           <Route exact path="/auth/confirmation" component={EmailConfirmation} />
         </Switch>
       </Layout>

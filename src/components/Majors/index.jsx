@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Tabs, List } from 'antd';
-import MajorsActionBar from '../../containers/Majors/ActionBar';
+import MajorsActionBar from './ActionBar';
 import Title from '../Layout/Title';
 import MajorItem from './Item';
 import { majorShape } from '../../shapes';

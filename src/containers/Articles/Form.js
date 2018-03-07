@@ -28,6 +28,7 @@ const FIELDS = [
 function mapStateToProps(state, ownProps) {
   const { params } = ownProps.match;
   const articleId = +params.articleId;
+  const majorId = +params.majorId;
 
   const article = getArticleEntity(state, params);
   const majorOptions = getMajorOptions(state);
@@ -37,7 +38,7 @@ function mapStateToProps(state, ownProps) {
   return {
     articleId,
     loading,
-    initialValues: articleId ? omitBy(pick(article, FIELDS), isNil) : {},
+    initialValues: articleId ? omitBy(pick(article, FIELDS), isNil) : { majorId },
     majorOptions,
     categoryOptions,
     currentPictureURL: get(article, 'picture.medium', articlePlaceholder),
