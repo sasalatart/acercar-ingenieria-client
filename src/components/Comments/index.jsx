@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider } from 'antd';
+import ActionBar from '../../containers/Layout/ActionBar';
+import Title from '../Layout/Title';
 import NewForm from '../../containers/Comments/NewForm';
 import List from '../../containers/Comments/List';
 
@@ -10,7 +12,9 @@ function CommentsSection({ baseResourceName, baseResourceId, intl: { formatMessa
 
   return (
     <div>
-      <h1>{t({ id: 'comments' })}</h1>
+      <ActionBar />
+      <Title text={t({ id: 'comments' })} />
+
       <NewForm {...commonProps} />
       <Divider />
       <List {...commonProps} />

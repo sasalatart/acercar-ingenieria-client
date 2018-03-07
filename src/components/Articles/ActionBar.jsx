@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from 'antd';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
+import ButtonLink from '../../containers/ButtonLink';
 import ROUTES from '../../routes';
 
 function ArticlesActionBar({ loggedIn, majorId, intl: { formatMessage: t } }) {
@@ -12,12 +11,7 @@ function ArticlesActionBar({ loggedIn, majorId, intl: { formatMessage: t } }) {
 
   if (loggedIn) {
     const newArticleHref = ROUTES.ARTICLES_NEW(majorId);
-    const linkToNewArticle = (
-      <Link to={newArticleHref} href={newArticleHref}>
-        <Button type="primary">{t({ id: 'articles.new' })}</Button>
-      </Link>
-    );
-    actions.push(linkToNewArticle);
+    actions.push(<ButtonLink to={newArticleHref} content={t({ id: 'articles.new' })} />);
   }
 
   return <ActionBar actions={actions} />;

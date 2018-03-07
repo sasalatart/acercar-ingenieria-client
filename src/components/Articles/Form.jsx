@@ -13,6 +13,7 @@ import {
   SubmitButton,
 } from '../Forms';
 import Spinner from '../Spinner';
+import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import { optionShape, attachmentShape } from '../../shapes';
 import articlesValidations from '../../validations/articles';
@@ -88,7 +89,9 @@ class ArticleForm extends Component {
 
     return (
       <div>
+        <ActionBar />
         <Title text={t({ id: `articles.${articleId ? 'edit' : 'new'}` })} />
+
         <form onSubmit={handleSubmit}>
           <Field
             name="title"

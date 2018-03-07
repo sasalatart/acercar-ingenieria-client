@@ -1,23 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from 'antd';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
+import ButtonLink from '../../containers/ButtonLink';
 import ROUTES from '../../routes';
 
 function MajorsActionBar({ hasAdminPrivileges, intl: { formatMessage: t } }) {
   const actions = [];
 
   if (hasAdminPrivileges) {
-    const newMajorHref = ROUTES.MAJORS_NEW;
-    const linkToNewMajor = (
-      <Link to={newMajorHref} href={newMajorHref}>
-        <Button type="primary">{t({ id: 'majors.new' })}</Button>
-      </Link>
-    );
-    actions.push(linkToNewMajor);
+    actions.push(<ButtonLink to={ROUTES.MAJORS_NEW} content={t({ id: 'majors.new' })} />);
   }
 
   return <ActionBar actions={actions} />;

@@ -2,6 +2,7 @@ import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
+import ActionBar from '../containers/Layout/ActionBar';
 import Title from './Layout/Title';
 import { themeStyles } from '../theme';
 
@@ -15,6 +16,7 @@ const styles = {
 function AboutUs({ intl: { formatMessage: t } }) {
   return (
     <div>
+      <ActionBar />
       <Title text={t({ id: 'aboutUs' })} />
 
       <Row gutter={36}>

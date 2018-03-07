@@ -4,6 +4,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
 import { List } from 'antd';
 import PaginationControls from '../../../containers/Pagination';
+import ActionBar from '../../../containers/Layout/ActionBar';
+import Title from '../../Layout/Title';
 import UserListItem from './Item';
 import { paginationShape, userShape } from '../../../shapes';
 
@@ -32,7 +34,9 @@ class UsersList extends Component {
 
     return (
       <div>
-        <h1>{majorId ? t({ id: 'majors.interestedUsers' }) : t({ id: 'users' })}</h1>
+        <ActionBar />
+        <Title text={majorId ? t({ id: 'majors.interestedUsers' }) : t({ id: 'users' })} />
+
         <PaginationControls
           pagination={pagination}
           loading={loading}

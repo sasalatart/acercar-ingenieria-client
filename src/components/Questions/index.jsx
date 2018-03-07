@@ -4,8 +4,8 @@ import { intlShape } from 'react-intl';
 import { Modal } from 'antd';
 import PaginationControls from '../../containers/Pagination';
 import Form from '../../containers/Questions/Form';
-import QuestionsActionBar from '../../containers/Questions/ActionBar';
 import QuestionsList from '../../containers/Questions/List';
+import QuestionsActionBar from './ActionBar';
 import Title from '../Layout/Title';
 import { paginationShape } from '../../shapes';
 

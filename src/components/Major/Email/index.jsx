@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
+import ActionBar from '../../../containers/Layout/ActionBar';
+import Title from '../../Layout/Title';
 import EmailForm from '../../../containers/Major/Email/Form';
 
 function Email({ majorId, intl: { formatMessage: t } }) {
   return (
     <div>
-      <h1>{t({ id: 'emails.send' })}</h1>
+      <ActionBar />
+      <Title text={t({ id: 'emails.send' })} />
+
       <EmailForm majorId={majorId} />
     </div>
   );

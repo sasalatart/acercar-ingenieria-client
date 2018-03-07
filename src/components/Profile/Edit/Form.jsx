@@ -45,7 +45,7 @@ class ProfileEditForm extends Component {
   static propTypes = {
     initialValues: PropTypes.shape({}).isRequired,
     currentAvatarURL: PropTypes.string,
-    majors: ImmutablePropTypes.mapOf(majorShape),
+    majors: ImmutablePropTypes.setOf(majorShape),
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
     loadMajors: PropTypes.func.isRequired,

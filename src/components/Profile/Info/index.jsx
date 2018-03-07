@@ -6,6 +6,7 @@ import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
 import Spinner from '../../Spinner';
+import ActionBar from '../../../containers/Layout/ActionBar';
 import Title from '../../Layout/Title';
 import SubTitle from '../../Layout/SubTitle';
 
@@ -27,23 +28,26 @@ function ProfileInfo({ user, intl: { formatMessage: t } }) {
   }
 
   return (
-    <Row type="flex" justify="center" gutter={8}>
-      <Col md={6}>
-        <div style={styles.cardWrapper}>
-          <ProfileCard user={user} />
-        </div>
-      </Col>
-      <Col md={18}>
-        <Title text={`${user.firstName} ${user.lastName}`} />
-        <SubTitle text={t({ id: 'profile.generation' }, { year: user.generation })} />
+    <div>
+      <ActionBar />
+      <Row type="flex" justify="center" gutter={8}>
+        <Col md={6}>
+          <div style={styles.cardWrapper}>
+            <ProfileCard user={user} />
+          </div>
+        </Col>
+        <Col md={18}>
+          <Title text={`${user.firstName} ${user.lastName}`} />
+          <SubTitle text={t({ id: 'profile.generation' }, { year: user.generation })} />
 
-        <Divider>Roles</Divider>
-        <RolesList user={user} />
+          <Divider>Roles</Divider>
+          <RolesList user={user} />
 
-        <Divider style={styles.divider}>{t({ id: 'profile.majorsOfInterest' })}</Divider>
-        <MajorsList majorsOfInterest={user.majorsOfInterest} />
-      </Col>
-    </Row>
+          <Divider style={styles.divider}>{t({ id: 'profile.majorsOfInterest' })}</Divider>
+          <MajorsList majorsOfInterest={user.majorsOfInterest} />
+        </Col>
+      </Row>
+    </div>
   );
 }
 

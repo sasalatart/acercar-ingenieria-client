@@ -2,15 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Button } from 'antd';
+import WithAuthorization from '../../hoc/WithAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
+import ButtonLink from '../../containers/ButtonLink';
+import ROUTES from '../../routes';
 
 function QuestionsActionBar({
   loggedIn,
   hasAdminPrivileges,
+  majorId,
   pending,
   onProposeClicked,
-  goToAnsweredQuestions,
-  goToPendingQuestions,
   intl: { formatMessage: t },
 }) {
   const actions = [];
@@ -28,24 +30,20 @@ function QuestionsActionBar({
   if (hasAdminPrivileges) {
     actions.push(pending
       ? (
-        <Button
+        <ButtonLink
           key="goToAnswered"
-          type="primary"
+          to={ROUTES.QUESTIONS(majorId)}
+          content={t({ id: 'routing.questions' })}
           icon="question-circle"
-          onClick={() => goToAnsweredQuestions()}
-        >
-          {t({ id: 'routing.questions' })}
-        </Button>
+        />
       )
       : (
-        <Button
+        <ButtonLink
           key="goToPending"
-          type="primary"
+          to={ROUTES.PENDING_QUESTIONS(majorId)}
+          content={t({ id: 'routing.pendingQuestions' })}
           icon="question-circle-o"
-          onClick={() => goToPendingQuestions()}
-        >
-          {t({ id: 'routing.pendingQuestions' })}
-        </Button>
+        />
       ));
   }
 
@@ -55,11 +53,14 @@ function QuestionsActionBar({
 QuestionsActionBar.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   hasAdminPrivileges: PropTypes.bool.isRequired,
+  majorId: PropTypes.number,
   pending: PropTypes.bool.isRequired,
   onProposeClicked: PropTypes.func.isRequired,
-  goToAnsweredQuestions: PropTypes.func.isRequired,
-  goToPendingQuestions: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(QuestionsActionBar);
+QuestionsActionBar.defaultProps = {
+  majorId: undefined,
+};
+
+export default injectIntl(WithAuthorization(QuestionsActionBar));

@@ -46,13 +46,13 @@ class Major extends Component {
   }
 
   getMenus() {
-    const { intl: { formatMessage: t } } = this.props;
+    const { major: { name }, intl: { formatMessage: t } } = this.props;
 
     return {
       info: {
         key: this.majorKeys.info,
         icon: 'info-circle',
-        text: t({ id: 'majors.info' }),
+        text: name,
       },
       edit: {
         key: this.majorKeys.edit,
@@ -62,7 +62,7 @@ class Major extends Component {
       admins: {
         key: this.majorKeys.admins,
         icon: 'star-o',
-        text: t({ id: 'majors.admins' }),
+        text: t({ id: 'admins' }),
       },
       users: {
         key: this.majorKeys.users,

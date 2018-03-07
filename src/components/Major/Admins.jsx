@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
 import PaginationControls from '../../containers/Pagination';
+import ActionBar from '../../containers/Layout/ActionBar';
+import Title from '../Layout/Title';
 import ProfileCard from '../Profile/Card';
 import { paginationShape, userShape } from '../../shapes';
 
@@ -57,7 +59,9 @@ class MajorAdmins extends Component {
 
     return (
       <div>
-        <h1>{t({ id: 'admins' })}</h1>
+        <ActionBar />
+        <Title text={t({ id: 'majors.admins' })} />
+
         <PaginationControls
           pagination={pagination}
           loading={loading}

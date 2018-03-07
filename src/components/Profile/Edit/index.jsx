@@ -1,11 +1,15 @@
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
+import ActionBar from '../../../containers/Layout/ActionBar';
+import Title from '../../Layout/Title';
 import EditForm from '../../../containers/Profile/Edit/Form';
 
 function ProfileEdit({ intl: { formatMessage: t } }) {
   return (
     <div>
-      <h1>{t({ id: 'routing.profileEdit' })}</h1>
+      <ActionBar />
+      <Title text={t({ id: 'routing.profileEdit' })} />
+
       <EditForm />
     </div>
   );

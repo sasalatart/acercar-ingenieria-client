@@ -3,6 +3,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
 import RichText from '../RichText';
+import ActionBar from '../../containers/Layout/ActionBar';
+import Title from '../Layout/Title';
 import { majorShape } from '../../shapes';
 import { themeStyles } from '../../theme';
 
@@ -13,7 +15,9 @@ const styles = {
 function MajorInfo({ major, intl: { formatMessage: t } }) {
   return (
     <div>
-      <h1>{major.name}</h1>
+      <ActionBar />
+      <Title text={major.name} />
+
       <Divider>{t({ id: 'majors.review' })}</Divider>
       <Row type="flex" align="middle" gutter={24}>
         <Col sm={8}>

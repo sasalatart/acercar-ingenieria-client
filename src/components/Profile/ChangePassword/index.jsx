@@ -1,11 +1,15 @@
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
+import ActionBar from '../../../containers/Layout/ActionBar';
+import Title from '../../Layout/Title';
 import ChangePasswordForm from '../../../containers/Profile/ChangePassword/Form';
 
 function ChangePassword({ intl: { formatMessage: t } }) {
   return (
     <div>
-      <h1>{t({ id: 'routing.changePassword' })}</h1>
+      <ActionBar />
+      <Title text={t({ id: 'routing.changePassword' })} />
+
       <ChangePasswordForm />
     </div>
   );
