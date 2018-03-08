@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import pick from 'lodash/pick';
-import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import {
   createQuestion,
   updateQuestion,
   getQuestionEntity,
 } from '../../store/ducks/questions';
+import WithAuthorization from '../../hoc/WithAuthorization';
 import QuestionsForm from '../../components/Questions/Form';
 
 const FIELDS = ['question', 'answer', 'pinned'];
@@ -19,7 +19,6 @@ function mapStateToProps(state, ownProps) {
 
   return {
     initialValues,
-    currentUser: getCurrentUserEntity(state),
   };
 }
 
@@ -32,4 +31,4 @@ const form = reduxForm({
   },
 })(QuestionsForm);
 
-export default injectIntl(connect(mapStateToProps)(form));
+export default injectIntl(WithAuthorization(connect(mapStateToProps)(form)));

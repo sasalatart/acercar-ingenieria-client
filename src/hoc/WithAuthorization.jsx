@@ -8,7 +8,7 @@ import {
 
 export default function HOC(WrappedComponent) {
   function mapStateToProps(state, ownProps) {
-    const majorId = +ownProps.match.params.majorId || ownProps.majorId;
+    const majorId = +(ownProps.match.params.majorId || ownProps.majorId);
 
     return {
       loggedIn: !!getCurrentUserEntity(state),

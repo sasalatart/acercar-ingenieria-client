@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { getHasAdminPrivileges } from '../../store/ducks/sessions';
 import { getPage } from '../../store/ducks/routes';
 import { getPagingFns } from '../../store/ducks/questions';
+import WithAuthorization from '../../hoc/WithAuthorization';
 import List from '../../components/Questions/List';
 
 function mapStateToProps(state, ownProps) {
@@ -11,9 +11,8 @@ function mapStateToProps(state, ownProps) {
   const params = { majorId, page };
 
   return {
-    hasAdminPrivileges: getHasAdminPrivileges(state, params),
     questions: getPagingFns(pending, majorId).getPagedEntities(state, params),
   };
 }
 
-export default injectIntl(connect(mapStateToProps)(List));
+export default injectIntl(WithAuthorization(connect(mapStateToProps)(List)));

@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import {
-  getCurrentUserEntity,
-  getHasAdminPrivileges,
-} from '../../store/ducks/sessions';
+import { getCurrentUserEntity } from '../../store/ducks/sessions';
+import WithAuthorization from '../../hoc/WithAuthorization';
 import Comment from '../../components/Comments/Comment';
 
 function mapStateToProps(state, ownProps) {
@@ -12,8 +9,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     isAuthor: currentUser.id === ownProps.comment.author.id,
-    hasAdminPrivileges: getHasAdminPrivileges(state, ownProps.match.params),
   };
 }
 
-export default withRouter(injectIntl(connect(mapStateToProps)(Comment)));
+export default injectIntl(WithAuthorization(connect(mapStateToProps)(Comment)));

@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 import { getPage } from '../../store/ducks/routes';
-import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import {
   loadQuestions,
   getPagingFns,
@@ -22,7 +21,6 @@ function mapStateToProps(state, ownProps) {
     majorId,
     pending,
     loading: !questions || questions.isEmpty(),
-    loggedIn: !!getCurrentUserEntity(state),
     pagination: pagingFns.getMeta(state, params),
     questions,
   };

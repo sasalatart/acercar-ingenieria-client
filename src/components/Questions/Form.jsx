@@ -4,7 +4,6 @@ import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert } from 'antd';
 import { TextArea, CheckboxField, SubmitButton } from '../Forms';
-import { userShape } from '../../shapes';
 import questionsValidations from '../../validations/questions';
 
 const styles = {
@@ -20,8 +19,7 @@ const styles = {
 
 class QuestionForm extends Component {
   static propTypes = {
-    currentUser: userShape.isRequired,
-    majorId: PropTypes.number,
+    hasAdminPrivileges: PropTypes.bool.isRequired,
     id: PropTypes.number,
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -30,7 +28,6 @@ class QuestionForm extends Component {
   }
 
   static defaultProps = {
-    majorId: undefined,
     id: undefined,
   }
 
@@ -50,13 +47,10 @@ class QuestionForm extends Component {
 
   render() {
     const {
-      currentUser, majorId, id, valid, submitting, handleSubmit, intl: { formatMessage: t },
+      hasAdminPrivileges, id, valid, submitting, handleSubmit, intl: { formatMessage: t },
     } = this.props;
 
     const { validators } = this.state;
-
-    const hasAdminPrivileges = currentUser.admin
-      || (majorId && currentUser.adminOfMajors.includes(majorId));
 
     return (
       <div>

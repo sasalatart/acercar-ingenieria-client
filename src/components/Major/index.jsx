@@ -13,7 +13,7 @@ import Articles from '../Articles';
 import Comments from '../Comments';
 import Email from './Email';
 import Spinner from '../Spinner';
-import { majorShape, userShape } from '../../shapes';
+import { majorShape } from '../../shapes';
 import { getMajorPaths } from '../../routes';
 import { themeStyles } from '../../theme';
 
@@ -27,9 +27,10 @@ const styles = {
 
 class Major extends Component {
   static propTypes = {
+    loggedIn: PropTypes.bool.isRequired,
+    hasAdminPrivileges: PropTypes.bool.isRequired,
     majorId: PropTypes.number.isRequired,
     major: majorShape,
-    currentUser: userShape,
     activeMenuKey: PropTypes.string.isRequired,
     loadMajor: PropTypes.func.isRequired,
     replaceRoute: PropTypes.func.isRequired,
@@ -38,7 +39,6 @@ class Major extends Component {
 
   static defaultProps = {
     major: undefined,
-    currentUser: undefined,
   }
 
   componentDidMount() {
@@ -104,15 +104,12 @@ class Major extends Component {
 
   render() {
     const {
-      majorId, major, currentUser, activeMenuKey, replaceRoute,
+      loggedIn, hasAdminPrivileges, majorId, major, activeMenuKey, replaceRoute,
     } = this.props;
 
     if (!major) {
       return <Spinner absolute />;
     }
-
-    const adminPrivileges = currentUser
-      && (currentUser.admin || currentUser.adminOfMajors.includes(major.id));
 
     const menus = this.getMenus();
 
@@ -121,13 +118,13 @@ class Major extends Component {
         <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
           <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)}>
             {this.renderMenuItem(menus.info)}
-            {adminPrivileges && this.renderMenuItem(menus.edit)}
-            {currentUser && this.renderMenuItem(menus.admins)}
-            {currentUser && this.renderMenuItem(menus.users)}
+            {hasAdminPrivileges && this.renderMenuItem(menus.edit)}
+            {loggedIn && this.renderMenuItem(menus.admins)}
+            {loggedIn && this.renderMenuItem(menus.users)}
             {this.renderMenuItem(menus.questions)}
             {this.renderMenuItem(menus.articles)}
-            {currentUser && this.renderMenuItem(menus.comments)}
-            {adminPrivileges && this.renderMenuItem(menus.email)}
+            {loggedIn && this.renderMenuItem(menus.comments)}
+            {hasAdminPrivileges && this.renderMenuItem(menus.email)}
           </Menu>
         </Sider>
 
@@ -138,7 +135,7 @@ class Major extends Component {
             render={() => <MajorInfo major={major} />}
           />
 
-          {adminPrivileges &&
+          {hasAdminPrivileges &&
             <Route
               exact
               path={this.majorRoutes.edit}
@@ -146,7 +143,7 @@ class Major extends Component {
             />
           }
 
-          {currentUser &&
+          {loggedIn &&
             <Route
               exact
               path={this.majorRoutes.admins}
@@ -154,7 +151,7 @@ class Major extends Component {
             />
           }
 
-          {currentUser &&
+          {loggedIn &&
             <Route
               exact
               path={this.majorRoutes.users}
@@ -174,7 +171,7 @@ class Major extends Component {
             render={() => <Articles majorId={majorId} />}
           />
 
-          {currentUser &&
+          {loggedIn &&
             <Route
               exact
               path={this.majorRoutes.comments}
@@ -182,7 +179,7 @@ class Major extends Component {
             />
           }
 
-          {adminPrivileges &&
+          {hasAdminPrivileges &&
             <Route
               exact
               path={this.majorRoutes.email}
