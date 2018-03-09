@@ -8,6 +8,7 @@ import AdminRoute from './containers/Routes/Admin';
 import QuestionsPrivilegesRoute from './containers/Routes/QuestionsPrivileges';
 import ArticlePrivilegesRoute from './containers/Routes/ArticlePrivileges';
 import PinnedAnnouncements from './containers/Announcements/Pinned';
+import Announcements from './containers/Announcements/List';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import EmailConfirmation from './containers/SignUp/EmailConfirmation';
@@ -48,6 +49,8 @@ export default function Router() {
       <Layout>
         <Switch>
           <Route exact path="/" component={PinnedAnnouncements} />
+          <Route exact path="/announcements" render={renderAdminRoute(Announcements)} />
+
           <Route exact path="/sign-in" render={renderLoggedOutRoute(SignIn)} />
           <Route exact path="/sign-up" render={renderLoggedOutRoute(SignUp)} />
 

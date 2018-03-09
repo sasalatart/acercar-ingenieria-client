@@ -1,13 +1,17 @@
 import { connect } from 'react-redux';
 import {
   loadPinnedAnnouncements,
-  getPinnedAnnouncements,
+  getPinnedAnnouncementsEntities,
 } from '../../store/ducks/announcements';
+import WithAuthorization from '../../hoc/WithAuthorization';
 import PinnedAnnouncements from '../../components/Announcements/Pinned';
 
 function mapStateToProps(state) {
+  const announcements = getPinnedAnnouncementsEntities(state);
+
   return {
-    announcements: getPinnedAnnouncements(state),
+    loading: !announcements.size,
+    announcements,
   };
 }
 
@@ -15,7 +19,7 @@ const mapDispatchToProps = {
   loadPinnedAnnouncements,
 };
 
-export default connect(
+export default WithAuthorization(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(PinnedAnnouncements);
+)(PinnedAnnouncements));

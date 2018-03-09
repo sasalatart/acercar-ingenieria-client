@@ -1,25 +1,31 @@
 import React, { Component } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { Carousel } from 'antd';
-import isEmpty from 'lodash/isEmpty';
 import { announcementShape } from '../../shapes';
+import ButtonLink from '../../containers/ButtonLink';
 import Spinner from '../Spinner';
+import ROUTES from '../../routes';
 
 const styles = {
   announcement: {
     height: 'auto',
     width: '100%',
   },
+  addButton: {
+    position: 'absolute',
+    zIndex: 1,
+    top: '5px',
+    right: '5px',
+  },
 };
 
 export default class PinnedAnnouncements extends Component {
   static propTypes = {
-    announcements: PropTypes.arrayOf(announcementShape),
+    hasAdminPrivileges: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    announcements: ImmutablePropTypes.listOf(announcementShape).isRequired,
     loadPinnedAnnouncements: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    announcements: [],
   };
 
   componentDidMount() {
@@ -27,24 +33,29 @@ export default class PinnedAnnouncements extends Component {
   }
 
   render() {
-    const { announcements } = this.props;
+    const { hasAdminPrivileges, loading, announcements } = this.props;
 
-    if (isEmpty(announcements)) {
+    if (loading) {
       return <Spinner absolute />;
     }
 
     return (
-      <Carousel autoplay>
-        {announcements.map(announcement => (
-          <div key={announcement.id}>
-            <img
-              alt={`announcement-${announcement.id}`}
-              src={announcement.picture.large}
-              style={styles.announcement}
-            />
-          </div>
-        ))}
-      </Carousel>
+      <div>
+        {hasAdminPrivileges &&
+          <ButtonLink to={ROUTES.ANNOUNCEMENTS} icon="plus" shape="circle" style={styles.addButton} />}
+
+        <Carousel autoplay>
+          {announcements.map(announcement => (
+            <div key={announcement.id}>
+              <img
+                alt={`announcement-${announcement.id}`}
+                src={announcement.picture.large}
+                style={styles.announcement}
+              />
+            </div>
+          ))}
+        </Carousel>
+      </div>
     );
   }
 }

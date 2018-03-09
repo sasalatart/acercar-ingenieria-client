@@ -1,15 +1,37 @@
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
+import URI from 'urijs';
 import { createSelector } from 'reselect';
+import { denormalize } from 'normalizr';
+import { pagingFnsFactory } from './paginations';
 import { announcementsSchema } from '../../schemas';
 import { getEntities } from './entities';
 
+export const pagingFns = pagingFnsFactory('announcements', announcementsSchema);
+
 const INITIAL_STATE = new Map({
-  pinned: [],
+  pagination: new Map({
+    platform: new Map({}),
+    platformMeta: new Map({}),
+  }),
+  pinned: List([]),
 });
 
 export const TYPES = {
+  LOAD: 'fetch::announcements/LOAD',
   LOAD_PINNED: 'fetch::announcements/LOAD_PINNED',
 };
+
+export function loadAnnouncements(page) {
+  return {
+    type: TYPES.LOAD,
+    payload: {
+      method: 'GET',
+      url: URI('/announcements').query({ page }).toString(),
+      urlParams: { page },
+      responseSchema: [announcementsSchema],
+    },
+  };
+}
 
 export function loadPinnedAnnouncements() {
   return {
@@ -24,8 +46,10 @@ export function loadPinnedAnnouncements() {
 
 export default function announcementsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case `${TYPES.LOAD}_FULFILLED`:
+      return pagingFns.update(state, action.payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
-      return state.set('pinned', action.payload.result);
+      return state.set('pinned', new List(action.payload.result));
     default:
       return state;
   }
@@ -33,14 +57,14 @@ export default function announcementsReducer(state = INITIAL_STATE, action) {
 
 export const getAnnouncementsData = state => state.announcements;
 
-export const getAnnouncementEntities = createSelector(
-  getEntities,
-  entities => entities.get('announcements'),
+const getPinnedIds = createSelector(
+  getAnnouncementsData,
+  announcementsData => announcementsData.get('pinned'),
 );
 
-export const getPinnedAnnouncements = createSelector(
-  getAnnouncementsData,
-  getAnnouncementEntities,
-  (announcementsData, announcementEntities) =>
-    announcementsData.get('pinned').map(id => announcementEntities.get(String(id))),
+export const getPinnedAnnouncementsEntities = createSelector(
+  getPinnedIds,
+  getEntities,
+  (pinnedIdsList, entities) =>
+    denormalize(pinnedIdsList, [announcementsSchema], entities),
 );

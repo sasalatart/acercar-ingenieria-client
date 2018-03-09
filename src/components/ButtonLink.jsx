@@ -13,12 +13,13 @@ ButtonLink.propTypes = {
   content: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,
-  ]).isRequired,
+  ]),
   goToRoute: PropTypes.func.isRequired,
 };
 
 ButtonLink.defaultProps = {
   type: 'primary',
+  content: null,
 };
 
 export default ButtonLink;

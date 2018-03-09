@@ -137,3 +137,8 @@ export const commentShape = PropTypes.shape({
   ...sharedCommentShape,
   childComments: PropTypes.arrayOf(childCommentShape),
 });
+
+export const lightboxImageShape = PropTypes.shape({
+  src: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string,
+});

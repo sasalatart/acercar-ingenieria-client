@@ -20,6 +20,7 @@
     "react-dom": "^16.2.0",
     "react-draft-wysiwyg": "^1.12.9",
     "react-dropzone": "^4.2.8",
+    "react-images": "^0.5.17",
     "react-immutable-proptypes": "^2.1.0",
     "react-intl": "^2.4.0",
     "react-player": "^1.1.2",

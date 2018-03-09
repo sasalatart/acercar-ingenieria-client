@@ -3,6 +3,7 @@ import mapValues from 'lodash/mapValues';
 
 const ROUTES = {
   LANDING: '/',
+  ANNOUNCEMENTS: '/announcements',
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
   PROFILE: '/profile',
