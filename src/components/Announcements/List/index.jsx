@@ -13,12 +13,13 @@ export default class Announcements extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    announcements: ImmutablePropTypes.setOf(announcementShape).isRequired,
+    announcements: ImmutablePropTypes.setOf(announcementShape),
     loadAnnouncements: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     pagination: undefined,
+    announcements: new Set(),
   }
 
   state = { lightboxOpen: false, clickedIndex: undefined };
@@ -61,12 +62,13 @@ export default class Announcements extends Component {
           loadFn={loadAnnouncements}
         />
 
-        <Lightbox
-          open={lightboxOpen}
-          images={this.createImagesArray()}
-          startingIndex={clickedIndex}
-          onClose={this.handleLightboxClosed}
-        />
+        {!loading &&
+          <Lightbox
+            open={lightboxOpen}
+            images={this.createImagesArray()}
+            startingIndex={clickedIndex}
+            onClose={this.handleLightboxClosed}
+          />}
       </div>
     );
   }

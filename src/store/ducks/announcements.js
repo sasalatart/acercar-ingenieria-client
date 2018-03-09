@@ -1,10 +1,14 @@
-import { Map, List } from 'immutable';
+import { Map, List, Set } from 'immutable';
 import URI from 'urijs';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { pagingFnsFactory } from './paginations';
 import { announcementsSchema } from '../../schemas';
-import { getEntities } from './entities';
+import {
+  getEntities,
+  removeEntity,
+} from './entities';
+import { resourceSuccessNotification } from './notifications';
 
 export const pagingFns = pagingFnsFactory('announcements', announcementsSchema);
 
@@ -14,11 +18,13 @@ const INITIAL_STATE = new Map({
     platformMeta: new Map({}),
   }),
   pinned: List([]),
+  destroyingIds: new Set(),
 });
 
 export const TYPES = {
   LOAD: 'fetch::announcements/LOAD',
   LOAD_PINNED: 'fetch::announcements/LOAD_PINNED',
+  DESTROY: 'fetch::announcements/DESTROY',
 };
 
 export function loadAnnouncements(page) {
@@ -44,12 +50,33 @@ export function loadPinnedAnnouncements() {
   };
 }
 
+export function destroyAnnouncement(id) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.DESTROY,
+      payload: {
+        method: 'DELETE',
+        url: `/announcements/${id}`,
+        urlParams: { id },
+      },
+    }).then(() => {
+      dispatch(resourceSuccessNotification('announcement', 'destroyed'));
+      dispatch(removeEntity('announcements', id));
+    });
+}
+
 export default function announcementsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD}_FULFILLED`:
       return pagingFns.update(state, action.payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
       return state.set('pinned', new List(action.payload.result));
+    case TYPES.DESTROY:
+      return state.update('destroyingIds', ids => ids.add(action.payload.urlParams.id));
+    case `${TYPES.DESTROY}_FULFILLED`:
+      return pagingFns
+        .destroy(state, action.payload.request.urlParams)
+        .update('destroyingIds', ids => ids.delete(action.payload.request.urlParams.id));
     default:
       return state;
   }
@@ -67,4 +94,9 @@ export const getPinnedAnnouncementsEntities = createSelector(
   getEntities,
   (pinnedIdsList, entities) =>
     denormalize(pinnedIdsList, [announcementsSchema], entities),
+);
+
+export const getDestroyingIds = createSelector(
+  getAnnouncementsData,
+  announcementsData => announcementsData.get('destroyingIds'),
 );

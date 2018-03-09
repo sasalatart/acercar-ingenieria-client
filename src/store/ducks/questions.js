@@ -7,7 +7,10 @@ import {
   addQueryToCurrentUri,
   getPage,
 } from './routes';
-import { getEntities, removeEntity } from './entities';
+import {
+  getEntities,
+  removeEntity,
+} from './entities';
 import {
   pagingFnsFactory,
   nestedPagingFnsFactory,
