@@ -18,12 +18,14 @@ const INITIAL_STATE = new Map({
     platformMeta: new Map({}),
   }),
   pinned: new Set([]),
-  destroyingIds: new Set(),
+  updatingIds: new Set([]),
+  destroyingIds: new Set([]),
 });
 
 export const TYPES = {
   LOAD: 'fetch::announcements/LOAD',
   LOAD_PINNED: 'fetch::announcements/LOAD_PINNED',
+  UPDATE: 'fetch::announcements/UPDATE',
   DESTROY: 'fetch::announcements/DESTROY',
 };
 
@@ -50,6 +52,19 @@ export function loadPinnedAnnouncements() {
   };
 }
 
+export function updatePinned(id, pinned) {
+  return {
+    type: TYPES.UPDATE,
+    payload: {
+      method: 'PUT',
+      url: `/announcements/${id}`,
+      urlParams: { id },
+      body: { pinned },
+      responseSchema: announcementsSchema,
+    },
+  };
+}
+
 export function destroyAnnouncement(id) {
   return dispatch =>
     dispatch({
@@ -71,6 +86,10 @@ export default function announcementsReducer(state = INITIAL_STATE, action) {
       return pagingFns.update(state, action.payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
       return state.set('pinned', new Set(action.payload.result));
+    case TYPES.UPDATE:
+      return state.update('updatingIds', ids => ids.add(action.payload.urlParams.id));
+    case `${TYPES.UPDATE}_FULFILLED`:
+      return state.update('updatingIds', ids => ids.delete(action.payload.request.urlParams.id));
     case TYPES.DESTROY:
       return state.update('destroyingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.DESTROY}_FULFILLED`:
@@ -95,6 +114,11 @@ export const getPinnedAnnouncementsEntities = createSelector(
   getEntities,
   (pinnedIdsList, entities) =>
     denormalize(pinnedIdsList, [announcementsSchema], entities),
+);
+
+export const getUpdatingIds = createSelector(
+  getAnnouncementsData,
+  announcementsData => announcementsData.get('updatingIds'),
 );
 
 export const getDestroyingIds = createSelector(

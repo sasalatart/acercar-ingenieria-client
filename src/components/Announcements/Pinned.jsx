@@ -32,29 +32,35 @@ export default class PinnedAnnouncements extends Component {
     this.props.loadPinnedAnnouncements();
   }
 
+  mapAnnouncements() {
+    return this.props.announcements.map(announcement => (
+      <div key={announcement.id}>
+        <img
+          alt={`announcement-${announcement.id}`}
+          src={announcement.picture.large}
+          style={styles.announcement}
+        />
+      </div>
+    ));
+  }
+
   render() {
-    const { hasAdminPrivileges, loading, announcements } = this.props;
+    const { hasAdminPrivileges, loading } = this.props;
 
     if (loading) {
       return <Spinner absolute />;
     }
+
+    const mappedAnnouncements = this.mapAnnouncements();
 
     return (
       <div>
         {hasAdminPrivileges &&
           <ButtonLink to={ROUTES.ANNOUNCEMENTS} icon="plus" shape="circle" style={styles.addButton} />}
 
-        <Carousel autoplay>
-          {announcements.map(announcement => (
-            <div key={announcement.id}>
-              <img
-                alt={`announcement-${announcement.id}`}
-                src={announcement.picture.large}
-                style={styles.announcement}
-              />
-            </div>
-          ))}
-        </Carousel>
+        {mappedAnnouncements.size === 1
+          ? mappedAnnouncements
+          : <Carousel autoplay>{mappedAnnouncements}</Carousel>}
       </div>
     );
   }
