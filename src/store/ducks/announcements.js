@@ -1,4 +1,4 @@
-import { Map, List, Set } from 'immutable';
+import { Map, Set } from 'immutable';
 import URI from 'urijs';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
@@ -17,7 +17,7 @@ const INITIAL_STATE = new Map({
     platform: new Map({}),
     platformMeta: new Map({}),
   }),
-  pinned: List([]),
+  pinned: new Set([]),
   destroyingIds: new Set(),
 });
 
@@ -70,13 +70,14 @@ export default function announcementsReducer(state = INITIAL_STATE, action) {
     case `${TYPES.LOAD}_FULFILLED`:
       return pagingFns.update(state, action.payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
-      return state.set('pinned', new List(action.payload.result));
+      return state.set('pinned', new Set(action.payload.result));
     case TYPES.DESTROY:
       return state.update('destroyingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.DESTROY}_FULFILLED`:
       return pagingFns
         .destroy(state, action.payload.request.urlParams)
-        .update('destroyingIds', ids => ids.delete(action.payload.request.urlParams.id));
+        .update('destroyingIds', ids => ids.delete(action.payload.request.urlParams.id))
+        .update('pinned', ids => ids.delete(action.payload.request.urlParams.id));
     default:
       return state;
   }

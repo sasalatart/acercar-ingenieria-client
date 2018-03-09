@@ -24,7 +24,7 @@ export default class PinnedAnnouncements extends Component {
   static propTypes = {
     hasAdminPrivileges: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
-    announcements: ImmutablePropTypes.listOf(announcementShape).isRequired,
+    announcements: ImmutablePropTypes.setOf(announcementShape).isRequired,
     loadPinnedAnnouncements: PropTypes.func.isRequired,
   };
 

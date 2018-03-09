@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Set } from 'immutable';
 import { List } from 'antd';
 import PaginationControls from '../../../containers/Pagination';
 import AnnouncementItem from './Item';
