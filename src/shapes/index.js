@@ -59,7 +59,6 @@ export const userShape = PropTypes.shape({
   lastName: PropTypes.string.isRequired,
   generation: PropTypes.number.isRequired,
   bio: PropTypes.string,
-  active: PropTypes.bool.isRequired,
   avatar: imageShape,
   admin: PropTypes.bool,
   majorsOfInterest: PropTypes.arrayOf(majorSummaryShape),

@@ -13,6 +13,7 @@ export default {
     'profile.majorsOfInterest': 'Majors of interest',
     'profile.joined': 'member of the platform since',
     'profile.noMajorsOfInterest': 'No majors of interest',
+    'users.destroyWarning': 'Deleting users also deletes their questions, articles, discussion threads and comments.',
   },
   'es-ES': {
     users: 'Usuarios',
@@ -28,5 +29,6 @@ export default {
     'profile.majorsOfInterest': 'Majors de interés',
     'profile.joined': 'miembro de la plataforma desde',
     'profile.noMajorsOfInterest': 'Sin majors de interés',
+    'users.destroyWarning': 'Al eliminar usuarios también se eliminan sus preguntas, artículos, temas en el foro, y comentarios.',
   },
 };

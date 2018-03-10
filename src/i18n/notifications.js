@@ -1,5 +1,6 @@
 export default {
   'en-US': {
+    'notifications.resource.user': 'The user',
     'notifications.resource.profile': 'Your profile',
     'notifications.resource.email': 'Your email',
     'notifications.resource.password': 'Your password',
@@ -18,6 +19,7 @@ export default {
     'notifications.signUpOneMoreStep.description': 'A confirmation email has been sent to you. Once you confirm this email, you will be able to sign in',
   },
   'es-ES': {
+    'notifications.resource.user': 'el usuario',
     'notifications.resource.profile': 'tu perfil',
     'notifications.resource.email': 'tu email',
     'notifications.resource.password': 'tu contraseña',

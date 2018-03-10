@@ -5,6 +5,7 @@ import {
   pagingFnsFactory,
   nestedPagingFnsFactory,
 } from './paginations';
+import { TYPES as USERS_TYPES } from './users';
 
 const platformPagingFns = pagingFnsFactory('admins', usersSchema);
 const majorsPagingFns = nestedPagingFnsFactory('admins', usersSchema, 'majors');
@@ -45,6 +46,11 @@ export default function adminsReducer(state = INITIAL_STATE, action) {
     case `${TYPES.LOAD}_FULFILLED`: {
       const { majorId } = action.payload.request.urlParams;
       return getPagingFns(majorId).update(state, action.payload);
+    }
+    case `${USERS_TYPES.DESTROY}_FULFILLED`: {
+      const { urlParams } = action.payload.request;
+      const fromMajors = majorsPagingFns.destroy(state, urlParams);
+      return platformPagingFns.destroy(fromMajors, urlParams);
     }
     default:
       return state;
