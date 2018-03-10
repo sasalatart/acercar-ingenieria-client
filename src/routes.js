@@ -7,6 +7,7 @@ const ROUTES = {
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
   PROFILE: '/profile',
+  USERS: '/users',
   USER: id => `/users/${id}`,
   MAJORS: '/majors',
   MAJORS_NEW: '/majors/new',

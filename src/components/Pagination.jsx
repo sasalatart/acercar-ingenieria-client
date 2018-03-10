@@ -16,6 +16,7 @@ const styles = {
 export default class PaginationControls extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    search: PropTypes.string,
     current: PropTypes.number,
     pagination: paginationShape,
     addQueryToCurrentUri: PropTypes.func.isRequired,
@@ -25,6 +26,7 @@ export default class PaginationControls extends Component {
   }
 
   static defaultProps = {
+    search: '',
     current: 1,
     pagination: undefined,
     onPageChange: noop,
@@ -35,7 +37,7 @@ export default class PaginationControls extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.current !== this.props.current) {
+    if (nextProps.search !== this.props.search) {
       this.props.loadFn(nextProps.current);
     }
   }

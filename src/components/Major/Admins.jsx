@@ -24,7 +24,7 @@ class MajorAdmins extends Component {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
     majorAdmins: ImmutablePropTypes.setOf(userShape),
-    loadMajorAdmins: PropTypes.func.isRequired,
+    loadAdmins: PropTypes.func.isRequired,
     goToUser: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
@@ -54,7 +54,7 @@ class MajorAdmins extends Component {
 
   render() {
     const {
-      loading, pagination, loadMajorAdmins, intl: { formatMessage: t },
+      loading, pagination, loadAdmins, intl: { formatMessage: t },
     } = this.props;
 
     return (
@@ -65,7 +65,7 @@ class MajorAdmins extends Component {
         <PaginationControls
           pagination={pagination}
           loading={loading}
-          loadFn={loadMajorAdmins}
+          loadFn={loadAdmins}
           render={this.renderProfileCards}
         />
       </div>

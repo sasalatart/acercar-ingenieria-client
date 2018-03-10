@@ -2,14 +2,21 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import {
   loadUsers,
-  getPagingFns,
+  getPagingFns as getUsersPagingFns,
 } from '../../../store/ducks/users';
+import {
+  loadAdmins,
+  getPagingFns as getAdminsPagingFns,
+} from '../../../store/ducks/admins';
 import UsersList from '../../../components/Users/List';
 
 function mapStateToProps(state, ownProps) {
-  const { majorId } = ownProps;
-  const pagingFns = getPagingFns(majorId);
+  const { majorId, admins } = ownProps;
   const params = { majorId };
+
+  const pagingFns = admins
+    ? getAdminsPagingFns(majorId)
+    : getUsersPagingFns(majorId);
 
   const users = pagingFns.getPagedEntities(state, params);
 
@@ -21,8 +28,11 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
+  const { majorId, admins } = ownProps;
+  const loadFn = admins ? loadAdmins : loadUsers;
+
   return {
-    loadUsers: (page = 1) => dispatch(loadUsers(page, ownProps.majorId)),
+    loadUsers: (page = 1) => dispatch(loadFn(page, majorId)),
   };
 }
 

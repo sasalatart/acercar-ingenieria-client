@@ -1,6 +1,7 @@
 export default {
   'en-US': {
     users: 'Users',
+    'users.all': 'All Users',
     'profile.info': 'Profile',
     'profile.notifications': 'Notifications',
     'profile.edit': 'Edit',
@@ -15,6 +16,7 @@ export default {
   },
   'es-ES': {
     users: 'Usuarios',
+    'users.all': 'Todos los usuarios',
     'profile.info': 'Perfil',
     'profile.notifications': 'Notificaciones',
     'profile.edit': 'Editar',

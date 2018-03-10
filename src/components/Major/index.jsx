@@ -7,7 +7,7 @@ import QuestionsPrivilegesRoute from '../../containers/Routes/QuestionsPrivilege
 import MajorInfo from './Info';
 import Edit from './Edit';
 import MajorAdmins from '../../containers/Major/Admins';
-import Users from '../../containers/Users/List';
+import Users from '../../containers/Users';
 import Questions from '../../containers/Questions';
 import Articles from '../Articles';
 import Comments from '../Comments';

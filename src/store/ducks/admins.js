@@ -1,28 +1,40 @@
 import { Map } from 'immutable';
 import URI from 'urijs';
 import { usersSchema } from '../../schemas';
-import { nestedPagingFnsFactory } from './paginations';
+import {
+  pagingFnsFactory,
+  nestedPagingFnsFactory,
+} from './paginations';
 
+const platformPagingFns = pagingFnsFactory('admins', usersSchema);
 const majorsPagingFns = nestedPagingFnsFactory('admins', usersSchema, 'majors');
 
 const INITIAL_STATE = Map({
   pagination: new Map({
+    platform: new Map({}),
+    platformMeta: new Map({}),
     majors: new Map({}),
     majorsMeta: new Map({}),
   }),
 });
 
 const TYPES = {
-  LOAD_FROM_MAJOR: 'fetch::admins/LOAD_FROM_MAJOR',
+  LOAD: 'fetch::admins/LOAD',
 };
 
-export function loadMajorAdmins(page, majorId) {
+export function getPagingFns(isOfMajor) {
+  return isOfMajor ? majorsPagingFns : platformPagingFns;
+}
+
+export function loadAdmins(page, majorId) {
+  const baseUrl = majorId ? `/majors/${majorId}/admins` : 'users/admins';
+
   return {
-    type: TYPES.LOAD_FROM_MAJOR,
+    type: TYPES.LOAD,
     payload: {
       method: 'GET',
-      url: URI(`/majors/${majorId}/admins`).query({ page }).toString(),
-      urlParams: { majorId, page },
+      url: URI(baseUrl).query({ page }).toString(),
+      urlParams: { page, majorId },
       responseSchema: [usersSchema],
     },
   };
@@ -30,13 +42,11 @@ export function loadMajorAdmins(page, majorId) {
 
 export default function adminsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD_FROM_MAJOR}_FULFILLED`:
-      return majorsPagingFns.update(state, action.payload);
+    case `${TYPES.LOAD}_FULFILLED`: {
+      const { majorId } = action.payload.request.urlParams;
+      return getPagingFns(majorId).update(state, action.payload);
+    }
     default:
       return state;
   }
 }
-
-export const getMajorAdminEntities = majorsPagingFns.getPagedEntities;
-
-export const getMajorAdminsPaginationMeta = majorsPagingFns.getMeta;

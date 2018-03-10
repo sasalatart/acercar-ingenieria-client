@@ -93,7 +93,7 @@ function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl) {
   );
 }
 
-function renderLowerHeader(intl) {
+function renderLowerHeader(currentUser, intl) {
   return (
     <div style={styles.lowerHeader}>
       <HeaderLink
@@ -111,6 +111,13 @@ function renderLowerHeader(intl) {
         text={intl.formatMessage({ id: 'routing.questions' })}
         icon="question-circle"
       />
+      {currentUser && currentUser.admin &&
+        <HeaderLink
+          to={ROUTES.USERS}
+          text={intl.formatMessage({ id: 'routing.users' })}
+          icon="team"
+        />
+      }
       <HeaderLink
         to={ROUTES.ABOUT_US}
         text={intl.formatMessage({ id: 'routing.aboutUs' })}
@@ -126,7 +133,7 @@ function Header({
   return (
     <div>
       {renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl)}
-      {renderLowerHeader(intl)}
+      {renderLowerHeader(currentUser, intl)}
     </div>
   );
 }

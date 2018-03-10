@@ -13,6 +13,7 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import EmailConfirmation from './containers/SignUp/EmailConfirmation';
 import Profile from './containers/Profile';
+import Users from './containers/Users';
 import Majors from './containers/Majors';
 import Major from './containers/Major';
 import NewMajor from './components/Majors/New';
@@ -55,6 +56,7 @@ export default function Router() {
           <Route exact path="/sign-up" render={renderLoggedOutRoute(SignUp)} />
 
           <Route path="/profile" component={renderLoggedInRoute(Profile)} />
+          <Route exact path="/users" component={renderAdminRoute(Users)} />
           <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
 
           <Route exact path="/majors" component={Majors} />
