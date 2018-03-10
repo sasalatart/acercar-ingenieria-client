@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon, Button, Popconfirm } from 'antd';
+import { Popconfirm } from 'antd';
+import DestroyIconOrButton from './IconOrButton';
 
 function DestroyButton({
   loading, iconOnly, onDestroy, intl: { formatMessage: t },
@@ -13,10 +14,7 @@ function DestroyButton({
       ancelText={t({ id: 'forms.confirm.cancel' })}
       onConfirm={onDestroy}
     >
-      {iconOnly
-        ? <Icon type={loading ? 'loading' : 'delete'} />
-        : <Button type="danger" icon="delete" loading={loading}>{t({ id: 'forms.delete' })}</Button>
-      }
+      <DestroyIconOrButton loading={loading} iconOnly={iconOnly} />
     </Popconfirm>
   );
 }

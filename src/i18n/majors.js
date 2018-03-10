@@ -15,6 +15,7 @@ export default {
     'majors.review': 'Short Description',
     'majors.ofType': 'Type: {type}',
     'majors.moreInfo': 'More Information',
+    'majors.destroyWarning': 'Deleting this Major will also delete its articles and comments.',
   },
   'es-ES': {
     'majors.disciplinary': 'Disciplinario',
@@ -32,5 +33,6 @@ export default {
     'majors.review': 'Reseña',
     'majors.ofType': 'Tipo: {type}',
     'majors.moreInfo': 'Más información',
+    'majors.destroyWarning': 'Al eliminar este Major también se eliminarán sus artículos y comentarios.',
   },
 };

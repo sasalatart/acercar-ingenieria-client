@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { injectIntl, intlShape } from 'react-intl';
 import { List, Avatar, Icon } from 'antd';
-import DestroyButton from '../../containers/Majors/DestroyButton';
+import ImportantDestroyButton from '../../containers/Majors/DestroyButton';
 import { majorShape } from '../../shapes';
 import ROUTES from '../../routes';
 
@@ -17,6 +18,7 @@ function MajorItem({
     name,
     shortDescription,
   },
+  intl: { formatMessage: t },
 }) {
   const avatar = <Avatar src={logo.medium} shape="square" />;
 
@@ -29,7 +31,17 @@ function MajorItem({
   if (hasAdminPrivileges) {
     const majorEditHref = ROUTES.MAJOR_EDIT(id);
     actions.push(<Link to={majorEditHref} href={majorEditHref}><Icon type="edit" /></Link>);
-    actions.push(<DestroyButton id={id} iconOnly />);
+
+    const destroyButton = (
+      <ImportantDestroyButton
+        id={id}
+        warningMessage={t({ id: 'majors.destroyWarning' })}
+        textToFill={name}
+        iconOnly
+      />
+    );
+
+    actions.push(destroyButton);
   }
 
   return (
@@ -42,6 +54,7 @@ function MajorItem({
 MajorItem.propTypes = {
   hasAdminPrivileges: PropTypes.bool.isRequired,
   major: majorShape.isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default MajorItem;
+export default injectIntl(MajorItem);
