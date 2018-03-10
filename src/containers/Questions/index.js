@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import { getPage } from '../../store/ducks/routes';
 import {
   loadQuestions,
   getPagingFns,
@@ -12,7 +11,7 @@ function mapStateToProps(state, ownProps) {
   const majorId = +ownProps.match.params.majorId;
   const pending = !!ownProps.match.params.pending;
 
-  const params = { majorId, pending, page: getPage(state) };
+  const params = { majorId, pending };
 
   const pagingFns = getPagingFns(pending, majorId);
   const questions = pagingFns.getPagedEntities(state, params);

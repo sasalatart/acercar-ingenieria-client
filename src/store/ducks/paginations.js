@@ -2,6 +2,10 @@
 import { Map, OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
+import {
+  addQueryToCurrentUri,
+  getPage,
+} from './routes';
 import { getEntities } from './entities';
 
 export function getBaseResourceIdName(baseResourceName) {
@@ -18,17 +22,37 @@ export function nestedPagingFnsFactory(resourceName, schema, baseResourceName, s
   const baseResourceIdName = getBaseResourceIdName(baseResourceName);
   const dataSelector = state => state[resourceName];
   const getBaseResourceId = (state, params) => params[baseResourceIdName];
-  const getPage = (state, params) => String(params.page);
 
   const getPagedIds = createSelector(
     getBaseResourceId,
     getPage,
     dataSelector,
     (baseResourceId, page, data) =>
-      data.getIn([...pagingPath, baseResourceId, page]),
+      data.getIn([...pagingPath, baseResourceId, String(page)]),
   );
 
   return {
+    addToPaginationAction(type, id, page, baseResourceId, suffixPayload) {
+      return (dispatch, getState) => {
+        const currentPage = getPage(getState());
+
+        if (currentPage && currentPage !== page) {
+          dispatch(addQueryToCurrentUri({ page }));
+        }
+
+        return dispatch({
+          type,
+          payload: {
+            baseResourceName,
+            baseResourceId,
+            id,
+            page,
+            ...suffixPayload,
+          },
+        });
+      };
+    },
+
     getPagedEntities: createSelector(
       getPagedIds,
       getEntities,
@@ -86,15 +110,33 @@ export function pagingFnsFactory(resourceName, schema, suffix) {
     : ['pagination', 'platformMeta'];
 
   const dataSelector = state => state[resourceName];
-  const getPage = (state, params) => String(params.page);
 
   const getPagedIds = createSelector(
     getPage,
     dataSelector,
-    (page, data) => data.getIn([...pagingPath, page]),
+    (page, data) => data.getIn([...pagingPath, String(page)]),
   );
 
   return {
+    addToPaginationAction(type, id, page, suffixPayload) {
+      return (dispatch, getState) => {
+        const currentPage = getPage(getState());
+
+        if (currentPage && currentPage !== page) {
+          dispatch(addQueryToCurrentUri({ page }));
+        }
+
+        return dispatch({
+          type,
+          payload: {
+            id,
+            page,
+            ...suffixPayload,
+          },
+        });
+      };
+    },
+
     getPagedEntities: createSelector(
       getPagedIds,
       getEntities,

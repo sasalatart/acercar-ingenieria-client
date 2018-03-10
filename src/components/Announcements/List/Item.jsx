@@ -11,6 +11,9 @@ const styles = {
   item: {
     margin: '10px',
   },
+  image: {
+    maxHeight: '200px',
+  },
 };
 
 function AnnouncementItem({ announcement, onClick }) {
@@ -19,6 +22,7 @@ function AnnouncementItem({ announcement, onClick }) {
       alt="announcement"
       src={announcement.picture.medium}
       onClick={() => onClick(announcement.id)}
+      style={styles.image}
       aria-hidden
     />
   );

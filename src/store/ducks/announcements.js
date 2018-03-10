@@ -25,8 +25,10 @@ const INITIAL_STATE = new Map({
 export const TYPES = {
   LOAD: 'fetch::announcements/LOAD',
   LOAD_PINNED: 'fetch::announcements/LOAD_PINNED',
+  CREATE: 'fetch::announcements/CREATE',
   UPDATE: 'fetch::announcements/UPDATE',
   DESTROY: 'fetch::announcements/DESTROY',
+  ADD_TO_PAGINATION: 'announcements/ADD_TO_PAGINATION',
 };
 
 export function loadAnnouncements(page) {
@@ -50,6 +52,22 @@ export function loadPinnedAnnouncements() {
       responseSchema: [announcementsSchema],
     },
   };
+}
+
+export function createAnnouncement(body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.CREATE,
+      payload: {
+        method: 'POST',
+        url: '/announcements',
+        body,
+        responseSchema: announcementsSchema,
+      },
+    }).then(({ value: { result } }) => {
+      dispatch(pagingFns.addToPaginationAction(TYPES.ADD_TO_PAGINATION, result, 1));
+      dispatch(resourceSuccessNotification('announcement', 'created'));
+    });
 }
 
 export function updatePinned(id, pinned) {
@@ -86,6 +104,10 @@ export default function announcementsReducer(state = INITIAL_STATE, action) {
       return pagingFns.update(state, action.payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
       return state.set('pinned', new Set(action.payload.result));
+    case TYPES.ADD_TO_PAGINATION: {
+      const { id, page } = action.payload;
+      return pagingFns.addToPagination(state, id, page);
+    }
     case TYPES.UPDATE:
       return state.update('updatingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.UPDATE}_FULFILLED`:

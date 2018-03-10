@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getPage } from '../../../store/ducks/routes';
+import { injectIntl } from 'react-intl';
 import {
   pagingFns,
   loadAnnouncements,
@@ -7,13 +7,12 @@ import {
 import Announcements from '../../../components/Announcements/List';
 
 function mapStateToProps(state) {
-  const params = { page: getPage(state) };
-  const announcements = pagingFns.getPagedEntities(state, params);
+  const announcements = pagingFns.getPagedEntities(state);
 
   return {
     loading: !announcements || !announcements.size,
     announcements,
-    pagination: pagingFns.getMeta(state, params),
+    pagination: pagingFns.getMeta(state),
   };
 }
 
@@ -23,7 +22,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
+export default injectIntl(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Announcements);
+)(Announcements));

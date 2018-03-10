@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { getPage } from '../../../store/ducks/routes';
 import {
   loadUsers,
   getPagingFns,
@@ -10,7 +9,7 @@ import UsersList from '../../../components/Users/List';
 function mapStateToProps(state, ownProps) {
   const { majorId } = ownProps;
   const pagingFns = getPagingFns(majorId);
-  const params = { majorId, page: getPage(state) };
+  const params = { majorId };
 
   const users = pagingFns.getPagedEntities(state, params);
 

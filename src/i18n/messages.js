@@ -3,6 +3,7 @@ import forms from './forms';
 import notifications from './notifications';
 import auth from './auth';
 import users from './users';
+import announcements from './announcements';
 import majors from './majors';
 import questions from './questions';
 import articles from './articles';
@@ -24,6 +25,7 @@ const messages = { [enUS]: {}, [esES]: {} };
   notifications,
   auth,
   users,
+  announcements,
   majors,
   questions,
   articles,

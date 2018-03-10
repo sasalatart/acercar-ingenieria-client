@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import {
-  goToUser,
-  getPage,
-} from '../../store/ducks/routes';
+import { goToUser } from '../../store/ducks/routes';
 import {
   loadMajorAdmins,
   getMajorAdminEntities,
@@ -12,8 +9,7 @@ import {
 import MajorAdmins from '../../components/Major/Admins';
 
 function mapStateToProps(state, ownProps) {
-  const { majorId } = ownProps;
-  const params = { majorId, page: getPage(state) };
+  const params = { majorId: ownProps.majorId };
 
   const majorAdmins = getMajorAdminEntities(state, params);
 

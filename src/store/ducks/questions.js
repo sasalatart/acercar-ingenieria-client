@@ -2,11 +2,8 @@ import { Map, Set } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
+import compact from 'lodash/compact';
 import { questionsSchema } from '../../schemas';
-import {
-  addQueryToCurrentUri,
-  getPage,
-} from './routes';
 import {
   getEntities,
   removeEntity,
@@ -46,6 +43,20 @@ const TYPES = {
   ADD_TO_PAGINATION: 'questions/ADD_TO_PAGINATION',
 };
 
+export function getPagingFns(isUnanswered, isOfMajor) {
+  if (isOfMajor) {
+    return isUnanswered ? majorsPendingPagingFns : majorsAnsweredPagingFns;
+  }
+
+  return isUnanswered ? platformPendingPagingFns : platformAnsweredPagingFns;
+}
+
+function getPagingFnsFromAction(type, payload) {
+  const isUnanswered = type.includes('UNANSWERED');
+  const isOfMajor = payload.request.urlParams.majorId;
+  return getPagingFns(isUnanswered, isOfMajor);
+}
+
 export function loadQuestions(page = 1, majorId, pending) {
   const urlSuffix = pending ? '/pending' : '';
   const uri = majorId
@@ -63,23 +74,6 @@ export function loadQuestions(page = 1, majorId, pending) {
   };
 }
 
-function addQuestionToPagination(id, majorId, pending, page = 1) {
-  return (dispatch, getState) => {
-    const currentPage = getPage(getState());
-
-    if (currentPage && currentPage !== page) {
-      dispatch(addQueryToCurrentUri({ page }));
-    }
-
-    return dispatch({
-      type: TYPES.ADD_TO_PAGINATION,
-      payload: {
-        id, majorId, pending, page,
-      },
-    });
-  };
-}
-
 export function createQuestion(values, majorId) {
   return dispatch =>
     dispatch({
@@ -93,7 +87,10 @@ export function createQuestion(values, majorId) {
       },
     }).then(({ value: { result } }) => {
       dispatch(resourceSuccessNotification('question', 'created'));
-      dispatch(addQuestionToPagination(result, majorId, !values.answer));
+      const paginationParams = compact([
+        TYPES.ADD_TO_PAGINATION, result, 1, majorId, { pending: !values.answer },
+      ]);
+      dispatch(getPagingFns(!values.answer, majorId).addToPaginationAction(...paginationParams));
     });
 }
 
@@ -137,20 +134,6 @@ export function destroyQuestion(id, majorId, pending) {
   };
 }
 
-export function getPagingFns(isUnanswered, isOfMajor) {
-  if (isOfMajor) {
-    return isUnanswered ? majorsPendingPagingFns : majorsAnsweredPagingFns;
-  }
-
-  return isUnanswered ? platformPendingPagingFns : platformAnsweredPagingFns;
-}
-
-function getPagingFnsFromAction(type, payload) {
-  const isUnanswered = type.includes('UNANSWERED');
-  const isOfMajor = payload.request.urlParams.majorId;
-  return getPagingFns(isUnanswered, isOfMajor);
-}
-
 export default function questionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_ANSWERED}_FULFILLED`:
@@ -165,9 +148,9 @@ export default function questionsReducer(state = INITIAL_STATE, action) {
       return state.update('destroyingIds', ids => ids.add(action.payload.id));
     case TYPES.ADD_TO_PAGINATION: {
       const {
-        id, majorId, pending, page,
+        id, baseResourceId, pending, page,
       } = action.payload;
-      return getPagingFns(pending, majorId).addToPagination(state, id, page, majorId);
+      return getPagingFns(pending, baseResourceId).addToPagination(state, id, page, baseResourceId);
     }
     default:
       return state;

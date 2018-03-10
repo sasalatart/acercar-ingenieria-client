@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { getPage } from '../../store/ducks/routes';
 import { getBaseResourceIdName } from '../../store/ducks/paginations';
 import {
   loadComments,
@@ -9,9 +8,8 @@ import CommentsList from '../../components/Comments/List';
 
 function mapStateToProps(state, ownProps) {
   const { baseResourceName, baseResourceId } = ownProps;
-  const page = getPage(state);
 
-  const params = { [getBaseResourceIdName(baseResourceName)]: baseResourceId, page };
+  const params = { [getBaseResourceIdName(baseResourceName)]: baseResourceId };
   const pagingFns = getPagingFns(baseResourceName);
   const comments = pagingFns.getPagedEntities(state, params);
 

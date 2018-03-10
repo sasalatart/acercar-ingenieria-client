@@ -4,10 +4,6 @@ import URI from 'urijs';
 import { createSelector } from 'reselect';
 import remove from 'lodash/remove';
 import {
-  addQueryToCurrentUri,
-  getPage,
-} from './routes';
-import {
   updateEntities,
   removeEntity,
   getEntity,
@@ -97,26 +93,6 @@ function removeCommentFromStore(id) {
   };
 }
 
-function addCommentToPagination(baseResourceName, baseResourceId, id, page = 1) {
-  return (dispatch, getState) => {
-    const currentPage = getPage(getState());
-
-    if (currentPage && currentPage !== page) {
-      dispatch(addQueryToCurrentUri({ page }));
-    }
-
-    return dispatch({
-      type: TYPES.ADD_TO_PAGINATION,
-      payload: {
-        baseResourceName,
-        baseResourceId,
-        id,
-        page,
-      },
-    });
-  };
-}
-
 export function createComment(body, baseResourceName, baseResourceId) {
   return dispatch =>
     dispatch({
@@ -132,9 +108,12 @@ export function createComment(body, baseResourceName, baseResourceId) {
       const { parentCommentId } = body;
       dispatch(reset(parentCommentId ? `commentAnswer${result}` : 'commentNew'));
 
-      dispatch(parentCommentId
-        ? addCommentToParent(parentCommentId, result)
-        : addCommentToPagination(baseResourceName, baseResourceId, result));
+      if (parentCommentId) {
+        dispatch(addCommentToParent(parentCommentId, result));
+      } else {
+        const pagingFns = getPagingFns(baseResourceName);
+        dispatch(pagingFns.addToPaginationAction(TYPES.ADD_TO_PAGINATION, result, 1, baseResourceId));
+      }
     });
 }
 
