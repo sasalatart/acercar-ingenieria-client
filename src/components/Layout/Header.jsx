@@ -54,7 +54,7 @@ const styles = {
   },
 };
 
-function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl) {
+function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, t) {
   return (
     <div style={styles.upperHeader}>
       <Link to={ROUTES.LANDING} href={ROUTES.LANDING} style={styles.innerUpperHeader}>
@@ -72,17 +72,17 @@ function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl) {
                 <UserAvatar user={currentUser} style={styles.button} />
               </Link>
               <Button type="danger" icon="logout" style={styles.button} onClick={signOut}>
-                {intl.formatMessage({ id: 'auth.signOut' })}
+                {t({ id: 'auth.signOut' })}
               </Button>
             </div>
           )
           : (
             <div>
               <Button type="primary" icon="login" style={styles.button} onClick={goToSignIn}>
-                {intl.formatMessage({ id: 'routing.signIn' })}
+                {t({ id: 'routing.signIn' })}
               </Button>
               <Button icon="rocket" style={styles.button} onClick={goToSignUp} ghost>
-                {intl.formatMessage({ id: 'routing.signUp' })}
+                {t({ id: 'routing.signUp' })}
               </Button>
             </div>
           )
@@ -93,7 +93,7 @@ function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl) {
   );
 }
 
-function renderLowerHeader(currentUser, intl) {
+function renderLowerHeader(currentUser, t) {
   return (
     <div style={styles.lowerHeader}>
       <HeaderLink
@@ -103,24 +103,24 @@ function renderLowerHeader(currentUser, intl) {
       />
       <HeaderLink
         to={ROUTES.ARTICLES()}
-        text={intl.formatMessage({ id: 'routing.articles' })}
+        text={t({ id: 'routing.articles' })}
         icon="file-text"
       />
       <HeaderLink
         to={ROUTES.QUESTIONS()}
-        text={intl.formatMessage({ id: 'routing.questions' })}
+        text="FAQs"
         icon="question-circle"
       />
       {currentUser && currentUser.admin &&
         <HeaderLink
           to={ROUTES.USERS}
-          text={intl.formatMessage({ id: 'routing.users' })}
+          text={t({ id: 'routing.users' })}
           icon="team"
         />
       }
       <HeaderLink
         to={ROUTES.ABOUT_US}
-        text={intl.formatMessage({ id: 'routing.aboutUs' })}
+        text={t({ id: 'routing.aboutUs' })}
         icon="smile"
       />
     </div>
@@ -128,12 +128,12 @@ function renderLowerHeader(currentUser, intl) {
 }
 
 function Header({
-  currentUser, goToSignIn, goToSignUp, signOut, intl,
+  currentUser, goToSignIn, goToSignUp, signOut, intl: { formatMessage: t },
 }) {
   return (
     <div>
-      {renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, intl)}
-      {renderLowerHeader(currentUser, intl)}
+      {renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, t)}
+      {renderLowerHeader(currentUser, t)}
     </div>
   );
 }

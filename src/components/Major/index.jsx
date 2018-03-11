@@ -72,7 +72,7 @@ class Major extends Component {
       questions: {
         key: this.majorKeys.questions,
         icon: 'question-circle',
-        text: t({ id: 'questions' }),
+        text: 'FAQs',
       },
       articles: {
         key: this.majorKeys.articles,

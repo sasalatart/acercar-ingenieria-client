@@ -73,7 +73,7 @@ class Questions extends Component {
           pending={pending}
           onProposeClicked={this.handleProposeClicked}
         />
-        <Title text={pending ? t({ id: 'questions.pending' }) : t({ id: 'questions' })} />
+        <Title text={pending ? t({ id: 'questions.pending' }) : 'FAQs'} />
 
         <PaginationControls
           pagination={pagination}
