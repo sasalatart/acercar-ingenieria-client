@@ -55,7 +55,7 @@ const styles = {
 export default class Comment extends Component {
   static propTypes = {
     isAuthor: PropTypes.bool.isRequired,
-    hasAdminPrivileges: PropTypes.bool.isRequired,
+    adminOrMajorAdmin: PropTypes.bool.isRequired,
     comment: commentShape.isRequired,
     intl: intlShape.isRequired,
   };
@@ -162,13 +162,13 @@ export default class Comment extends Component {
   }
 
   renderActions() {
-    const { hasAdminPrivileges, isAuthor } = this.props;
+    const { adminOrMajorAdmin, isAuthor } = this.props;
 
     return (
       <div>
         {this.renderLikeButton()}
         {isAuthor && this.renderEditButton()}
-        {(hasAdminPrivileges || isAuthor) && this.renderDestroyButton()}
+        {(adminOrMajorAdmin || isAuthor) && this.renderDestroyButton()}
       </div>
     );
   }

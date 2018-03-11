@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { getHasAdminPrivileges } from '../../store/ducks/sessions';
+import { getIsAdmin } from '../../store/ducks/sessions';
 import Restricted from '../../components/Routes/Restricted';
 
 function mapStateToProps(state) {
   return {
-    restrictedCondition: getHasAdminPrivileges(state),
+    restrictedCondition: getIsAdmin(state),
   };
 }
 

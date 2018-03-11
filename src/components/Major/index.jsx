@@ -28,7 +28,7 @@ const styles = {
 class Major extends Component {
   static propTypes = {
     loggedIn: PropTypes.bool.isRequired,
-    hasAdminPrivileges: PropTypes.bool.isRequired,
+    adminOrMajorAdmin: PropTypes.bool.isRequired,
     majorId: PropTypes.number.isRequired,
     major: majorShape,
     activeMenuKey: PropTypes.string.isRequired,
@@ -62,7 +62,7 @@ class Major extends Component {
       admins: {
         key: this.majorKeys.admins,
         icon: 'star-o',
-        text: t({ id: 'admins' }),
+        text: 'Admins',
       },
       users: {
         key: this.majorKeys.users,
@@ -104,7 +104,7 @@ class Major extends Component {
 
   render() {
     const {
-      loggedIn, hasAdminPrivileges, majorId, major, activeMenuKey, replaceRoute,
+      loggedIn, adminOrMajorAdmin, majorId, major, activeMenuKey, replaceRoute,
     } = this.props;
 
     if (!major) {
@@ -118,13 +118,13 @@ class Major extends Component {
         <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
           <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)}>
             {this.renderMenuItem(menus.info)}
-            {hasAdminPrivileges && this.renderMenuItem(menus.edit)}
+            {adminOrMajorAdmin && this.renderMenuItem(menus.edit)}
             {loggedIn && this.renderMenuItem(menus.admins)}
             {loggedIn && this.renderMenuItem(menus.users)}
             {this.renderMenuItem(menus.questions)}
             {this.renderMenuItem(menus.articles)}
             {loggedIn && this.renderMenuItem(menus.comments)}
-            {hasAdminPrivileges && this.renderMenuItem(menus.email)}
+            {adminOrMajorAdmin && this.renderMenuItem(menus.email)}
           </Menu>
         </Sider>
 
@@ -135,7 +135,7 @@ class Major extends Component {
             render={() => <MajorInfo major={major} />}
           />
 
-          {hasAdminPrivileges &&
+          {adminOrMajorAdmin &&
             <Route
               exact
               path={this.majorRoutes.edit}
@@ -179,7 +179,7 @@ class Major extends Component {
             />
           }
 
-          {hasAdminPrivileges &&
+          {adminOrMajorAdmin &&
             <Route
               exact
               path={this.majorRoutes.email}

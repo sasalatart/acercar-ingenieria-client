@@ -13,7 +13,6 @@ const { TabPane } = Tabs;
 
 class MajorsList extends Component {
   static propTypes = {
-    hasAdminPrivileges: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     disciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
     interdisciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
@@ -34,7 +33,7 @@ class MajorsList extends Component {
   }
 
   renderMajors(majors) {
-    const { loading, hasAdminPrivileges } = this.props;
+    const { loading } = this.props;
 
     return (
       <List
@@ -42,7 +41,7 @@ class MajorsList extends Component {
         size="large"
         loading={loading}
         dataSource={majors.toJS()}
-        renderItem={major => <MajorItem major={major} hasAdminPrivileges={hasAdminPrivileges} />}
+        renderItem={major => <MajorItem major={major} />}
       />
     );
   }

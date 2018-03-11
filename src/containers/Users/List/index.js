@@ -6,7 +6,9 @@ import {
 } from '../../../store/ducks/users';
 import {
   loadAdmins,
+  unsetSelectedUser,
   getPagingFns as getAdminsPagingFns,
+  getSelectedUserEntity,
 } from '../../../store/ducks/admins';
 import UsersList from '../../../components/Users/List';
 
@@ -24,6 +26,7 @@ function mapStateToProps(state, ownProps) {
     loading: !users || users.isEmpty(),
     pagination: pagingFns.getMeta(state, params),
     users,
+    selectedUser: getSelectedUserEntity(state),
   };
 }
 
@@ -33,6 +36,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 
   return {
     loadUsers: (page = 1) => dispatch(loadFn(page, majorId)),
+    unsetSelectedUser: () => dispatch(unsetSelectedUser()),
   };
 }
 

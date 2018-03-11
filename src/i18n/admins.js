@@ -1,12 +1,14 @@
 export default {
   'en-US': {
-    admins: 'Administrators',
-    'admins.platform': 'Administrators of the Platform',
-    'admins.ofMajor': 'Administrators of {majorName}',
+    platform: 'Platform',
+    'admins.platform': 'Admins of the Platform',
+    'admins.ofMajor': 'Admins of {majorName}',
+    'admins.changeStatusFor': 'Change Admin status for {userName}',
   },
   'es-ES': {
-    admins: 'Administradores',
-    'admins.platform': 'Administradores de la plataforma',
-    'admins.ofMajor': 'Administradores de {majorName}',
+    platform: 'Plataforma',
+    'admins.platform': 'Admins de la plataforma',
+    'admins.ofMajor': 'Admins de {majorName}',
+    'admins.changeStatusFor': 'Cambiar status de admin para {userName}',
   },
 };

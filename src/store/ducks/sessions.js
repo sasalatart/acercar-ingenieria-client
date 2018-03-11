@@ -153,16 +153,27 @@ export const getCurrentUserEntity = createSelector(
 
 const getMajorId = (state, params) => params && params.majorId;
 
-export const getHasAdminPrivileges = createSelector(
+export const getIsLoggedIn = createSelector(
   getCurrentUserEntity,
+  currentUser => !!currentUser,
+);
+
+export const getIsAdmin = createSelector(
+  getIsLoggedIn,
+  getCurrentUserEntity,
+  (loggedIn, currentUser) => loggedIn && currentUser.admin,
+);
+
+export const getIsAdminOfMajor = createSelector(
+  getIsLoggedIn,
   getMajorId,
-  (currentUser, majorId) => {
-    const loggedIn = !!currentUser;
-    if (!loggedIn) return false;
+  getCurrentUserEntity,
+  (loggedIn, majorId, currentUser) =>
+    loggedIn && currentUser.adminOfMajors.map(({ id }) => id).includes(majorId),
+);
 
-    if (currentUser.admin) return true;
-
-    const adminOfMajorIds = currentUser.adminOfMajors.map(({ id }) => id);
-    return !!(majorId && adminOfMajorIds.includes(majorId));
-  },
+export const getIsAdminOrMajorAdmin = createSelector(
+  getIsAdmin,
+  getIsAdminOfMajor,
+  (admin, adminOfMajor) => admin || adminOfMajor,
 );

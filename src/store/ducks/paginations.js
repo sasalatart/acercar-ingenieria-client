@@ -158,7 +158,6 @@ export function pagingFnsFactory(resourceName, schema, suffix) {
 
     destroy: (state, urlParams) => {
       const { id } = urlParams;
-
       const pages = state.getIn(pagingPath);
       if (!pages) return state;
 

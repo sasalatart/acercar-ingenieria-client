@@ -33,7 +33,7 @@ function setStyle(pinned) {
 }
 
 function QuestionsList({
-  hasAdminPrivileges,
+  adminOrMajorAdmin,
   questions,
   majorId,
   pending,
@@ -47,7 +47,7 @@ function QuestionsList({
       }) => (
         <Panel key={id} header={question} style={setStyle(pinned)}>
           {answer}
-          {hasAdminPrivileges &&
+          {adminOrMajorAdmin &&
             <div style={styles.actions}>
               <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
                 {t({ id: 'forms.edit' })}
@@ -62,7 +62,7 @@ function QuestionsList({
 }
 
 QuestionsList.propTypes = {
-  hasAdminPrivileges: PropTypes.bool.isRequired,
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   majorId: PropTypes.number,
   pending: PropTypes.bool.isRequired,
   questions: ImmutablePropTypes.setOf(questionShape).isRequired,

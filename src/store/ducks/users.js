@@ -100,7 +100,7 @@ export default function usersReducer(state = INITIAL_STATE, action) {
 
 export const getUsersData = state => state.users;
 
-export const getUserId = (state, params) => params.userId;
+const getUserId = (state, params) => params.userId;
 
 export const getUserEntity = createSelector(
   getUserId,

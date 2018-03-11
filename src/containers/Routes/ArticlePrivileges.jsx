@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  getHasAdminPrivileges,
+  getIsAdminOrMajorAdmin,
   getCurrentUserEntity,
 } from '../../store/ducks/sessions';
 import {
@@ -37,12 +37,12 @@ function mapStateToProps(state, ownProps) {
   const currentUser = getCurrentUserEntity(state);
   const article = getArticleEntity(state, params);
 
-  const hasAdminPrivileges = getHasAdminPrivileges(state, params);
+  const adminOrMajorAdmin = getIsAdminOrMajorAdmin(state, params);
   const isAuthor = currentUser && article && currentUser.id === article.author.id;
 
   return {
     loading: !article,
-    restrictedCondition: hasAdminPrivileges || isAuthor,
+    restrictedCondition: adminOrMajorAdmin || isAuthor,
   };
 }
 

@@ -14,7 +14,7 @@ function ArticleActionBar({
     likedByCurrentUser,
     likesCount,
   },
-  hasAdminPrivileges,
+  adminOrMajorAdmin,
   isAuthor,
   goToArticleEdit,
   intl: { formatMessage: t },
@@ -29,7 +29,7 @@ function ArticleActionBar({
     />,
   ];
 
-  if (hasAdminPrivileges || isAuthor) {
+  if (adminOrMajorAdmin || isAuthor) {
     actions.push(<Button key="edit" type="primary" icon="edit" onClick={goToArticleEdit}>{t({ id: 'forms.edit' })}</Button>);
     actions.push(<DestroyButton key="destroy" id={id} majorId={majorId} />);
   }
@@ -38,7 +38,7 @@ function ArticleActionBar({
 }
 
 ArticleActionBar.propTypes = {
-  hasAdminPrivileges: PropTypes.bool.isRequired,
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   isAuthor: PropTypes.bool.isRequired,
   article: articleShape.isRequired,
   goToArticleEdit: PropTypes.func.isRequired,

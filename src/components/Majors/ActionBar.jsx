@@ -6,10 +6,10 @@ import ActionBar from '../../containers/Layout/ActionBar';
 import ButtonLink from '../../containers/ButtonLink';
 import ROUTES from '../../routes';
 
-function MajorsActionBar({ hasAdminPrivileges, intl: { formatMessage: t } }) {
+function MajorsActionBar({ admin, intl: { formatMessage: t } }) {
   const actions = [];
 
-  if (hasAdminPrivileges) {
+  if (admin) {
     actions.push(<ButtonLink to={ROUTES.MAJORS_NEW} content={t({ id: 'majors.new' })} />);
   }
 
@@ -17,7 +17,7 @@ function MajorsActionBar({ hasAdminPrivileges, intl: { formatMessage: t } }) {
 }
 
 MajorsActionBar.propTypes = {
-  hasAdminPrivileges: PropTypes.bool.isRequired,
+  admin: PropTypes.bool.isRequired,
   intl: intlShape.isRequired,
 };
 

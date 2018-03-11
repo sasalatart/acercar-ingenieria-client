@@ -19,7 +19,7 @@ const styles = {
 
 class QuestionForm extends Component {
   static propTypes = {
-    hasAdminPrivileges: PropTypes.bool.isRequired,
+    adminOrMajorAdmin: PropTypes.bool.isRequired,
     id: PropTypes.number,
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -47,7 +47,7 @@ class QuestionForm extends Component {
 
   render() {
     const {
-      hasAdminPrivileges, id, valid, submitting, handleSubmit, intl: { formatMessage: t },
+      adminOrMajorAdmin, id, valid, submitting, handleSubmit, intl: { formatMessage: t },
     } = this.props;
 
     const { validators } = this.state;
@@ -70,7 +70,7 @@ class QuestionForm extends Component {
             placeholder={t({ id: 'forms.question' })}
             validate={[validators.required, validators.minLength, validators.maxQuestionLength]}
           />
-          {hasAdminPrivileges &&
+          {adminOrMajorAdmin &&
             <Field
               name="answer"
               component={TextArea}
@@ -78,7 +78,7 @@ class QuestionForm extends Component {
               validate={[validators.minLength, validators.maxAnswerLength]}
             />
           }
-          {hasAdminPrivileges &&
+          {adminOrMajorAdmin &&
             <div style={styles.pinnedWrapper}>
               <span>{t({ id: 'forms.pinned' })}</span>
               <Field name="pinned" component={CheckboxField} hasFeedback={false} />

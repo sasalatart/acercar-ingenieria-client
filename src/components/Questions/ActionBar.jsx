@@ -9,7 +9,7 @@ import ROUTES from '../../routes';
 
 function QuestionsActionBar({
   loggedIn,
-  hasAdminPrivileges,
+  adminOrMajorAdmin,
   majorId,
   pending,
   onProposeClicked,
@@ -27,7 +27,7 @@ function QuestionsActionBar({
     actions.push(proposeOneButton);
   }
 
-  if (hasAdminPrivileges) {
+  if (adminOrMajorAdmin) {
     actions.push(pending
       ? (
         <ButtonLink
@@ -52,7 +52,7 @@ function QuestionsActionBar({
 
 QuestionsActionBar.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
-  hasAdminPrivileges: PropTypes.bool.isRequired,
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   majorId: PropTypes.number,
   pending: PropTypes.bool.isRequired,
   onProposeClicked: PropTypes.func.isRequired,

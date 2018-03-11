@@ -13,7 +13,7 @@ const { Item } = List;
 const { Meta } = Item;
 
 function ArticleListItem({
-  hasAdminPrivileges,
+  adminOrMajorAdmin,
   article: {
     id,
     majorId,
@@ -37,7 +37,7 @@ function ArticleListItem({
     />,
   ];
 
-  if (hasAdminPrivileges) {
+  if (adminOrMajorAdmin) {
     actions.push(<DestroyButton id={id} majorId={majorId} iconOnly />);
   }
 
@@ -63,7 +63,7 @@ function ArticleListItem({
 }
 
 ArticleListItem.propTypes = {
-  hasAdminPrivileges: PropTypes.bool.isRequired,
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   article: articleShape.isRequired,
 };
 

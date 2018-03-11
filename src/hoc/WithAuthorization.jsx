@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
-  getCurrentUserEntity,
-  getHasAdminPrivileges,
+  getIsLoggedIn,
+  getIsAdmin,
+  getIsAdminOrMajorAdmin,
 } from '../store/ducks/sessions';
 
 export default function HOC(WrappedComponent) {
@@ -11,8 +12,9 @@ export default function HOC(WrappedComponent) {
     const majorId = +(ownProps.match.params.majorId || ownProps.majorId);
 
     return {
-      loggedIn: !!getCurrentUserEntity(state),
-      hasAdminPrivileges: getHasAdminPrivileges(state, { majorId }),
+      loggedIn: getIsLoggedIn(state),
+      admin: getIsAdmin(state),
+      adminOrMajorAdmin: getIsAdminOrMajorAdmin(state, { majorId }),
     };
   }
 

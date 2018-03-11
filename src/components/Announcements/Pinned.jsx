@@ -22,7 +22,7 @@ const styles = {
 
 export default class PinnedAnnouncements extends Component {
   static propTypes = {
-    hasAdminPrivileges: PropTypes.bool.isRequired,
+    admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     announcements: ImmutablePropTypes.setOf(announcementShape).isRequired,
     loadPinnedAnnouncements: PropTypes.func.isRequired,
@@ -45,7 +45,7 @@ export default class PinnedAnnouncements extends Component {
   }
 
   render() {
-    const { hasAdminPrivileges, loading } = this.props;
+    const { admin, loading } = this.props;
 
     if (loading) {
       return <Spinner absolute />;
@@ -55,7 +55,7 @@ export default class PinnedAnnouncements extends Component {
 
     return (
       <div>
-        {hasAdminPrivileges &&
+        {admin &&
           <ButtonLink to={ROUTES.ANNOUNCEMENTS} icon="plus" shape="circle" style={styles.addButton} />}
 
         {mappedAnnouncements.size === 1
