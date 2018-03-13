@@ -8,6 +8,7 @@ export default {
     'notifications.resource.major': 'The Major',
     'notifications.resource.question': 'The question',
     'notifications.resource.article': 'The article',
+    'notifications.resource.discussion': 'The discussion',
 
     'notifications.actions.created': '{resource} has been created',
     'notifications.actions.updated': '{resource} has been updated',
@@ -27,6 +28,7 @@ export default {
     'notifications.resource.major': 'el Major',
     'notifications.resource.question': 'la pregunta',
     'notifications.resource.article': 'el artículo',
+    'notifications.resource.discussion': 'el tema',
 
     'notifications.actions.created': 'Se ha creado {resource}',
     'notifications.actions.updated': 'Se ha actualizado {resource}',

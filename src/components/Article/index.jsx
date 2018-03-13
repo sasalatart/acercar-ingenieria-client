@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
-import { Tag, Row, Col, Divider } from 'antd';
+import { Row, Col, Divider } from 'antd';
 import get from 'lodash/get';
 import Spinner from '../Spinner';
 import ArticleActionBar from '../../containers/Article/ActionBar';
@@ -11,8 +11,9 @@ import SubTitle from '../Layout/SubTitle';
 import RichText from '../RichText';
 import DateWithFormat from '../DateWithFormat';
 import Comments from '../Comments';
+import TagList from '../TagList';
 import { articleShape } from '../../shapes';
-import { colors, themeStyles } from '../../theme';
+import { themeStyles } from '../../theme';
 import ROUTES from '../../routes';
 import articlePlaceholder from '../../images/article.png';
 
@@ -82,21 +83,6 @@ export default class Article extends Component {
     );
   }
 
-  renderCategoryList() {
-    const { categoryList } = this.props.article;
-
-    if (!categoryList.length) return null;
-
-    const taggedCategories = categoryList
-      .map(category => <Tag key={category} color={colors.primaryDark}>{category}</Tag>);
-
-    return (
-      <div style={styles.tagsContainer}>
-        {taggedCategories}
-      </div>
-    );
-  }
-
   render() {
     const { loggedIn, loading, article } = this.props;
 
@@ -110,7 +96,12 @@ export default class Article extends Component {
 
         <Title text={article.title} />
         {this.renderSubtitle()}
-        {this.renderCategoryList()}
+
+        {article.categoryList.length > 0 &&
+          <div style={styles.tagsContainer}>
+            <TagList tags={article.categoryList} />
+          </div>
+        }
 
         <Divider />
 

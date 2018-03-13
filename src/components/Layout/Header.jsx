@@ -103,7 +103,7 @@ function renderLowerHeader(currentUser, t) {
       />
       <HeaderLink
         to={ROUTES.ARTICLES()}
-        text={t({ id: 'routing.articles' })}
+        text={t({ id: 'articles' })}
         icon="file-text"
       />
       <HeaderLink
@@ -111,16 +111,23 @@ function renderLowerHeader(currentUser, t) {
         text="FAQs"
         icon="question-circle"
       />
+      {currentUser &&
+        <HeaderLink
+          to={ROUTES.DISCUSSIONS}
+          text={t({ id: 'discussions' })}
+          icon="message"
+        />
+      }
       {currentUser && currentUser.admin &&
         <HeaderLink
           to={ROUTES.USERS}
-          text={t({ id: 'routing.users' })}
+          text={t({ id: 'users' })}
           icon="team"
         />
       }
       <HeaderLink
         to={ROUTES.ABOUT_US}
-        text={t({ id: 'routing.aboutUs' })}
+        text={t({ id: 'aboutUs' })}
         icon="smile"
       />
     </div>

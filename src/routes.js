@@ -37,6 +37,9 @@ const ROUTES = {
     ? `/majors/${majorId}/questions/pending`
     : '/questions/pending'
   ),
+  DISCUSSIONS: '/discussions',
+  MY_DISCUSSIONS: '/discussions/mine',
+  DISCUSSION: id => `/discussions/${id}`,
   ABOUT_US: '/about-us',
 };
 

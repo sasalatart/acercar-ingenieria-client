@@ -7,6 +7,7 @@ import announcements from './announcements';
 import majors from './majors';
 import questions from './questions';
 import articles from './articles';
+import discussions from './discussions';
 import categories from './categories';
 import comments from './comments';
 import admins from './admins';
@@ -29,6 +30,7 @@ const messages = { [enUS]: {}, [esES]: {} };
   majors,
   questions,
   articles,
+  discussions,
   categories,
   comments,
   admins,

@@ -2,7 +2,10 @@ import { Map, Set } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
-import { removeEntity, getEntities } from './entities';
+import {
+  removeEntity,
+  getEntities,
+} from './entities';
 import {
   pagingFnsFactory,
   nestedPagingFnsFactory,
@@ -24,7 +27,7 @@ const INITIAL_STATE = new Map({
     majors: new Map({}),
     majorsMeta: new Map({}),
   }),
-  destroyingIds: new Set(),
+  destroyingIds: new Set([]),
 });
 
 const TYPES = {

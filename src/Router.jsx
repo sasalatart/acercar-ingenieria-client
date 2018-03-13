@@ -7,20 +7,21 @@ import LoggedInRoute from './containers/Routes/LoggedIn';
 import AdminRoute from './containers/Routes/Admin';
 import QuestionsPrivilegesRoute from './containers/Routes/QuestionsPrivileges';
 import ArticlePrivilegesRoute from './containers/Routes/ArticlePrivileges';
-import PinnedAnnouncements from './containers/Announcements/Pinned';
-import Announcements from './containers/Announcements/List';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import EmailConfirmation from './containers/SignUp/EmailConfirmation';
+import PinnedAnnouncements from './containers/Announcements/Pinned';
+import Announcements from './containers/Announcements/List';
 import Profile from './containers/Profile';
 import Users from './containers/Users';
 import Majors from './containers/Majors';
-import Major from './containers/Major';
 import NewMajor from './components/Majors/New';
-import Article from './containers/Article';
+import Major from './containers/Major';
 import Articles from './components/Articles';
-import Questions from './containers/Questions';
 import ArticleForm from './containers/Articles/Form';
+import Article from './containers/Article';
+import Questions from './containers/Questions';
+import Discussions from './components/Discussions';
 import AboutUs from './components/AboutUs';
 import Layout from './components/Layout';
 
@@ -72,6 +73,8 @@ export default function Router() {
           <Route exact path="/articles/:articleId/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
 
           <Route exact path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
+
+          <Route exact path="/discussions/:mine?" render={renderLoggedInRoute(Discussions)} />
 
           <Route exact path="/about-us" component={AboutUs} />
 

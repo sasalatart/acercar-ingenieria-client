@@ -71,6 +71,10 @@ export const locationShape = PropTypes.shape({
   search: PropTypes.string,
 });
 
+export const matchShape = PropTypes.shape({
+  params: PropTypes.shape({}),
+});
+
 export const paginationShape = PropTypes.shape({
   page: PropTypes.number.isRequired,
   totalPages: PropTypes.number.isRequired,
@@ -140,4 +144,18 @@ export const commentShape = PropTypes.shape({
 export const lightboxImageShape = PropTypes.shape({
   src: PropTypes.string.isRequired,
   thumbnail: PropTypes.string,
+});
+
+export const discussionShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  author: userShape.isRequired,
+  title: PropTypes.string.isRequired,
+  pinned: PropTypes.bool.isRequired,
+  description: PropTypes.string.isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  impressionsCount: PropTypes.number.isRequired,
+  commentsCount: PropTypes.number.isRequired,
+  likesCount: PropTypes.number.isRequired,
+  likedByCurrentUser: PropTypes.bool.isRequired,
+  createdAt: PropTypes.string.isRequired,
 });

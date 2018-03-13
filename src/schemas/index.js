@@ -23,6 +23,10 @@ export const articlesSchema = new schema.Entity('articles', {
   majorSummary: majorSummariesSchema,
 });
 
+export const discussionsSchema = new schema.Entity('discussions', {
+  author: usersSchema,
+});
+
 export const categoriesSchema = new schema.Entity('categories');
 
 export const childCommentsSchema = new schema.Entity('comments', {

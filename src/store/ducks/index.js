@@ -13,6 +13,7 @@ import admins from './admins';
 import majors from './majors';
 import questions from './questions';
 import articles from './articles';
+import discussions from './discussions';
 import categories from './categories';
 import comments from './comments';
 import likes from './likes';
@@ -29,6 +30,7 @@ const appReducer = combineReducers({
   majors,
   questions,
   articles,
+  discussions,
   categories,
   comments,
   likes,

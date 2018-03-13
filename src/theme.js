@@ -4,6 +4,7 @@ export const colors = {
   secondaryLight: '#FDFDFD',
   primaryTextLight: 'white',
   fieldPrefix: 'rgba(0, 0, 0, .25)',
+  starred: '#F7CA18',
 };
 
 export const measures = {
