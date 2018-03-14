@@ -7,6 +7,7 @@ import LoggedInRoute from './containers/Routes/LoggedIn';
 import AdminRoute from './containers/Routes/Admin';
 import QuestionsPrivilegesRoute from './containers/Routes/QuestionsPrivileges';
 import ArticlePrivilegesRoute from './containers/Routes/ArticlePrivileges';
+import DiscussionPrivilegesRoute from './containers/Routes/DiscussionPrivileges';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import EmailConfirmation from './containers/SignUp/EmailConfirmation';
@@ -22,6 +23,7 @@ import ArticleForm from './containers/Articles/Form';
 import Article from './containers/Article';
 import Questions from './containers/Questions';
 import Discussions from './components/Discussions';
+import DiscussionForm from './containers/Discussions/Form';
 import AboutUs from './components/AboutUs';
 import Layout from './components/Layout';
 
@@ -45,6 +47,10 @@ function renderArticlePrivilegesRoute(component) {
   return props => <ArticlePrivilegesRoute {...props} component={component} />;
 }
 
+function renderDiscussionPrivilegesRoute(component) {
+  return props => <DiscussionPrivilegesRoute {...props} component={component} />;
+}
+
 export default function Router() {
   return (
     <ConnectedRouter history={history}>
@@ -62,18 +68,20 @@ export default function Router() {
 
           <Route exact path="/majors" component={Majors} />
           <Route exact path="/majors/new" render={renderAdminRoute(NewMajor)} />
-          <Route exact path="/majors/:majorId/articles/new" component={ArticleForm} />
+          <Route exact path="/majors/:majorId/articles/new" component={renderLoggedInRoute(ArticleForm)} />
           <Route exact path="/majors/:majorId/articles/:articleId" component={Article} />
           <Route exact path="/majors/:majorId/articles/:articleId/edit" render={renderArticlePrivilegesRoute(ArticleForm)} />
           <Route path="/majors/:majorId" component={Major} />
 
           <Route exact path="/articles" component={Articles} />
-          <Route exact path="/articles/new" component={ArticleForm} />
+          <Route exact path="/articles/new" component={renderLoggedInRoute(ArticleForm)} />
           <Route exact path="/articles/:articleId" component={Article} />
           <Route exact path="/articles/:articleId/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
 
           <Route exact path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
 
+          <Route exact path="/discussions/new" component={renderLoggedInRoute(DiscussionForm)} />
+          <Route exact path="/discussions/:discussionId/edit" component={renderDiscussionPrivilegesRoute(DiscussionForm)} />
           <Route exact path="/discussions/:mine?" render={renderLoggedInRoute(Discussions)} />
 
           <Route exact path="/about-us" component={AboutUs} />

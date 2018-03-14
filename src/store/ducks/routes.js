@@ -43,6 +43,10 @@ export function goToArticleEdit(id, majorId) {
   return push(ROUTES.ARTICLE_EDIT(id, majorId));
 }
 
+export function goToDiscussion(id) {
+  return push(ROUTES.DISCUSSION(id));
+}
+
 export function addQueryToCurrentUri(query) {
   return (dispatch, getState) => {
     // eslint-disable-next-line no-use-before-define

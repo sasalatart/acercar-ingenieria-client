@@ -1,7 +1,12 @@
 import { Map, Set } from 'immutable';
 import URI from 'urijs';
 import { createSelector } from 'reselect';
-import { removeEntity } from './entities';
+import { denormalize } from 'normalizr';
+import { goToDiscussion } from './routes';
+import {
+  removeEntity,
+  getEntities,
+} from './entities';
 import { pagingFnsFactory } from './paginations';
 import { resourceSuccessNotification } from './notifications';
 import { discussionsSchema } from '../../schemas';
@@ -19,6 +24,9 @@ const INITIAL_STATE = new Map({
 const TYPES = {
   LOAD_INDEX: 'fetch::discussions/LOAD_INDEX',
   LOAD_MINE: 'fetch::discussions/LOAD_MINE',
+  LOAD: 'fetch::discussions/LOAD',
+  CREATE: 'fetch::discussions/CREATE',
+  UPDATE: 'fetch::discussions/UPDATE',
   DESTROY: 'fetch::discussions/DESTROY',
 };
 
@@ -38,6 +46,51 @@ export function loadDiscussions(page = 1, mine) {
       responseSchema: [discussionsSchema],
     },
   };
+}
+
+export function loadDiscussion(id) {
+  return {
+    type: TYPES.LOAD,
+    payload: {
+      method: 'GET',
+      url: `/discussions/${id}`,
+      urlParams: { id },
+      responseSchema: discussionsSchema,
+    },
+  };
+}
+
+export function createDiscussion(body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.CREATE,
+      payload: {
+        method: 'POST',
+        url: '/discussions',
+        body,
+        responseSchema: discussionsSchema,
+      },
+    }).then(({ value: { result } }) => {
+      dispatch(resourceSuccessNotification('discussion', 'created'));
+      dispatch(goToDiscussion(result));
+    });
+}
+
+export function updateDiscussion(id, body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.UPDATE,
+      payload: {
+        method: 'PUT',
+        url: `/discussions/${id}`,
+        urlParams: { id },
+        body,
+        responseSchema: discussionsSchema,
+      },
+    }).then(() => {
+      dispatch(resourceSuccessNotification('discussion', 'updated'));
+      dispatch(goToDiscussion(id));
+    });
 }
 
 export function destroyDiscussion(id) {
@@ -76,6 +129,14 @@ export default function discussionsReducer(state = INITIAL_STATE, action) {
 }
 
 const getDiscussionsData = state => state.discussions;
+
+const getDiscussionId = (state, params) => params.discussionId;
+
+export const getDiscussionEntity = createSelector(
+  getDiscussionId,
+  getEntities,
+  (discussionId, entities) => denormalize(discussionId, discussionsSchema, entities),
+);
 
 export const getDestroyingIds = createSelector(
   getDiscussionsData,
