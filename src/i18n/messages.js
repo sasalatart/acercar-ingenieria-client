@@ -13,6 +13,7 @@ import comments from './comments';
 import admins from './admins';
 import emails from './emails';
 import aboutUs from './about-us';
+import attachments from './attachments';
 import errors from './errors';
 
 const enUS = 'en-US';
@@ -36,6 +37,7 @@ const messages = { [enUS]: {}, [esES]: {} };
   admins,
   emails,
   aboutUs,
+  attachments,
   errors,
 ].forEach((translations) => {
   Object.assign(messages[enUS], translations[enUS]);

@@ -7,12 +7,14 @@ import Title from '../Layout/Title';
 import NewForm from '../../containers/Comments/NewForm';
 import List from '../../containers/Comments/List';
 
-function CommentsSection({ baseResourceName, baseResourceId, intl: { formatMessage: t } }) {
+function CommentsSection({
+  baseResourceName, baseResourceId, withActionBar, intl: { formatMessage: t },
+}) {
   const commonProps = { baseResourceName, baseResourceId };
 
   return (
     <div>
-      <ActionBar />
+      {withActionBar && <ActionBar />}
       <Title text={t({ id: 'comments' })} />
 
       <NewForm {...commonProps} />
@@ -25,7 +27,12 @@ function CommentsSection({ baseResourceName, baseResourceId, intl: { formatMessa
 CommentsSection.propTypes = {
   baseResourceName: PropTypes.string.isRequired,
   baseResourceId: PropTypes.number.isRequired,
+  withActionBar: PropTypes.bool,
   intl: intlShape.isRequired,
+};
+
+CommentsSection.defaultProps = {
+  withActionBar: false,
 };
 
 export default injectIntl(CommentsSection);

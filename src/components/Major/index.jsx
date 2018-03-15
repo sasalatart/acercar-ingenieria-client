@@ -175,7 +175,7 @@ class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.comments}
-              render={() => <Comments baseResourceName="majors" baseResourceId={majorId} />}
+              render={() => <Comments baseResourceName="majors" baseResourceId={majorId} withActionBar />}
             />
           }
 

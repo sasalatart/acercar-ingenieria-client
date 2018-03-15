@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Row, Col, Divider } from 'antd';
 import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import Spinner from '../Spinner';
 import ArticleActionBar from '../../containers/Article/ActionBar';
 import Title from '../Layout/Title';
 import SubTitle from '../Layout/SubTitle';
-import RichText from '../RichText';
 import DateWithFormat from '../DateWithFormat';
+import RichText from '../RichText';
+import Attachments from '../Attachments';
 import Comments from '../Comments';
 import TagList from '../TagList';
 import { articleShape } from '../../shapes';
@@ -120,6 +122,13 @@ export default class Article extends Component {
 
         <Divider />
         <RichText content={article.content} />
+
+        {!isEmpty(article.attachments) &&
+          <div>
+            <Divider />
+            <Attachments attachments={article.attachments} />
+          </div>
+        }
 
         {loggedIn &&
           <div>

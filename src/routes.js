@@ -40,6 +40,7 @@ const ROUTES = {
   DISCUSSIONS: '/discussions',
   MY_DISCUSSIONS: '/discussions/mine',
   DISCUSSION: id => `/discussions/${id}`,
+  DISCUSSION_EDIT: id => `/discussions/${id}/edit`,
   ABOUT_US: '/about-us',
 };
 

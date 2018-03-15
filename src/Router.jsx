@@ -24,6 +24,7 @@ import Article from './containers/Article';
 import Questions from './containers/Questions';
 import Discussions from './components/Discussions';
 import DiscussionForm from './containers/Discussions/Form';
+import Discussion from './containers/Discussion';
 import AboutUs from './components/AboutUs';
 import Layout from './components/Layout';
 
@@ -81,6 +82,7 @@ export default function Router() {
           <Route exact path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
 
           <Route exact path="/discussions/new" component={renderLoggedInRoute(DiscussionForm)} />
+          <Route exact path="/discussions/:discussionId" component={renderLoggedInRoute(Discussion)} />
           <Route exact path="/discussions/:discussionId/edit" component={renderDiscussionPrivilegesRoute(DiscussionForm)} />
           <Route exact path="/discussions/:mine?" render={renderLoggedInRoute(Discussions)} />
 
