@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert } from 'antd';
-import { TextArea, CheckboxField, SubmitButton } from '../Forms';
+import {
+  TextArea,
+  SwitchField,
+  SubmitButton,
+} from '../Forms';
 import questionsValidations from '../../validations/questions';
 
 const styles = {
@@ -80,8 +84,7 @@ class QuestionForm extends Component {
           }
           {adminOrMajorAdmin &&
             <div style={styles.pinnedWrapper}>
-              <span>{t({ id: 'forms.pinned' })}</span>
-              <Field name="pinned" component={CheckboxField} hasFeedback={false} />
+              <Field name="pinned" component={SwitchField} label={t({ id: 'forms.pinned' })} />
             </div>
           }
           <SubmitButton disabled={!valid} loading={submitting} />

@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { intlShape } from 'react-intl';
 import {
   PictureField,
-  CheckboxField,
+  SwitchField,
   SubmitButton,
 } from '../Forms';
 import announcementsValidations from '../../validations/announcements';
@@ -60,8 +60,11 @@ class AnnouncementForm extends Component {
             />
           </div>
           <div style={styles.centered}>
-            <span>{t({ id: 'forms.pinned' })}</span>
-            <Field name="pinned" component={CheckboxField} hasFeedback={false} />
+            <Field
+              name="pinned"
+              component={SwitchField}
+              label={t({ id: 'forms.pinned' })}
+            />
           </div>
           <SubmitButton disabled={!valid} loading={submitting} />
         </form>
