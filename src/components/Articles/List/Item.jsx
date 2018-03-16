@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { List } from 'antd';
-import IconText from '../../IconText';
+import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
 import DestroyButton from '../../../containers/Articles/DestroyButton';
+import IconText from '../../IconText';
 import ROUTES from '../../../routes';
 import { articleShape } from '../../../shapes';
 import articlePlaceholder from '../../../images/article.png';
@@ -67,4 +68,4 @@ ArticleListItem.propTypes = {
   article: articleShape.isRequired,
 };
 
-export default ArticleListItem;
+export default WithAuthorization(ArticleListItem);

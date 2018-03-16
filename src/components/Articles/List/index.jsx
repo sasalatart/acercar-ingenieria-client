@@ -7,7 +7,6 @@ import { paginationShape, articleShape } from '../../../shapes';
 
 export default class ArticlesList extends Component {
   static propTypes = {
-    adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
     articles: PropTypes.arrayOf(articleShape),
@@ -20,7 +19,7 @@ export default class ArticlesList extends Component {
   }
 
   renderListItem = article => (
-    <ArticleListItem article={article} adminOrMajorAdmin={this.props.adminOrMajorAdmin} />
+    <ArticleListItem article={article} />
   )
 
   render() {

@@ -4,7 +4,6 @@ import {
   loadArticles,
   getPagingFns,
 } from '../../../store/ducks/articles';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import ArticlesList from '../../../components/Articles/List';
 
 function mapStateToProps(state, ownProps) {
@@ -26,7 +25,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-export default injectIntl(WithAuthorization(connect(
+export default injectIntl(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ArticlesList)));
+)(ArticlesList));
