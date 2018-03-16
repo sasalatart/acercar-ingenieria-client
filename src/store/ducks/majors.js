@@ -140,7 +140,7 @@ const getActiveIds = createSelector(
 export const getMajorEntities = createSelector(
   getActiveIds,
   getEntities,
-  (activeIds, entities) => denormalize(activeIds, [majorsSchema], entities),
+  (activeIds, entities) => denormalize(activeIds, [majorsSchema], entities).toJS(),
 );
 
 export const getMajorEntity = createSelector(
@@ -167,7 +167,7 @@ export const getMajorOptions = createSelector(
   getMajorEntities,
   majorEntities => ([
     { key: 0, value: null, label: 'None' },
-    ...majorEntities.toArray().map(({ id, name }) => ({ key: id, value: id, label: name })),
+    ...majorEntities.map(({ id, name }) => ({ key: id, value: id, label: name })),
   ]),
 );
 

@@ -15,7 +15,7 @@ function mapStateToProps(state, ownProps) {
   const questions = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !questions || questions.isEmpty(),
+    loading: !questions || !questions.length,
     pagination: pagingFns.selectors.getMeta(state, params),
     questions,
   };

@@ -13,7 +13,7 @@ function mapStateToProps(state, ownProps) {
   const discussions = pagingFns.selectors.getPagedEntities(state);
 
   return {
-    loading: !discussions || !discussions.size,
+    loading: !discussions || !discussions.length,
     pagination: pagingFns.selectors.getMeta(state),
     discussions,
   };

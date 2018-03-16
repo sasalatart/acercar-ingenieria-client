@@ -23,7 +23,7 @@ function mapStateToProps(state, ownProps) {
   const users = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !users || users.isEmpty(),
+    loading: !users || !users.length,
     pagination: pagingFns.selectors.getMeta(state, params),
     users,
     selectedUser: getSelectedUserEntity(state),

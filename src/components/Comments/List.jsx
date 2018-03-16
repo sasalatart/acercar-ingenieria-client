@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Set } from 'immutable';
 import Comment from '../../containers/Comments/Comment';
 import PaginationControls from '../../containers/Pagination';
 import { paginationShape, commentShape } from '../../shapes';
@@ -10,13 +8,13 @@ export default class CommentsList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    comments: ImmutablePropTypes.setOf(commentShape),
+    comments: PropTypes.arrayOf(commentShape),
     loadComments: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     pagination: undefined,
-    comments: new Set(),
+    comments: [],
   }
 
   renderComments = () =>

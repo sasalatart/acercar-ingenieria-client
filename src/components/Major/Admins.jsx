@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { injectIntl, intlShape } from 'react-intl';
 import PaginationControls from '../../containers/Pagination';
 import ActionBar from '../../containers/Layout/ActionBar';
@@ -23,7 +22,7 @@ class MajorAdmins extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    majorAdmins: ImmutablePropTypes.setOf(userShape),
+    majorAdmins: PropTypes.arrayOf(userShape),
     loadAdmins: PropTypes.func.isRequired,
     goToUser: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
@@ -31,7 +30,7 @@ class MajorAdmins extends Component {
 
   static defaultProps = {
     pagination: undefined,
-    majorAdmins: undefined,
+    majorAdmins: [],
   }
 
   renderProfileCards = () => {

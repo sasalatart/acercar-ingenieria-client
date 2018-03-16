@@ -12,7 +12,7 @@ function mapStateToProps(state) {
   const interdisciplinaryMajors = getInterdisciplinaryMajors(state);
 
   return {
-    loading: !disciplinaryMajors.size && !interdisciplinaryMajors.size,
+    loading: !disciplinaryMajors.length && !interdisciplinaryMajors.length,
     disciplinaryMajors,
     interdisciplinaryMajors,
   };

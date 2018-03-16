@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { Carousel } from 'antd';
 import { announcementShape } from '../../shapes';
@@ -24,7 +23,7 @@ export default class PinnedAnnouncements extends Component {
   static propTypes = {
     admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
-    announcements: ImmutablePropTypes.setOf(announcementShape).isRequired,
+    announcements: PropTypes.arrayOf(announcementShape).isRequired,
     loadPinnedAnnouncements: PropTypes.func.isRequired,
   };
 
@@ -58,7 +57,7 @@ export default class PinnedAnnouncements extends Component {
         {admin &&
           <ButtonLink to={ROUTES.ANNOUNCEMENTS} icon="plus" shape="circle" style={styles.addButton} />}
 
-        {mappedAnnouncements.size === 1
+        {mappedAnnouncements.length === 1
           ? mappedAnnouncements
           : <Carousel autoplay>{mappedAnnouncements}</Carousel>}
       </div>

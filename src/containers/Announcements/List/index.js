@@ -10,7 +10,7 @@ function mapStateToProps(state) {
   const announcements = pagingFns.selectors.getPagedEntities(state);
 
   return {
-    loading: !announcements || !announcements.size,
+    loading: !announcements || !announcements.length,
     announcements,
     pagination: pagingFns.selectors.getMeta(state),
   };

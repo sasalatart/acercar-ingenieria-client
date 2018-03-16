@@ -64,7 +64,10 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
       getPagedEntities: createSelector(
         getPagedIds,
         getEntities,
-        (ids, entities) => denormalize(ids, [schema], entities),
+        (ids, entities) => {
+          const pagedEntities = denormalize(ids, [schema], entities);
+          return pagedEntities ? pagedEntities.toJS() : undefined;
+        },
       ),
 
       getMeta: createSelector(

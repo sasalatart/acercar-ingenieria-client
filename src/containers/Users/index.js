@@ -16,7 +16,7 @@ function mapStateToProps(state) {
 
   return {
     admin: !!(currentUser && currentUser.admin),
-    loading: !disciplinaryMajors.size && !interdisciplinaryMajors.size,
+    loading: !disciplinaryMajors.length && !interdisciplinaryMajors.length,
     disciplinaryMajors,
     interdisciplinaryMajors,
   };

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Set } from 'immutable';
 import { List } from 'antd';
 import PaginationControls from '../../../containers/Pagination';
 import ArticleListItem from './Item';
@@ -12,13 +10,13 @@ export default class ArticlesList extends Component {
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    articles: ImmutablePropTypes.setOf(articleShape),
+    articles: PropTypes.arrayOf(articleShape),
     loadArticles: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     pagination: undefined,
-    articles: Set(),
+    articles: [],
   }
 
   renderListItem = article => (
@@ -37,7 +35,7 @@ export default class ArticlesList extends Component {
           <List
             itemLayout="vertical"
             size="large"
-            dataSource={this.props.articles.toJS()}
+            dataSource={this.props.articles}
             renderItem={this.renderListItem}
           />
         )}

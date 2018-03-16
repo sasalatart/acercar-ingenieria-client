@@ -14,7 +14,7 @@ function mapStateToProps(state, ownProps) {
   const comments = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !comments || !comments.size,
+    loading: !comments || !comments.length,
     pagination: pagingFns.selectors.getMeta(state, params),
     comments,
   };

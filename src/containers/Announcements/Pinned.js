@@ -10,7 +10,7 @@ function mapStateToProps(state) {
   const announcements = getPinnedAnnouncementsEntities(state);
 
   return {
-    loading: !announcements.size,
+    loading: !announcements.length,
     announcements,
   };
 }

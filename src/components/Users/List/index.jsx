@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { List, Modal } from 'antd';
 import PaginationControls from '../../../containers/Pagination';
@@ -12,7 +11,7 @@ class UsersList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    users: ImmutablePropTypes.setOf(userShape),
+    users: PropTypes.arrayOf(userShape),
     selectedUser: userShape,
     loadUsers: PropTypes.func.isRequired,
     unsetSelectedUser: PropTypes.func.isRequired,
@@ -21,7 +20,7 @@ class UsersList extends Component {
 
   static defaultProps = {
     pagination: undefined,
-    users: undefined,
+    users: [],
     selectedUser: undefined,
   }
 
@@ -57,7 +56,7 @@ class UsersList extends Component {
           render={() => (
             <List
               itemLayout="horizontal"
-              dataSource={users.toJS()}
+              dataSource={users}
               renderItem={this.renderUser}
             />
           )}

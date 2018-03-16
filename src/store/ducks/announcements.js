@@ -137,7 +137,7 @@ export const getPinnedAnnouncementsEntities = createSelector(
   getPinnedIds,
   getEntities,
   (pinnedIdsList, entities) =>
-    denormalize(pinnedIdsList, [announcementsSchema], entities),
+    denormalize(pinnedIdsList, [announcementsSchema], entities).toJS(),
 );
 
 export const getUpdatingIds = createSelector(

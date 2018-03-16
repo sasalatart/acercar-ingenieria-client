@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Set } from 'immutable';
 import { intlShape } from 'react-intl';
 import { Collapse, Button } from 'antd';
 import Linkify from 'react-linkify';
@@ -35,7 +33,7 @@ export default class QuestionsList extends Component {
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     pending: PropTypes.bool.isRequired,
-    questions: ImmutablePropTypes.setOf(questionShape),
+    questions: PropTypes.arrayOf(questionShape),
     pagination: paginationShape,
     loadQuestions: PropTypes.func.isRequired,
     onEditClicked: PropTypes.func.isRequired,
@@ -44,7 +42,7 @@ export default class QuestionsList extends Component {
 
   static defaultProps = {
     pagination: undefined,
-    questions: Set([]),
+    questions: [],
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Tabs, List } from 'antd';
 import MajorsActionBar from './ActionBar';
@@ -14,8 +13,8 @@ const { TabPane } = Tabs;
 class MajorsList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    disciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
-    interdisciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
+    disciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
+    interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     loadMajors: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
@@ -40,7 +39,7 @@ class MajorsList extends Component {
         itemLayout="horizontal"
         size="large"
         loading={loading}
-        dataSource={majors.toJS()}
+        dataSource={majors}
         renderItem={major => <MajorItem major={major} />}
       />
     );

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Select } from 'antd';
 import ActionBar from '../../containers/Layout/ActionBar';
@@ -22,8 +21,8 @@ class Users extends Component {
     admin: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
     loading: PropTypes.bool.isRequired,
-    disciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
-    interdisciplinaryMajors: ImmutablePropTypes.setOf(majorShape).isRequired,
+    disciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
+    interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     loadMajors: PropTypes.func.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
     intl: intlShape.isRequired,

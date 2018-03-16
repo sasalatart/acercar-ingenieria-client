@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Set } from 'immutable';
 import { List } from 'antd';
 import PaginationControls from '../../../containers/Pagination';
 import DiscussionListItem from './Item';
@@ -12,13 +10,13 @@ class DiscussionsList extends Component {
     loading: PropTypes.bool.isRequired,
     mine: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    discussions: ImmutablePropTypes.setOf(discussionShape),
+    discussions: PropTypes.arrayOf(discussionShape),
     loadDiscussions: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     pagination: undefined,
-    discussions: Set(),
+    discussions: [],
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,7 +43,7 @@ class DiscussionsList extends Component {
           <List
             itemLayout="vertical"
             size="large"
-            dataSource={discussions.toJS()}
+            dataSource={discussions}
             renderItem={this.renderListItem}
           />
         )}

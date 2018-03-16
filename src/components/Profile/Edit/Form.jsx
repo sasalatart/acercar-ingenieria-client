@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert, Icon, Row, Col } from 'antd';
@@ -45,7 +44,7 @@ class ProfileEditForm extends Component {
   static propTypes = {
     initialValues: PropTypes.shape({}).isRequired,
     currentAvatarURL: PropTypes.string,
-    majors: ImmutablePropTypes.setOf(majorShape),
+    majors: PropTypes.arrayOf(majorShape),
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
     loadMajors: PropTypes.func.isRequired,
@@ -74,7 +73,7 @@ class ProfileEditForm extends Component {
   }
 
   getMajorsOptions() {
-    return Object.values(this.props.majors.toJS())
+    return Object.values(this.props.majors)
       .map(({ id, name }) => ({ key: id, value: id, label: name }));
   }
 

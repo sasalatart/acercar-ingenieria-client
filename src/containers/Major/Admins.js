@@ -14,7 +14,7 @@ function mapStateToProps(state, ownProps) {
   const majorAdmins = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !majorAdmins || majorAdmins.isEmpty(),
+    loading: !majorAdmins || !majorAdmins.length,
     pagination: pagingFns.selectors.getMeta(state, params),
     majorAdmins,
   };

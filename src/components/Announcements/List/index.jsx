@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { intlShape } from 'react-intl';
-import { Set } from 'immutable';
 import { List, Modal } from 'antd';
 import PaginationControls from '../../../containers/Pagination';
 import Form from '../../../containers/Announcements/Form';
@@ -19,14 +17,14 @@ export default class Announcements extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    announcements: ImmutablePropTypes.setOf(announcementShape),
+    announcements: PropTypes.arrayOf(announcementShape),
     loadAnnouncements: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
   static defaultProps = {
     pagination: undefined,
-    announcements: new Set(),
+    announcements: [],
   }
 
   state = { lightboxOpen: false, clickedIndex: undefined, formVisible: false };
@@ -52,7 +50,7 @@ export default class Announcements extends Component {
 
   createImagesArray() {
     return this.props.announcements
-      .map(({ picture: { thumb, large } }) => ({ src: large, thumbnail: thumb })).toJS();
+      .map(({ picture: { thumb, large } }) => ({ src: large, thumbnail: thumb }));
   }
 
   renderAnnouncement = announcement =>
@@ -92,7 +90,7 @@ export default class Announcements extends Component {
           render={() => (
             <List
               grid={GRID_SETTINGS}
-              dataSource={announcements.toJS()}
+              dataSource={announcements}
               renderItem={this.renderAnnouncement}
             />
           )}

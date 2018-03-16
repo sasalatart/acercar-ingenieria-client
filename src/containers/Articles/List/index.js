@@ -14,7 +14,7 @@ function mapStateToProps(state, ownProps) {
   const articles = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !articles || !articles.size,
+    loading: !articles || !articles.length,
     pagination: pagingFns.selectors.getMeta(state, params),
     articles,
   };
