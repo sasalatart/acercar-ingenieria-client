@@ -1,36 +1,19 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { Modal } from 'antd';
-import PaginationControls from '../../containers/Pagination';
 import Form from '../../containers/Questions/Form';
 import QuestionsList from '../../containers/Questions/List';
 import QuestionsActionBar from './ActionBar';
 import Title from '../Layout/Title';
-import { paginationShape } from '../../shapes';
+import { matchShape } from '../../shapes';
 
 class Questions extends Component {
   static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    majorId: PropTypes.number,
-    pending: PropTypes.bool.isRequired,
-    pagination: paginationShape,
-    loadQuestions: PropTypes.func.isRequired,
+    match: matchShape.isRequired,
     intl: intlShape.isRequired,
   }
 
-  static defaultProps = {
-    majorId: undefined,
-    pagination: undefined,
-  }
-
   state = { formVisible: false };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.pending !== this.props.pending) {
-      nextProps.loadQuestions();
-    }
-  }
 
   handleProposeClicked = () => {
     this.setState({ formVisible: true });
@@ -45,8 +28,10 @@ class Questions extends Component {
   }
 
   renderFormModal() {
-    const { majorId, intl: { formatMessage: t } } = this.props;
+    const { match, intl: { formatMessage: t } } = this.props;
     const { formVisible, editingId } = this.state;
+
+    const majorId = +match.params.majorId;
 
     return (
       <Modal
@@ -62,9 +47,9 @@ class Questions extends Component {
   }
 
   render() {
-    const {
-      majorId, pending, loading, pagination, loadQuestions, intl: { formatMessage: t },
-    } = this.props;
+    const { match, intl: { formatMessage: t } } = this.props;
+    const majorId = +match.params.majorId;
+    const pending = !!match.params.pending;
 
     return (
       <div>
@@ -75,18 +60,7 @@ class Questions extends Component {
         />
         <Title text={pending ? t({ id: 'questions.pending' }) : 'FAQs'} />
 
-        <PaginationControls
-          pagination={pagination}
-          loading={loading}
-          loadFn={loadQuestions}
-          render={() => (
-            <QuestionsList
-              majorId={majorId}
-              pending={pending}
-              onEditClicked={this.handleEditClicked}
-            />
-          )}
-        />
+        <QuestionsList majorId={majorId} pending={pending} onEditClicked={this.handleEditClicked} />
 
         {this.renderFormModal()}
       </div>
@@ -94,4 +68,4 @@ class Questions extends Component {
   }
 }
 
-export default Questions;
+export default injectIntl(Questions);

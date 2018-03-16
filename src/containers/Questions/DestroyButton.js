@@ -12,10 +12,10 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { id, majorId, pending } = ownProps;
+  const { id, majorId } = ownProps;
 
   return {
-    onDestroy: () => dispatch(destroyQuestion(id, majorId, pending)),
+    onDestroy: () => dispatch(destroyQuestion(id, majorId)),
   };
 }
 

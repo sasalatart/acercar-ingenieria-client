@@ -25,9 +25,7 @@ const platformPendingPagingFns = pagingFnsFactory(...commonPlatformParams, 'pend
 const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({}),
-    platformMeta: new Map({}),
     majors: new Map({}),
-    majorsMeta: new Map({}),
   }),
   destroyingIds: new Set(),
 });
@@ -37,8 +35,7 @@ const TYPES = {
   LOAD_UNANSWERED: 'fetch::questions/LOAD_UNANSWERED',
   CREATE: 'fetch::questions/CREATE',
   UPDATE: 'fetch::questions/UPDATE',
-  DESTROY_ANSWERED: 'fetch::questions/DESTROY_ANSWERED',
-  DESTROY_UNANSWERED: 'fetch::questions/DESTROY_UNANSWERED',
+  DESTROY: 'fetch::questions/DESTROY',
   SET_DESTROYING: 'questions/SET_DESTROYING',
   ADD_TO_PAGINATION: 'questions/ADD_TO_PAGINATION',
 };
@@ -49,12 +46,6 @@ export function getPagingFns(isUnanswered, isOfMajor) {
   }
 
   return isUnanswered ? platformPendingPagingFns : platformAnsweredPagingFns;
-}
-
-function getPagingFnsFromAction(type, payload) {
-  const isUnanswered = type.includes('UNANSWERED');
-  const isOfMajor = payload.request.urlParams.majorId;
-  return getPagingFns(isUnanswered, isOfMajor);
 }
 
 export function loadQuestions(page = 1, majorId, pending) {
@@ -117,11 +108,11 @@ function setDestroyingQuestion(id) {
   };
 }
 
-export function destroyQuestion(id, majorId, pending) {
+export function destroyQuestion(id, majorId) {
   return (dispatch) => {
     dispatch(setDestroyingQuestion(id));
     return dispatch({
-      type: pending ? TYPES.DESTROY_UNANSWERED : TYPES.DESTROY_ANSWERED,
+      type: TYPES.DESTROY,
       payload: {
         method: 'DELETE',
         url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
@@ -136,21 +127,29 @@ export function destroyQuestion(id, majorId, pending) {
 
 export default function questionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD_ANSWERED}_FULFILLED`:
-    case `${TYPES.LOAD_UNANSWERED}_FULFILLED`:
-      return getPagingFnsFromAction(action.type, action.payload).update(state, action.payload);
-    case `${TYPES.DESTROY_ANSWERED}_FULFILLED`:
-    case `${TYPES.DESTROY_UNANSWERED}_FULFILLED`:
-      return getPagingFnsFromAction(action.type, action.payload)
-        .destroy(state, action.payload.request.urlParams)
-        .update('destroyingIds', ids => ids.delete(action.payload.request.urlParams.id));
+    case `${TYPES.LOAD_ANSWERED}_FULFILLED`: {
+      const { majorId } = action.payload.request.urlParams;
+      return getPagingFns(false, majorId).update(state, action.payload);
+    }
+    case `${TYPES.LOAD_UNANSWERED}_FULFILLED`: {
+      const { majorId } = action.payload.request.urlParams;
+      return getPagingFns(true, majorId).update(state, action.payload);
+    }
+    case `${TYPES.UPDATE}_FULFILLED`: {
+      const { urlParams, body } = action.payload.request;
+      return getPagingFns(!!body.answer, urlParams.majorId).destroy(state, urlParams);
+    }
+    case `${TYPES.DESTROY}_FULFILLED`: {
+      const { urlParams } = action.payload.request;
+      const fromPending = getPagingFns(true, urlParams.majorId).destroy(state, urlParams);
+      const fromAnswered = getPagingFns(false, urlParams.majorId).destroy(fromPending, urlParams);
+      return fromAnswered.update('destroyingIds', ids => ids.delete(urlParams.id));
+    }
     case TYPES.SET_DESTROYING:
       return state.update('destroyingIds', ids => ids.add(action.payload.id));
     case TYPES.ADD_TO_PAGINATION: {
-      const {
-        id, baseResourceId, pending, page,
-      } = action.payload;
-      return getPagingFns(pending, baseResourceId).addToPagination(state, id, page, baseResourceId);
+      const { id, baseResourceId, pending } = action.payload;
+      return getPagingFns(pending, baseResourceId).addToPagination(state, id, 1, baseResourceId);
     }
     default:
       return state;

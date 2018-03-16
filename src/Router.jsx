@@ -21,7 +21,7 @@ import Major from './containers/Major';
 import Articles from './components/Articles';
 import ArticleForm from './containers/Articles/Form';
 import Article from './containers/Article';
-import Questions from './containers/Questions';
+import Questions from './components/Questions';
 import Discussions from './components/Discussions';
 import DiscussionForm from './containers/Discussions/Form';
 import Discussion from './containers/Discussion';
