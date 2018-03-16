@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
+import WithAuthorization from '../../hoc/WithAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
 import ButtonLink from '../../containers/ButtonLink';
 import ROUTES from '../../routes';
 
-function DiscussionsActionBar({ mine, intl: { formatMessage: t } }) {
+function DiscussionsActionBar({ loggedIn, mine, intl: { formatMessage: t } }) {
   const actions = [];
+
+  if (loggedIn) {
+    const newDiscussionHref = ROUTES.DISCUSSIONS_NEW;
+    actions.push(<ButtonLink to={newDiscussionHref} content={t({ id: 'discussions.new' })} />);
+  }
 
   actions.push(mine
     ? (
@@ -28,6 +34,7 @@ function DiscussionsActionBar({ mine, intl: { formatMessage: t } }) {
 }
 
 DiscussionsActionBar.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
   mine: PropTypes.bool,
   intl: intlShape.isRequired,
 };
@@ -36,4 +43,4 @@ DiscussionsActionBar.defaultProps = {
   mine: false,
 };
 
-export default injectIntl(DiscussionsActionBar);
+export default injectIntl(WithAuthorization(DiscussionsActionBar));
