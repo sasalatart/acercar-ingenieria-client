@@ -7,12 +7,13 @@ import {
   removeEntity,
   getEntities,
 } from './entities';
-import { pagingFnsFactory } from './paginations';
+import pagingFnsFactory from './paginations';
 import { resourceSuccessNotification } from './notifications';
 import { discussionsSchema } from '../../schemas';
 
-const forumPagingFns = pagingFnsFactory('discussions', discussionsSchema, 'forum');
-const myPagingFns = pagingFnsFactory('discussions', discussionsSchema, 'mine');
+const commonArgs = ['discussions', discussionsSchema];
+const forumPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'forum' });
+const myPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'mine' });
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
@@ -112,15 +113,15 @@ export function destroyDiscussion(id) {
 export default function discussionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return forumPagingFns.update(state, action.payload);
+      return forumPagingFns.reducer.setPage(state, action.payload);
     case `${TYPES.LOAD_MINE}_FULFILLED`:
-      return myPagingFns.update(state, action.payload);
+      return myPagingFns.reducer.setPage(state, action.payload);
     case TYPES.DESTROY:
       return state.update('destroyingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      const fromForum = forumPagingFns.destroy(state, urlParams);
-      const fromMine = myPagingFns.destroy(fromForum, urlParams);
+      const fromForum = forumPagingFns.reducer.removeFromPage(state, urlParams);
+      const fromMine = myPagingFns.reducer.removeFromPage(fromForum, urlParams);
       return fromMine.update('destroyingIds', ids => ids.delete(urlParams.id));
     }
     default:

@@ -7,21 +7,17 @@ import {
   getEntities,
 } from './entities';
 import { usersSchema } from '../../schemas';
-import {
-  pagingFnsFactory,
-  nestedPagingFnsFactory,
-} from './paginations';
+import pagingFnsFactory from './paginations';
 import { resourceSuccessNotification } from './notifications';
 
-const platformPagingFns = pagingFnsFactory('users', usersSchema);
-const majorsPagingFns = nestedPagingFnsFactory('users', usersSchema, 'majors');
+const commonArgs = ['users', usersSchema];
+const platformPagingFns = pagingFnsFactory(...commonArgs);
+const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 
 const INITIAL_STATE = Map({
   pagination: new Map({
     platform: new Map({}),
-    platformMeta: new Map({}),
     majors: new Map({}),
-    majorsMeta: new Map({}),
   }),
   destroyingIds: new Set([]),
 });
@@ -81,7 +77,7 @@ export default function usersReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`: {
       const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(majorId).update(state, action.payload);
+      return getPagingFns(majorId).reducer.setPage(state, action.payload);
     }
     case TYPES.DESTROY: {
       const { id } = action.payload.urlParams;
@@ -89,8 +85,8 @@ export default function usersReducer(state = INITIAL_STATE, action) {
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      const fromMajors = majorsPagingFns.destroy(state, urlParams);
-      const fromPlatform = platformPagingFns.destroy(fromMajors, urlParams);
+      const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
+      const fromPlatform = platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
       return fromPlatform.update('destroyingIds', ids => ids.delete(urlParams.id));
     }
     default:

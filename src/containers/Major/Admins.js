@@ -11,11 +11,11 @@ function mapStateToProps(state, ownProps) {
   const params = { majorId: ownProps.majorId };
   const pagingFns = getPagingFns(params.majorId);
 
-  const majorAdmins = pagingFns.getPagedEntities(state, params);
+  const majorAdmins = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
     loading: !majorAdmins || majorAdmins.isEmpty(),
-    pagination: pagingFns.getMeta(state, params),
+    pagination: pagingFns.selectors.getMeta(state, params),
     majorAdmins,
   };
 }

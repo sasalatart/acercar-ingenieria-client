@@ -11,11 +11,11 @@ function mapStateToProps(state, ownProps) {
 
   const params = { [getBaseResourceIdName(baseResourceName)]: baseResourceId };
   const pagingFns = getPagingFns(baseResourceName);
-  const comments = pagingFns.getPagedEntities(state, params);
+  const comments = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
     loading: !comments || !comments.size,
-    pagination: pagingFns.getMeta(state, params),
+    pagination: pagingFns.selectors.getMeta(state, params),
     comments,
   };
 }

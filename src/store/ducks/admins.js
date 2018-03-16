@@ -4,21 +4,17 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { usersSchema } from '../../schemas';
 import { getEntities } from './entities';
-import {
-  pagingFnsFactory,
-  nestedPagingFnsFactory,
-} from './paginations';
+import pagingFnsFactory from './paginations';
 import { TYPES as USERS_TYPES } from './users';
 
-const platformPagingFns = pagingFnsFactory('admins', usersSchema);
-const majorsPagingFns = nestedPagingFnsFactory('admins', usersSchema, 'majors');
+const commonArgs = ['admins', usersSchema];
+const platformPagingFns = pagingFnsFactory(...commonArgs);
+const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 
 const INITIAL_STATE = Map({
   pagination: new Map({
     platform: new Map({}),
-    platformMeta: new Map({}),
     majors: new Map({}),
-    majorsMeta: new Map({}),
   }),
   selectedUserId: undefined,
   updatingAdminsIds: new Set([]),
@@ -98,7 +94,7 @@ export default function adminsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD}_FULFILLED`: {
       const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(majorId).update(state, action.payload);
+      return getPagingFns(majorId).reducer.setPage(state, action.payload);
     }
     case TYPES.SET_SELECTED_USER:
       return state.set('selectedUserId', action.payload.id);
@@ -117,7 +113,8 @@ export default function adminsReducer(state = INITIAL_STATE, action) {
       const { id, majorId } = action.payload.request.urlParams;
       const path = majorId ? ['updatingMajorAdminsIds', String(majorId)] : ['updatingAdminsIds'];
       return getPagingFns(majorId)
-        .addToPagination(state, id, 1, majorId)
+        .reducer
+        .addToPage(state, id, 1, majorId)
         .updateIn(path, ids => ids.delete(id));
     }
     case `${TYPES.DEMOTE_FROM_PLATFORM}_FULFILLED`:
@@ -126,13 +123,14 @@ export default function adminsReducer(state = INITIAL_STATE, action) {
       const { id, majorId } = urlParams;
       const path = majorId ? ['updatingMajorAdminsIds', String(majorId)] : ['updatingAdminsIds'];
       return getPagingFns(majorId)
-        .destroy(state, urlParams)
+        .reducer
+        .removeFromPage(state, urlParams)
         .updateIn(path, ids => ids.delete(id));
     }
     case `${USERS_TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      const fromMajors = majorsPagingFns.destroy(state, urlParams);
-      return platformPagingFns.destroy(fromMajors, urlParams);
+      const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
+      return platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
     }
     default:
       return state;

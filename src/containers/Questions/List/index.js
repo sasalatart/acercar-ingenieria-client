@@ -12,11 +12,11 @@ function mapStateToProps(state, ownProps) {
   const params = pick(ownProps, 'majorId', 'pending');
 
   const pagingFns = getPagingFns(params.pending, params.majorId);
-  const questions = pagingFns.getPagedEntities(state, params);
+  const questions = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
     loading: !questions || questions.isEmpty(),
-    pagination: pagingFns.getMeta(state, params),
+    pagination: pagingFns.selectors.getMeta(state, params),
     questions,
   };
 }

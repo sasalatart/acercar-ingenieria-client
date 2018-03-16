@@ -7,12 +7,12 @@ import {
 import Announcements from '../../../components/Announcements/List';
 
 function mapStateToProps(state) {
-  const announcements = pagingFns.getPagedEntities(state);
+  const announcements = pagingFns.selectors.getPagedEntities(state);
 
   return {
     loading: !announcements || !announcements.size,
     announcements,
-    pagination: pagingFns.getMeta(state),
+    pagination: pagingFns.selectors.getMeta(state),
   };
 }
 

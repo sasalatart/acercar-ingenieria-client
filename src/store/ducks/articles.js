@@ -6,10 +6,7 @@ import {
   removeEntity,
   getEntities,
 } from './entities';
-import {
-  pagingFnsFactory,
-  nestedPagingFnsFactory,
-} from './paginations';
+import pagingFnsFactory from './paginations';
 import { resourceSuccessNotification } from './notifications';
 import {
   goToArticles,
@@ -17,15 +14,14 @@ import {
 } from './routes';
 import { articlesSchema } from '../../schemas';
 
-const platformPagingFns = pagingFnsFactory('articles', articlesSchema);
-const majorsPagingFns = nestedPagingFnsFactory('articles', articlesSchema, 'majors');
+const commonArgs = ['articles', articlesSchema];
+const platformPagingFns = pagingFnsFactory(...commonArgs);
+const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({}),
-    platformMeta: new Map({}),
     majors: new Map({}),
-    majorsMeta: new Map({}),
   }),
   destroyingIds: new Set([]),
 });
@@ -127,20 +123,17 @@ export function getPagingFns(isOfMajor) {
   return isOfMajor ? majorsPagingFns : platformPagingFns;
 }
 
-function getPagingFnsFromAction(payload) {
-  const { majorId } = payload.request.urlParams;
-  return getPagingFns(majorId);
-}
-
 export default function articlesReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return getPagingFns(action.payload.request.urlParams.majorId).update(state, action.payload);
+    case `${TYPES.LOAD_INDEX}_FULFILLED`: {
+      const { majorId } = action.payload.request.urlParams;
+      return getPagingFns(majorId).reducer.setPage(state, action.payload);
+    }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      return getPagingFnsFromAction(action.payload)
-        .destroy(state, urlParams)
-        .update('destroyingIds', ids => ids.delete(urlParams.id));
+      const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
+      const fromPlatform = platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
+      return fromPlatform.update('destroyingIds', ids => ids.delete(urlParams.id));
     }
     case TYPES.SET_DESTROYING:
       return state.update('destroyingIds', ids => ids.add(action.payload.id));

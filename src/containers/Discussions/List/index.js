@@ -10,11 +10,11 @@ import DiscussionsList from '../../../components/Discussions/List';
 function mapStateToProps(state, ownProps) {
   const pagingFns = getPagingFns(ownProps.mine);
 
-  const discussions = pagingFns.getPagedEntities(state);
+  const discussions = pagingFns.selectors.getPagedEntities(state);
 
   return {
     loading: !discussions || !discussions.size,
-    pagination: pagingFns.getMeta(state),
+    pagination: pagingFns.selectors.getMeta(state),
     discussions,
   };
 }

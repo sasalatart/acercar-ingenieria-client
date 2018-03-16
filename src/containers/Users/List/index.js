@@ -20,11 +20,11 @@ function mapStateToProps(state, ownProps) {
     ? getAdminsPagingFns(majorId)
     : getUsersPagingFns(majorId);
 
-  const users = pagingFns.getPagedEntities(state, params);
+  const users = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
     loading: !users || users.isEmpty(),
-    pagination: pagingFns.getMeta(state, params),
+    pagination: pagingFns.selectors.getMeta(state, params),
     users,
     selectedUser: getSelectedUserEntity(state),
   };

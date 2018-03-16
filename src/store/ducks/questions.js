@@ -2,25 +2,23 @@ import { Map, Set } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
-import compact from 'lodash/compact';
 import { questionsSchema } from '../../schemas';
 import {
   getEntities,
   removeEntity,
 } from './entities';
-import {
-  pagingFnsFactory,
-  nestedPagingFnsFactory,
-} from './paginations';
+import pagingFnsFactory from './paginations';
 import { resourceSuccessNotification } from './notifications';
 
-const commonMajorParams = ['questions', questionsSchema, 'majors'];
-const majorsAnsweredPagingFns = nestedPagingFnsFactory(...commonMajorParams, 'answered');
-const majorsPendingPagingFns = nestedPagingFnsFactory(...commonMajorParams, 'pending');
+const commonArgs = ['questions', questionsSchema];
+const answeredSuffix = { suffix: 'answered' };
+const pendingSuffix = { suffix: 'pending' };
 
-const commonPlatformParams = ['questions', questionsSchema];
-const platformAnsweredPagingFns = pagingFnsFactory(...commonPlatformParams, 'answered');
-const platformPendingPagingFns = pagingFnsFactory(...commonPlatformParams, 'pending');
+const majorsAnsweredPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', ...answeredSuffix });
+const majorsPendingPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', ...pendingSuffix });
+
+const platformAnsweredPagingFns = pagingFnsFactory(...commonArgs, answeredSuffix);
+const platformPendingPagingFns = pagingFnsFactory(...commonArgs, pendingSuffix);
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
@@ -37,7 +35,8 @@ const TYPES = {
   UPDATE: 'fetch::questions/UPDATE',
   DESTROY: 'fetch::questions/DESTROY',
   SET_DESTROYING: 'questions/SET_DESTROYING',
-  ADD_TO_PAGINATION: 'questions/ADD_TO_PAGINATION',
+  ADD_TO_ANSWERED_PAGINATION: 'questions/ADD_TO_ANSWERED_PAGINATION',
+  ADD_TO_UNANSWERED_PAGINATION: 'questions/ADD_TO_UNANSWERED_PAGINATION',
 };
 
 export function getPagingFns(isUnanswered, isOfMajor) {
@@ -78,10 +77,12 @@ export function createQuestion(values, majorId) {
       },
     }).then(({ value: { result } }) => {
       dispatch(resourceSuccessNotification('question', 'created'));
-      const paginationParams = compact([
-        TYPES.ADD_TO_PAGINATION, result, 1, majorId, { pending: !values.answer },
-      ]);
-      dispatch(getPagingFns(!values.answer, majorId).addToPaginationAction(...paginationParams));
+      const type = values.answer
+        ? TYPES.ADD_TO_ANSWERED_PAGINATION
+        : TYPES.ADD_TO_UNANSWERED_PAGINATION;
+
+      const pagingFns = getPagingFns(!values.answer, majorId);
+      dispatch(pagingFns.actions.addToPage(type, result, 1, majorId));
     });
 }
 
@@ -129,27 +130,35 @@ export default function questionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_ANSWERED}_FULFILLED`: {
       const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(false, majorId).update(state, action.payload);
+      return getPagingFns(false, majorId).reducer.setPage(state, action.payload);
     }
     case `${TYPES.LOAD_UNANSWERED}_FULFILLED`: {
       const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(true, majorId).update(state, action.payload);
+      return getPagingFns(true, majorId).reducer.setPage(state, action.payload);
     }
     case `${TYPES.UPDATE}_FULFILLED`: {
       const { urlParams, body } = action.payload.request;
-      return getPagingFns(!!body.answer, urlParams.majorId).destroy(state, urlParams);
+      const pagingFns = getPagingFns(!!body.answer, urlParams.majorId);
+      return pagingFns.reducer.removeFromPage(state, urlParams);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      const fromPending = getPagingFns(true, urlParams.majorId).destroy(state, urlParams);
-      const fromAnswered = getPagingFns(false, urlParams.majorId).destroy(fromPending, urlParams);
+      const pendingPagingFns = getPagingFns(true, urlParams.majorId);
+      const answeredPagingFns = getPagingFns(false, urlParams.majorId);
+
+      const fromPending = pendingPagingFns.reducer.removeFromPage(state, urlParams);
+      const fromAnswered = answeredPagingFns.reducer.removeFromPage(fromPending, urlParams);
       return fromAnswered.update('destroyingIds', ids => ids.delete(urlParams.id));
     }
     case TYPES.SET_DESTROYING:
       return state.update('destroyingIds', ids => ids.add(action.payload.id));
-    case TYPES.ADD_TO_PAGINATION: {
-      const { id, baseResourceId, pending } = action.payload;
-      return getPagingFns(pending, baseResourceId).addToPagination(state, id, 1, baseResourceId);
+    case TYPES.ADD_TO_ANSWERED_PAGINATION: {
+      const { id, baseResourceId } = action.payload;
+      return getPagingFns(false, baseResourceId).reducer.addToPage(state, id, 1, baseResourceId);
+    }
+    case TYPES.ADD_TO_UNANSWERED_PAGINATION: {
+      const { id, baseResourceId } = action.payload;
+      return getPagingFns(true, baseResourceId).reducer.addToPage(state, id, 1, baseResourceId);
     }
     default:
       return state;

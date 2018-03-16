@@ -8,22 +8,21 @@ import {
   removeEntity,
   getEntity,
 } from './entities';
-import {
-  nestedPagingFnsFactory,
-  getBaseResourceIdName,
-} from './paginations';
+import pagingFnsFactory, { getBaseResourceIdName } from './paginations';
 import { commentsSchema } from '../../schemas';
 
-const majorsPagingFns = nestedPagingFnsFactory('comments', commentsSchema, 'majors');
-const articlesPagingFns = nestedPagingFnsFactory('comments', commentsSchema, 'articles');
-const discussionsPagingFns = nestedPagingFnsFactory('comments', commentsSchema, 'discussions');
+const commonArgs = ['comments', commentsSchema];
+const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
+const articlesPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'articles' });
+const discussionsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'discussions' });
 
 const collectionName = 'comments';
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
+    majors: new Map({}),
     articles: new Map({}),
-    articlesMeta: new Map({}),
+    discussions: new Map({}),
   }),
   destroyingIds: new Set(),
 });
@@ -112,7 +111,7 @@ export function createComment(body, baseResourceName, baseResourceId) {
         dispatch(addCommentToParent(parentCommentId, result));
       } else {
         const pagingFns = getPagingFns(baseResourceName);
-        dispatch(pagingFns.addToPaginationAction(TYPES.ADD_TO_PAGINATION, result, 1, baseResourceId));
+        dispatch(pagingFns.actions.addToPage(TYPES.ADD_TO_PAGINATION, result, 1, baseResourceId));
       }
     });
 }
@@ -160,12 +159,14 @@ export default function commentsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      return getPagingFns(getBaseResourceName(urlParams)).update(state, action.payload);
+      const pagingFns = getPagingFns(getBaseResourceName(urlParams));
+      return pagingFns.reducer.setPage(state, action.payload);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
       return getPagingFns(getBaseResourceName(urlParams))
-        .destroy(state, urlParams)
+        .reducer
+        .removeFromPage(state, urlParams)
         .update('destroyingIds', ids => ids.delete(urlParams.id));
     }
     case TYPES.SET_DESTROYING:
@@ -174,7 +175,7 @@ export default function commentsReducer(state = INITIAL_STATE, action) {
       const {
         baseResourceName, baseResourceId, id, page,
       } = action.payload;
-      return getPagingFns(baseResourceName).addToPagination(state, id, page, baseResourceId);
+      return getPagingFns(baseResourceName).reducer.addToPage(state, id, page, baseResourceId);
     }
     default:
       return state;
