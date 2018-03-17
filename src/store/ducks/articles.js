@@ -8,10 +8,7 @@ import {
 } from './entities';
 import pagingFnsFactory from './paginations';
 import { resourceSuccessNotification } from './notifications';
-import {
-  goToArticles,
-  goToArticle,
-} from './routes';
+import { goToArticle } from './routes';
 import { articlesSchema } from '../../schemas';
 
 const commonArgs = ['articles', articlesSchema];
@@ -73,9 +70,9 @@ export function createArticle(body, majorId) {
         body,
         responseSchema: articlesSchema,
       },
-    }).then(() => {
+    }).then(({ value: { result } }) => {
       dispatch(resourceSuccessNotification('article', 'created'));
-      dispatch(goToArticles(majorId));
+      dispatch(goToArticle(result, majorId));
     });
 }
 
