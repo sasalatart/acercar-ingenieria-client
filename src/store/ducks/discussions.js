@@ -116,7 +116,7 @@ export default function discussionsReducer(state = INITIAL_STATE, action) {
       return forumPagingFns.reducer.setPage(state, action.payload);
     case `${TYPES.LOAD_MINE}_FULFILLED`:
       return myPagingFns.reducer.setPage(state, action.payload);
-    case TYPES.DESTROY:
+    case `${TYPES.DESTROY}_PENDING`:
       return state.update('destroyingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;

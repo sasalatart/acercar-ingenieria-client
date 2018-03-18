@@ -107,7 +107,7 @@ export default function announcementsReducer(state = INITIAL_STATE, action) {
       const { id, page } = action.payload;
       return pagingFns.reducer.addToPage(state, id, page);
     }
-    case TYPES.UPDATE:
+    case `${TYPES.UPDATE}_PENDING`:
       return state.update('updatingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.UPDATE}_FULFILLED`:
       return state.update('updatingIds', ids => ids.delete(action.payload.request.urlParams.id));

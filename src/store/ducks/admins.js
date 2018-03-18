@@ -100,10 +100,10 @@ export default function adminsReducer(state = INITIAL_STATE, action) {
       return state.set('selectedUserId', action.payload.id);
     case TYPES.UNSET_SELECTED_USER:
       return state.set('selectedUserId', undefined);
-    case TYPES.PROMOTE_TO_PLATFORM:
-    case TYPES.PROMOTE_TO_MAJOR:
-    case TYPES.DEMOTE_FROM_PLATFORM:
-    case TYPES.DEMOTE_FROM_MAJOR: {
+    case `${TYPES.PROMOTE_TO_PLATFORM}_PENDING`:
+    case `${TYPES.PROMOTE_TO_MAJOR}_PENDING`:
+    case `${TYPES.DEMOTE_FROM_PLATFORM}_PENDING`:
+    case `${TYPES.DEMOTE_FROM_MAJOR}_PENDING`: {
       const { id, majorId } = action.payload.urlParams;
       const path = majorId ? ['updatingMajorAdminsIds', String(majorId)] : ['updatingAdminsIds'];
       return state.updateIn(path, ids => (ids ? ids.add(id) : new Set([id])));

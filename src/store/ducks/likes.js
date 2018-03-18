@@ -3,35 +3,17 @@ import { createSelector } from 'reselect';
 import { updateEntities, getEntity } from './entities';
 
 const INITIAL_STATE = new Map({
-  likingResources: new Map(),
-  unlikingResources: new Map(),
+  loadingResources: new Map(),
 });
 
 const TYPES = {
   LIKE: 'fetch::likes/LIKE',
   UNLIKE: 'fetch::likes/UNLIKE',
-  SET_LIKING_RESOURCE: 'likes/SET_LIKING_RESOURCE',
-  SET_UNLIKING_RESOURCE: 'likes/SET_UNLIKING_RESOURCE',
 };
 
-function setLoadingResourceFactory(type) {
-  return (collectionName, resourceId) => ({
-    type,
-    payload: {
-      collectionName,
-      resourceId,
-    },
-  });
-}
-
-const setLikingResource = setLoadingResourceFactory(TYPES.SET_LIKING_RESOURCE);
-
-const setUnlikingResource = setLoadingResourceFactory(TYPES.SET_UNLIKING_RESOURCE);
-
 export function like(collectionName, resourceId) {
-  return (dispatch, getState) => {
-    dispatch(setLikingResource(collectionName, resourceId));
-    return dispatch({
+  return (dispatch, getState) =>
+    dispatch({
       type: TYPES.LIKE,
       payload: {
         method: 'POST',
@@ -44,13 +26,11 @@ export function like(collectionName, resourceId) {
       entity.likedByCurrentUser = true;
       dispatch(updateEntities(collectionName, { [resourceId]: { ...entity } }));
     });
-  };
 }
 
 export function unlike(collectionName, resourceId) {
-  return (dispatch, getState) => {
-    dispatch(setUnlikingResource(collectionName, resourceId));
-    return dispatch({
+  return (dispatch, getState) =>
+    dispatch({
       type: TYPES.UNLIKE,
       payload: {
         method: 'DELETE',
@@ -63,31 +43,30 @@ export function unlike(collectionName, resourceId) {
       entity.likedByCurrentUser = false;
       dispatch(updateEntities(collectionName, { [resourceId]: { ...entity } }));
     });
-  };
 }
 
-function removeIdFromLoadingSet(state, loadingSetName, payload) {
-  const { collectionName, resourceId } = payload.request.urlParams;
-  return state.updateIn([loadingSetName, collectionName], ids => ids.delete(resourceId));
-}
-
-function addIdToLoadingSet(state, loadingSetName, { collectionName, resourceId }) {
+function removeIdFromLoadingSet(state, { collectionName, resourceId }) {
   return state.updateIn(
-    [loadingSetName, collectionName],
+    ['loadingResources', collectionName],
+    ids => ids.delete(resourceId),
+  );
+}
+
+function addIdToLoadingSet(state, { collectionName, resourceId }) {
+  return state.updateIn(
+    ['loadingResources', collectionName],
     ids => (ids ? ids.add(resourceId) : new Set([resourceId])),
   );
 }
 
 export default function likesReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case `${TYPES.LIKE}_PENDING`:
+    case `${TYPES.UNLIKE}_PENDING`:
+      return addIdToLoadingSet(state, action.payload.urlParams);
     case `${TYPES.LIKE}_FULFILLED`:
-      return removeIdFromLoadingSet(state, 'likingResources', action.payload);
     case `${TYPES.UNLIKE}_FULFILLED`:
-      return removeIdFromLoadingSet(state, 'unlikingResources', action.payload);
-    case TYPES.SET_LIKING_RESOURCE:
-      return addIdToLoadingSet(state, 'likingResources', action.payload);
-    case TYPES.SET_UNLIKING_RESOURCE:
-      return addIdToLoadingSet(state, 'unlikingResources', action.payload);
+      return removeIdFromLoadingSet(state, action.payload.request.urlParams);
     default:
       return state;
   }
@@ -99,21 +78,14 @@ const getCollectionName = (state, params) => params.collectionName;
 
 const getResourceId = (state, params) => params.resourceId;
 
-const getLikingIdsForCollection = createSelector(
+const getLoadingIdsForCollection = createSelector(
   getLikesData,
   getCollectionName,
-  (likesData, collectionName) => likesData.getIn(['likingResources', collectionName]) || Set(),
-);
-
-const getUnlikingIdsForCollection = createSelector(
-  getLikesData,
-  getCollectionName,
-  (likesData, collectionName) => likesData.getIn(['unlikingResources', collectionName]) || Set(),
+  (likesData, collectionName) => likesData.getIn(['loadingResources', collectionName]) || Set(),
 );
 
 export const getResourceLikeLoading = createSelector(
-  getLikingIdsForCollection,
-  getUnlikingIdsForCollection,
+  getLoadingIdsForCollection,
   getResourceId,
-  (likingIds, unlikingIds, resourceId) => likingIds.has(resourceId) || unlikingIds.has(resourceId),
+  (loadingIds, resourceId) => loadingIds.has(resourceId),
 );

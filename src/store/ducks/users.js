@@ -79,7 +79,7 @@ export default function usersReducer(state = INITIAL_STATE, action) {
       const { majorId } = action.payload.request.urlParams;
       return getPagingFns(majorId).reducer.setPage(state, action.payload);
     }
-    case TYPES.DESTROY: {
+    case `${TYPES.DESTROY}_PENDING`: {
       const { id } = action.payload.urlParams;
       return state.update('destroyingIds', ids => ids.add(id));
     }

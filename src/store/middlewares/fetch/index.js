@@ -5,7 +5,7 @@ import parseResponse from './response';
 import parseError from './errors';
 
 const fetchMiddleware = store => next => (action) => {
-  if (!action.payload || !action.payload.method) {
+  if (!action.payload || !action.payload.url || action.type.includes('REJECTED')) {
     return next(action);
   }
 
@@ -14,23 +14,31 @@ const fetchMiddleware = store => next => (action) => {
 
   const { url, ...rest } = params;
 
-  next(action);
+  const promise = window.fetch(url, rest)
+    .then(async (response) => {
+      const responseContentType = response.headers.get('content-type');
+      if (responseContentType && responseContentType.includes('text/html')) {
+        return Promise.resolve();
+      }
+
+      refreshTokens(response, store, action.type);
+      const body = response.status === 204 ? {} : await response.json();
+
+      return response.status < 400
+        ? parseResponse(body, response.headers, action.payload)
+        : parseError(body, response.status, action.payload, store);
+    });
+
   return next({
     type: action.type,
-    payload: window.fetch(url, rest)
-      .then(async (response) => {
-        const responseContentType = response.headers.get('content-type');
-        if (responseContentType && responseContentType.includes('text/html')) {
-          return Promise.resolve();
-        }
-
-        refreshTokens(response, store, action.type);
-        const body = response.status === 204 ? {} : await response.json();
-
-        return response.status < 400
-          ? parseResponse(body, response.headers, action.payload)
-          : parseError(response.status, body, store);
-      }),
+    payload: {
+      promise,
+      data: action.payload,
+    },
+  }).catch(() => {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`${action.type} caught at middleware.`);
+    }
   });
 };
 

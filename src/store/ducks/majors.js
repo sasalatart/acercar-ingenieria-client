@@ -113,7 +113,7 @@ export default function majorsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return state.set('activeIds', new Set(action.payload.result));
-    case TYPES.DESTROY: {
+    case `${TYPES.DESTROY}_PENDING`: {
       const { id } = action.payload.urlParams;
       return state.update('destroyingIds', ids => ids.add(id));
     }
