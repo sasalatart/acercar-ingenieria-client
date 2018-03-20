@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Select } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import UsersList from '../../containers/Users/List';
-import Spinner from '../Spinner';
+import DataPlaceholder from '../DataPlaceholder';
 import { majorShape } from '../../shapes';
 
 const { Option, OptGroup } = Select;
@@ -20,7 +21,6 @@ class Users extends Component {
   static propTypes = {
     admin: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
-    loading: PropTypes.bool.isRequired,
     disciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     loadMajors: PropTypes.func.isRequired,
@@ -64,6 +64,10 @@ class Users extends Component {
   renderSelect() {
     const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
 
+    if (isEmpty(disciplinaryMajors) && isEmpty(interdisciplinaryMajors)) {
+      return <DataPlaceholder />;
+    }
+
     const disciplinaryMajorOptions = this.mapMajors(disciplinaryMajors);
     const interdisciplinaryMajorOptions = this.mapMajors(interdisciplinaryMajors);
 
@@ -83,12 +87,8 @@ class Users extends Component {
 
   render() {
     const {
-      admin, majorId, loading, intl: { formatMessage: t },
+      admin, majorId, intl: { formatMessage: t },
     } = this.props;
-
-    if (loading) {
-      return <Spinner absolute />;
-    }
 
     const { searchFilter } = this.state;
     const usersListParams = admin

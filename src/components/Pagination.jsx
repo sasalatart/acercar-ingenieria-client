@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Pagination } from 'antd';
 import noop from 'lodash/noop';
-import Spinner from './Spinner';
+import DataPlaceholder from './DataPlaceholder';
 import { paginationShape } from '../shapes';
 
 const styles = {
@@ -16,6 +16,7 @@ const styles = {
 export default class PaginationControls extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     search: PropTypes.string,
     current: PropTypes.number,
     pagination: paginationShape,
@@ -64,7 +65,8 @@ export default class PaginationControls extends Component {
   }
 
   renderContent() {
-    return this.props.loading ? <Spinner /> : this.props.render();
+    const { loading, noData, render } = this.props;
+    return (loading || noData) ? <DataPlaceholder noData={noData} /> : render();
   }
 
   render() {

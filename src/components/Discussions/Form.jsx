@@ -11,7 +11,7 @@ import {
   FilesField,
   SubmitButton,
 } from '../Forms';
-import Spinner from '../Spinner';
+import DataPlaceholder from '../DataPlaceholder';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import { attachmentShape } from '../../shapes';
@@ -36,7 +36,8 @@ class DiscussionForm extends Component {
   static propTypes = {
     admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
-    discussionId: PropTypes.number,
+    noData: PropTypes.bool.isRequired,
+    id: PropTypes.number,
     previousAttachments: PropTypes.arrayOf(attachmentShape).isRequired,
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -45,7 +46,7 @@ class DiscussionForm extends Component {
   }
 
   static defaultProps = {
-    discussionId: undefined,
+    id: undefined,
   }
 
   componentWillMount() {
@@ -104,7 +105,8 @@ class DiscussionForm extends Component {
   render() {
     const {
       loading,
-      discussionId,
+      noData,
+      id,
       previousAttachments,
       valid,
       submitting,
@@ -112,8 +114,8 @@ class DiscussionForm extends Component {
       intl: { formatMessage: t },
     } = this.props;
 
-    if (loading) {
-      return <Spinner absolute />;
+    if (loading || noData) {
+      return <DataPlaceholder noData={noData} absolute />;
     }
 
     const { validators } = this.state;
@@ -123,7 +125,7 @@ class DiscussionForm extends Component {
     return (
       <div>
         <ActionBar />
-        <Title text={t({ id: `discussions.${discussionId ? 'edit' : 'new'}` })} />
+        <Title text={t({ id: `discussions.${id ? 'edit' : 'new'}` })} />
 
         <form onSubmit={handleSubmit}>
           {this.renderTopRow()}

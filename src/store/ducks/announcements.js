@@ -4,39 +4,34 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import pagingFnsFactory from './paginations';
 import { announcementsSchema } from '../../schemas';
-import {
-  getEntities,
-  removeEntity,
-} from './entities';
-import { resourceSuccessNotification } from './notifications';
+import { getEntities } from './entities';
 
-export const pagingFns = pagingFnsFactory('announcements', announcementsSchema);
+export const collection = 'announcements';
+export const pagingFns = pagingFnsFactory(collection, announcementsSchema);
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({}),
   }),
   pinned: new Set([]),
-  updatingIds: new Set([]),
-  destroyingIds: new Set([]),
 });
 
 export const TYPES = {
-  LOAD: 'fetch::announcements/LOAD',
-  LOAD_PINNED: 'fetch::announcements/LOAD_PINNED',
-  CREATE: 'fetch::announcements/CREATE',
-  UPDATE: 'fetch::announcements/UPDATE',
-  DESTROY: 'fetch::announcements/DESTROY',
+  LOAD_INDEX: 'announcements/LOAD_INDEX',
+  LOAD_PINNED: 'announcements/LOAD_PINNED',
+  CREATE: 'announcements/CREATE',
+  UPDATE: 'announcements/UPDATE',
+  DESTROY: 'announcements/DESTROY',
   ADD_TO_PAGINATION: 'announcements/ADD_TO_PAGINATION',
 };
 
 export function loadAnnouncements(page) {
   return {
-    type: TYPES.LOAD,
+    type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
       url: URI('/announcements').query({ page }).toString(),
-      urlParams: { page },
+      urlParams: { collection, page },
       responseSchema: [announcementsSchema],
     },
   };
@@ -48,6 +43,7 @@ export function loadPinnedAnnouncements() {
     payload: {
       method: 'GET',
       url: '/announcements/pinned',
+      urlParams: { collection, suffix: 'pinned' },
       responseSchema: [announcementsSchema],
     },
   };
@@ -60,12 +56,12 @@ export function createAnnouncement(body) {
       payload: {
         method: 'POST',
         url: '/announcements',
+        urlParams: { collection },
         body,
         responseSchema: announcementsSchema,
       },
     }).then(({ value: { result } }) => {
       dispatch(pagingFns.actions.addToPage(TYPES.ADD_TO_PAGINATION, result, 1));
-      dispatch(resourceSuccessNotification('announcement', 'created'));
     });
 }
 
@@ -75,7 +71,7 @@ export function updatePinned(id, pinned) {
     payload: {
       method: 'PUT',
       url: `/announcements/${id}`,
-      urlParams: { id },
+      urlParams: { collection, id },
       body: { pinned },
       responseSchema: announcementsSchema,
     },
@@ -83,23 +79,19 @@ export function updatePinned(id, pinned) {
 }
 
 export function destroyAnnouncement(id) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.DESTROY,
-      payload: {
-        method: 'DELETE',
-        url: `/announcements/${id}`,
-        urlParams: { id },
-      },
-    }).then(() => {
-      dispatch(resourceSuccessNotification('announcement', 'destroyed'));
-      dispatch(removeEntity('announcements', id));
-    });
+  return {
+    type: TYPES.DESTROY,
+    payload: {
+      method: 'DELETE',
+      url: `/announcements/${id}`,
+      urlParams: { collection, id },
+    },
+  };
 }
 
 export default function announcementsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD}_FULFILLED`:
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return pagingFns.reducer.setPage(state, action.payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
       return state.set('pinned', new Set(action.payload.result));
@@ -107,18 +99,11 @@ export default function announcementsReducer(state = INITIAL_STATE, action) {
       const { id, page } = action.payload;
       return pagingFns.reducer.addToPage(state, id, page);
     }
-    case `${TYPES.UPDATE}_PENDING`:
-      return state.update('updatingIds', ids => ids.add(action.payload.urlParams.id));
-    case `${TYPES.UPDATE}_FULFILLED`:
-      return state.update('updatingIds', ids => ids.delete(action.payload.request.urlParams.id));
-    case TYPES.DESTROY:
-      return state.update('destroyingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
       return pagingFns
         .reducer
         .removeFromPage(state, urlParams)
-        .update('destroyingIds', ids => ids.delete(urlParams.id))
         .update('pinned', ids => ids.delete(urlParams.id));
     }
     default:
@@ -138,14 +123,4 @@ export const getPinnedAnnouncementsEntities = createSelector(
   getEntities,
   (pinnedIdsList, entities) =>
     denormalize(pinnedIdsList, [announcementsSchema], entities).toJS(),
-);
-
-export const getUpdatingIds = createSelector(
-  getAnnouncementsData,
-  announcementsData => announcementsData.get('updatingIds'),
-);
-
-export const getDestroyingIds = createSelector(
-  getAnnouncementsData,
-  announcementsData => announcementsData.get('destroyingIds'),
 );

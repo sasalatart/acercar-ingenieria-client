@@ -9,10 +9,6 @@ import {
 } from './routes';
 import { getEntities } from './entities';
 
-export function getBaseResourceIdName(baseResourceName) {
-  return baseResourceName && `${baseResourceName.slice(0, -1)}Id`;
-}
-
 export default function pagingFnsFactory(resourceName, schema, options = {}) {
   const { baseResourceName, suffix } = options;
 
@@ -22,10 +18,8 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
     ? basePagingPath.concat([`${suffix}Meta`])
     : ['pagination', `${baseResourceName || 'platform'}Meta`];
 
-  const baseResourceIdName = getBaseResourceIdName(baseResourceName);
-
   const getData = state => state[resourceName];
-  const getBaseResourceId = (state, params = {}) => params[baseResourceIdName];
+  const getBaseResourceId = (state, params = {}) => params.baseResourceId;
   const getPagingPath = baseResourceId => compact([...pagingPath, baseResourceId]);
   const getMetaPath = baseResourceId => compact([...metaPath, baseResourceId]);
 
@@ -33,7 +27,7 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
     getBaseResourceId,
     getPage,
     getData,
-    (baseResourceId, page, data) =>
+    (baseResourceId, page = 1, data) =>
       data.getIn([...getPagingPath(baseResourceId), String(page)]),
   );
 
@@ -41,7 +35,7 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
     actions: {
       addToPage(type, id, page, baseResourceId) {
         return (dispatch, getState) => {
-          const currentPage = getPage(getState());
+          const currentPage = getPage(getState()) || 1;
 
           if (currentPage && currentPage !== page) {
             dispatch(addQueryToCurrentUri({ page }));
@@ -82,20 +76,15 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
 
     reducer: {
       setPage: (state, payload) => {
-        const { pagination, result, request: { urlParams } } = payload;
-        const baseResourceId = urlParams[baseResourceIdName];
+        const { pagination, result, request: { urlParams: { baseResourceId } } } = payload;
 
         const ids = new OrderedSet(result);
-
         return state
           .mergeIn(getPagingPath(baseResourceId), new Map({ [pagination.page]: ids }))
           .setIn(getMetaPath(baseResourceId), pagination);
       },
 
-      removeFromPage: (state, urlParams) => {
-        const { id } = urlParams;
-        const baseResourceId = urlParams[baseResourceIdName];
-
+      removeFromPage: (state, { id, baseResourceId }) => {
         const pages = state.getIn(getPagingPath(baseResourceId));
         if (!pages) return state;
 

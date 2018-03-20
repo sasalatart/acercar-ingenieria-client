@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Divider } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import Spinner from '../Spinner';
+import DataPlaceholder from '../DataPlaceholder';
 import DiscussionActionBar from '../../containers/Discussion/ActionBar';
 import Title from '../Layout/Title';
 import TagList from '../TagList';
@@ -65,8 +65,9 @@ export default class Discussion extends Component {
   render() {
     const { loggedIn, loading, discussion } = this.props;
 
-    if (loading) {
-      return <Spinner absolute />;
+    const noData = !loading && !discussion;
+    if (loading || noData) {
+      return <DataPlaceholder noData={noData} absolute />;
     }
 
     return (

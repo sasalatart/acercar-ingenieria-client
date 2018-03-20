@@ -15,7 +15,6 @@ export const INITIAL_STATE = new Map({
 
 const TYPES = {
   UPDATE: 'entities/UPDATE',
-  REMOVE: 'entities/REMOVE',
 };
 
 export function updateEntities(collectionName, entities) {
@@ -29,20 +28,10 @@ export function updateEntities(collectionName, entities) {
   };
 }
 
-export function removeEntity(collection, key) {
-  return {
-    type: TYPES.REMOVE,
-    payload: {
-      collection,
-      key,
-    },
-  };
-}
-
 export default function entitiesReducer(state = INITIAL_STATE, action) {
-  if (action.type === TYPES.REMOVE) {
-    const { payload: { collection, key } } = action;
-    return state.deleteIn([collection, String(key)]);
+  if (action.type.includes('DESTROY_FULFILLED')) {
+    const { collection, id } = action.payload.request.urlParams;
+    return state.deleteIn([collection, String(id)]);
   }
 
   if (!action.payload || !action.payload.entities || action.type === REHYDRATE) {
@@ -65,12 +54,12 @@ export default function entitiesReducer(state = INITIAL_STATE, action) {
 
 export const getEntities = state => state.entities;
 
-const getCollectionName = (state, params) => params.collectionName;
-const getResourceId = (state, params) => params.resourceId;
+const getCollection = (state, params) => params.collection;
+const getId = (state, params) => params.id;
 
 export const getEntity = createSelector(
   getEntities,
-  getCollectionName,
-  getResourceId,
-  (entities, collectionName, resourceId) => entities.getIn([collectionName, String(resourceId)]),
+  getCollection,
+  getId,
+  (entities, collection, id) => entities.getIn([collection, String(id)]),
 );

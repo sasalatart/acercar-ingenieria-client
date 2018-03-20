@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
-import ImportantDestroyButton from '../../../containers/Users/DestroyButton';
+import DestroyButton from '../../../containers/DestroyButton';
 import ProfileAvatar from '../../Profile/Avatar';
 import ROUTES from '../../../routes';
 import { userShape } from '../../../shapes';
@@ -30,10 +30,12 @@ function UserListItem({
 
   if (adminOrMajorAdmin) {
     const destroyButton = (
-      <ImportantDestroyButton
+      <DestroyButton
+        collection="users"
         id={user.id}
         warningMessage={t({ id: 'users.destroyWarning' })}
         textToFill={`${user.firstName} ${user.lastName}`}
+        important
         iconOnly
       />
     );

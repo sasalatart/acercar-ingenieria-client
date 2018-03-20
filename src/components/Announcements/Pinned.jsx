@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Carousel } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 import { announcementShape } from '../../shapes';
 import ButtonLink from '../../containers/ButtonLink';
-import Spinner from '../Spinner';
+import DataPlaceholder from '../DataPlaceholder';
 import ROUTES from '../../routes';
 
 const styles = {
@@ -43,23 +44,32 @@ export default class PinnedAnnouncements extends Component {
     ));
   }
 
-  render() {
-    const { admin, loading } = this.props;
+  renderContent() {
+    const { loading, announcements } = this.props;
 
-    if (loading) {
-      return <Spinner absolute />;
+    const noData = !loading && isEmpty(announcements);
+    if (loading || noData) {
+      return <DataPlaceholder noData={noData} absolute />;
     }
 
     const mappedAnnouncements = this.mapAnnouncements();
+    return mappedAnnouncements.length === 1
+      ? mappedAnnouncements
+      : <Carousel autoplay>{mappedAnnouncements}</Carousel>;
+  }
 
+  render() {
     return (
       <div>
-        {admin &&
-          <ButtonLink to={ROUTES.ANNOUNCEMENTS} icon="plus" shape="circle" style={styles.addButton} />}
-
-        {mappedAnnouncements.length === 1
-          ? mappedAnnouncements
-          : <Carousel autoplay>{mappedAnnouncements}</Carousel>}
+        {this.props.admin &&
+          <ButtonLink
+            to={ROUTES.ANNOUNCEMENTS}
+            icon="plus"
+            shape="circle"
+            style={styles.addButton}
+          />
+        }
+        {this.renderContent()}
       </div>
     );
   }

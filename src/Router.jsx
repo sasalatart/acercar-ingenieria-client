@@ -65,25 +65,25 @@ export default function Router() {
 
           <Route path="/profile" component={renderLoggedInRoute(Profile)} />
           <Route exact path="/users" component={renderAdminRoute(Users)} />
-          <Route exact path="/users/:userId" component={renderLoggedInRoute(Profile)} />
+          <Route exact path="/users/:id" component={renderLoggedInRoute(Profile)} />
 
           <Route exact path="/majors" component={Majors} />
           <Route exact path="/majors/new" render={renderAdminRoute(NewMajor)} />
           <Route exact path="/majors/:majorId/articles/new" component={renderLoggedInRoute(ArticleForm)} />
-          <Route exact path="/majors/:majorId/articles/:articleId" component={Article} />
-          <Route exact path="/majors/:majorId/articles/:articleId/edit" render={renderArticlePrivilegesRoute(ArticleForm)} />
-          <Route path="/majors/:majorId" component={Major} />
+          <Route exact path="/majors/:majorId/articles/:id" component={Article} />
+          <Route exact path="/majors/:majorId/articles/:id/edit" render={renderArticlePrivilegesRoute(ArticleForm)} />
+          <Route path="/majors/:id" component={Major} />
 
           <Route exact path="/articles" component={Articles} />
           <Route exact path="/articles/new" component={renderLoggedInRoute(ArticleForm)} />
-          <Route exact path="/articles/:articleId" component={Article} />
-          <Route exact path="/articles/:articleId/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
+          <Route exact path="/articles/:id" component={Article} />
+          <Route exact path="/articles/:id/edit" component={renderArticlePrivilegesRoute(ArticleForm)} />
 
           <Route exact path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
 
           <Route exact path="/discussions/new" component={renderLoggedInRoute(DiscussionForm)} />
-          <Route exact path="/discussions/:discussionId" component={renderLoggedInRoute(Discussion)} />
-          <Route exact path="/discussions/:discussionId/edit" component={renderDiscussionPrivilegesRoute(DiscussionForm)} />
+          <Route exact path="/discussions/:id" component={renderLoggedInRoute(Discussion)} />
+          <Route exact path="/discussions/:id/edit" component={renderDiscussionPrivilegesRoute(DiscussionForm)} />
           <Route exact path="/discussions/:mine?" render={renderLoggedInRoute(Discussions)} />
 
           <Route exact path="/about-us" component={AboutUs} />

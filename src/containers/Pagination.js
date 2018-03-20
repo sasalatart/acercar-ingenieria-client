@@ -9,7 +9,7 @@ import Pagination from '../components/Pagination';
 function mapStateToProps(state) {
   return {
     search: getSearch(state),
-    current: getPage(state),
+    current: getPage(state) || 1,
   };
 }
 

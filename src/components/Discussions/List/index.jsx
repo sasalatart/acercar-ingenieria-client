@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
 import DiscussionListItem from './Item';
 import { paginationShape, discussionShape } from '../../../shapes';
@@ -38,6 +39,7 @@ class DiscussionsList extends Component {
       <PaginationControls
         pagination={pagination}
         loading={loading}
+        noData={!loading && isEmpty(discussions)}
         loadFn={loadDiscussions}
         render={() => (
           <List

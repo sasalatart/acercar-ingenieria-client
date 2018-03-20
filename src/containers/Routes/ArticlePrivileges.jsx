@@ -6,10 +6,12 @@ import {
   getCurrentUserEntity,
 } from '../../store/ducks/sessions';
 import {
+  collection,
   loadArticle,
   getArticleEntity,
 } from '../../store/ducks/articles';
-import Spinner from '../../components/Spinner';
+import { getIsFetching } from '../../store/ducks/loading';
+import DataPlaceholder from '../../components/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
 
 class ArticlePrivileges extends Component {
@@ -24,7 +26,7 @@ class ArticlePrivileges extends Component {
 
   render() {
     if (this.props.loading) {
-      return <Spinner absolute />;
+      return <DataPlaceholder absolute />;
     }
 
     return <Restricted {...this.props} />;
@@ -32,7 +34,7 @@ class ArticlePrivileges extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { params } = ownProps.match;
+  const params = { ...ownProps.match.params, collection };
 
   const currentUser = getCurrentUserEntity(state);
   const article = getArticleEntity(state, params);
@@ -41,16 +43,16 @@ function mapStateToProps(state, ownProps) {
   const isAuthor = currentUser && article && currentUser.id === article.author.id;
 
   return {
-    loading: !article,
+    loading: !article && getIsFetching(state, params),
     restrictedCondition: adminOrMajorAdmin || isAuthor,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { majorId, articleId } = ownProps.match.params;
+  const { id, majorId } = ownProps.match.params;
 
   return {
-    loadArticle: () => dispatch(loadArticle(articleId, majorId)),
+    loadArticle: () => dispatch(loadArticle(id, majorId)),
   };
 }
 

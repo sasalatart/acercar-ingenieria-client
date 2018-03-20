@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Avatar, Icon } from 'antd';
 import WithAuthorization from '../../hoc/WithAuthorization';
-import ImportantDestroyButton from '../../containers/Majors/DestroyButton';
+import DestroyButton from '../../containers/DestroyButton';
 import { majorShape } from '../../shapes';
 import ROUTES from '../../routes';
 
@@ -34,10 +34,12 @@ function MajorItem({
     actions.push(<Link to={majorEditHref} href={majorEditHref}><Icon type="edit" /></Link>);
 
     const destroyButton = (
-      <ImportantDestroyButton
+      <DestroyButton
+        collection="majors"
         id={id}
         warningMessage={t({ id: 'majors.destroyWarning' })}
         textToFill={name}
+        important
         iconOnly
       />
     );

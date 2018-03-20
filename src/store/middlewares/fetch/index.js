@@ -35,9 +35,9 @@ const fetchMiddleware = store => next => (action) => {
       promise,
       data: action.payload,
     },
-  }).catch(() => {
+  }).catch((err) => {
     if (process.env.NODE_ENV !== 'production') {
-      console.warn(`${action.type} caught at middleware.`);
+      console.error(err);
     }
   });
 };

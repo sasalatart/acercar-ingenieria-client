@@ -1,17 +1,14 @@
-import { Map, Set } from 'immutable';
+import { Map } from 'immutable';
 import URI from 'urijs';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { goToDiscussion } from './routes';
-import {
-  removeEntity,
-  getEntities,
-} from './entities';
+import { getEntities } from './entities';
 import pagingFnsFactory from './paginations';
-import { resourceSuccessNotification } from './notifications';
 import { discussionsSchema } from '../../schemas';
 
-const commonArgs = ['discussions', discussionsSchema];
+export const collection = 'discussions';
+const commonArgs = [collection, discussionsSchema];
 const forumPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'forum' });
 const myPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'mine' });
 
@@ -19,16 +16,15 @@ const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({}),
   }),
-  destroyingIds: new Set([]),
 });
 
 const TYPES = {
-  LOAD_INDEX: 'fetch::discussions/LOAD_INDEX',
-  LOAD_MINE: 'fetch::discussions/LOAD_MINE',
-  LOAD: 'fetch::discussions/LOAD',
-  CREATE: 'fetch::discussions/CREATE',
-  UPDATE: 'fetch::discussions/UPDATE',
-  DESTROY: 'fetch::discussions/DESTROY',
+  LOAD_INDEX: 'discussions/LOAD_INDEX',
+  LOAD_MINE: 'discussions/LOAD_MINE',
+  LOAD: 'discussions/LOAD',
+  CREATE: 'discussions/CREATE',
+  UPDATE: 'discussions/UPDATE',
+  DESTROY: 'discussions/DESTROY',
 };
 
 export function getPagingFns(mine) {
@@ -43,7 +39,7 @@ export function loadDiscussions(page = 1, mine) {
     payload: {
       method: 'GET',
       url: URI(`/discussions${urlSuffix}`).query({ page }).toString(),
-      urlParams: { page },
+      urlParams: { collection, page, suffix: mine ? 'mine' : undefined },
       responseSchema: [discussionsSchema],
     },
   };
@@ -55,7 +51,7 @@ export function loadDiscussion(id) {
     payload: {
       method: 'GET',
       url: `/discussions/${id}`,
-      urlParams: { id },
+      urlParams: { collection, id },
       responseSchema: discussionsSchema,
     },
   };
@@ -68,11 +64,11 @@ export function createDiscussion(body) {
       payload: {
         method: 'POST',
         url: '/discussions',
+        urlParams: { collection },
         body,
         responseSchema: discussionsSchema,
       },
     }).then(({ value: { result } }) => {
-      dispatch(resourceSuccessNotification('discussion', 'created'));
       dispatch(goToDiscussion(result));
     });
 }
@@ -84,29 +80,23 @@ export function updateDiscussion(id, body) {
       payload: {
         method: 'PUT',
         url: `/discussions/${id}`,
-        urlParams: { id },
+        urlParams: { collection, id },
         body,
         responseSchema: discussionsSchema,
       },
     }).then(() => {
-      dispatch(resourceSuccessNotification('discussion', 'updated'));
       dispatch(goToDiscussion(id));
     });
 }
 
 export function destroyDiscussion(id) {
-  return (dispatch) => {
-    dispatch({
-      type: TYPES.DESTROY,
-      payload: {
-        method: 'DELETE',
-        url: `/discussions/${id}`,
-        urlParams: { id },
-      },
-    }).then(() => {
-      dispatch(resourceSuccessNotification('discussion', 'destroyed'));
-      dispatch(removeEntity('discussions', id));
-    });
+  return {
+    type: TYPES.DESTROY,
+    payload: {
+      method: 'DELETE',
+      url: `/discussions/${id}`,
+      urlParams: { collection, id },
+    },
   };
 }
 
@@ -116,30 +106,20 @@ export default function discussionsReducer(state = INITIAL_STATE, action) {
       return forumPagingFns.reducer.setPage(state, action.payload);
     case `${TYPES.LOAD_MINE}_FULFILLED`:
       return myPagingFns.reducer.setPage(state, action.payload);
-    case `${TYPES.DESTROY}_PENDING`:
-      return state.update('destroyingIds', ids => ids.add(action.payload.urlParams.id));
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
       const fromForum = forumPagingFns.reducer.removeFromPage(state, urlParams);
-      const fromMine = myPagingFns.reducer.removeFromPage(fromForum, urlParams);
-      return fromMine.update('destroyingIds', ids => ids.delete(urlParams.id));
+      return myPagingFns.reducer.removeFromPage(fromForum, urlParams);
     }
     default:
       return state;
   }
 }
 
-const getDiscussionsData = state => state.discussions;
-
-const getDiscussionId = (state, params) => params.discussionId;
+const getId = (state, params) => params.id;
 
 export const getDiscussionEntity = createSelector(
-  getDiscussionId,
+  getId,
   getEntities,
   (discussionId, entities) => denormalize(discussionId, discussionsSchema, entities),
-);
-
-export const getDestroyingIds = createSelector(
-  getDiscussionsData,
-  discussionsData => discussionsData.get('destroyingIds'),
 );

@@ -17,6 +17,7 @@ import discussions from './discussions';
 import categories from './categories';
 import comments from './comments';
 import likes from './likes';
+import loading from './loading';
 
 const appReducer = combineReducers({
   router: routerReducer,
@@ -34,6 +35,7 @@ const appReducer = combineReducers({
   categories,
   comments,
   likes,
+  loading,
 });
 
 const TO_KEEP_ON_SIGN_OUT = ['i18n', 'announcements'];

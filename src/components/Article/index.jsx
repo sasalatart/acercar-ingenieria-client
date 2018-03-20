@@ -5,7 +5,7 @@ import { intlShape } from 'react-intl';
 import { Row, Col, Divider } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import Spinner from '../Spinner';
+import DataPlaceholder from '../DataPlaceholder';
 import ArticleActionBar from '../../containers/Article/ActionBar';
 import Title from '../Layout/Title';
 import SubTitle from '../Layout/SubTitle';
@@ -88,8 +88,9 @@ export default class Article extends Component {
   render() {
     const { loggedIn, loading, article } = this.props;
 
-    if (loading) {
-      return <Spinner absolute />;
+    const noData = !loading && !article;
+    if (loading || noData) {
+      return <DataPlaceholder noData={noData} absolute />;
     }
 
     return (

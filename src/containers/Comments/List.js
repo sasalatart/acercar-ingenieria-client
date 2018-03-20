@@ -1,20 +1,25 @@
 import { connect } from 'react-redux';
-import { getBaseResourceIdName } from '../../store/ducks/paginations';
+import isEmpty from 'lodash/isEmpty';
 import {
+  collection,
   loadComments,
   getPagingFns,
 } from '../../store/ducks/comments';
+import { getIsFetching } from '../../store/ducks/loading';
 import CommentsList from '../../components/Comments/List';
 
 function mapStateToProps(state, ownProps) {
   const { baseResourceName, baseResourceId } = ownProps;
 
-  const params = { [getBaseResourceIdName(baseResourceName)]: baseResourceId };
+  const params = {
+    collection, baseResourceName, baseResourceId, paged: true,
+  };
+
   const pagingFns = getPagingFns(baseResourceName);
   const comments = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !comments || !comments.length,
+    loading: isEmpty(comments) && getIsFetching(state, params),
     pagination: pagingFns.selectors.getMeta(state, params),
     comments,
   };

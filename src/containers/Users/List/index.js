@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import isEmpty from 'lodash/isEmpty';
 import {
+  getCollectionParams,
   loadUsers,
   getPagingFns as getUsersPagingFns,
 } from '../../../store/ducks/users';
@@ -10,11 +12,12 @@ import {
   getPagingFns as getAdminsPagingFns,
   getSelectedUserEntity,
 } from '../../../store/ducks/admins';
+import { getIsFetching } from '../../../store/ducks/loading';
 import UsersList from '../../../components/Users/List';
 
 function mapStateToProps(state, ownProps) {
   const { majorId, admins } = ownProps;
-  const params = { majorId };
+  const params = { ...getCollectionParams(majorId, admins), paged: true };
 
   const pagingFns = admins
     ? getAdminsPagingFns(majorId)
@@ -23,7 +26,7 @@ function mapStateToProps(state, ownProps) {
   const users = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !users || !users.length,
+    loading: isEmpty(users) && getIsFetching(state, params),
     pagination: pagingFns.selectors.getMeta(state, params),
     users,
     selectedUser: getSelectedUserEntity(state),

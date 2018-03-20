@@ -4,7 +4,8 @@ import { intlShape } from 'react-intl';
 import { Collapse, Button } from 'antd';
 import Linkify from 'react-linkify';
 import get from 'lodash/get';
-import DestroyButton from '../../../containers/Questions/DestroyButton';
+import isEmpty from 'lodash/isEmpty';
+import DestroyButton from '../../../containers/DestroyButton';
 import PaginationControls from '../../../containers/Pagination';
 import IconText from '../../IconText';
 import { paginationShape, questionShape } from '../../../shapes';
@@ -69,7 +70,7 @@ export default class QuestionsList extends Component {
             <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
               {t({ id: 'forms.edit' })}
             </Button>
-            <DestroyButton id={id} majorId={get(majorSummary, 'id')} />
+            <DestroyButton collection="questions" id={id} baseResourceId={get(majorSummary, 'id')} />
           </div>
         }
       </Panel>
@@ -85,6 +86,7 @@ export default class QuestionsList extends Component {
       <PaginationControls
         pagination={pagination}
         loading={loading}
+        noData={!loading && isEmpty(questions)}
         loadFn={loadQuestions}
         render={() => (
           <Collapse bordered={false}>

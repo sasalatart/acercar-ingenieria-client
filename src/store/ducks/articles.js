@@ -1,17 +1,14 @@
-import { Map, Set } from 'immutable';
+import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
-import {
-  removeEntity,
-  getEntities,
-} from './entities';
+import { getEntities } from './entities';
 import pagingFnsFactory from './paginations';
-import { resourceSuccessNotification } from './notifications';
 import { goToArticle } from './routes';
 import { articlesSchema } from '../../schemas';
 
-const commonArgs = ['articles', articlesSchema];
+export const collection = 'articles';
+const commonArgs = [collection, articlesSchema];
 const platformPagingFns = pagingFnsFactory(...commonArgs);
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 
@@ -20,17 +17,23 @@ const INITIAL_STATE = new Map({
     platform: new Map({}),
     majors: new Map({}),
   }),
-  destroyingIds: new Set([]),
 });
 
 const TYPES = {
-  LOAD_INDEX: 'fetch::articles/LOAD_INDEX',
-  LOAD: 'fetch::articles/LOAD',
-  CREATE: 'fetch::articles/CREATE',
-  UPDATE: 'fetch::articles/UPDATE',
-  DESTROY: 'fetch::articles/DESTROY',
-  SET_DESTROYING: 'articles/SET_DESTROYING',
+  LOAD_INDEX: 'articles/LOAD_INDEX',
+  LOAD: 'articles/LOAD',
+  CREATE: 'articles/CREATE',
+  UPDATE: 'articles/UPDATE',
+  DESTROY: 'articles/DESTROY',
 };
+
+export function getCollectionParams(majorId) {
+  return {
+    collection,
+    baseResourceName: majorId && 'majors',
+    baseResourceId: majorId,
+  };
+}
 
 export function loadArticles(page = 1, majorId) {
   const uri = majorId
@@ -42,7 +45,7 @@ export function loadArticles(page = 1, majorId) {
     payload: {
       method: 'GET',
       url: uri.query({ page }).toString(),
-      urlParams: { page, majorId },
+      urlParams: { page, ...getCollectionParams(majorId) },
       responseSchema: [articlesSchema],
     },
   };
@@ -54,7 +57,7 @@ export function loadArticle(id, majorId) {
     payload: {
       method: 'GET',
       url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-      urlParams: { majorId, id },
+      urlParams: { id, ...getCollectionParams(majorId) },
       responseSchema: articlesSchema,
     },
   };
@@ -67,52 +70,39 @@ export function createArticle(body, majorId) {
       payload: {
         method: 'POST',
         url: majorId ? `/majors/${majorId}/articles` : '/articles',
+        urlParams: getCollectionParams(majorId),
         body,
         responseSchema: articlesSchema,
       },
     }).then(({ value: { result } }) => {
-      dispatch(resourceSuccessNotification('article', 'created'));
       dispatch(goToArticle(result, majorId));
     });
 }
 
-export function updateArticle(body, articleId, majorId) {
+export function updateArticle(id, body, majorId) {
   return dispatch =>
     dispatch({
       type: TYPES.UPDATE,
       payload: {
         method: 'PUT',
-        url: majorId ? `/majors/${majorId}/articles/${articleId}` : `/articles/${articleId}`,
+        url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
+        urlParams: { id, ...getCollectionParams(majorId) },
         body,
         responseSchema: articlesSchema,
       },
     }).then(() => {
-      dispatch(resourceSuccessNotification('article', 'updated'));
-      dispatch(goToArticle(articleId, majorId));
+      dispatch(goToArticle(id, majorId));
     });
-}
-
-function setDestroyingArticle(id) {
-  return {
-    type: TYPES.SET_DESTROYING,
-    payload: { id },
-  };
 }
 
 export function destroyArticle(id, majorId) {
-  return (dispatch) => {
-    dispatch(setDestroyingArticle(id));
-    return dispatch({
-      type: TYPES.DESTROY,
-      payload: {
-        method: 'DELETE',
-        url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-        urlParams: { id, majorId },
-      },
-    }).then(() => {
-      dispatch(resourceSuccessNotification('article', 'destroyed'));
-      dispatch(removeEntity('articles', id));
-    });
+  return {
+    type: TYPES.DESTROY,
+    payload: {
+      method: 'DELETE',
+      url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
+      urlParams: { id, ...getCollectionParams(majorId) },
+    },
   };
 }
 
@@ -123,33 +113,23 @@ export function getPagingFns(isOfMajor) {
 export default function articlesReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`: {
-      const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(majorId).reducer.setPage(state, action.payload);
+      const { baseResourceId } = action.payload.request.urlParams;
+      return getPagingFns(baseResourceId).reducer.setPage(state, action.payload);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
       const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
-      const fromPlatform = platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
-      return fromPlatform.update('destroyingIds', ids => ids.delete(urlParams.id));
+      return platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
     }
-    case TYPES.SET_DESTROYING:
-      return state.update('destroyingIds', ids => ids.add(action.payload.id));
     default:
       return state;
   }
 }
 
-const getArticlesData = state => state.articles;
-
-const getArticleId = (state, params) => params.articleId;
+const getId = (state, params) => params.id;
 
 export const getArticleEntity = createSelector(
-  getArticleId,
+  getId,
   getEntities,
   (articleId, entities) => denormalize(articleId, articlesSchema, entities),
-);
-
-export const getDestroyingIds = createSelector(
-  getArticlesData,
-  articlesData => articlesData.get('destroyingIds'),
 );

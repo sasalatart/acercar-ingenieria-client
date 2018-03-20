@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { List, Icon } from 'antd';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
-import DestroyButton from '../../../containers/Discussions/DestroyButton';
+import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import DateWithFormat from '../../DateWithFormat';
 import TagList from '../../TagList';
@@ -43,8 +43,8 @@ function DiscussionListItem({
     <IconText type="eye" text={impressionsCount} />,
     <IconText type="message" text={commentsCount} />,
     <LikeButton
-      collectionName="discussions"
-      resourceId={id}
+      collection="discussions"
+      id={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
       iconOnly
@@ -52,7 +52,7 @@ function DiscussionListItem({
   ];
 
   if (admin) {
-    actions.push(<DestroyButton id={id} iconOnly />);
+    actions.push(<DestroyButton collection="discussions" id={id} iconOnly />);
   }
 
   const titleHref = ROUTES.DISCUSSION(id);

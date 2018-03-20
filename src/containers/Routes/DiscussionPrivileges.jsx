@@ -6,10 +6,12 @@ import {
   getCurrentUserEntity,
 } from '../../store/ducks/sessions';
 import {
+  collection,
   loadDiscussion,
   getDiscussionEntity,
 } from '../../store/ducks/discussions';
-import Spinner from '../../components/Spinner';
+import { getIsFetching } from '../../store/ducks/loading';
+import DataPlaceholder from '../../components/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
 
 class DiscussionPrivileges extends Component {
@@ -24,7 +26,7 @@ class DiscussionPrivileges extends Component {
 
   render() {
     if (this.props.loading) {
-      return <Spinner absolute />;
+      return <DataPlaceholder absolute />;
     }
 
     return <Restricted {...this.props} />;
@@ -32,7 +34,7 @@ class DiscussionPrivileges extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const { params } = ownProps.match;
+  const params = { ...ownProps.match.params, collection };
 
   const currentUser = getCurrentUserEntity(state);
   const discussion = getDiscussionEntity(state, params);
@@ -40,16 +42,16 @@ function mapStateToProps(state, ownProps) {
   const isAuthor = currentUser && discussion && currentUser.id === discussion.author.id;
 
   return {
-    loading: !discussion,
+    loading: !discussion && getIsFetching(state, params),
     restrictedCondition: getIsAdmin(state) || isAuthor,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { discussionId } = ownProps.match.params;
+  const { id } = ownProps.match.params;
 
   return {
-    loadDiscussion: () => dispatch(loadDiscussion(discussionId)),
+    loadDiscussion: () => dispatch(loadDiscussion(id)),
   };
 }
 

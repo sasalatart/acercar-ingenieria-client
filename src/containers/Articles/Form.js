@@ -14,10 +14,12 @@ import {
   getCategoryOptions,
 } from '../../store/ducks/categories';
 import {
+  collection,
   createArticle,
   updateArticle,
   getArticleEntity,
 } from '../../store/ducks/articles';
+import { getIsFetching } from '../../store/ducks/loading';
 import articlePlaceholder from '../../images/article.png';
 import ArticleForm from '../../components/Articles/Form';
 
@@ -26,19 +28,19 @@ const FIELDS = [
 ];
 
 function mapStateToProps(state, ownProps) {
-  const { params } = ownProps.match;
-  const articleId = +params.articleId;
+  const params = { ...ownProps.match.params, collection };
+  const id = +params.id;
   const majorId = +params.majorId;
 
   const article = getArticleEntity(state, params);
   const majorOptions = getMajorOptions(state);
   const categoryOptions = getCategoryOptions(state);
-  const loading = (!!articleId && !article) || !majorOptions.length || !categoryOptions.length;
+  const loading = getIsFetching(state, params) || !majorOptions.length || !categoryOptions.length;
 
   return {
-    articleId,
+    id,
     loading,
-    initialValues: articleId ? omitBy(pick(article, FIELDS), isNil) : { majorId },
+    initialValues: id ? omitBy(pick(article, FIELDS), isNil) : { majorId },
     majorOptions,
     categoryOptions,
     currentPictureURL: get(article, 'picture.medium', articlePlaceholder),
@@ -62,12 +64,12 @@ const form = reduxForm({
   form: 'article',
   enableReinitialize: true,
   onSubmit: (values, dispatch, props) => {
-    const { articleId } = props.match.params;
+    const { id } = props.match.params;
 
     const processedValues = processValues(values);
-    const action = articleId
-      ? updateArticle(processedValues, articleId, processedValues.majorId)
-      : createArticle(processedValues, articleId);
+    const action = id
+      ? updateArticle(id, processedValues, processedValues.majorId)
+      : createArticle(processedValues, processedValues.majorId);
 
     return dispatch(action);
   },

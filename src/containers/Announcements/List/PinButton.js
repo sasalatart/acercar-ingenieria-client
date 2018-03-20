@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import {
-  updatePinned,
-  getUpdatingIds,
-} from '../../../store/ducks/announcements';
+import { updatePinned } from '../../../store/ducks/announcements';
+import { getIsUpdating } from '../../../store/ducks/loading';
 import PinButton from '../../../components/Announcements/List/PinButton';
 
 function mapStateToProps(state, ownProps) {
+  const params = { collection: 'announcements', id: ownProps.id };
+
   return {
-    loading: getUpdatingIds(state).has(ownProps.id),
+    loading: getIsUpdating(state, params),
   };
 }
 

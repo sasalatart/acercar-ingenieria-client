@@ -7,7 +7,8 @@ import { getEntities } from './entities';
 import pagingFnsFactory from './paginations';
 import { TYPES as USERS_TYPES } from './users';
 
-const commonArgs = ['admins', usersSchema];
+const collection = 'admins';
+const commonArgs = [collection, usersSchema];
 const platformPagingFns = pagingFnsFactory(...commonArgs);
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 
@@ -22,14 +23,22 @@ const INITIAL_STATE = Map({
 });
 
 const TYPES = {
-  LOAD: 'fetch::admins/LOAD',
+  LOAD_INDEX: 'admins/LOAD_INDEX',
   SET_SELECTED_USER: 'admins/SET_SELECTED_USER',
   UNSET_SELECTED_USER: 'admins/UNSET_SELECTED_USER',
-  PROMOTE_TO_PLATFORM: 'fetch::admins/PROMOTE_TO_PLATFORM',
-  PROMOTE_TO_MAJOR: 'fetch::admins/PROMOTE_TO_MAJOR',
-  DEMOTE_FROM_PLATFORM: 'fetch::admins/DEMOTE_FROM_PLATFORM',
-  DEMOTE_FROM_MAJOR: 'fetch::admins/DEMOTE_FROM_MAJOR',
+  PROMOTE_TO_PLATFORM: 'admins/PROMOTE_TO_PLATFORM',
+  PROMOTE_TO_MAJOR: 'admins/PROMOTE_TO_MAJOR',
+  DEMOTE_FROM_PLATFORM: 'admins/DEMOTE_FROM_PLATFORM',
+  DEMOTE_FROM_MAJOR: 'admins/DEMOTE_FROM_MAJOR',
 };
+
+export function getCollectionParams(majorId) {
+  return {
+    collection,
+    baseResourceName: majorId && 'majors',
+    baseResourceId: majorId,
+  };
+}
 
 export function getPagingFns(isOfMajor) {
   return isOfMajor ? majorsPagingFns : platformPagingFns;
@@ -39,11 +48,11 @@ export function loadAdmins(page, majorId) {
   const baseUrl = majorId ? `/majors/${majorId}/admins` : 'users/admins';
 
   return {
-    type: TYPES.LOAD,
+    type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
       url: URI(baseUrl).query({ page }).toString(),
-      urlParams: { page, majorId },
+      urlParams: { page, ...getCollectionParams(majorId) },
       responseSchema: [usersSchema],
     },
   };
@@ -92,9 +101,9 @@ export function demoteFromAdmin(id, majorId) {
 
 export default function adminsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD}_FULFILLED`: {
-      const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(majorId).reducer.setPage(state, action.payload);
+    case `${TYPES.LOAD_INDEX}_FULFILLED`: {
+      const { baseResourceId } = action.payload.request.urlParams;
+      return getPagingFns(baseResourceId).reducer.setPage(state, action.payload);
     }
     case TYPES.SET_SELECTED_USER:
       return state.set('selectedUserId', action.payload.id);

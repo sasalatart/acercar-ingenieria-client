@@ -1,20 +1,23 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import isEmpty from 'lodash/isEmpty';
 import { goToUser } from '../../store/ducks/routes';
 import {
+  getCollectionParams,
   loadAdmins,
   getPagingFns,
 } from '../../store/ducks/admins';
+import { getIsFetching } from '../../store/ducks/loading';
 import MajorAdmins from '../../components/Major/Admins';
 
 function mapStateToProps(state, ownProps) {
-  const params = { majorId: ownProps.majorId };
-  const pagingFns = getPagingFns(params.majorId);
+  const params = { ...getCollectionParams(ownProps.majorId), paged: true };
+  const pagingFns = getPagingFns(ownProps.majorId);
 
   const majorAdmins = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !majorAdmins || !majorAdmins.length,
+    loading: isEmpty(majorAdmins) && getIsFetching(state, params),
     pagination: pagingFns.selectors.getMeta(state, params),
     majorAdmins,
   };

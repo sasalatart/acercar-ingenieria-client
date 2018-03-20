@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
 import ArticleListItem from './Item';
 import { paginationShape, articleShape } from '../../../shapes';
@@ -23,18 +24,21 @@ export default class ArticlesList extends Component {
   )
 
   render() {
-    const { loading, pagination, loadArticles } = this.props;
+    const {
+      loading, pagination, articles, loadArticles,
+    } = this.props;
 
     return (
       <PaginationControls
         pagination={pagination}
         loading={loading}
+        noData={!loading && isEmpty(articles)}
         loadFn={loadArticles}
         render={() => (
           <List
             itemLayout="vertical"
             size="large"
-            dataSource={this.props.articles}
+            dataSource={articles}
             renderItem={this.renderListItem}
           />
         )}

@@ -5,7 +5,6 @@ import { userShape } from '../../../shapes';
 import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
-import Spinner from '../../Spinner';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import Title from '../../Layout/Title';
 import SubTitle from '../../Layout/SubTitle';
@@ -23,10 +22,6 @@ const styles = {
 };
 
 function ProfileInfo({ user, intl: { formatMessage: t } }) {
-  if (!user) {
-    return <Spinner absolute />;
-  }
-
   return (
     <div>
       <ActionBar />

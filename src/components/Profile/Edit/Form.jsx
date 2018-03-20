@@ -11,7 +11,7 @@ import {
   SelectField,
   SubmitButton,
 } from '../../Forms';
-import Spinner from '../../Spinner';
+import DataPlaceholder from '../../DataPlaceholder';
 import usersValidations from '../../../validations/users';
 import { majorShape } from '../../../shapes';
 import { colors } from '../../../theme';
@@ -105,7 +105,7 @@ class ProfileEditForm extends Component {
     } = this.props;
 
     if (!majors) {
-      return <Spinner absolute />;
+      return <DataPlaceholder absolute />;
     }
 
     const { validators } = this.state;

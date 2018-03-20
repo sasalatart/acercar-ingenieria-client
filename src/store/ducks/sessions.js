@@ -19,13 +19,12 @@ const INITIAL_STATE = new Map({
 
 export const TYPES = {
   SET_TOKENS: 'sessions/SET_TOKENS',
-  SIGN_IN: 'fetch::sessions/SIGN_IN',
-  SIGN_UP: 'fetch::sessions/SIGN_UP',
-  CONFIRM_EMAIL: 'fetch::/sessions/CONFIRM_EMAIL',
-  SIGN_OUT: 'fetch::sessions/SIGN_OUT',
-  UPDATE: 'fetch::users/UPDATE',
-  CHANGE_PASSWORD: 'fetch::users/CHANGE_PASSWORD',
-  SET_TAB: 'users/SET_TAB',
+  SIGN_IN: 'sessions/SIGN_IN',
+  SIGN_UP: 'sessions/SIGN_UP',
+  CONFIRM_EMAIL: 'sessions/CONFIRM_EMAIL',
+  SIGN_OUT: 'sessions/SIGN_OUT',
+  UPDATE: 'sessions/UPDATE',
+  CHANGE_PASSWORD: 'sessions/CHANGE_PASSWORD',
 };
 
 export function setTokens(tokens) {
@@ -90,18 +89,18 @@ export function signOut() {
   };
 }
 
-export function updateProfile(userId, body) {
+export function updateProfile(id, body) {
   return async dispatch =>
     dispatch({
       type: TYPES.UPDATE,
       payload: {
         method: 'PUT',
-        url: `/users/${userId}`,
+        url: `/users/${id}`,
+        urlParams: { collection: 'profiles', id },
         body,
         responseSchema: usersSchema,
       },
     }).then(() => {
-      dispatch(resourceSuccessNotification('profile', 'updated'));
       dispatch(goToProfile());
     });
 }

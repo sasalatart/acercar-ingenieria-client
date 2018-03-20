@@ -12,7 +12,7 @@ import Questions from '../Questions';
 import Articles from '../Articles';
 import Comments from '../Comments';
 import Email from './Email';
-import Spinner from '../Spinner';
+import DataPlaceholder from '../DataPlaceholder';
 import { majorShape } from '../../shapes';
 import { getMajorPaths } from '../../routes';
 import { themeStyles } from '../../theme';
@@ -29,7 +29,8 @@ class Major extends Component {
   static propTypes = {
     loggedIn: PropTypes.bool.isRequired,
     adminOrMajorAdmin: PropTypes.bool.isRequired,
-    majorId: PropTypes.number.isRequired,
+    loading: PropTypes.bool.isRequired,
+    id: PropTypes.number.isRequired,
     major: majorShape,
     activeMenuKey: PropTypes.string.isRequired,
     loadMajor: PropTypes.func.isRequired,
@@ -42,7 +43,7 @@ class Major extends Component {
   }
 
   componentDidMount() {
-    this.props.loadMajor(this.props.majorId);
+    this.props.loadMajor();
   }
 
   getMenus() {
@@ -92,8 +93,8 @@ class Major extends Component {
     };
   }
 
-  majorKeys = getMajorPaths(this.props.majorId).keys;
-  majorRoutes = getMajorPaths(this.props.majorId).routes;
+  majorKeys = getMajorPaths(this.props.id).keys;
+  majorRoutes = getMajorPaths(this.props.id).routes;
 
   renderMenuItem = ({ key, icon, text }) => (
     <Menu.Item key={key}>
@@ -104,11 +105,12 @@ class Major extends Component {
 
   render() {
     const {
-      loggedIn, adminOrMajorAdmin, majorId, major, activeMenuKey, replaceRoute,
+      loggedIn, adminOrMajorAdmin, loading, id, major, activeMenuKey, replaceRoute,
     } = this.props;
 
-    if (!major) {
-      return <Spinner absolute />;
+    const noData = !loading && !major;
+    if (loading || noData) {
+      return <DataPlaceholder noData={noData} absolute />;
     }
 
     const menus = this.getMenus();
@@ -147,7 +149,7 @@ class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.admins}
-              render={() => <MajorAdmins majorId={majorId} />}
+              render={() => <MajorAdmins majorId={id} />}
             />
           }
 
@@ -155,7 +157,7 @@ class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.users}
-              render={() => <Users majorId={majorId} />}
+              render={() => <Users majorId={id} />}
             />
           }
 
@@ -168,14 +170,14 @@ class Major extends Component {
           <Route
             exact
             path={this.majorRoutes.articles}
-            render={() => <Articles majorId={majorId} />}
+            render={() => <Articles majorId={id} />}
           />
 
           {loggedIn &&
             <Route
               exact
               path={this.majorRoutes.comments}
-              render={() => <Comments baseResourceName="majors" baseResourceId={majorId} withActionBar />}
+              render={() => <Comments baseResourceName="majors" baseResourceId={id} withActionBar />}
             />
           }
 
@@ -183,7 +185,7 @@ class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.email}
-              render={() => <Email majorId={majorId} />}
+              render={() => <Email majorId={id} />}
             />
           }
         </Content>

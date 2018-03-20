@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { List } from 'antd';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
-import DestroyButton from '../../../containers/Articles/DestroyButton';
+import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import ROUTES from '../../../routes';
 import { articleShape } from '../../../shapes';
@@ -30,8 +30,8 @@ function ArticleListItem({
   const actions = [
     <IconText type="message" text={commentsCount} />,
     <LikeButton
-      collectionName="articles"
-      resourceId={id}
+      collection="articles"
+      id={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
       iconOnly
@@ -39,7 +39,7 @@ function ArticleListItem({
   ];
 
   if (adminOrMajorAdmin) {
-    actions.push(<DestroyButton id={id} majorId={majorId} iconOnly />);
+    actions.push(<DestroyButton collection="articles" id={id} baseResourceId={majorId} iconOnly />);
   }
 
   const titleHref = ROUTES.ARTICLE(id, majorId);

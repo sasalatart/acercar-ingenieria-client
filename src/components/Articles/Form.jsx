@@ -12,7 +12,7 @@ import {
   FilesField,
   SubmitButton,
 } from '../Forms';
-import Spinner from '../Spinner';
+import DataPlaceholder from '../DataPlaceholder';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import { optionShape, attachmentShape } from '../../shapes';
@@ -83,8 +83,9 @@ class ArticleForm extends Component {
 
     const { validators } = this.state;
 
-    if (loading) {
-      return <Spinner absolute />;
+    const noData = !loading && articleId;
+    if (loading || noData) {
+      return <DataPlaceholder noData={noData} absolute />;
     }
 
     return (

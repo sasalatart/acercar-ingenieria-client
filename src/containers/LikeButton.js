@@ -21,14 +21,14 @@ const mapDispatchToProps = {
 };
 
 function mergeProps(stateProps, dispatchProps, ownProps) {
-  const { collectionName, resourceId, likedByCurrentUser } = ownProps;
+  const { collection, id, likedByCurrentUser } = ownProps;
 
   const onClickFn = likedByCurrentUser ? dispatchProps.unlike : dispatchProps.like;
 
   return {
     ...ownProps,
     ...stateProps,
-    onClick: stateProps.loggedIn ? () => onClickFn(collectionName, resourceId) : noop,
+    onClick: stateProps.loggedIn ? () => onClickFn(collection, id) : noop,
   };
 }
 

@@ -1,16 +1,13 @@
-import { Map, Set } from 'immutable';
+import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
 import { questionsSchema } from '../../schemas';
-import {
-  getEntities,
-  removeEntity,
-} from './entities';
+import { getEntities } from './entities';
 import pagingFnsFactory from './paginations';
-import { resourceSuccessNotification } from './notifications';
 
-const commonArgs = ['questions', questionsSchema];
+export const collection = 'questions';
+const commonArgs = [collection, questionsSchema];
 const answeredSuffix = { suffix: 'answered' };
 const pendingSuffix = { suffix: 'pending' };
 
@@ -25,19 +22,25 @@ const INITIAL_STATE = new Map({
     platform: new Map({}),
     majors: new Map({}),
   }),
-  destroyingIds: new Set(),
 });
 
 const TYPES = {
-  LOAD_ANSWERED: 'fetch::questions/LOAD_ANSWERED',
-  LOAD_UNANSWERED: 'fetch::questions/LOAD_UNANSWERED',
-  CREATE: 'fetch::questions/CREATE',
-  UPDATE: 'fetch::questions/UPDATE',
-  DESTROY: 'fetch::questions/DESTROY',
-  SET_DESTROYING: 'questions/SET_DESTROYING',
+  LOAD_ANSWERED: 'questions/LOAD_ANSWERED',
+  LOAD_UNANSWERED: 'questions/LOAD_UNANSWERED',
+  CREATE: 'questions/CREATE',
+  UPDATE: 'questions/UPDATE',
+  DESTROY: 'questions/DESTROY',
   ADD_TO_ANSWERED_PAGINATION: 'questions/ADD_TO_ANSWERED_PAGINATION',
   ADD_TO_UNANSWERED_PAGINATION: 'questions/ADD_TO_UNANSWERED_PAGINATION',
 };
+
+export function getCollectionParams(majorId) {
+  return {
+    collection,
+    baseResourceName: majorId && 'majors',
+    baseResourceId: majorId,
+  };
+}
 
 export function getPagingFns(isUnanswered, isOfMajor) {
   if (isOfMajor) {
@@ -53,12 +56,14 @@ export function loadQuestions(page = 1, majorId, pending) {
     ? URI(`/majors/${majorId}/questions${urlSuffix}`)
     : URI(`/questions${urlSuffix}`);
 
+  const suffix = pending ? 'pending' : 'answered';
+
   return {
     type: pending ? TYPES.LOAD_UNANSWERED : TYPES.LOAD_ANSWERED,
     payload: {
       method: 'GET',
       url: uri.query({ page }).toString(),
-      urlParams: { page, majorId },
+      urlParams: { page, ...getCollectionParams(majorId), suffix },
       responseSchema: [questionsSchema],
     },
   };
@@ -71,12 +76,11 @@ export function createQuestion(values, majorId) {
       payload: {
         method: 'POST',
         url: majorId ? `/majors/${majorId}/questions` : '/questions',
-        urlParams: { majorId },
+        urlParams: getCollectionParams(majorId),
         body: values,
         responseSchema: questionsSchema,
       },
     }).then(({ value: { result } }) => {
-      dispatch(resourceSuccessNotification('question', 'created'));
       const type = values.answer
         ? TYPES.ADD_TO_ANSWERED_PAGINATION
         : TYPES.ADD_TO_UNANSWERED_PAGINATION;
@@ -87,71 +91,52 @@ export function createQuestion(values, majorId) {
 }
 
 export function updateQuestion(values, majorId, id) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.UPDATE,
-      payload: {
-        method: 'PUT',
-        url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-        urlParams: { id, majorId },
-        body: values,
-        responseSchema: questionsSchema,
-      },
-    }).then(() => {
-      dispatch(resourceSuccessNotification('question', 'updated'));
-    });
-}
-
-function setDestroyingQuestion(id) {
   return {
-    type: TYPES.SET_DESTROYING,
-    payload: { id },
+    type: TYPES.UPDATE,
+    payload: {
+      method: 'PUT',
+      url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
+      urlParams: { id, ...getCollectionParams(majorId) },
+      body: values,
+      responseSchema: questionsSchema,
+    },
   };
 }
 
 export function destroyQuestion(id, majorId) {
-  return (dispatch) => {
-    dispatch(setDestroyingQuestion(id));
-    return dispatch({
-      type: TYPES.DESTROY,
-      payload: {
-        method: 'DELETE',
-        url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-        urlParams: { id, majorId },
-      },
-    }).then(() => {
-      dispatch(resourceSuccessNotification('question', 'destroyed'));
-      dispatch(removeEntity('questions', id));
-    });
+  return {
+    type: TYPES.DESTROY,
+    payload: {
+      method: 'DELETE',
+      url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
+      urlParams: { id, ...getCollectionParams(majorId) },
+    },
   };
 }
 
 export default function questionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_ANSWERED}_FULFILLED`: {
-      const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(false, majorId).reducer.setPage(state, action.payload);
+      const { baseResourceId } = action.payload.request.urlParams;
+      return getPagingFns(false, baseResourceId).reducer.setPage(state, action.payload);
     }
     case `${TYPES.LOAD_UNANSWERED}_FULFILLED`: {
-      const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(true, majorId).reducer.setPage(state, action.payload);
+      const { baseResourceId } = action.payload.request.urlParams;
+      return getPagingFns(true, baseResourceId).reducer.setPage(state, action.payload);
     }
     case `${TYPES.UPDATE}_FULFILLED`: {
       const { urlParams, body } = action.payload.request;
-      const pagingFns = getPagingFns(!!body.answer, urlParams.majorId);
+      const pagingFns = getPagingFns(!!body.answer, urlParams.baseResourceId);
       return pagingFns.reducer.removeFromPage(state, urlParams);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      const pendingPagingFns = getPagingFns(true, urlParams.majorId);
-      const answeredPagingFns = getPagingFns(false, urlParams.majorId);
+      const pendingPagingFns = getPagingFns(true, urlParams.baseResourceId);
+      const answeredPagingFns = getPagingFns(false, urlParams.baseResourceId);
 
       const fromPending = pendingPagingFns.reducer.removeFromPage(state, urlParams);
-      const fromAnswered = answeredPagingFns.reducer.removeFromPage(fromPending, urlParams);
-      return fromAnswered.update('destroyingIds', ids => ids.delete(urlParams.id));
+      return answeredPagingFns.reducer.removeFromPage(fromPending, urlParams);
     }
-    case TYPES.SET_DESTROYING:
-      return state.update('destroyingIds', ids => ids.add(action.payload.id));
     case TYPES.ADD_TO_ANSWERED_PAGINATION: {
       const { id, baseResourceId } = action.payload;
       return getPagingFns(false, baseResourceId).reducer.addToPage(state, id, 1, baseResourceId);
@@ -173,9 +158,4 @@ export const getQuestionEntity = createSelector(
   getQuestionId,
   getEntities,
   (questionId, entities) => denormalize(questionId, questionsSchema, entities),
-);
-
-export const getDestroyingIds = createSelector(
-  getQuestionsData,
-  questionsData => questionsData.get('destroyingIds'),
 );

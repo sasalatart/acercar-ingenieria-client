@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Button } from 'antd';
-import DestroyButton from '../../containers/Articles/DestroyButton';
+import DestroyButton from '../../containers/DestroyButton';
 import LikeButton from '../../containers/LikeButton';
 import ActionBar from '../../containers/Layout/ActionBar';
 import { articleShape } from '../../shapes';
@@ -22,8 +22,8 @@ function ArticleActionBar({
   const actions = [
     <LikeButton
       key="like"
-      collectionName="articles"
-      resourceId={id}
+      collection="articles"
+      id={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
@@ -31,7 +31,7 @@ function ArticleActionBar({
 
   if (adminOrMajorAdmin || isAuthor) {
     actions.push(<Button key="edit" type="primary" icon="edit" onClick={goToArticleEdit}>{t({ id: 'forms.edit' })}</Button>);
-    actions.push(<DestroyButton key="destroy" id={id} majorId={majorId} />);
+    actions.push(<DestroyButton key="destroy" collection="articles" id={id} baseResourceId={majorId} />);
   }
 
   return <ActionBar actions={actions} />;

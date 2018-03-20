@@ -1,22 +1,16 @@
-import { Map, Set } from 'immutable';
+import { Map } from 'immutable';
 import { reset } from 'redux-form';
 import URI from 'urijs';
-import { createSelector } from 'reselect';
 import remove from 'lodash/remove';
-import {
-  updateEntities,
-  removeEntity,
-  getEntity,
-} from './entities';
-import pagingFnsFactory, { getBaseResourceIdName } from './paginations';
+import { updateEntities, getEntity } from './entities';
+import pagingFnsFactory from './paginations';
 import { commentsSchema } from '../../schemas';
 
-const commonArgs = ['comments', commentsSchema];
+export const collection = 'comments';
+const commonArgs = [collection, commentsSchema];
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 const articlesPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'articles' });
 const discussionsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'discussions' });
-
-const collectionName = 'comments';
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
@@ -24,29 +18,15 @@ const INITIAL_STATE = new Map({
     articles: new Map({}),
     discussions: new Map({}),
   }),
-  destroyingIds: new Set(),
 });
 
 const TYPES = {
-  LOAD: 'fetch::comments/LOAD',
-  CREATE: 'fetch::comments/CREATE',
-  UPDATE: 'fetch::comments/UPDATE',
-  DESTROY: 'fetch::comments/DESTROY',
-  SET_DESTROYING: 'comments/SET_DESTROYING',
+  LOAD_INDEX: 'comments/LOAD_INDEX',
+  CREATE: 'comments/CREATE',
+  UPDATE: 'comments/UPDATE',
+  DESTROY: 'comments/DESTROY',
   ADD_TO_PAGINATION: 'comments/ADD_TO_PAGINATION',
 };
-
-function getBaseResourceName(params) {
-  if (params.majorId) return 'majors';
-  if (params.articleId) return 'articles';
-  if (params.discussionId) return 'discussions';
-
-  return undefined;
-}
-
-function getBaseResourceId(params) {
-  return params.majorId || params.articleId || params.discussionId;
-}
 
 export function getPagingFns(resourceName) {
   switch (resourceName) {
@@ -59,11 +39,13 @@ export function getPagingFns(resourceName) {
 
 export function loadComments(baseResourceName, baseResourceId, page = 1) {
   return {
-    type: TYPES.LOAD,
+    type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
       url: URI(`/${baseResourceName}/${baseResourceId}/comments`).query({ page }).toString(),
-      urlParams: { page, [getBaseResourceIdName(baseResourceName)]: baseResourceId },
+      urlParams: {
+        collection, page, baseResourceName, baseResourceId,
+      },
       responseSchema: [commentsSchema],
     },
   };
@@ -71,24 +53,18 @@ export function loadComments(baseResourceName, baseResourceId, page = 1) {
 
 function addCommentToParent(parentCommentId, childId) {
   return (dispatch, getState) => {
-    const comment = getEntity(getState(), { collectionName, resourceId: parentCommentId });
+    const comment = getEntity(getState(), { collection, id: parentCommentId });
     comment.childComments.push(childId);
-    dispatch(updateEntities(collectionName, { [parentCommentId]: { ...comment } }));
+    dispatch(updateEntities(collection, { [parentCommentId]: { ...comment } }));
   };
 }
 
-function removeCommentFromStore(id) {
+function removeCommentFromParent(id, parentCommentId) {
   return (dispatch, getState) => {
     const state = getState();
-    const comment = getEntity(state, { collectionName, resourceId: id });
-
-    if (comment.parentCommentId) {
-      const parent = getEntity(state, { collectionName, resourceId: comment.parentCommentId });
-      remove(parent.childComments, childId => childId === id);
-      dispatch(updateEntities(collectionName, { [parent.id]: { ...parent } }));
-    }
-
-    dispatch(removeEntity('comments', id));
+    const parent = getEntity(state, { collection, id: parentCommentId });
+    remove(parent.childComments, childId => childId === id);
+    dispatch(updateEntities(collection, { [parent.id]: { ...parent } }));
   };
 }
 
@@ -99,7 +75,7 @@ export function createComment(body, baseResourceName, baseResourceId) {
       payload: {
         method: 'POST',
         url: `/${baseResourceName}/${baseResourceId}/comments`,
-        urlParams: { [getBaseResourceIdName(baseResourceName)]: baseResourceId },
+        urlParams: { collection, baseResourceName, baseResourceId },
         body,
         responseSchema: commentsSchema,
       },
@@ -122,55 +98,45 @@ export function updateComment(id, body, baseResourceName, baseResourceId) {
     payload: {
       method: 'PUT',
       url: `/${baseResourceName}/${baseResourceId}/comments/${id}`,
-      urlParams: { id, [getBaseResourceIdName(baseResourceName)]: baseResourceId },
+      urlParams: {
+        collection, id, baseResourceName, baseResourceId,
+      },
       body,
       responseSchema: commentsSchema,
     },
   };
 }
 
-function setDestroyingComment(id) {
-  return {
-    type: TYPES.SET_DESTROYING,
-    payload: { id },
-  };
-}
-
-export function destroyComment(id, baseResourceIdCandidates) {
+export function destroyComment(id, baseResourceName, baseResourceId, parentCommentId) {
   return (dispatch) => {
-    const baseResourceName = getBaseResourceName(baseResourceIdCandidates);
-    const baseResourceId = getBaseResourceId(baseResourceIdCandidates);
+    if (parentCommentId) {
+      dispatch(removeCommentFromParent(id, parentCommentId));
+    }
 
-    dispatch(setDestroyingComment(id));
     return dispatch({
       type: TYPES.DESTROY,
       payload: {
         method: 'DELETE',
         url: `/${baseResourceName}/${baseResourceId}/comments/${id}`,
-        urlParams: { id, [getBaseResourceIdName(baseResourceName)]: baseResourceId },
+        urlParams: {
+          collection, id, baseResourceName, baseResourceId,
+        },
       },
-    }).then(() => {
-      dispatch(removeCommentFromStore(id));
     });
   };
 }
 
 export default function commentsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD}_FULFILLED`: {
+    case `${TYPES.LOAD_INDEX}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      const pagingFns = getPagingFns(getBaseResourceName(urlParams));
+      const pagingFns = getPagingFns(urlParams.baseResourceName);
       return pagingFns.reducer.setPage(state, action.payload);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      return getPagingFns(getBaseResourceName(urlParams))
-        .reducer
-        .removeFromPage(state, urlParams)
-        .update('destroyingIds', ids => ids.delete(urlParams.id));
+      return getPagingFns(urlParams.baseResourceName).reducer.removeFromPage(state, urlParams);
     }
-    case TYPES.SET_DESTROYING:
-      return state.update('destroyingIds', ids => ids.add(action.payload.id));
     case TYPES.ADD_TO_PAGINATION: {
       const {
         baseResourceName, baseResourceId, id, page,
@@ -181,10 +147,3 @@ export default function commentsReducer(state = INITIAL_STATE, action) {
       return state;
   }
 }
-
-const getCommentsData = state => state.comments;
-
-export const getDestroyingIds = createSelector(
-  getCommentsData,
-  commentsData => commentsData.get('destroyingIds'),
-);

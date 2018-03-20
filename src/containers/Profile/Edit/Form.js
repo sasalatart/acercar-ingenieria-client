@@ -2,8 +2,14 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import pick from 'lodash/pick';
-import { updateProfile, getCurrentUserEntity } from '../../../store/ducks/sessions';
-import { loadMajors, getMajorEntities } from '../../../store/ducks/majors';
+import {
+  updateProfile,
+  getCurrentUserEntity,
+} from '../../../store/ducks/sessions';
+import {
+  loadMajors,
+  getMajorEntities,
+} from '../../../store/ducks/majors';
 import ProfileEditForm from '../../../components/Profile/Edit/Form';
 
 const FIELDS = [

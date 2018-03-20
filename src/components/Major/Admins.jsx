@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
+import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../containers/Pagination';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
@@ -53,7 +54,7 @@ class MajorAdmins extends Component {
 
   render() {
     const {
-      loading, pagination, loadAdmins, intl: { formatMessage: t },
+      loading, majorAdmins, pagination, loadAdmins, intl: { formatMessage: t },
     } = this.props;
 
     return (
@@ -64,6 +65,7 @@ class MajorAdmins extends Component {
         <PaginationControls
           pagination={pagination}
           loading={loading}
+          noData={!loading && isEmpty(majorAdmins)}
           loadFn={loadAdmins}
           render={this.renderProfileCards}
         />

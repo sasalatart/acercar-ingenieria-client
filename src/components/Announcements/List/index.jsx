@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List, Modal } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
 import Form from '../../../containers/Announcements/Form';
 import AnnouncementItem from './Item';
@@ -87,6 +88,7 @@ export default class Announcements extends Component {
         <PaginationControls
           pagination={pagination}
           loading={loading}
+          noData={!loading && isEmpty(announcements)}
           render={() => (
             <List
               grid={GRID_SETTINGS}

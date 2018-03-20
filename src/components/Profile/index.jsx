@@ -7,6 +7,7 @@ import { userShape } from '../../shapes';
 import ProfileInfo from './Info';
 import ProfileEdit from './Edit';
 import ChangePassword from './ChangePassword';
+import DataPlaceholder from '../DataPlaceholder';
 import { getProfilePaths } from '../../routes';
 import { themeStyles } from '../../theme';
 
@@ -20,7 +21,8 @@ const styles = {
 
 class Profile extends Component {
   static propTypes = {
-    userId: PropTypes.number.isRequired,
+    loading: PropTypes.bool.isRequired,
+    id: PropTypes.number.isRequired,
     user: userShape,
     currentUser: userShape.isRequired,
     activeMenuKey: PropTypes.string.isRequired,
@@ -34,7 +36,7 @@ class Profile extends Component {
   };
 
   componentWillMount() {
-    this.props.loadUser(this.props.userId);
+    this.props.loadUser();
   }
 
   getMenus() {
@@ -75,10 +77,15 @@ class Profile extends Component {
 
   render() {
     const {
-      userId, user, currentUser, activeMenuKey, replaceRoute,
+      loading, id, user, currentUser, activeMenuKey, replaceRoute,
     } = this.props;
 
-    if (userId !== currentUser.id) {
+    const noData = !loading && id && !user;
+    if (loading || noData) {
+      return <DataPlaceholder noData={noData} absolute />;
+    }
+
+    if (id !== currentUser.id) {
       return <ProfileInfo user={user} />;
     }
 

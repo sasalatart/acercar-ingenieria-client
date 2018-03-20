@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
-import DestroyButton from '../../containers/Discussions/DestroyButton';
+import DestroyButton from '../../containers/DestroyButton';
 import LikeButton from '../../containers/LikeButton';
 import ActionBar from '../../containers/Layout/ActionBar';
 import ButtonLink from '../../containers/ButtonLink';
@@ -17,8 +17,8 @@ function DiscussionActionBar({
   const actions = [
     <LikeButton
       key="like"
-      collectionName="discussions"
-      resourceId={id}
+      collection="discussions"
+      id={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
@@ -26,7 +26,7 @@ function DiscussionActionBar({
 
   if (admin || isAuthor) {
     actions.push(<ButtonLink key="edit" to={ROUTES.DISCUSSION_EDIT(id)} icon="edit" content={t({ id: 'forms.edit' })} />);
-    actions.push(<DestroyButton key="destroy" id={id} />);
+    actions.push(<DestroyButton key="destroy" collection="discussions" id={id} />);
   }
 
   return <ActionBar actions={actions} />;

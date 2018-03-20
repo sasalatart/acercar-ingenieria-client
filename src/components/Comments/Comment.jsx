@@ -4,7 +4,7 @@ import { intlShape } from 'react-intl';
 import { Button, Icon, Divider } from 'antd';
 import { commentShape } from '../../shapes';
 import LikeButton from '../../containers/LikeButton';
-import DestroyButton from '../../containers/Comments/DestroyButton';
+import DestroyButton from '../../containers/DestroyButton';
 import NewForm from '../../containers/Comments/NewForm';
 import EditForm from '../../containers/Comments/EditForm';
 import ProfileAvatar from '../Profile/Avatar';
@@ -98,8 +98,8 @@ export default class Comment extends Component {
 
     return (
       <LikeButton
-        collectionName="comments"
-        resourceId={id}
+        collection="comments"
+        id={id}
         likedByCurrentUser={likedByCurrentUser}
         likesCount={likesCount}
         iconOnly
@@ -117,13 +117,23 @@ export default class Comment extends Component {
   }
 
   renderDestroyButton() {
-    const { id, commentableType, commentableId } = this.props.comment;
-    const buttonProps = { id, [`${commentableType.toLowerCase()}Id`]: commentableId };
+    const {
+      id, commentableType, commentableId, parentCommentId,
+    } = this.props.comment;
+
+    const baseResourceName = `${commentableType.charAt(0).toLowerCase()}${commentableType.slice(1)}s`;
 
     return (
       <span>
         <Divider type="vertical" />
-        <DestroyButton {...buttonProps} iconOnly />
+        <DestroyButton
+          collection="comments"
+          id={id}
+          baseResourceName={baseResourceName}
+          baseResourceId={commentableId}
+          parentCommentId={parentCommentId}
+          iconOnly
+        />
       </span>
     );
   }

@@ -1,21 +1,27 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import pick from 'lodash/pick';
+import isEmpty from 'lodash/isEmpty';
 import {
+  getCollectionParams,
   loadQuestions,
   getPagingFns,
 } from '../../../store/ducks/questions';
+import { getIsFetching } from '../../../store/ducks/loading';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import QuestionsList from '../../../components/Questions/List';
 
 function mapStateToProps(state, ownProps) {
-  const params = pick(ownProps, 'majorId', 'pending');
+  const params = {
+    ...getCollectionParams(ownProps.majorId),
+    suffix: ownProps.pending ? 'pending' : 'answered',
+    paged: true,
+  };
 
-  const pagingFns = getPagingFns(params.pending, params.majorId);
+  const pagingFns = getPagingFns(ownProps.pending, ownProps.majorId);
   const questions = pagingFns.selectors.getPagedEntities(state, params);
 
   return {
-    loading: !questions || !questions.length,
+    loading: isEmpty(questions) && getIsFetching(state, params),
     pagination: pagingFns.selectors.getMeta(state, params),
     questions,
   };

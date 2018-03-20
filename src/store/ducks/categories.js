@@ -4,20 +4,23 @@ import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
 import { categoriesSchema } from '../../schemas';
 
+const collection = 'categories';
+
 const INITIAL_STATE = Map({
   activeCategoryIds: [],
 });
 
 const TYPES = {
-  LOAD: 'fetch::categories/LOAD',
+  LOAD_INDEX: 'categories/LOAD_INDEX',
 };
 
 export function loadCategories() {
   return {
-    type: TYPES.LOAD,
+    type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
       url: '/categories',
+      urlParams: { collection },
       responseSchema: [categoriesSchema],
     },
   };
@@ -25,7 +28,7 @@ export function loadCategories() {
 
 export default function categoriesReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD}_FULFILLED`:
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return state.set('activeCategoryIds', action.payload.result);
     default:
       return state;

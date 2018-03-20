@@ -67,7 +67,8 @@ export const getPage = createSelector(
   getSearch,
   (search) => {
     const urlSearchParams = new URLSearchParams(search);
-    return +urlSearchParams.get('page') || 1;
+    const page = urlSearchParams.get('page');
+    return page ? +urlSearchParams.get('page') : undefined;
   },
 );
 

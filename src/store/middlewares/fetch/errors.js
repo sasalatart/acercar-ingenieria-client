@@ -1,4 +1,5 @@
 import humps from 'humps';
+import pick from 'lodash/pick';
 import { getLocale } from '../../ducks/i18n';
 import {
   signOut,
@@ -22,8 +23,8 @@ function getDescription(status, body, locale) {
     return messages[locale]['errors.server'];
   }
 
-  const { message, errors } = body;
-  return message || (errors.fullMessages || errors).join(', ');
+  const { message, error, errors } = body;
+  return message || error || (errors.fullMessages || errors).join(', ');
 }
 
 export default async function parseError(body, status, payload, store) {
@@ -42,5 +43,6 @@ export default async function parseError(body, status, payload, store) {
     description: getDescription(status, camelizedBody, locale),
   }));
 
-  return Promise.reject(payload);
+  // eslint-disable-next-line prefer-promise-reject-errors
+  return Promise.reject({ request: pick(payload, 'urlParams') });
 }

@@ -7,55 +7,55 @@ const INITIAL_STATE = new Map({
 });
 
 const TYPES = {
-  LIKE: 'fetch::likes/LIKE',
-  UNLIKE: 'fetch::likes/UNLIKE',
+  LIKE: 'likes/LIKE',
+  UNLIKE: 'likes/UNLIKE',
 };
 
-export function like(collectionName, resourceId) {
+export function like(collection, id) {
   return (dispatch, getState) =>
     dispatch({
       type: TYPES.LIKE,
       payload: {
         method: 'POST',
-        url: `/${collectionName}/${resourceId}/likes`,
-        urlParams: { collectionName, resourceId },
+        url: `/${collection}/${id}/likes`,
+        urlParams: { collection, id },
       },
     }).then(() => {
-      const entity = getEntity(getState(), { collectionName, resourceId });
+      const entity = getEntity(getState(), { collection, id });
       entity.likesCount += 1;
       entity.likedByCurrentUser = true;
-      dispatch(updateEntities(collectionName, { [resourceId]: { ...entity } }));
+      dispatch(updateEntities(collection, { [id]: { ...entity } }));
     });
 }
 
-export function unlike(collectionName, resourceId) {
+export function unlike(collection, id) {
   return (dispatch, getState) =>
     dispatch({
       type: TYPES.UNLIKE,
       payload: {
         method: 'DELETE',
-        url: `/${collectionName}/${resourceId}/likes`,
-        urlParams: { collectionName, resourceId },
+        url: `/${collection}/${id}/likes`,
+        urlParams: { collection, id },
       },
     }).then(() => {
-      const entity = getEntity(getState(), { collectionName, resourceId });
+      const entity = getEntity(getState(), { collection, id });
       entity.likesCount -= 1;
       entity.likedByCurrentUser = false;
-      dispatch(updateEntities(collectionName, { [resourceId]: { ...entity } }));
+      dispatch(updateEntities(collection, { [id]: { ...entity } }));
     });
 }
 
-function removeIdFromLoadingSet(state, { collectionName, resourceId }) {
+function removeIdFromLoadingSet(state, { collection, id }) {
   return state.updateIn(
-    ['loadingResources', collectionName],
-    ids => ids.delete(resourceId),
+    ['loadingResources', collection],
+    ids => ids.delete(id),
   );
 }
 
-function addIdToLoadingSet(state, { collectionName, resourceId }) {
+function addIdToLoadingSet(state, { collection, id }) {
   return state.updateIn(
-    ['loadingResources', collectionName],
-    ids => (ids ? ids.add(resourceId) : new Set([resourceId])),
+    ['loadingResources', collection],
+    ids => (ids ? ids.add(id) : new Set([id])),
   );
 }
 
@@ -74,18 +74,18 @@ export default function likesReducer(state = INITIAL_STATE, action) {
 
 const getLikesData = state => state.likes;
 
-const getCollectionName = (state, params) => params.collectionName;
+const getCollection = (state, params) => params.collection;
 
-const getResourceId = (state, params) => params.resourceId;
+const getId = (state, params) => params.id;
 
 const getLoadingIdsForCollection = createSelector(
   getLikesData,
-  getCollectionName,
+  getCollection,
   (likesData, collectionName) => likesData.getIn(['loadingResources', collectionName]) || Set(),
 );
 
 export const getResourceLikeLoading = createSelector(
   getLoadingIdsForCollection,
-  getResourceId,
-  (loadingIds, resourceId) => loadingIds.has(resourceId),
+  getId,
+  (loadingIds, baseResourceId) => loadingIds.has(baseResourceId),
 );

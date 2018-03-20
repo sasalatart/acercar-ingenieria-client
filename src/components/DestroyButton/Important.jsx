@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { Modal, Alert, Input, Button } from 'antd';
 import DestroyIconOrButton from './IconOrButton';
 
@@ -90,4 +90,4 @@ class ImportantDestroyButton extends Component {
   }
 }
 
-export default ImportantDestroyButton;
+export default injectIntl(ImportantDestroyButton);

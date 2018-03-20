@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
 import PinButton from '../../../containers/Announcements/List/PinButton';
-import DestroyButton from '../../../containers/Announcements/List/DestroyButton';
+import DestroyButton from '../../../containers/DestroyButton';
 import { announcementShape } from '../../../shapes';
 
 const { Item } = List;
@@ -29,7 +29,7 @@ function AnnouncementItem({ announcement, onClick }) {
 
   const actions = [
     <PinButton id={announcement.id} pinned={announcement.pinned} />,
-    <DestroyButton id={announcement.id} iconOnly />,
+    <DestroyButton collection="announcements" id={announcement.id} iconOnly />,
   ];
 
   return (

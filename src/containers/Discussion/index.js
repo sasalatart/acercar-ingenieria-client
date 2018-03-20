@@ -1,27 +1,29 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import {
+  collection,
   loadDiscussion,
   getDiscussionEntity,
 } from '../../store/ducks/discussions';
+import { getIsFetching } from '../../store/ducks/loading';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import Discussion from '../../components/Discussion/index';
 
 function mapStateToProps(state, ownProps) {
-  const { discussionId } = ownProps.match.params;
-  const discussion = getDiscussionEntity(state, ownProps.match.params);
+  const params = { ...ownProps.match.params, collection };
+  const discussion = getDiscussionEntity(state, params);
 
   return {
-    loading: !!discussionId && !discussion,
+    loading: !discussion && getIsFetching(state, params),
     discussion,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { discussionId } = ownProps.match.params;
+  const { id } = ownProps.match.params;
 
   return {
-    loadDiscussion: () => dispatch(loadDiscussion(discussionId)),
+    loadDiscussion: () => dispatch(loadDiscussion(id)),
   };
 }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List, Modal } from 'antd';
+import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
 import UserListItem from '../../../containers/Users/List/Item';
 import AdminStatusPanel from '../AdminStatus/Panel';
@@ -52,6 +53,7 @@ class UsersList extends Component {
         <PaginationControls
           pagination={pagination}
           loading={loading}
+          noData={!loading && isEmpty(users)}
           loadFn={loadUsers}
           render={() => (
             <List

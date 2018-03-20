@@ -1,16 +1,13 @@
-import { Map, Set } from 'immutable';
+import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import URI from 'urijs';
-import {
-  removeEntity,
-  getEntities,
-} from './entities';
+import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 import pagingFnsFactory from './paginations';
-import { resourceSuccessNotification } from './notifications';
 
-const commonArgs = ['users', usersSchema];
+export const collection = 'users';
+const commonArgs = [collection, usersSchema];
 const platformPagingFns = pagingFnsFactory(...commonArgs);
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 
@@ -19,14 +16,21 @@ const INITIAL_STATE = Map({
     platform: new Map({}),
     majors: new Map({}),
   }),
-  destroyingIds: new Set([]),
 });
 
 export const TYPES = {
-  LOAD: 'fetch::users/LOAD',
-  LOAD_INDEX: 'fetch::users/LOAD_INDEX',
-  DESTROY: 'fetch::users/DESTROY',
+  LOAD_INDEX: 'users/LOAD_INDEX',
+  LOAD: 'users/LOAD',
+  DESTROY: 'users/DESTROY',
 };
+
+export function getCollectionParams(majorId, admins) {
+  return {
+    collection: admins ? 'admins' : collection,
+    baseResourceName: majorId && 'majors',
+    baseResourceId: majorId,
+  };
+}
 
 export function getPagingFns(majorId) {
   return majorId ? majorsPagingFns : platformPagingFns;
@@ -40,7 +44,7 @@ export function loadUsers(page, majorId) {
     payload: {
       method: 'GET',
       url: URI(baseUrl).query({ page }).toString(),
-      urlParams: { majorId, page },
+      urlParams: { ...getCollectionParams(majorId), page },
       responseSchema: [usersSchema],
     },
   };
@@ -52,42 +56,33 @@ export function loadUser(id) {
     payload: {
       method: 'GET',
       url: `/users/${id}`,
-      urlParams: { id },
+      urlParams: { collection, id },
       responseSchema: usersSchema,
     },
   };
 }
 
 export function destroyUser(id) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.DESTROY,
-      payload: {
-        method: 'DELETE',
-        url: `/users/${id}`,
-        urlParams: { id },
-      },
-    }).then(() => {
-      dispatch(removeEntity('users', id));
-      dispatch(resourceSuccessNotification('user', 'destroyed'));
-    });
+  return {
+    type: TYPES.DESTROY,
+    payload: {
+      method: 'DELETE',
+      url: `/users/${id}`,
+      urlParams: { collection, id },
+    },
+  };
 }
 
 export default function usersReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`: {
-      const { majorId } = action.payload.request.urlParams;
-      return getPagingFns(majorId).reducer.setPage(state, action.payload);
-    }
-    case `${TYPES.DESTROY}_PENDING`: {
-      const { id } = action.payload.urlParams;
-      return state.update('destroyingIds', ids => ids.add(id));
+      const { baseResourceId } = action.payload.request.urlParams;
+      return getPagingFns(baseResourceId).reducer.setPage(state, action.payload);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
       const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
-      const fromPlatform = platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
-      return fromPlatform.update('destroyingIds', ids => ids.delete(urlParams.id));
+      return platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
     }
     default:
       return state;
@@ -96,15 +91,10 @@ export default function usersReducer(state = INITIAL_STATE, action) {
 
 export const getUsersData = state => state.users;
 
-const getUserId = (state, params) => params.userId;
+const getId = (state, params) => params.id;
 
 export const getUserEntity = createSelector(
-  getUserId,
+  getId,
   getEntities,
   (userId, entities) => denormalize(userId, usersSchema, entities),
-);
-
-export const getDestroyingIds = createSelector(
-  getUsersData,
-  usersData => usersData.get('destroyingIds'),
 );

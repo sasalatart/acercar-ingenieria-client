@@ -1,32 +1,31 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import {
+  collection,
   loadArticle,
   getArticleEntity,
 } from '../../store/ducks/articles';
+import { getIsFetching } from '../../store/ducks/loading';
+import WithAuthorization from '../../hoc/WithAuthorization';
 import Article from '../../components/Article/index';
 
 function mapStateToProps(state, ownProps) {
-  const { articleId } = ownProps.match.params;
-  const article = getArticleEntity(state, ownProps.match.params);
+  const params = { ...ownProps.match.params, collection };
+  const article = getArticleEntity(state, params);
 
   return {
-    loggedIn: !!getCurrentUserEntity(state),
-    loading: !!articleId && !article,
+    loading: !article && getIsFetching(state, params),
     article,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { majorId, articleId } = ownProps.match.params;
+  const { id, majorId } = ownProps.match.params;
 
   return {
-    loadArticle: () => dispatch(loadArticle(articleId, majorId)),
+    loadArticle: () => dispatch(loadArticle(id, majorId)),
   };
 }
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Article));
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Article);
+export default injectIntl(WithAuthorization(connectedComponent));
