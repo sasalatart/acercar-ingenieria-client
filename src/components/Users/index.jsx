@@ -19,7 +19,7 @@ const styles = {
 
 class Users extends Component {
   static propTypes = {
-    admin: PropTypes.bool.isRequired,
+    withFilter: PropTypes.bool,
     majorId: PropTypes.number,
     disciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
@@ -29,6 +29,7 @@ class Users extends Component {
   }
 
   static defaultProps = {
+    withFilter: true,
     majorId: undefined,
   }
 
@@ -37,7 +38,7 @@ class Users extends Component {
   };
 
   componentDidMount() {
-    if (this.props.admin) {
+    if (this.props.withFilter) {
       this.props.loadMajors();
     }
   }
@@ -87,11 +88,11 @@ class Users extends Component {
 
   render() {
     const {
-      admin, majorId, intl: { formatMessage: t },
+      withFilter, majorId, intl: { formatMessage: t },
     } = this.props;
 
     const { searchFilter } = this.state;
-    const usersListParams = admin
+    const usersListParams = withFilter
       ? { ...searchFilter, majorId: searchFilter.majorId || majorId }
       : { majorId };
 
@@ -100,7 +101,7 @@ class Users extends Component {
         <ActionBar />
         <Title text={t({ id: 'users' })} />
 
-        {admin && this.renderSelect()}
+        {withFilter && this.renderSelect()}
         <UsersList {...usersListParams} />
       </div>
     );

@@ -6,7 +6,6 @@ import {
   getDisciplinaryMajors,
   getInterdisciplinaryMajors,
 } from '../../store/ducks/majors';
-import WithAuthorization from '../../hoc/WithAuthorization';
 import Users from '../../components/Users';
 
 function mapStateToProps(state) {
@@ -25,4 +24,4 @@ const mapDispatchToProps = {
 };
 
 const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Users);
-export default injectIntl(WithAuthorization(connectedComponent));
+export default injectIntl(connectedComponent);

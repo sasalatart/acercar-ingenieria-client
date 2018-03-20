@@ -157,7 +157,7 @@ class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.users}
-              render={() => <Users majorId={id} />}
+              render={() => <Users majorId={id} withFilter={false} />}
             />
           }
 
