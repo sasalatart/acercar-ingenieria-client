@@ -16,6 +16,7 @@ function ArticleActionBar({
   },
   adminOrMajorAdmin,
   isAuthor,
+  onDestroy,
   goToArticleEdit,
   intl: { formatMessage: t },
 }) {
@@ -31,7 +32,7 @@ function ArticleActionBar({
 
   if (adminOrMajorAdmin || isAuthor) {
     actions.push(<Button key="edit" type="primary" icon="edit" onClick={goToArticleEdit}>{t({ id: 'forms.edit' })}</Button>);
-    actions.push(<DestroyButton key="destroy" collection="articles" id={id} baseResourceId={majorId} />);
+    actions.push(<DestroyButton key="destroy" collection="articles" id={id} baseResourceId={majorId} callback={onDestroy} />);
   }
 
   return <ActionBar actions={actions} />;
@@ -41,6 +42,7 @@ ArticleActionBar.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   isAuthor: PropTypes.bool.isRequired,
   article: articleShape.isRequired,
+  onDestroy: PropTypes.func.isRequired,
   goToArticleEdit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };

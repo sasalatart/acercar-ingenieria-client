@@ -12,6 +12,7 @@ function DiscussionActionBar({
   admin,
   isAuthor,
   discussion: { id, likedByCurrentUser, likesCount },
+  onDestroy,
   intl: { formatMessage: t },
 }) {
   const actions = [
@@ -26,7 +27,7 @@ function DiscussionActionBar({
 
   if (admin || isAuthor) {
     actions.push(<ButtonLink key="edit" to={ROUTES.DISCUSSION_EDIT(id)} icon="edit" content={t({ id: 'forms.edit' })} />);
-    actions.push(<DestroyButton key="destroy" collection="discussions" id={id} />);
+    actions.push(<DestroyButton key="destroy" collection="discussions" id={id} callback={onDestroy} />);
   }
 
   return <ActionBar actions={actions} />;
@@ -36,6 +37,7 @@ DiscussionActionBar.propTypes = {
   admin: PropTypes.bool.isRequired,
   isAuthor: PropTypes.bool.isRequired,
   discussion: discussionShape.isRequired,
+  onDestroy: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 

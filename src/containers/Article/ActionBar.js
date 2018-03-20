@@ -1,6 +1,9 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { goToArticleEdit } from '../../store/ducks/routes';
+import {
+  goToArticles,
+  goToArticleEdit,
+} from '../../store/ducks/routes';
 import { getCurrentUserEntity } from '../../store/ducks/sessions';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import ArticleActionBar from '../../components/Article/ActionBar';
@@ -20,6 +23,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 
   return {
     goToArticleEdit: () => dispatch(goToArticleEdit(id, majorId)),
+    onDestroy: () => dispatch(goToArticles(majorId)),
   };
 }
 

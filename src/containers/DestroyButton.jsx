@@ -60,7 +60,8 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    onDestroy: () => dispatch(getDestroyAction(ownProps)),
+    onDestroy: () => dispatch(getDestroyAction(ownProps))
+      .then(() => ownProps.callback && ownProps.callback()),
   };
 }
 
