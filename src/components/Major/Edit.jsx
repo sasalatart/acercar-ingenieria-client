@@ -1,6 +1,6 @@
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
-import EditForm from '../../containers/Major/Form';
+import Form from '../../containers/Majors/Form';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import { majorShape } from '../../shapes';
@@ -11,7 +11,7 @@ function MajorEdit({ major, intl: { formatMessage: t } }) {
       <ActionBar />
       <Title text={t({ id: 'majors.edit' })} />
 
-      <EditForm major={major} />
+      <Form major={major} />
     </div>
   );
 }

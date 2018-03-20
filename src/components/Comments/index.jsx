@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Divider } from 'antd';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
-import NewForm from '../../containers/Comments/NewForm';
+import Form from '../../containers/Comments/Form';
 import List from '../../containers/Comments/List';
 
 function CommentsSection({
@@ -17,7 +17,7 @@ function CommentsSection({
       {withActionBar && <ActionBar />}
       <Title text={t({ id: 'comments' })} />
 
-      <NewForm {...commonProps} />
+      <Form {...commonProps} />
       <Divider />
       <List {...commonProps} />
     </div>

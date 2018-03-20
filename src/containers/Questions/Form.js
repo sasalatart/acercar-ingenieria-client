@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import pick from 'lodash/pick';
 import {
   createQuestion,
@@ -8,27 +7,31 @@ import {
   getQuestionEntity,
 } from '../../store/ducks/questions';
 import WithAuthorization from '../../hoc/WithAuthorization';
+import I18nForm from '../../hoc/I18nForm';
 import QuestionsForm from '../../components/Questions/Form';
+import questionsValidations from '../../validations/questions';
 
 const FIELDS = ['question', 'answer', 'pinned'];
 
 function mapStateToProps(state, ownProps) {
-  const initialValues = ownProps.id
-    ? pick(getQuestionEntity(state, { questionId: ownProps.id }), FIELDS)
-    : {};
-
   return {
-    initialValues,
+    initialValues: ownProps.id
+      ? pick(getQuestionEntity(state, { questionId: ownProps.id }), FIELDS)
+      : {},
   };
 }
 
 const form = reduxForm({
   form: 'question',
-  onSubmit: (values, dispatch, props) => {
-    const actionCreator = props.id ? updateQuestion : createQuestion;
-    return dispatch(actionCreator(values, props.majorId, props.id))
-      .then(() => props.onSubmitSuccess && props.onSubmitSuccess());
+  onSubmit: (values, dispatch, { id, majorId, onSubmitSuccess }) => {
+    const action = id
+      ? updateQuestion(id, values, majorId)
+      : createQuestion(values, majorId);
+
+    return dispatch(action)
+      .then(() => onSubmitSuccess && onSubmitSuccess());
   },
 })(QuestionsForm);
 
-export default injectIntl(WithAuthorization(connect(mapStateToProps)(form)));
+const connectedComponent = connect(mapStateToProps)(form);
+export default WithAuthorization(I18nForm(connectedComponent, questionsValidations));

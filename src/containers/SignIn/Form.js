@@ -1,11 +1,12 @@
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import { signIn } from '../../store/ducks/sessions';
+import I18nForm from '../../hoc/I18nForm';
 import SignInForm from '../../components/SignIn/Form';
+import usersValidations from '../../validations/users';
 
 const form = reduxForm({
   form: 'signIn',
   onSubmit: (values, dispatch) => dispatch(signIn(values)),
 })(SignInForm);
 
-export default injectIntl(form);
+export default I18nForm(form, usersValidations);

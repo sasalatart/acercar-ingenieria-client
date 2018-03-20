@@ -12,7 +12,6 @@ import {
   SubmitButton,
 } from '../../Forms';
 import DataPlaceholder from '../../DataPlaceholder';
-import usersValidations from '../../../validations/users';
 import { majorShape } from '../../../shapes';
 import { colors } from '../../../theme';
 
@@ -40,8 +39,9 @@ const fieldIcons = {
 const GUTTER = 8;
 const COLUMN_LAYOUT = { sm: 24, lg: 12 };
 
-class ProfileEditForm extends Component {
+export default class ProfileEditForm extends Component {
   static propTypes = {
+    validators: PropTypes.shape({}).isRequired,
     initialValues: PropTypes.shape({}).isRequired,
     currentAvatarURL: PropTypes.string,
     majors: PropTypes.arrayOf(majorShape),
@@ -57,19 +57,8 @@ class ProfileEditForm extends Component {
     majors: undefined,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.loadMajors();
-    this.setValidators(this.props.intl.formatMessage);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.intl.locale !== this.props.intl.locale) {
-      this.setValidators(nextProps.intl.formatMessage);
-    }
-  }
-
-  setValidators(t) {
-    this.setState({ validators: usersValidations(t) });
   }
 
   getMajorsOptions() {
@@ -101,14 +90,18 @@ class ProfileEditForm extends Component {
 
   render() {
     const {
-      currentAvatarURL, majors, valid, submitting, handleSubmit, intl: { formatMessage: t },
+      validators,
+      currentAvatarURL,
+      majors,
+      valid,
+      submitting,
+      handleSubmit,
+      intl: { formatMessage: t },
     } = this.props;
 
     if (!majors) {
       return <DataPlaceholder absolute />;
     }
-
-    const { validators } = this.state;
 
     return (
       <div>
@@ -177,11 +170,9 @@ class ProfileEditForm extends Component {
               }}
             />
           </div>
-          <SubmitButton disabled={!valid} loading={submitting} />
+          <SubmitButton disabled={!valid || submitting} loading={submitting} />
         </form>
       </div>
     );
   }
 }
-
-export default ProfileEditForm;

@@ -6,8 +6,7 @@ import Linkify from 'react-linkify';
 import { commentShape } from '../../shapes';
 import LikeButton from '../../containers/LikeButton';
 import DestroyButton from '../../containers/DestroyButton';
-import NewForm from '../../containers/Comments/NewForm';
-import EditForm from '../../containers/Comments/EditForm';
+import Form from '../../containers/Comments/Form';
 import ProfileAvatar from '../Profile/Avatar';
 import DateWithFormat from '../DateWithFormat';
 import ChildComments from './ChildComments';
@@ -74,10 +73,18 @@ export default class Comment extends Component {
 
   renderMainContent() {
     if (this.state.editing) {
+      const { comment } = this.props;
+      const baseResourceName = `${comment.commentableType.toLowerCase()}s`;
+
       return (
         <div style={styles.formWrapper}>
           <div style={styles.mainContent}>
-            <EditForm comment={this.props.comment} onSubmitSuccess={this.handleStopEditing} />
+            <Form
+              baseResourceName={baseResourceName}
+              baseResourceId={comment.commentableId}
+              comment={comment}
+              onSubmitSuccess={this.handleStopEditing}
+            />
           </div>
           {this.renderCancelButton(this.handleStopEditing)}
         </div>
@@ -195,7 +202,7 @@ export default class Comment extends Component {
     return (
       <div style={styles.formWrapper}>
         <div style={styles.mainContent}>
-          <NewForm
+          <Form
             parentCommentId={id}
             baseResourceName={baseResourceName}
             baseResourceId={commentableId}

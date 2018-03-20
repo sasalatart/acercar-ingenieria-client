@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
-import Comment from '../../containers/Comments/Comment';
-import PaginationControls from '../../containers/Pagination';
-import { paginationShape, commentShape } from '../../shapes';
+import Comment from '../../../containers/Comments/Comment';
+import PaginationControls from '../../../containers/Pagination';
+import { paginationShape, commentShape } from '../../../shapes';
 
 export default class CommentsList extends Component {
   static propTypes = {

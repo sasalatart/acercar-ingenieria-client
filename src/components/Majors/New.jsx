@@ -1,6 +1,6 @@
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
-import NewForm from '../../containers/Major/Form';
+import Form from '../../containers/Majors/Form';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 
@@ -10,7 +10,7 @@ function NewMajor({ intl: { formatMessage: t } }) {
       <ActionBar />
       <Title text={t({ id: 'majors.new' })} />
 
-      <NewForm />
+      <Form />
     </div>
   );
 }

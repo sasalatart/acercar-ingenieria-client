@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 import omitBy from 'lodash/omitBy';
@@ -13,7 +12,9 @@ import {
 } from '../../store/ducks/discussions';
 import { getIsFetching } from '../../store/ducks/loading';
 import withAuthorization from '../../hoc/WithAuthorization';
+import I18nForm from '../../hoc/I18nForm';
 import DiscussionForm from '../../components/Discussions/Form';
+import discussionsValidations from '../../validations/discussions';
 
 const FIELDS = [
   'title', 'pinned', 'description', 'tagList',
@@ -55,4 +56,5 @@ const form = reduxForm({
   },
 })(DiscussionForm);
 
-export default injectIntl(withAuthorization(connect(mapStateToProps)(form)));
+const connectedComponent = connect(mapStateToProps)(form);
+export default withAuthorization(I18nForm(connectedComponent, discussionsValidations));

@@ -1,11 +1,12 @@
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import { changePassword } from '../../../store/ducks/sessions';
-import ChangePasswordForm from '../../../components/Profile/ChangePassword/Form';
+import I18nForm from '../../../hoc/I18nForm';
+import Form from '../../../components/Profile/ChangePassword/Form';
+import usersValidations from '../../../validations/users';
 
 const form = reduxForm({
   form: 'changePassword',
   onSubmit: (values, dispatch) => dispatch(changePassword(values)),
-})(ChangePasswordForm);
+})(Form);
 
-export default injectIntl(form);
+export default I18nForm(form, usersValidations);

@@ -90,7 +90,7 @@ export function createQuestion(values, majorId) {
     });
 }
 
-export function updateQuestion(values, majorId, id) {
+export function updateQuestion(id, values, majorId) {
   return {
     type: TYPES.UPDATE,
     payload: {

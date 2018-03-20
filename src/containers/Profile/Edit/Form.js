@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import pick from 'lodash/pick';
 import {
   updateProfile,
@@ -10,7 +9,9 @@ import {
   loadMajors,
   getMajorEntities,
 } from '../../../store/ducks/majors';
+import I18nForm from '../../../hoc/I18nForm';
 import ProfileEditForm from '../../../components/Profile/Edit/Form';
+import usersValidations from '../../../validations/users';
 
 const FIELDS = [
   'email', 'firstName', 'lastName', 'generation', 'bio', 'majorUsersAttributes',
@@ -56,7 +57,5 @@ const form = reduxForm({
   )),
 })(ProfileEditForm);
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(form));
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(form);
+export default I18nForm(connectedComponent, usersValidations);

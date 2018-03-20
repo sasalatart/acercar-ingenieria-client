@@ -16,7 +16,6 @@ import DataPlaceholder from '../DataPlaceholder';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import { optionShape, attachmentShape } from '../../shapes';
-import articlesValidations from '../../validations/articles';
 
 const styles = {
   fileInputWrapper: {
@@ -29,8 +28,9 @@ const styles = {
 const GUTTER = 8;
 const COLUMN_LAYOUT = { sm: 24, lg: 12 };
 
-class ArticleForm extends Component {
+export default class ArticleForm extends Component {
   static propTypes = {
+    validators: PropTypes.shape({}).isRequired,
     loading: PropTypes.bool.isRequired,
     articleId: PropTypes.number,
     majorOptions: PropTypes.arrayOf(optionShape).isRequired,
@@ -49,26 +49,14 @@ class ArticleForm extends Component {
     articleId: undefined,
   }
 
-  componentWillMount() {
-    const { loadMajors, loadCategories, intl } = this.props;
-
-    loadMajors();
-    loadCategories();
-    this.setValidators(intl.formatMessage);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.intl.locale !== this.props.intl.locale) {
-      this.setValidators(nextProps.intl.formatMessage);
-    }
-  }
-
-  setValidators(t) {
-    this.setState({ validators: articlesValidations(t) });
+  componentDidMount() {
+    this.props.loadMajors();
+    this.props.loadCategories();
   }
 
   render() {
     const {
+      validators,
       loading,
       articleId,
       majorOptions,
@@ -80,8 +68,6 @@ class ArticleForm extends Component {
       handleSubmit,
       intl: { formatMessage: t },
     } = this.props;
-
-    const { validators } = this.state;
 
     const noData = !loading && articleId;
     if (loading || noData) {
@@ -156,11 +142,9 @@ class ArticleForm extends Component {
               </div>
             </Col>
           </Row>
-          <SubmitButton disabled={!valid} loading={submitting} />
+          <SubmitButton disabled={!valid || submitting} loading={submitting} />
         </form>
       </div>
     );
   }
 }
-
-export default ArticleForm;

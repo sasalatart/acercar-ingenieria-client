@@ -2,11 +2,13 @@ import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
+import get from 'lodash/get';
 import RichText from '../RichText';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import { majorShape } from '../../shapes';
 import { themeStyles } from '../../theme';
+import majorPlaceholder from '../../images/major.png';
 
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
@@ -23,7 +25,7 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
       <Row type="flex" align="middle" gutter={24}>
         <Col sm={6}>
           <div style={styles.mediaContainer}>
-            <img src={major.logo.medium} alt="major-logo" />
+            <img src={get(major.logo, 'medium') || majorPlaceholder} alt="major-logo" />
           </div>
         </Col>
         <Col sm={18}>

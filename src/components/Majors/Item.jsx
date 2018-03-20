@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Avatar, Icon } from 'antd';
+import get from 'lodash/get';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import DestroyButton from '../../containers/DestroyButton';
 import { majorShape } from '../../shapes';
 import ROUTES from '../../routes';
 import { themeStyles } from '../../theme';
+import majorPlaceholder from '../../images/major.png';
 
 const { Item } = List;
 const { Meta } = Item;
@@ -26,7 +28,7 @@ function MajorItem({
   },
   intl: { formatMessage: t },
 }) {
-  const avatar = <Avatar src={logo.medium} shape="square" />;
+  const avatar = <Avatar src={get(logo, 'thumb') || majorPlaceholder} shape="square" />;
 
   const titleHref = ROUTES.MAJOR(id);
   const title = <Link to={titleHref} href={titleHref}>{name}</Link>;

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 import omitBy from 'lodash/omitBy';
@@ -21,7 +20,9 @@ import {
 } from '../../store/ducks/articles';
 import { getIsFetching } from '../../store/ducks/loading';
 import articlePlaceholder from '../../images/article.png';
+import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
+import articlesValidations from '../../validations/articles';
 
 const FIELDS = [
   'title', 'shortDescription', 'content', 'categoryList', 'majorId',
@@ -75,7 +76,5 @@ const form = reduxForm({
   },
 })(ArticleForm);
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(form));
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(form);
+export default I18nForm(connectedComponent, articlesValidations);

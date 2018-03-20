@@ -53,7 +53,7 @@ class EmailForm extends Component {
           placeholder={t({ id: 'forms.content' })}
           validate={validators.required}
         />
-        <SubmitButton disabled={!valid} loading={submitting} />
+        <SubmitButton disabled={!valid || submitting} loading={submitting} />
       </form>
     );
   }

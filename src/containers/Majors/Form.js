@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import get from 'lodash/get';
 import pick from 'lodash/pick';
 import {
   createMajor,
   updateMajor,
 } from '../../store/ducks/majors';
-import MajorEditForm from '../../components/Major/Form';
+import I18nForm from '../../hoc/I18nForm';
+import Form from '../../components/Majors/Form';
+import majorsValidations from '../../validations/majors';
 import majorPlaceholder from '../../images/major.png';
 
 const FIELDS = [
@@ -28,7 +29,8 @@ const form = reduxForm({
   onSubmit: (values, dispatch, props) => (props.major
     ? dispatch(updateMajor(props.major.id, values))
     : dispatch(createMajor(values))),
-})(MajorEditForm);
+})(Form);
 
-export default injectIntl(connect(mapStateToProps)(form));
+const connectedComponent = connect(mapStateToProps)(form);
+export default I18nForm(connectedComponent, majorsValidations);
 
