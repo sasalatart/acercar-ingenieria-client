@@ -39,6 +39,10 @@ export const themeStyles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
+  justifiedTextContainer: {
+    textAlign: 'justify',
+    whiteSpace: 'pre-wrap',
+  },
 };
 
 export const breakpoints = {

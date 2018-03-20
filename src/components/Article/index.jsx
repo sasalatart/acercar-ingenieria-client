@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Row, Col, Divider } from 'antd';
+import Linkify from 'react-linkify';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import DataPlaceholder from '../DataPlaceholder';
@@ -31,6 +32,7 @@ const styles = {
   },
   shortDescription: {
     marginTop: '25px',
+    ...themeStyles.justifiedTextContainer,
   },
   tagsContainer: {
     display: 'flex',
@@ -85,6 +87,16 @@ export default class Article extends Component {
     );
   }
 
+  renderShortDescription() {
+    const { shortDescription } = this.props.article;
+
+    return (
+      <Linkify>
+        <p style={styles.shortDescription}>{shortDescription}</p>
+      </Linkify>
+    );
+  }
+
   render() {
     const { loggedIn, loading, article } = this.props;
 
@@ -109,15 +121,15 @@ export default class Article extends Component {
         <Divider />
 
         <Row gutter={24}>
-          <Col sm={8}>
+          <Col sm={6}>
             <div style={styles.mediaContainer}>
               <img src={get(article.picture, 'medium', articlePlaceholder)} alt="major-logo" />
             </div>
           </Col>
-          <Col sm={16}>
+          <Col sm={18}>
             {this.renderAuthor()}
             <DateWithFormat dateString={article.createdAt} style={styles.date} />
-            <p style={styles.shortDescription}>{article.shortDescription}</p>
+            {this.renderShortDescription()}
           </Col>
         </Row>
 

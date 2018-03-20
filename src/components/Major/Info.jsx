@@ -10,6 +10,7 @@ import { themeStyles } from '../../theme';
 
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
+  shortDescription: themeStyles.justifiedTextContainer,
 };
 
 function MajorInfo({ major, intl: { formatMessage: t } }) {
@@ -20,14 +21,14 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
 
       <Divider>{t({ id: 'majors.review' })}</Divider>
       <Row type="flex" align="middle" gutter={24}>
-        <Col sm={8}>
+        <Col sm={6}>
           <div style={styles.mediaContainer}>
             <img src={major.logo.medium} alt="major-logo" />
           </div>
         </Col>
-        <Col sm={16}>
+        <Col sm={18}>
           <p>{t({ id: 'majors.ofType' }, { type: t({ id: `majors.${major.category}` }) })}</p>
-          <p>{major.shortDescription}</p>
+          <p style={styles.shortDescription}>{major.shortDescription}</p>
         </Col>
       </Row>
 

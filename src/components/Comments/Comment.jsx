@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Button, Icon, Divider } from 'antd';
+import Linkify from 'react-linkify';
 import { commentShape } from '../../shapes';
 import LikeButton from '../../containers/LikeButton';
 import DestroyButton from '../../containers/DestroyButton';
@@ -10,6 +11,7 @@ import EditForm from '../../containers/Comments/EditForm';
 import ProfileAvatar from '../Profile/Avatar';
 import DateWithFormat from '../DateWithFormat';
 import ChildComments from './ChildComments';
+import { themeStyles } from '../../theme';
 
 const styles = {
   parentWrapper: {
@@ -18,7 +20,7 @@ const styles = {
   },
   childWrapper: {
     display: 'flex',
-    marginTop: '20px',
+    marginTop: '25px',
     marginLeft: '66px',
   },
   formWrapper: {
@@ -36,8 +38,8 @@ const styles = {
     fontWeight: 'bold',
   },
   content: {
-    margin: 0,
-    whiteSpace: 'pre-wrap',
+    margin: '0 20px 0 0',
+    ...themeStyles.justifiedTextContainer,
   },
   cancelButtonWrapper: {
     display: 'flex',
@@ -88,7 +90,9 @@ export default class Comment extends Component {
         <p style={styles.metaData}>
           {author.firstName} {author.lastName}, <DateWithFormat dateString={createdAt} withTime />
         </p>
-        <p style={styles.content}>{content}</p>
+        <Linkify>
+          <p style={styles.content}>{content}</p>
+        </Linkify>
       </div>
     );
   }

@@ -7,9 +7,14 @@ import WithAuthorization from '../../hoc/WithAuthorization';
 import DestroyButton from '../../containers/DestroyButton';
 import { majorShape } from '../../shapes';
 import ROUTES from '../../routes';
+import { themeStyles } from '../../theme';
 
 const { Item } = List;
 const { Meta } = Item;
+
+const styles = {
+  shortDescription: themeStyles.justifiedTextContainer,
+};
 
 function MajorItem({
   admin,
@@ -47,9 +52,10 @@ function MajorItem({
     actions.push(destroyButton);
   }
 
+  const description = <p style={styles.shortDescription}>{shortDescription}</p>;
   return (
     <Item actions={actions}>
-      <Meta avatar={avatar} title={title} description={shortDescription} />
+      <Meta avatar={avatar} title={title} description={description} />
     </Item>
   );
 }

@@ -1,17 +1,24 @@
 import React from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
+import Linkify from 'react-linkify';
 import ReactPlayer from 'react-player';
 import ActionBar from '../containers/Layout/ActionBar';
 import Title from './Layout/Title';
 import { themeStyles } from '../theme';
 
 const styles = {
-  justifiedText: {
-    textAlign: 'justify',
-  },
+  justifiedText: themeStyles.justifiedTextContainer,
   mediaContainer: themeStyles.mediaContainer,
 };
+
+function renderParagraph(text) {
+  return (
+    <Linkify>
+      <p style={styles.justifiedText}>{text}</p>
+    </Linkify>
+  );
+}
 
 function AboutUs({ intl: { formatMessage: t } }) {
   return (
@@ -22,7 +29,7 @@ function AboutUs({ intl: { formatMessage: t } }) {
       <Row gutter={36}>
         <Col sm={12}>
           <h1>{t({ id: 'aboutUs.whatIsAI.title' })}</h1>
-          <p style={styles.justifiedText}>{t({ id: 'aboutUs.whatIsAI.content' })}</p>
+          {renderParagraph(t({ id: 'aboutUs.whatIsAI.content' }))}
 
           <div style={styles.mediaContainer}>
             <ReactPlayer url="//player.vimeo.com/video/56773559" controls />
@@ -30,10 +37,10 @@ function AboutUs({ intl: { formatMessage: t } }) {
         </Col>
         <Col sm={12}>
           <h1>{t({ id: 'aboutUs.mission.title' })}</h1>
-          <p style={styles.justifiedText}>{t({ id: 'aboutUs.mission.content' })}</p>
+          {renderParagraph(t({ id: 'aboutUs.mission.content' }))}
 
           <h1>{t({ id: 'aboutUs.vision.title' })}</h1>
-          <p style={styles.justifiedText}>{t({ id: 'aboutUs.vision.content' })}</p>
+          {renderParagraph(t({ id: 'aboutUs.vision.content' }))}
         </Col>
       </Row>
     </div>

@@ -2,16 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { List } from 'antd';
+import Linkify from 'react-linkify';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import ROUTES from '../../../routes';
 import { articleShape } from '../../../shapes';
+import { themeStyles } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
 
 const { Item } = List;
 const { Meta } = Item;
+
+const styles = {
+  shortDescription: themeStyles.justifiedTextContainer,
+  image: {
+    height: '150px',
+  },
+};
 
 function ArticleListItem({
   adminOrMajorAdmin,
@@ -43,10 +52,14 @@ function ArticleListItem({
   }
 
   const titleHref = ROUTES.ARTICLE(id, majorId);
-  const titleText = <Link to={titleHref} href={titleHref}>{title}</Link>;
+  const titleTag = (
+    <span>
+      <Link to={titleHref} href={titleHref}>{title}</Link>
+    </span>
+  );
 
   const imageSrc = picture ? picture.medium : articlePlaceholder;
-  const imageTag = <img alt="summary-logo" src={imageSrc} />;
+  const imageTag = <img alt="summary-logo" src={imageSrc} style={styles.image} />;
 
   const authorHref = ROUTES.USER(author.id);
   const authorName = (
@@ -55,10 +68,16 @@ function ArticleListItem({
     </Link>
   );
 
+  const shortDescriptionTag = (
+    <Linkify>
+      <p style={styles.shortDescription}>{shortDescription}</p>
+    </Linkify>
+  );
+
   return (
     <Item actions={actions} extra={imageTag}>
-      <Meta title={titleText} description={authorName} />
-      {shortDescription}
+      <Meta title={titleTag} description={authorName} />
+      {shortDescriptionTag}
     </Item>
   );
 }
