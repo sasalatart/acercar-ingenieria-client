@@ -1,4 +1,6 @@
+import URI from 'urijs';
 import { getTokens } from '../../ducks/sessions';
+import { getLocale } from '../../ducks/i18n';
 import refreshTokens from './tokens';
 import buildParams from './params';
 import parseResponse from './response';
@@ -9,12 +11,15 @@ const fetchMiddleware = store => next => (action) => {
     return next(action);
   }
 
-  const tokens = getTokens(store.getState());
+  const state = store.getState();
+  const locale = getLocale(state);
+  const tokens = getTokens(state);
   const params = buildParams(action.payload, tokens);
 
   const { url, ...rest } = params;
+  const urlWithLocale = URI(url).query({ locale: locale.split('-')[0] }).toString();
 
-  const promise = window.fetch(url, rest)
+  const promise = window.fetch(urlWithLocale, rest)
     .then(async (response) => {
       const responseContentType = response.headers.get('content-type');
       if (responseContentType && responseContentType.includes('text/html')) {
@@ -35,10 +40,6 @@ const fetchMiddleware = store => next => (action) => {
       promise,
       data: action.payload,
     },
-  }).catch((err) => {
-    if (process.env.NODE_ENV !== 'production') {
-      console.error(err);
-    }
   });
 };
 

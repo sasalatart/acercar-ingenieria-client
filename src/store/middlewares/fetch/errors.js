@@ -24,7 +24,7 @@ function getDescription(status, body, locale) {
   }
 
   const { message, error, errors } = body;
-  return message || error || (errors.fullMessages || errors).join(', ');
+  return message || error || errors.fullMessages;
 }
 
 export default async function parseError(body, status, payload, store) {
