@@ -6,6 +6,8 @@ import buildParams from './params';
 import parseResponse from './response';
 import parseError from './errors';
 
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 const fetchMiddleware = store => next => (action) => {
   if (!action.payload || !action.payload.url || action.type.includes('REJECTED')) {
     return next(action);
@@ -19,7 +21,7 @@ const fetchMiddleware = store => next => (action) => {
   const { url, ...rest } = params;
   const urlWithLocale = URI(url).addQuery({ locale: locale.split('-')[0] }).toString();
 
-  const promise = window.fetch(urlWithLocale, rest)
+  const promise = window.fetch(`${BASE_URL}${urlWithLocale}`, { ...rest, credentials: 'include' })
     .then(async (response) => {
       const responseContentType = response.headers.get('content-type');
       if (responseContentType && responseContentType.includes('text/html')) {
