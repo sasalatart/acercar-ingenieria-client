@@ -1,28 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
-import ArticlesList from '../../containers/Articles/List';
-import ArticlesActionBar from './ActionBar';
-import Title from '../Layout/Title';
+import { Route, Switch } from 'react-router-dom';
+import {
+  renderLoggedInRoute,
+  renderArticlePrivilegesRoute,
+} from '../../containers/Routes';
+import List from '../../containers/Articles/List';
+import Form from '../../containers/Articles/Form';
+import Article from '../../containers/Articles/Article';
 
-function Articles({ majorId, intl: { formatMessage: t } }) {
+function Articles() {
   return (
-    <div>
-      <ArticlesActionBar majorId={majorId} />
-      <Title text={t({ id: 'articles' })} />
-
-      <ArticlesList majorId={majorId} />
-    </div>
+    <Switch>
+      <Route path="/articles/:id/edit" render={renderArticlePrivilegesRoute(Form)} />
+      <Route path="/articles/new" render={renderLoggedInRoute(Form)} />
+      <Route path="/articles/:id" component={Article} />
+      <Route path="/articles" component={List} />
+    </Switch>
   );
 }
 
-Articles.propTypes = {
-  majorId: PropTypes.number,
-  intl: intlShape.isRequired,
-};
-
-Articles.defaultProps = {
-  majorId: undefined,
-};
-
-export default injectIntl(Articles);
+export default Articles;

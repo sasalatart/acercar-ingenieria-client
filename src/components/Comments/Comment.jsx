@@ -7,7 +7,7 @@ import { commentShape } from '../../shapes';
 import LikeButton from '../../containers/LikeButton';
 import DestroyButton from '../../containers/DestroyButton';
 import Form from '../../containers/Comments/Form';
-import ProfileAvatar from '../Profile/Avatar';
+import ProfileAvatar from '../Users/Profile/Avatar';
 import DateWithFormat from '../DateWithFormat';
 import ChildComments from './ChildComments';
 import { themeStyles } from '../../theme';

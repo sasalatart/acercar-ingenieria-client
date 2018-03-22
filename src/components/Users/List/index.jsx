@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List, Modal } from 'antd';
 import isEmpty from 'lodash/isEmpty';
+import ActionBar from '../../../containers/Layout/ActionBar';
+import Title from '../../Layout/Title';
 import PaginationControls from '../../../containers/Pagination';
 import UserListItem from '../../../containers/Users/List/Item';
 import AdminStatusPanel from '../AdminStatus/Panel';
 import { paginationShape, userShape } from '../../../shapes';
 
-class UsersList extends Component {
+export default class UsersList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
@@ -16,6 +18,7 @@ class UsersList extends Component {
     selectedUser: userShape,
     loadUsers: PropTypes.func.isRequired,
     unsetSelectedUser: PropTypes.func.isRequired,
+    withTitle: PropTypes.bool,
     intl: intlShape.isRequired,
   }
 
@@ -23,6 +26,7 @@ class UsersList extends Component {
     pagination: undefined,
     users: [],
     selectedUser: undefined,
+    withTitle: false,
   }
 
   renderUser = user => <UserListItem user={user} />;
@@ -45,11 +49,20 @@ class UsersList extends Component {
 
   render() {
     const {
-      loading, pagination, users, selectedUser, loadUsers,
+      loading,
+      pagination,
+      users,
+      selectedUser,
+      withTitle,
+      loadUsers,
+      intl: { formatMessage: t },
     } = this.props;
 
     return (
       <div>
+        {withTitle && <ActionBar />}
+        {withTitle && <Title text={t({ id: 'users' })} />}
+
         <PaginationControls
           pagination={pagination}
           loading={loading}
@@ -68,5 +81,3 @@ class UsersList extends Component {
     );
   }
 }
-
-export default UsersList;

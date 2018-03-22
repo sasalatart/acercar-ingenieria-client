@@ -5,10 +5,12 @@ import {
   getIsAdminOrMajorAdmin,
   getCurrentUserEntity,
 } from '../../store/ducks/sessions';
+import { getMajorIdFromProps } from '../../store/ducks/majors';
 import {
   collection,
   loadArticle,
   getArticleEntity,
+  getArticleIdFromProps,
 } from '../../store/ducks/articles';
 import { getIsFetching } from '../../store/ducks/loading';
 import DataPlaceholder from '../../components/DataPlaceholder';
@@ -34,7 +36,9 @@ class ArticlePrivileges extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection };
+  const majorId = getMajorIdFromProps(ownProps);
+  const articleId = getArticleIdFromProps(ownProps);
+  const params = { majorId, collection, id: articleId };
 
   const currentUser = getCurrentUserEntity(state);
   const article = getArticleEntity(state, params);

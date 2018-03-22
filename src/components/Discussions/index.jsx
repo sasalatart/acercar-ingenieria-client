@@ -1,27 +1,21 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { injectIntl, intlShape } from 'react-intl';
-import DiscussionsList from '../../containers/Discussions/List';
-import ActionBar from './ActionBar';
-import Title from '../Layout/Title';
-import { matchShape } from '../../shapes';
+import { Route, Switch } from 'react-router-dom';
+import {
+  renderLoggedInRoute,
+  renderDiscussionPrivilegesRoute,
+} from '../../containers/Routes';
+import List from '../../containers/Discussions/List';
+import Form from '../../containers/Discussions/Form';
+import Discussion from '../../containers/Discussions/Discussion';
 
-function Articles({ match: { params }, intl: { formatMessage: t } }) {
-  const mine = !!params.mine;
-
+export default function Discussions() {
   return (
-    <div>
-      <ActionBar mine={mine} />
-      <Title text={t({ id: mine ? 'discussions.mine' : 'discussions' })} />
-
-      <DiscussionsList mine={mine} />
-    </div>
+    <Switch>
+      <Route path="/discussions/:id/edit" render={renderDiscussionPrivilegesRoute(Form)} />
+      <Route path="/discussions/new" render={renderLoggedInRoute(Form)} />
+      <Route path="/discussions/mine" render={renderLoggedInRoute(List, { mine: true })} />
+      <Route path="/discussions/:id" render={renderLoggedInRoute(Discussion)} />
+      <Route path="/discussions" render={renderLoggedInRoute(List)} />
+    </Switch>
   );
 }
-
-Articles.propTypes = {
-  match: matchShape.isRequired,
-  intl: intlShape.isRequired,
-};
-
-export default withRouter(injectIntl(Articles));

@@ -5,7 +5,7 @@ import { intlShape } from 'react-intl';
 import Radium from 'radium';
 import { Button } from 'antd';
 import ROUTES from '../../routes';
-import UserAvatar from '../Profile/Avatar';
+import UserAvatar from '../Users/Profile/Avatar';
 import LocaleSelect from '../../containers/LocaleSelect';
 import HeaderLink from './HeaderLink';
 import { userShape } from '../../shapes';

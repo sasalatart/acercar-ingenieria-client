@@ -6,6 +6,7 @@ import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
 import {
   collection,
+  loadDiscussion,
   createDiscussion,
   updateDiscussion,
   getDiscussionEntity,
@@ -36,6 +37,12 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
+function mapDispatchToProps(dispatch, ownProps) {
+  return {
+    loadDiscussion: () => dispatch(loadDiscussion(ownProps.match.params.id)),
+  };
+}
+
 function processValues(values) {
   const tagList = values.tagList && values.tagList.reduce((tags, tag) => `${tags}, ${tag}`);
 
@@ -56,5 +63,5 @@ const form = reduxForm({
   },
 })(DiscussionForm);
 
-const connectedComponent = connect(mapStateToProps)(form);
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(form);
 export default withAuthorization(I18nForm(connectedComponent, discussionsValidations));

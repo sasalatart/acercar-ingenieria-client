@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import DestroyButton from '../../../containers/DestroyButton';
-import ProfileAvatar from '../../Profile/Avatar';
+import ProfileAvatar from '../../Users/Profile/Avatar';
 import ROUTES from '../../../routes';
 import { userShape } from '../../../shapes';
 

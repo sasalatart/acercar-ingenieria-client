@@ -39,7 +39,7 @@ export function loadDiscussions(page = 1, mine) {
     payload: {
       method: 'GET',
       url: URI(`/discussions${urlSuffix}`).query({ page }).toString(),
-      urlParams: { collection, page, suffix: mine ? 'mine' : undefined },
+      urlParams: { collection, page, suffix: mine ? 'mine' : 'forum' },
       responseSchema: [discussionsSchema],
     },
   };

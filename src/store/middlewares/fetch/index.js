@@ -17,7 +17,7 @@ const fetchMiddleware = store => next => (action) => {
   const params = buildParams(action.payload, tokens);
 
   const { url, ...rest } = params;
-  const urlWithLocale = URI(url).query({ locale: locale.split('-')[0] }).toString();
+  const urlWithLocale = URI(url).addQuery({ locale: locale.split('-')[0] }).toString();
 
   const promise = window.fetch(urlWithLocale, rest)
     .then(async (response) => {

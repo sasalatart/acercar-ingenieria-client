@@ -9,7 +9,13 @@ import {
 
 export default function HOC(WrappedComponent) {
   function mapStateToProps(state, ownProps) {
-    const majorId = +(ownProps.match.params.majorId || ownProps.majorId);
+    const { match } = ownProps;
+
+    const majorId = +(
+      match.params.majorId
+      || (match.path.includes('majors/:id') && match.params.id)
+      || ownProps.majorId
+    );
 
     return {
       loggedIn: getIsLoggedIn(state),

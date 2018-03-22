@@ -159,3 +159,12 @@ export const getMajorOptions = createSelector(
     ...majorEntities.map(({ id, name }) => ({ key: id, value: id, label: name })),
   ]),
 );
+
+export function getMajorIdFromProps(props) {
+  const { match } = props;
+  return +(
+    match.params.majorId
+    || (match.path.includes('majors/:id') && match.params.id)
+    || props.majorId
+  );
+}

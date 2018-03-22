@@ -11,7 +11,7 @@ import WithAuthorization from '../../../hoc/WithAuthorization';
 import DiscussionsList from '../../../components/Discussions/List';
 
 function mapStateToProps(state, ownProps) {
-  const params = { collection, paged: true, suffix: ownProps.mine ? 'mine' : undefined };
+  const params = { collection, paged: true, suffix: ownProps.mine ? 'mine' : 'forum' };
   const pagingFns = getPagingFns(ownProps.mine);
 
   const discussions = pagingFns.selectors.getPagedEntities(state);
@@ -29,7 +29,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-export default injectIntl(WithAuthorization(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DiscussionsList)));
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(DiscussionsList);
+export default injectIntl(WithAuthorization(connectedComponent));

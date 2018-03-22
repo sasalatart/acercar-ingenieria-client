@@ -133,3 +133,12 @@ export const getArticleEntity = createSelector(
   getEntities,
   (articleId, entities) => denormalize(articleId, articlesSchema, entities),
 );
+
+export function getArticleIdFromProps(props) {
+  const { match } = props;
+  return +(
+    match.params.articleId
+    || (match.path.includes('articles/:id') && match.params.id)
+    || props.articleId
+  );
+}

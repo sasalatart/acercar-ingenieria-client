@@ -6,8 +6,8 @@ const ROUTES = {
   ANNOUNCEMENTS: '/announcements',
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
-  PROFILE: '/profile',
   USERS: '/users',
+  PROFILE: '/users/profile',
   USER: id => `/users/${id}`,
   MAJORS: '/majors',
   MAJORS_NEW: '/majors/new',
@@ -58,7 +58,7 @@ export const getProfilePaths = () => {
   };
 
   return {
-    keys: mapValues(subPaths, path => `/profile${path}`),
+    keys: mapValues(subPaths, path => `/users/profile${path}`),
   };
 };
 

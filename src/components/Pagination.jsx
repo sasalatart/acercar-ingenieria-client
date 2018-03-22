@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Pagination } from 'antd';
-import noop from 'lodash/noop';
 import DataPlaceholder from './DataPlaceholder';
 import { paginationShape } from '../shapes';
 
@@ -23,14 +22,12 @@ export default class PaginationControls extends Component {
     addQueryToCurrentUri: PropTypes.func.isRequired,
     loadFn: PropTypes.func.isRequired,
     render: PropTypes.func.isRequired,
-    onPageChange: PropTypes.func,
   }
 
   static defaultProps = {
     search: '',
     current: 1,
     pagination: undefined,
-    onPageChange: noop,
   }
 
   componentDidMount() {
@@ -38,14 +35,16 @@ export default class PaginationControls extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.search !== this.props.search) {
+    const pageChanged = nextProps.current !== this.props.current;
+    const searchChanged = nextProps.search !== this.props.search;
+
+    if (pageChanged || searchChanged) {
       this.props.loadFn(nextProps.current);
     }
   }
 
   handlePageChange = (page) => {
     this.props.addQueryToCurrentUri({ page });
-    this.props.onPageChange();
   }
 
   renderPaginationTag() {
