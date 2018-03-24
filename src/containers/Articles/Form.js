@@ -36,7 +36,9 @@ function mapStateToProps(state, ownProps) {
   const article = getArticleEntity(state, params);
   const majorOptions = getMajorOptions(state);
   const categoryOptions = getCategoryOptions(state);
-  const loading = getIsFetching(state, params) || !majorOptions.length || !categoryOptions.length;
+  const loading = (id && getIsFetching(state, params))
+    || !majorOptions.length
+    || !categoryOptions.length;
 
   return {
     id,
