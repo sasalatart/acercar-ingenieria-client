@@ -1,5 +1,4 @@
 import { Map } from 'immutable';
-import URI from 'urijs';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { goToDiscussion } from './routes';
@@ -33,13 +32,12 @@ export function getPagingFns(mine) {
 }
 
 export function loadDiscussions(page = 1, mine, query) {
-  const urlSuffix = mine ? '/mine' : '';
-
   return {
     type: mine ? TYPES.LOAD_MINE : TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI(`/discussions${urlSuffix}`).query({ page, ...query }).toString(),
+      url: `/discussions${mine ? '/mine' : ''}`,
+      query: { page, ...query },
       urlParams: {
         collection, page, ...query, suffix: mine ? 'mine' : 'forum',
       },

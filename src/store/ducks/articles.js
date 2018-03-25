@@ -1,7 +1,6 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
-import URI from 'urijs';
 import { getEntities } from './entities';
 import pagingFnsFactory from './paginations';
 import { goToArticle } from './routes';
@@ -37,15 +36,12 @@ export function getCollectionParams(majorId) {
 }
 
 export function loadArticles(page = 1, majorId, query) {
-  const uri = majorId
-    ? URI(`/majors/${majorId}/articles`)
-    : URI('/articles');
-
   return {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: uri.query({ page, ...query }).toString(),
+      url: majorId ? `/majors/${majorId}/articles` : '/articles',
+      query: { page, ...query },
       urlParams: { page, ...query, ...getCollectionParams(majorId) },
       responseSchema: [articlesSchema],
     },

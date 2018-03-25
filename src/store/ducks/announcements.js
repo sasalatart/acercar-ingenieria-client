@@ -1,5 +1,4 @@
 import { Map, Set } from 'immutable';
-import URI from 'urijs';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import pagingFnsFactory from './paginations';
@@ -30,7 +29,8 @@ export function loadAnnouncements(page = 1) {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI('/announcements').query({ page }).toString(),
+      url: '/announcements',
+      query: { page },
       urlParams: { collection, page },
       responseSchema: [announcementsSchema],
     },

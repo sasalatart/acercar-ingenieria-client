@@ -1,6 +1,5 @@
 import { Map } from 'immutable';
 import { reset } from 'redux-form';
-import URI from 'urijs';
 import remove from 'lodash/remove';
 import { updateEntities, getEntity } from './entities';
 import pagingFnsFactory from './paginations';
@@ -42,7 +41,8 @@ export function loadComments(baseResourceName, baseResourceId, page = 1) {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI(`/${baseResourceName}/${baseResourceId}/comments`).query({ page }).toString(),
+      url: `/${baseResourceName}/${baseResourceId}/comments`,
+      query: { page },
       urlParams: {
         collection, page, baseResourceName, baseResourceId,
       },

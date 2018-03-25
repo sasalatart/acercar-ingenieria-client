@@ -1,5 +1,4 @@
 import URI from 'urijs';
-import humps from 'humps';
 import { getTokens } from '../../ducks/sessions';
 import { getLocale } from '../../ducks/i18n';
 import refreshTokens from './tokens';
@@ -17,17 +16,12 @@ const fetchMiddleware = store => next => (action) => {
   const state = store.getState();
   const locale = getLocale(state);
   const tokens = getTokens(state);
-  const params = buildParams(action.payload, tokens);
+  const params = buildParams(action.payload, tokens, locale);
 
-  const { url, ...rest } = params;
+  const { url, query, ...rest } = params;
+  const finalUrl = URI(`${BASE_URL}${url}`).query({ ...query }).toString();
 
-  const query = humps.decamelizeKeys(URI.parseQuery(url));
-  const urlWithLocale = URI(url).query({
-    ...query,
-    locale: locale.split('-')[0],
-  }).toString();
-
-  const promise = window.fetch(`${BASE_URL}${urlWithLocale}`, { ...rest, credentials: 'include' })
+  const promise = window.fetch(finalUrl, rest)
     .then(async (response) => {
       const responseContentType = response.headers.get('content-type');
       if (responseContentType && responseContentType.includes('text/html')) {

@@ -4,7 +4,7 @@ import omit from 'lodash/omit';
 import isEmpty from 'lodash/isEmpty';
 import objectToFormData from 'object-to-formdata';
 
-const REQUEST_KEYS = ['headers', 'method', 'url', 'body'];
+const REQUEST_KEYS = ['headers', 'method', 'url', 'query', 'body'];
 
 function getFileKeys(body) {
   if (!body) {
@@ -55,10 +55,15 @@ function buildFormData(payload, params, fileKeys) {
   return formData;
 }
 
-export default function buildParams(payload, tokens) {
+export default function buildParams(payload, tokens, locale) {
+  const decamelizedPayload = humps.decamelizeKeys(pick(payload, REQUEST_KEYS));
+  const query = { ...decamelizedPayload.query, locale: locale.split('-')[0] };
+
   const params = {
     headers: { ...tokens },
-    ...humps.decamelizeKeys(pick(payload, REQUEST_KEYS)),
+    ...decamelizedPayload,
+    query,
+    credentials: 'include',
   };
 
   const fileKeys = getFileKeys(payload.body);

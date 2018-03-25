@@ -1,7 +1,6 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
-import URI from 'urijs';
 import { questionsSchema } from '../../schemas';
 import { getEntities } from './entities';
 import pagingFnsFactory from './paginations';
@@ -52,17 +51,14 @@ export function getPagingFns(isUnanswered, isOfMajor) {
 
 export function loadQuestions(page = 1, majorId, pending) {
   const urlSuffix = pending ? '/pending' : '';
-  const uri = majorId
-    ? URI(`/majors/${majorId}/questions${urlSuffix}`)
-    : URI(`/questions${urlSuffix}`);
-
   const suffix = pending ? 'pending' : 'answered';
 
   return {
     type: pending ? TYPES.LOAD_UNANSWERED : TYPES.LOAD_ANSWERED,
     payload: {
       method: 'GET',
-      url: uri.query({ page }).toString(),
+      url: majorId ? `/majors/${majorId}/questions${urlSuffix}` : `/questions${urlSuffix}`,
+      query: { page },
       urlParams: { page, ...getCollectionParams(majorId), suffix },
       responseSchema: [questionsSchema],
     },

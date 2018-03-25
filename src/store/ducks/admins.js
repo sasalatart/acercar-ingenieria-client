@@ -1,5 +1,4 @@
 import { Map, Set } from 'immutable';
-import URI from 'urijs';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { usersSchema } from '../../schemas';
@@ -46,13 +45,12 @@ export function getPagingFns(isOfMajor) {
 }
 
 export function loadAdmins(page = 1, majorId, query) {
-  const baseUrl = majorId ? `/majors/${majorId}/admins` : '/users/admins';
-
   return {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI(baseUrl).query({ page, ...query }).toString(),
+      url: majorId ? `/majors/${majorId}/admins` : '/users/admins',
+      query: { page, ...query },
       urlParams: { page, ...query, ...getCollectionParams(majorId) },
       responseSchema: [usersSchema],
     },

@@ -1,7 +1,6 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
-import URI from 'urijs';
 import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 import pagingFnsFactory from './paginations';
@@ -38,13 +37,12 @@ export function getPagingFns(majorId) {
 }
 
 export function loadUsers(page = 1, majorId, query) {
-  const baseUrl = majorId ? `/majors/${majorId}/users` : '/users';
-
   return {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI(baseUrl).query({ page, ...query }).toString(),
+      url: majorId ? `/majors/${majorId}/users` : '/users',
+      query: { page, ...query },
       urlParams: { ...getCollectionParams(majorId), page },
       responseSchema: [usersSchema],
     },
