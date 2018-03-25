@@ -63,6 +63,11 @@ export default class Comment extends Component {
 
   state = { editing: false, answering: false };
 
+  getBaseResourceName() {
+    const { commentableType } = this.props.comment;
+    return `${commentableType.charAt(0).toLowerCase()}${commentableType.slice(1)}s`;
+  }
+
   handleStartEditing = () => this.setState({ editing: true });
 
   handleStopEditing = () => this.setState({ editing: false });
@@ -74,13 +79,12 @@ export default class Comment extends Component {
   renderMainContent() {
     if (this.state.editing) {
       const { comment } = this.props;
-      const baseResourceName = `${comment.commentableType.toLowerCase()}s`;
 
       return (
         <div style={styles.formWrapper}>
           <div style={styles.mainContent}>
             <Form
-              baseResourceName={baseResourceName}
+              baseResourceName={this.getBaseResourceName()}
               baseResourceId={comment.commentableId}
               comment={comment}
               onSubmitSuccess={this.handleStopEditing}
@@ -128,11 +132,7 @@ export default class Comment extends Component {
   }
 
   renderDestroyButton() {
-    const {
-      id, commentableType, commentableId, parentCommentId,
-    } = this.props.comment;
-
-    const baseResourceName = `${commentableType.charAt(0).toLowerCase()}${commentableType.slice(1)}s`;
+    const { id, commentableId, parentCommentId } = this.props.comment;
 
     return (
       <span>
@@ -140,7 +140,7 @@ export default class Comment extends Component {
         <DestroyButton
           collection="comments"
           id={id}
-          baseResourceName={baseResourceName}
+          baseResourceName={this.getBaseResourceName()}
           baseResourceId={commentableId}
           parentCommentId={parentCommentId}
           iconOnly
@@ -195,16 +195,14 @@ export default class Comment extends Component {
   }
 
   renderAnswerForm() {
-    const { id, commentableType, commentableId } = this.props.comment;
-
-    const baseResourceName = `${commentableType.toLowerCase()}s`;
+    const { id, commentableId } = this.props.comment;
 
     return (
       <div style={styles.formWrapper}>
         <div style={styles.mainContent}>
           <Form
             parentCommentId={id}
-            baseResourceName={baseResourceName}
+            baseResourceName={this.getBaseResourceName()}
             baseResourceId={commentableId}
             onSubmitSuccess={this.handleStopAnswering}
           />
