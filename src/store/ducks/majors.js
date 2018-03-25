@@ -1,4 +1,4 @@
-import { Map, Set } from 'immutable';
+import { Map, OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { majorsSchema } from '../../schemas';
@@ -10,7 +10,7 @@ import { resourceSuccessNotification } from './notifications';
 export const collection = 'majors';
 
 const INITIAL_STATE = new Map({
-  activeIds: new Set(),
+  activeIds: new OrderedSet(),
 });
 
 export const TYPES = {
@@ -108,7 +108,7 @@ export function sendEmail(id, body) {
 export default function majorsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return state.set('activeIds', new Set(action.payload.result));
+      return state.set('activeIds', new OrderedSet(action.payload.result));
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { id } = action.payload.request.urlParams;
       return state.update('activeIds', ids => ids.delete(id));
