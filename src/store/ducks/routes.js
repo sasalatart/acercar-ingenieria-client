@@ -79,14 +79,19 @@ export function addQueryToCurrentUri(query, reset) {
 
 export const getRouterData = state => state.router;
 
-export const getPathname = createSelector(
+export const getLocation = createSelector(
   getRouterData,
-  routerData => routerData.location.pathname,
+  routerData => routerData.location,
+);
+
+export const getPathname = createSelector(
+  getLocation,
+  location => location && location.pathname,
 );
 
 export const getSearch = createSelector(
-  getRouterData,
-  routerData => routerData.location.search,
+  getLocation,
+  location => location && location.search,
 );
 
 const getFilters = (state, params) => params.filters;
