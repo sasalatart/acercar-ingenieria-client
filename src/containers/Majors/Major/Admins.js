@@ -25,7 +25,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    loadAdmins: (page = 1) => dispatch(loadAdmins(page, ownProps.majorId)),
+    loadAdmins: ({ page }) => dispatch(loadAdmins(page, ownProps.majorId)),
     goToUser: id => dispatch(goToUser(id)),
   };
 }

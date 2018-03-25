@@ -38,7 +38,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   const loadFn = admins ? loadAdmins : loadUsers;
 
   return {
-    loadUsers: (page = 1) => dispatch(loadFn(page, majorId)),
+    loadUsers: ({ page, ...query }) => dispatch(loadFn(page, majorId, query)),
     unsetSelectedUser: () => dispatch(unsetSelectedUser()),
   };
 }

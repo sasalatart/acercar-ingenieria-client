@@ -5,17 +5,21 @@ import { optionShape } from '../../shapes';
 
 const { Option } = Select;
 
-function CustomSelect(props) {
+function filter(input, option) {
+  return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+}
+
+function renderOption(option) {
+  const {
+    value, label, key, ...rest
+  } = option;
+  return <Option key={key} {...rest} value={value}>{label}</Option>;
+}
+
+export default function CustomSelect(props) {
   return (
-    <Select
-      optionFilterProp="children"
-      filterOption={(input, option) =>
-        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-      {...props}
-    >
-      {props.options.map(({
-        value, label, key, ...rest
-      }) => <Option key={key} {...rest} value={value}>{label}</Option>)}
+    <Select optionFilterProp="children" filterOption={filter} {...props}>
+      {props.options.map(renderOption)}
     </Select>
   );
 }
@@ -24,4 +28,42 @@ CustomSelect.propTypes = {
   options: PropTypes.arrayOf(optionShape).isRequired,
 };
 
-export default CustomSelect;
+function reduceValue(value = []) {
+  if (value.length === 0) return '';
+  return value.reduce((tags, tag) => `${tags}, ${tag}`);
+}
+
+export function CustomTagsSelect(props) {
+  const {
+    value,
+    onChange,
+    onBlur,
+    options,
+  } = props;
+
+  return (
+    <Select
+      mode="tags"
+      tokenSeparators={[', ']}
+      optionFilterProp="children"
+      filterOption={filter}
+      {...props}
+      value={value && value.split(', ')}
+      onBlur={newValue => onBlur(reduceValue(newValue))}
+      onChange={newValue => onChange(reduceValue(newValue))}
+    >
+      {options.map(renderOption)}
+    </Select>
+  );
+}
+
+CustomTagsSelect.propTypes = {
+  value: PropTypes.arrayOf(PropTypes.string),
+  options: PropTypes.arrayOf(optionShape).isRequired,
+  onBlur: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+CustomTagsSelect.defaultProps = {
+  value: undefined,
+};

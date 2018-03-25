@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List, Modal } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import ActionBar from '../../../containers/Layout/ActionBar';
+import ActionBar from '../../../containers/Users/List/ActionBar';
 import Title from '../../Layout/Title';
 import PaginationControls from '../../../containers/Pagination';
 import UserListItem from '../../../containers/Users/List/Item';
@@ -13,6 +13,8 @@ import { paginationShape, userShape } from '../../../shapes';
 export default class UsersList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    majorId: PropTypes.number,
+    admins: PropTypes.bool,
     pagination: paginationShape,
     users: PropTypes.arrayOf(userShape),
     selectedUser: userShape,
@@ -23,6 +25,8 @@ export default class UsersList extends Component {
   }
 
   static defaultProps = {
+    majorId: undefined,
+    admins: false,
     pagination: undefined,
     users: [],
     selectedUser: undefined,
@@ -50,6 +54,8 @@ export default class UsersList extends Component {
   render() {
     const {
       loading,
+      majorId,
+      admins,
       pagination,
       users,
       selectedUser,
@@ -60,7 +66,7 @@ export default class UsersList extends Component {
 
     return (
       <div>
-        {withTitle && <ActionBar />}
+        {withTitle && <ActionBar majorId={majorId} admins={admins} />}
         {withTitle && <Title text={t({ id: 'users' })} />}
 
         <PaginationControls

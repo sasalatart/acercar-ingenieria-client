@@ -22,6 +22,7 @@ export const TYPES = {
   LOAD_INDEX: 'users/LOAD_INDEX',
   LOAD: 'users/LOAD',
   DESTROY: 'users/DESTROY',
+  RESET_PAGINATION: 'users/RESET_PAGINATION',
 };
 
 export function getCollectionParams(majorId, admins) {
@@ -36,14 +37,14 @@ export function getPagingFns(majorId) {
   return majorId ? majorsPagingFns : platformPagingFns;
 }
 
-export function loadUsers(page, majorId) {
+export function loadUsers(page = 1, majorId, query) {
   const baseUrl = majorId ? `/majors/${majorId}/users` : '/users';
 
   return {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI(baseUrl).query({ page }).toString(),
+      url: URI(baseUrl).query({ page, ...query }).toString(),
       urlParams: { ...getCollectionParams(majorId), page },
       responseSchema: [usersSchema],
     },
@@ -73,6 +74,13 @@ export function destroyUser(id) {
   };
 }
 
+export function resetPagination(majorId) {
+  return {
+    type: TYPES.RESET_PAGINATION,
+    payload: { majorId },
+  };
+}
+
 export default function usersReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`: {
@@ -83,6 +91,10 @@ export default function usersReducer(state = INITIAL_STATE, action) {
       const { urlParams } = action.payload.request;
       const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
       return platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
+    }
+    case TYPES.RESET_PAGINATION: {
+      const { majorId } = action.payload;
+      return getPagingFns(majorId).reducer.reset(state, majorId);
     }
     default:
       return state;

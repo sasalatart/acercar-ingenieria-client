@@ -6,7 +6,7 @@ import {
   getDisciplinaryMajors,
   getInterdisciplinaryMajors,
 } from '../../store/ducks/majors';
-import Users from '../../components/Users/Search';
+import AllUsers from '../../components/Users/All';
 
 function mapStateToProps(state) {
   const disciplinaryMajors = getDisciplinaryMajors(state);
@@ -23,5 +23,5 @@ const mapDispatchToProps = {
   addQueryToCurrentUri,
 };
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Users);
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(AllUsers);
 export default injectIntl(connectedComponent);

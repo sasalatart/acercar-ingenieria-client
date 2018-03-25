@@ -8,6 +8,7 @@ import {
   TextArea,
   RichTextField,
   SelectField,
+  TagsField,
   PictureField,
   FilesField,
   SubmitButton,
@@ -104,9 +105,8 @@ export default class ArticleForm extends Component {
             <Col {...COLUMN_LAYOUT}>
               <Field
                 name="categoryList"
-                component={SelectField}
+                component={TagsField}
                 label={t({ id: 'categories' })}
-                mode="multiple"
                 options={categoryOptions}
               />
             </Col>

@@ -75,7 +75,7 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
     },
 
     reducer: {
-      setPage: (state, payload) => {
+      setPage(state, payload) {
         const { pagination, result, request: { urlParams: { baseResourceId } } } = payload;
 
         const ids = new OrderedSet(result);
@@ -84,7 +84,7 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
           .setIn(getMetaPath(baseResourceId), pagination);
       },
 
-      removeFromPage: (state, { id, baseResourceId }) => {
+      removeFromPage(state, { id, baseResourceId }) {
         const pages = state.getIn(getPagingPath(baseResourceId));
         if (!pages) return state;
 
@@ -100,6 +100,12 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
           [...getPagingPath(baseResourceId), String(page)],
           pages => (pages ? setToAdd.merge(pages) : setToAdd),
         );
+      },
+
+      reset(state, baseResourceId) {
+        return state
+          .setIn(getPagingPath(baseResourceId), new Map({}))
+          .removeIn(getMetaPath(baseResourceId));
       },
     },
   };

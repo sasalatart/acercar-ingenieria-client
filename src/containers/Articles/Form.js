@@ -56,23 +56,15 @@ const mapDispatchToProps = {
   loadCategories,
 };
 
-function processValues(values) {
-  const categoryList = values.categoryList
-    && values.categoryList.reduce((categories, category) => `${categories}, ${category}`);
-
-  return { ...values, categoryList };
-}
-
 const form = reduxForm({
   form: 'article',
   enableReinitialize: true,
   onSubmit: (values, dispatch, props) => {
     const { id } = props.match.params;
 
-    const processedValues = processValues(values);
     const action = id
-      ? updateArticle(id, processedValues, processedValues.majorId)
-      : createArticle(processedValues, processedValues.majorId);
+      ? updateArticle(id, values, values.majorId)
+      : createArticle(values, values.majorId);
 
     return dispatch(action);
   },

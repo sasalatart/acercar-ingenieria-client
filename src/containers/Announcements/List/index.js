@@ -22,7 +22,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadAnnouncements: (page = 1) => dispatch(loadAnnouncements(page)),
+    loadAnnouncements: ({ page }) => dispatch(loadAnnouncements(page)),
   };
 }
 

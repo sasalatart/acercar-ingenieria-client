@@ -4,7 +4,7 @@ export default {
     'discussions.mine': 'My Threads',
     'discussions.new': 'New Discussion',
     'discussions.edit': 'Edit Discussion',
-    'discussions.defaultTag': 'Example tag',
+    'discussions.defaultTag': 'Question',
     'discussions.author': 'By: {authorName}',
   },
   'es-ES': {
@@ -12,7 +12,7 @@ export default {
     'discussions.mine': 'Mis Temas',
     'discussions.new': 'Nuevo tema',
     'discussions.edit': 'Editar tema',
-    'discussions.defaultTag': 'Tag de ejemplo',
+    'discussions.defaultTag': 'Duda',
     'discussions.author': 'Por: {authorName}',
   },
 };

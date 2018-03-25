@@ -30,6 +30,7 @@ const TYPES = {
   PROMOTE_TO_MAJOR: 'admins/PROMOTE_TO_MAJOR',
   DEMOTE_FROM_PLATFORM: 'admins/DEMOTE_FROM_PLATFORM',
   DEMOTE_FROM_MAJOR: 'admins/DEMOTE_FROM_MAJOR',
+  RESET_PAGINATION: 'admins/RESET_PAGINATION',
 };
 
 export function getCollectionParams(majorId) {
@@ -44,15 +45,15 @@ export function getPagingFns(isOfMajor) {
   return isOfMajor ? majorsPagingFns : platformPagingFns;
 }
 
-export function loadAdmins(page, majorId) {
-  const baseUrl = majorId ? `/majors/${majorId}/admins` : 'users/admins';
+export function loadAdmins(page = 1, majorId, query) {
+  const baseUrl = majorId ? `/majors/${majorId}/admins` : '/users/admins';
 
   return {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI(baseUrl).query({ page }).toString(),
-      urlParams: { page, ...getCollectionParams(majorId) },
+      url: URI(baseUrl).query({ page, ...query }).toString(),
+      urlParams: { page, ...query, ...getCollectionParams(majorId) },
       responseSchema: [usersSchema],
     },
   };
@@ -99,6 +100,13 @@ export function demoteFromAdmin(id, majorId) {
   };
 }
 
+export function resetPagination(majorId) {
+  return {
+    type: TYPES.RESET_PAGINATION,
+    payload: { majorId },
+  };
+}
+
 export default function adminsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`: {
@@ -140,6 +148,10 @@ export default function adminsReducer(state = INITIAL_STATE, action) {
       const { urlParams } = action.payload.request;
       const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
       return platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
+    }
+    case TYPES.RESET_PAGINATION: {
+      const { majorId } = action.payload;
+      return getPagingFns(majorId).reducer.reset(state, majorId);
     }
     default:
       return state;

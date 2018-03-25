@@ -14,6 +14,12 @@ export const maxLength = (message, maxValue) => value => (
     : undefined
 );
 
+export const maxCSVLength = (message, maxValue) => value => (
+  value && value.split(', ').length > maxValue
+    ? message
+    : undefined
+);
+
 export const isBetween = (message, minValue, maxValue) => value => (
   value < minValue || value > maxValue
     ? message

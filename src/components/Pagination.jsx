@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Pagination } from 'antd';
+import URI from 'urijs';
 import DataPlaceholder from './DataPlaceholder';
 import { paginationShape } from '../shapes';
 
@@ -39,7 +40,8 @@ export default class PaginationControls extends Component {
     const searchChanged = nextProps.search !== this.props.search;
 
     if (pageChanged || searchChanged) {
-      this.props.loadFn(nextProps.current);
+      const query = URI.parseQuery(nextProps.search);
+      nextProps.loadFn({ page: nextProps.current, ...query });
     }
   }
 

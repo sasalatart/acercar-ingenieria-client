@@ -1,4 +1,9 @@
-import { required, maxLength, minLength } from './validators';
+import {
+  required,
+  maxLength,
+  minLength,
+  maxCSVLength,
+} from './validators';
 
 const MIN_TITLE_LENGTH = 10;
 const MAX_TITLE_LENGTH = 255;
@@ -17,7 +22,7 @@ export default t => ({
     MAX_TITLE_LENGTH,
   ),
 
-  maxTagCount: maxLength(
+  maxTagCount: maxCSVLength(
     t({ id: 'forms.maxOptions' }, { length: MAX_TAG_COUNT }),
     MAX_TAG_COUNT,
   ),

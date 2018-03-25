@@ -4,7 +4,7 @@ import {
   renderAdminRoute,
   renderLoggedInRoute,
 } from '../../containers/Routes';
-import Search from '../../containers/Users/Search';
+import AllUsers from '../../containers/Users/All';
 import Profile from '../../containers/Users/Profile';
 
 function Users() {
@@ -12,7 +12,7 @@ function Users() {
     <Switch>
       <Route path="/users/profile" render={renderLoggedInRoute(Profile, { mine: true })} />
       <Route path="/users/:id" render={renderLoggedInRoute(Profile)} />
-      <Route path="/users" render={renderAdminRoute(Search)} />
+      <Route path="/users" render={renderAdminRoute(AllUsers)} />
     </Switch>
   );
 }

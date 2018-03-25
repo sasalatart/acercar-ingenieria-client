@@ -28,8 +28,10 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
+  const { majorId, pending } = ownProps;
+
   return {
-    loadQuestions: (page = 1) => dispatch(loadQuestions(page, ownProps.majorId, ownProps.pending)),
+    loadQuestions: ({ page }) => dispatch(loadQuestions(page, majorId, pending)),
   };
 }
 

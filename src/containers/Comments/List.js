@@ -36,7 +36,7 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
     ...ownProps,
     ...stateProps,
     ...dispatchProps,
-    loadComments: (page = 1) =>
+    loadComments: ({ page }) =>
       dispatchProps.loadComments(baseResourceName, baseResourceId, page),
   };
 }

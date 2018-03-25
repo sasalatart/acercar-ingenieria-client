@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { List } from 'antd';
+import { List, Icon } from 'antd';
 import Linkify from 'react-linkify';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
+import TagList from '../..//TagList';
 import IconText from '../../IconText';
 import ROUTES from '../../../routes';
 import { articleShape } from '../../../shapes';
@@ -28,6 +29,7 @@ function ArticleListItem({
     id,
     majorId,
     title,
+    categoryList,
     author,
     shortDescription,
     picture,
@@ -35,6 +37,7 @@ function ArticleListItem({
     likedByCurrentUser,
     likesCount,
   },
+  onTagClick,
 }) {
   const actions = [
     <IconText type="message" text={commentsCount} />,
@@ -77,6 +80,12 @@ function ArticleListItem({
   return (
     <Item actions={actions} extra={imageTag}>
       <Meta title={titleTag} description={authorName} />
+      {categoryList.length > 0 &&
+        <div>
+          <Icon type="tags" />
+          <TagList tags={categoryList} onTagClick={onTagClick} />
+        </div>
+      }
       {shortDescriptionTag}
     </Item>
   );
@@ -85,6 +94,7 @@ function ArticleListItem({
 ArticleListItem.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   article: articleShape.isRequired,
+  onTagClick: PropTypes.func.isRequired,
 };
 
 export default WithAuthorization(ArticleListItem);

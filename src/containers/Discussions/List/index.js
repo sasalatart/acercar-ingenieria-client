@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
+import { addQueryToCurrentUri } from '../../../store/ducks/routes';
 import {
   collection,
   loadDiscussions,
+  resetPagination,
   getPagingFns,
 } from '../../../store/ducks/discussions';
 import { getIsFetching } from '../../../store/ducks/loading';
@@ -25,7 +27,11 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    loadDiscussions: (page = 1) => dispatch(loadDiscussions(page, ownProps.mine)),
+    loadDiscussions: ({ page, ...query }) => dispatch(loadDiscussions(page, ownProps.mine, query)),
+    onTagClick: (text) => {
+      dispatch(resetPagination(ownProps.mine));
+      dispatch(addQueryToCurrentUri({ tagList: text }));
+    },
   };
 }
 

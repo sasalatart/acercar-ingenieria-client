@@ -1,6 +1,7 @@
 import { push, replace } from 'react-router-redux';
 import { createSelector } from 'reselect';
 import URI from 'urijs';
+import pick from 'lodash/pick';
 import ROUTES from '../../routes';
 
 export function goToLanding() {
@@ -51,13 +52,30 @@ export function goToDiscussion(id) {
   return push(ROUTES.DISCUSSION(id));
 }
 
-export function addQueryToCurrentUri(query) {
+/* eslint-disable no-use-before-define */
+export function removeQueriesFromCurrentUri(queries) {
   return (dispatch, getState) => {
-    // eslint-disable-next-line no-use-before-define
-    const newUri = URI(getSearch(getState())).query(query).toString();
-    dispatch(replace(newUri));
+    const state = getState();
+
+    const pathname = getPathname(state);
+    const newQuery = URI(getSearch(state)).removeQuery(queries);
+    dispatch(replace(`${pathname}${newQuery.toString()}`));
   };
 }
+
+export function addQueryToCurrentUri(query, reset) {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    const pathname = getPathname(state);
+    const newQuery = reset
+      ? URI('').setQuery(query)
+      : URI(getSearch(state)).removeQuery(Object.keys(query)).addQuery(query);
+
+    dispatch(replace(`${pathname}${newQuery.toString()}`));
+  };
+}
+/* eslint-enable no-use-before-define */
 
 export const getRouterData = state => state.router;
 
@@ -71,12 +89,24 @@ export const getSearch = createSelector(
   routerData => routerData.location.search,
 );
 
+const getFilters = (state, params) => params.filters;
+
+export const getActiveFilters = createSelector(
+  getSearch,
+  getFilters,
+  (search, filters) => pick(URI.parseQuery(search), filters),
+);
+
+export const getFiltersActive = createSelector(
+  getActiveFilters,
+  activeFilters => Object.keys(activeFilters).length > 0,
+);
+
 export const getPage = createSelector(
   getSearch,
   (search) => {
-    const urlSearchParams = new URLSearchParams(search);
-    const page = urlSearchParams.get('page');
-    return page ? +urlSearchParams.get('page') : undefined;
+    const query = URI.parseQuery(search);
+    return query.page && +query.page;
   },
 );
 

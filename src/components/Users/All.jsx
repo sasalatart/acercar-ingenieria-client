@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Select } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import ActionBar from '../../containers/Layout/ActionBar';
+import ActionBar from '../../containers/Users/List/ActionBar';
 import Title from '../Layout/Title';
 import UsersList from '../../containers/Users/List';
 import DataPlaceholder from '../DataPlaceholder';
@@ -12,6 +12,11 @@ import { majorShape } from '../../shapes';
 const { Option, OptGroup } = Select;
 
 const styles = {
+  selectContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '-25px 0 25px 0',
+  },
   select: {
     minWidth: '400px',
   },
@@ -42,7 +47,7 @@ export default class SearchUsers extends Component {
 
     this.setState(
       { searchFilter },
-      () => this.props.addQueryToCurrentUri({ page: 1, ...searchFilter }),
+      () => this.props.addQueryToCurrentUri({ page: 1, ...searchFilter }, true),
     );
   };
 
@@ -64,16 +69,18 @@ export default class SearchUsers extends Component {
     const interdisciplinaryMajorOptions = this.mapMajors(interdisciplinaryMajors);
 
     return (
-      <Select defaultValue="all" style={styles.select} onChange={this.handleChange}>
-        <Option value="all">{t({ id: 'users.all' })}</Option>
-        <Option value="platformAdmins">{t({ id: 'admins.platform' })}</Option>
-        <OptGroup label={t({ id: 'majors.disciplinaries' })}>
-          {disciplinaryMajorOptions}
-        </OptGroup>
-        <OptGroup label={t({ id: 'majors.interdisciplinaries' })}>
-          {interdisciplinaryMajorOptions}
-        </OptGroup>
-      </Select>
+      <div style={styles.selectContainer}>
+        <Select defaultValue="all" style={styles.select} onChange={this.handleChange}>
+          <Option value="all">{t({ id: 'users.all' })}</Option>
+          <Option value="platformAdmins">{t({ id: 'admins.platform' })}</Option>
+          <OptGroup label={t({ id: 'majors.disciplinaries' })}>
+            {disciplinaryMajorOptions}
+          </OptGroup>
+          <OptGroup label={t({ id: 'majors.interdisciplinaries' })}>
+            {interdisciplinaryMajorOptions}
+          </OptGroup>
+        </Select>
+      </div>
     );
   }
 
@@ -83,7 +90,7 @@ export default class SearchUsers extends Component {
 
     return (
       <div>
-        <ActionBar />
+        <ActionBar {...searchFilter} />
         <Title text={t({ id: 'users' })} />
 
         {this.renderSelect()}

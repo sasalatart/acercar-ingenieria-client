@@ -43,21 +43,14 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-function processValues(values) {
-  const tagList = values.tagList && values.tagList.reduce((tags, tag) => `${tags}, ${tag}`);
-
-  return { ...values, tagList };
-}
-
 const form = reduxForm({
   form: 'discussion',
   onSubmit: (values, dispatch, props) => {
     const { id } = props.match.params;
 
-    const processedValues = processValues(values);
     const action = id
-      ? updateDiscussion(id, processedValues)
-      : createDiscussion(processedValues);
+      ? updateDiscussion(id, values)
+      : createDiscussion(values);
 
     return dispatch(action);
   },

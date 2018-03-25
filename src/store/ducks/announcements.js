@@ -25,7 +25,7 @@ export const TYPES = {
   ADD_TO_PAGINATION: 'announcements/ADD_TO_PAGINATION',
 };
 
-export function loadAnnouncements(page) {
+export function loadAnnouncements(page = 1) {
   return {
     type: TYPES.LOAD_INDEX,
     payload: {

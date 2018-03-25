@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
+import { addQueryToCurrentUri } from '../../../store/ducks/routes';
 import {
   getCollectionParams,
   loadArticles,
+  resetPagination,
   getPagingFns,
 } from '../../../store/ducks/articles';
 import { getIsFetching } from '../../../store/ducks/loading';
@@ -24,7 +26,11 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    loadArticles: (page = 1) => dispatch(loadArticles(page, ownProps.majorId)),
+    loadArticles: ({ page, ...query }) => dispatch(loadArticles(page, ownProps.majorId, query)),
+    onTagClick: (text) => {
+      dispatch(resetPagination(ownProps.majorId));
+      dispatch(addQueryToCurrentUri({ categoryList: text }));
+    },
   };
 }
 

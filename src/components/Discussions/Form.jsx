@@ -6,7 +6,7 @@ import { Col, Row } from 'antd';
 import {
   TextField,
   RichTextField,
-  SelectField,
+  TagsField,
   SwitchField,
   FilesField,
   SubmitButton,
@@ -129,11 +129,9 @@ export default class DiscussionForm extends Component {
           <div style={styles.tagsInputWrapper}>
             <Field
               name="tagList"
-              component={SelectField}
+              component={TagsField}
               label="Tags"
-              mode="tags"
               options={[{ key: defaultTag, value: defaultTag, label: defaultTag }]}
-              tokenSeparators={[',']}
               validate={validators.maxTagCount}
             />
           </div>

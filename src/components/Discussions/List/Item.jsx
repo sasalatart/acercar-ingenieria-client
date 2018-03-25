@@ -38,6 +38,7 @@ function DiscussionListItem({
     likedByCurrentUser,
     createdAt,
   },
+  onTagClick,
 }) {
   const actions = [
     <IconText type="eye" text={impressionsCount} />,
@@ -80,7 +81,7 @@ function DiscussionListItem({
       {tagList.length > 0 &&
         <div>
           <Icon type="tags" />
-          <TagList tags={tagList} />
+          <TagList tags={tagList} onTagClick={onTagClick} />
         </div>
       }
     </Item>
@@ -90,6 +91,7 @@ function DiscussionListItem({
 DiscussionListItem.propTypes = {
   admin: PropTypes.bool.isRequired,
   discussion: discussionShape.isRequired,
+  onTagClick: PropTypes.func.isRequired,
 };
 
 export default WithAuthorization(DiscussionListItem);

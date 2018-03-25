@@ -4,7 +4,7 @@ import { intlShape } from 'react-intl';
 import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
-import ActionBar from './ActionBar';
+import ActionBar from '../../../containers/Discussions/List/ActionBar';
 import Title from '../../Layout/Title';
 import DiscussionListItem from './Item';
 import { paginationShape, discussionShape } from '../../../shapes';
@@ -16,6 +16,7 @@ export default class DiscussionsList extends Component {
     discussions: PropTypes.arrayOf(discussionShape),
     mine: PropTypes.bool,
     loadDiscussions: PropTypes.func.isRequired,
+    onTagClick: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -32,7 +33,7 @@ export default class DiscussionsList extends Component {
   }
 
   renderListItem = discussion => (
-    <DiscussionListItem discussion={discussion} />
+    <DiscussionListItem discussion={discussion} onTagClick={this.props.onTagClick} />
   )
 
   render() {

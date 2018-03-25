@@ -4,7 +4,7 @@ import { intlShape } from 'react-intl';
 import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
-import ActionBar from './ActionBar';
+import ActionBar from '../../../containers/Articles/List/ActionBar';
 import Title from '../../Layout/Title';
 import ListItem from './Item';
 import { paginationShape, articleShape } from '../../../shapes';
@@ -16,6 +16,7 @@ export default class ArticlesList extends Component {
     pagination: paginationShape,
     articles: PropTypes.arrayOf(articleShape),
     loadArticles: PropTypes.func.isRequired,
+    onTagClick: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -26,7 +27,7 @@ export default class ArticlesList extends Component {
   }
 
   renderListItem = article => (
-    <ListItem article={article} />
+    <ListItem article={article} onTagClick={this.props.onTagClick} />
   )
 
   render() {

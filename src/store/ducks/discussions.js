@@ -25,21 +25,24 @@ const TYPES = {
   CREATE: 'discussions/CREATE',
   UPDATE: 'discussions/UPDATE',
   DESTROY: 'discussions/DESTROY',
+  RESET_PAGINATION: 'discussions/RESET_PAGINATION',
 };
 
 export function getPagingFns(mine) {
   return mine ? myPagingFns : forumPagingFns;
 }
 
-export function loadDiscussions(page = 1, mine) {
+export function loadDiscussions(page = 1, mine, query) {
   const urlSuffix = mine ? '/mine' : '';
 
   return {
     type: mine ? TYPES.LOAD_MINE : TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: URI(`/discussions${urlSuffix}`).query({ page }).toString(),
-      urlParams: { collection, page, suffix: mine ? 'mine' : 'forum' },
+      url: URI(`/discussions${urlSuffix}`).query({ page, ...query }).toString(),
+      urlParams: {
+        collection, page, ...query, suffix: mine ? 'mine' : 'forum',
+      },
       responseSchema: [discussionsSchema],
     },
   };
@@ -100,6 +103,13 @@ export function destroyDiscussion(id) {
   };
 }
 
+export function resetPagination(mine) {
+  return {
+    type: TYPES.RESET_PAGINATION,
+    payload: { mine },
+  };
+}
+
 export default function discussionsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
@@ -110,6 +120,10 @@ export default function discussionsReducer(state = INITIAL_STATE, action) {
       const { urlParams } = action.payload.request;
       const fromForum = forumPagingFns.reducer.removeFromPage(state, urlParams);
       return myPagingFns.reducer.removeFromPage(fromForum, urlParams);
+    }
+    case TYPES.RESET_PAGINATION: {
+      const { mine } = action.payload;
+      return getPagingFns(mine).reducer.reset(state);
     }
     default:
       return state;

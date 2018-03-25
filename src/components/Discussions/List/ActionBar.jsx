@@ -1,13 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
-import WithAuthorization from '../../../hoc/WithAuthorization';
+import { Field } from 'redux-form';
+import { intlShape } from 'react-intl';
+import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
+import { TagsField } from '../../Forms';
 import ROUTES from '../../../routes';
 
-function DiscussionsActionBar({ loggedIn, mine, intl: { formatMessage: t } }) {
-  const actions = [];
+function renderExtraFields(t) {
+  const defaultTag = t({ id: 'discussions.defaultTag' });
+
+  return (
+    <Field
+      name="tagList"
+      component={TagsField}
+      label="Tags"
+      options={[{ key: defaultTag, value: defaultTag, label: defaultTag }]}
+    />
+  );
+}
+
+function DiscussionsActionBar({
+  loggedIn,
+  mine,
+  resetPagination,
+  intl: { formatMessage: t },
+}) {
+  const actions = [
+    <SearchButtons
+      key="search"
+      searchTextLabel={t({ id: 'search.discussions' })}
+      beforeSearch={resetPagination}
+      extraFilters={['tagList']}
+      renderExtraFields={() => renderExtraFields(t)}
+    />,
+  ];
 
   if (loggedIn) {
     const newDiscussionHref = ROUTES.DISCUSSIONS_NEW;
@@ -36,6 +64,7 @@ function DiscussionsActionBar({ loggedIn, mine, intl: { formatMessage: t } }) {
 DiscussionsActionBar.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   mine: PropTypes.bool,
+  resetPagination: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 
@@ -43,4 +72,4 @@ DiscussionsActionBar.defaultProps = {
   mine: false,
 };
 
-export default injectIntl(WithAuthorization(DiscussionsActionBar));
+export default DiscussionsActionBar;
