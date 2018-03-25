@@ -1,7 +1,7 @@
 export const colors = {
   primaryLight: '#85C8FF',
   primaryDark: '#40A9FF',
-  secondaryLight: '#FDFDFD',
+  secondaryLight: '#F3FAFF',
   primaryTextLight: 'white',
   fieldPrefix: 'rgba(0, 0, 0, .25)',
   starred: '#F7CA18',
