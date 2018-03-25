@@ -94,14 +94,16 @@ export default class ArticleForm extends Component {
             validate={[validators.required, validators.maxShortDescriptionLength]}
           />
           <Row gutter={GUTTER}>
-            <Col {...COLUMN_LAYOUT}>
-              <Field
-                name="majorId"
-                component={SelectField}
-                label="Major"
-                options={majorOptions}
-              />
-            </Col>
+            {majorOptions.length > 0 &&
+              <Col {...COLUMN_LAYOUT}>
+                <Field
+                  name="majorId"
+                  component={SelectField}
+                  label="Major"
+                  options={majorOptions}
+                />
+              </Col>
+            }
             <Col {...COLUMN_LAYOUT}>
               <Field
                 name="categoryList"

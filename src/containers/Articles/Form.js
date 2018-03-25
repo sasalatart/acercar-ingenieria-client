@@ -6,7 +6,7 @@ import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
 import {
   loadMajors,
-  getMajorOptions,
+  getCurrentUserMajorOptions,
 } from '../../store/ducks/majors';
 import {
   loadCategories,
@@ -34,11 +34,9 @@ function mapStateToProps(state, ownProps) {
   const majorId = +params.majorId;
 
   const article = getArticleEntity(state, params);
-  const majorOptions = getMajorOptions(state);
+  const majorOptions = getCurrentUserMajorOptions(state);
   const categoryOptions = getCategoryOptions(state);
-  const loading = (id && getIsFetching(state, params))
-    || !majorOptions.length
-    || !categoryOptions.length;
+  const loading = (id && getIsFetching(state, params)) || !categoryOptions.length;
 
   return {
     id,

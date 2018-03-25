@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { majorsSchema } from '../../schemas';
 import { goToMajor } from './routes';
+import { getCurrentUserEntity } from './sessions';
 import { getEntities } from './entities';
 import { resourceSuccessNotification } from './notifications';
 
@@ -154,7 +155,14 @@ export const getInterdisciplinaryMajors = createSelector(
 
 export const getMajorOptions = createSelector(
   getMajorEntities,
-  majorEntities => majorEntities.map(({ id, name }) => ({ key: id, value: id, label: name })),
+  majorEntities => majorEntities
+    .map(({ id, name }) => ({ key: id, value: id, label: name })),
+);
+
+export const getCurrentUserMajorOptions = createSelector(
+  getCurrentUserEntity,
+  currentUser => currentUser.majorsOfInterest
+    .map(({ majorId, name }) => ({ key: majorId, value: majorId, label: name })),
 );
 
 export function getMajorIdFromProps(props) {
