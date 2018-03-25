@@ -14,7 +14,7 @@ function displayNotification(
   message,
   description,
   type = NOTIFICATION_TYPES.open,
-  duration = 20,
+  duration = 10,
 ) {
   return {
     type: TYPES.DISPLAY,
