@@ -43,3 +43,15 @@ export const isEqualTo = (message, target) => (value, allValues) => (
     ? message
     : undefined
 );
+
+export const maxFileSize = (message, maxSize) => value => (
+  value && value.size > maxSize
+    ? message
+    : undefined
+);
+
+export const image = message => value => (
+  value && !value.type.includes('image')
+    ? message
+    : undefined
+);

@@ -7,7 +7,7 @@ import {
   TextField,
   NumberField,
   TextArea,
-  PictureField,
+  ImageField,
   SelectField,
   SubmitButton,
 } from '../../../Forms';
@@ -162,12 +162,9 @@ export default class ProfileEditForm extends Component {
           <div style={styles.avatarFieldWrapper}>
             <Field
               name="avatar"
-              component={PictureField}
+              component={ImageField}
               imagePlaceholder={currentAvatarURL}
-              instructions={{
-                changePicture: t({ id: 'forms.changeAvatar' }),
-                drop: t({ id: 'forms.dropzone' }),
-              }}
+              validate={[validators.image, validators.maxAvatarSize]}
             />
           </div>
           <SubmitButton disabled={!valid || submitting} loading={submitting} />

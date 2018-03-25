@@ -13,7 +13,7 @@ export const TextField = createComponent(Input, textFieldMap);
 export const NumberField = createComponent(InputNumber, mapError);
 export const TextArea = createComponent(Input.TextArea, textFieldMap);
 export { default as RichTextField } from './RichTextInput';
-export { default as PictureField } from './PictureInput';
+export { default as ImageField } from './ImageInput';
 export { default as FilesField } from './FilesInput';
 export { default as SwitchField } from './CustomSwitch';
 export const SelectField = createComponent(CustomSelect, selectFieldMap);

@@ -9,7 +9,7 @@ import {
   RichTextField,
   SelectField,
   TagsField,
-  PictureField,
+  ImageField,
   FilesField,
   SubmitButton,
 } from '../Forms';
@@ -124,12 +124,9 @@ export default class ArticleForm extends Component {
               <div style={styles.fileInputWrapper}>
                 <Field
                   name="picture"
-                  component={PictureField}
+                  component={ImageField}
                   imagePlaceholder={currentPictureURL}
-                  instructions={{
-                    changePicture: t({ id: 'forms.changePicture' }),
-                    drop: t({ id: 'forms.dropzone' }),
-                  }}
+                  validate={[validators.image, validators.maxPictureSize]}
                 />
               </div>
             </Col>

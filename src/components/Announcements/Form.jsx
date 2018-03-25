@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { intlShape } from 'react-intl';
 import {
-  PictureField,
+  ImageField,
   SwitchField,
   SubmitButton,
 } from '../Forms';
@@ -13,6 +13,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  switchContainer: {
+    margin: '15px 0',
   },
 };
 
@@ -28,15 +31,11 @@ function AnnouncementForm({
       <div style={styles.centered}>
         <Field
           name="picture"
-          component={PictureField}
-          instructions={{
-            changePicture: t({ id: 'forms.changePicture' }),
-            drop: t({ id: 'forms.dropzone' }),
-          }}
-          validate={validators.required}
+          component={ImageField}
+          validate={[validators.required, validators.image, validators.maxPictureSize]}
         />
       </div>
-      <div style={styles.centered}>
+      <div style={{ ...styles.centered, ...styles.switchContainer }}>
         <Field
           name="pinned"
           component={SwitchField}

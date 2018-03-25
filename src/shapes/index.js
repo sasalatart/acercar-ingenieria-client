@@ -165,3 +165,7 @@ export const discussionShape = PropTypes.shape({
   likedByCurrentUser: PropTypes.bool.isRequired,
   createdAt: PropTypes.string.isRequired,
 });
+
+export const fieldMetaShape = PropTypes.shape({
+  error: PropTypes.string,
+});

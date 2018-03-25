@@ -5,6 +5,7 @@ export const colors = {
   primaryTextLight: 'white',
   fieldPrefix: 'rgba(0, 0, 0, .25)',
   starred: '#F7CA18',
+  error: '#F5222D',
 };
 
 export const measures = {

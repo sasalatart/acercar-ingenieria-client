@@ -7,7 +7,7 @@ import {
   TextField,
   TextArea,
   RichTextField,
-  PictureField,
+  ImageField,
   RadioField,
   SubmitButton,
 } from '../Forms';
@@ -80,12 +80,9 @@ function MajorForm({
       <div style={styles.logoFieldWrapper}>
         <Field
           name="logo"
-          component={PictureField}
+          component={ImageField}
           imagePlaceholder={currentLogoURL}
-          instructions={{
-            changePicture: t({ id: 'forms.changeLogo' }),
-            drop: t({ id: 'forms.dropzone' }),
-          }}
+          validate={[validators.image, validators.maxLogoSize]}
         />
       </div>
       <Field
