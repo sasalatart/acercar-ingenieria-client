@@ -37,6 +37,7 @@ function CommentForm({
           placeholder={t({ id: 'forms.content' })}
           validate={[validators.required, validators.maxLength]}
           disabled={submitting}
+          autoFocus
         />
       </div>
       <SubmitButton
