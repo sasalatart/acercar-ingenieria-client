@@ -52,19 +52,25 @@ export const majorOfInterestShape = PropTypes.shape({
   logo: imageShape,
 });
 
-export const userShape = PropTypes.shape({
+const sharedUserShape = {
   id: PropTypes.number.isRequired,
   email: PropTypes.string.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   generation: PropTypes.number.isRequired,
-  bio: PropTypes.string,
   avatar: imageShape,
+  createdAt: PropTypes.string.isRequired,
+};
+
+export const userShape = PropTypes.shape({
+  ...sharedUserShape,
+  bio: PropTypes.string,
   admin: PropTypes.bool,
   majorsOfInterest: PropTypes.arrayOf(majorSummaryShape),
   adminOfMajors: PropTypes.arrayOf(majorSummaryShape),
-  createdAt: PropTypes.string.isRequired,
 });
+
+export const userSummaryShape = PropTypes.shape(sharedUserShape);
 
 export const locationShape = PropTypes.shape({
   pathname: PropTypes.string.isRequired,
@@ -86,7 +92,7 @@ export const questionShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   question: PropTypes.string.isRequired,
   answer: PropTypes.string,
-  author: userShape.isRequired,
+  author: userSummaryShape.isRequired,
   major: majorSummaryShape,
   pinned: PropTypes.bool.isRequired,
   createdAt: PropTypes.string.isRequired,
@@ -98,7 +104,7 @@ export const articleShape = PropTypes.shape({
   picture: imageShape,
   shortDescription: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
-  author: userShape.isRequired,
+  author: userSummaryShape.isRequired,
   majorSummary: majorSummaryShape,
   categoryList: PropTypes.arrayOf(PropTypes.string),
   likesCount: PropTypes.number.isRequired,
@@ -122,7 +128,7 @@ export const optionShape = PropTypes.shape({
 
 const sharedCommentShape = {
   id: PropTypes.number.isRequired,
-  author: userShape.isRequired,
+  author: userSummaryShape.isRequired,
   commentableType: PropTypes.string.isRequired,
   commentableId: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
@@ -148,7 +154,7 @@ export const lightboxImageShape = PropTypes.shape({
 
 export const discussionShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
-  author: userShape.isRequired,
+  author: userSummaryShape.isRequired,
   title: PropTypes.string.isRequired,
   pinned: PropTypes.bool.isRequired,
   description: PropTypes.string.isRequired,

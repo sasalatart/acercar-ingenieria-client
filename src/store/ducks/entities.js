@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 
 export const INITIAL_STATE = new Map({
   users: new Map({}),
+  userSummaries: new Map({}),
   announcements: new Map({}),
   majors: new Map({}),
   majorsOfInterest: new Map({}),

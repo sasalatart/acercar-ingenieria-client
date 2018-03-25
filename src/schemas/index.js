@@ -6,6 +6,8 @@ export const majorSummariesSchema = new schema.Entity('majorSummaries');
 
 export const majorsOfInterestSchema = new schema.Entity('majorsOfInterest');
 
+export const userSummariesSchema = new schema.Entity('userSummaries');
+
 export const usersSchema = new schema.Entity('users', {
   majorsOfInterest: [majorsOfInterestSchema],
   adminOfMajors: [majorSummariesSchema],
@@ -14,26 +16,26 @@ export const usersSchema = new schema.Entity('users', {
 export const announcementsSchema = new schema.Entity('announcements');
 
 export const questionsSchema = new schema.Entity('questions', {
-  author: usersSchema,
+  author: userSummariesSchema,
   majorSummary: majorSummariesSchema,
 });
 
 export const articlesSchema = new schema.Entity('articles', {
-  author: usersSchema,
+  author: userSummariesSchema,
   majorSummary: majorSummariesSchema,
 });
 
 export const discussionsSchema = new schema.Entity('discussions', {
-  author: usersSchema,
+  author: userSummariesSchema,
 });
 
 export const categoriesSchema = new schema.Entity('categories');
 
 export const childCommentsSchema = new schema.Entity('comments', {
-  author: usersSchema,
+  author: userSummariesSchema,
 });
 
 export const commentsSchema = new schema.Entity('comments', {
-  author: usersSchema,
+  author: userSummariesSchema,
   childComments: [childCommentsSchema],
 });
