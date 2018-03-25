@@ -8,6 +8,7 @@ import {
 import {
   loadMajors,
   getMajorEntities,
+  getMajorOptions,
 } from '../../../../store/ducks/majors';
 import I18nForm from '../../../../hoc/I18nForm';
 import EditForm from '../../../../components/Users/Profile/Edit/Form';
@@ -39,6 +40,7 @@ function mapStateToProps(state) {
   return {
     currentUser,
     majors: getMajorEntities(state),
+    majorOptions: getMajorOptions(state),
     initialValues: {
       ...pick(currentUser, FIELDS),
       majorUsersAttributes: currentUser.majorsOfInterest.map(({ majorId }) => majorId),

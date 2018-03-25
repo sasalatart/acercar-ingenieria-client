@@ -154,10 +154,7 @@ export const getInterdisciplinaryMajors = createSelector(
 
 export const getMajorOptions = createSelector(
   getMajorEntities,
-  majorEntities => ([
-    { key: 0, value: null, label: 'None' },
-    ...majorEntities.map(({ id, name }) => ({ key: id, value: id, label: name })),
-  ]),
+  majorEntities => majorEntities.map(({ id, name }) => ({ key: id, value: id, label: name })),
 );
 
 export function getMajorIdFromProps(props) {

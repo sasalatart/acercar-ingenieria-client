@@ -12,7 +12,7 @@ import {
   SubmitButton,
 } from '../../../Forms';
 import DataPlaceholder from '../../../DataPlaceholder';
-import { majorShape } from '../../../../shapes';
+import { majorShape, optionShape } from '../../../../shapes';
 import { colors } from '../../../../theme';
 
 const styles = {
@@ -45,6 +45,7 @@ export default class ProfileEditForm extends Component {
     initialValues: PropTypes.shape({}).isRequired,
     currentAvatarURL: PropTypes.string,
     majors: PropTypes.arrayOf(majorShape),
+    majorOptions: PropTypes.arrayOf(optionShape).isRequired,
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
     loadMajors: PropTypes.func.isRequired,
@@ -61,11 +62,6 @@ export default class ProfileEditForm extends Component {
 
   componentDidMount() {
     this.props.loadMajors();
-  }
-
-  getMajorsOptions() {
-    return Object.values(this.props.majors)
-      .map(({ id, name }) => ({ key: id, value: id, label: name }));
   }
 
   checkEmailChanged = (event, newEmail) => {
@@ -95,6 +91,7 @@ export default class ProfileEditForm extends Component {
       validators,
       currentAvatarURL,
       majors,
+      majorOptions,
       valid,
       submitting,
       handleSubmit,
@@ -158,8 +155,9 @@ export default class ProfileEditForm extends Component {
           <Field
             name="majorUsersAttributes"
             component={SelectField}
+            label="Majors"
             mode="multiple"
-            options={this.getMajorsOptions()}
+            options={majorOptions}
           />
           <div style={styles.avatarFieldWrapper}>
             <Field
