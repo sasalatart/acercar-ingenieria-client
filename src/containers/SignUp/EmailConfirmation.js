@@ -1,20 +1,17 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import { getLocale } from '../../store/ducks/i18n';
+import URI from 'urijs';
 import { confirmEmail } from '../../store/ducks/sessions';
 import EmailConfirmation from '../../components/SignUp/EmailConfirmation';
 
-function mapStateToProps(state) {
+function mapDispatchToProps(dispatch, ownProps) {
+  const { search } = ownProps.location;
+
   return {
-    locale: getLocale(state),
+    confirmEmail: () => dispatch(confirmEmail(URI.parseQuery(search))),
   };
 }
 
-const mapDispatchToProps = {
-  confirmEmail,
-};
-
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EmailConfirmation));
+const connectedComponent = connect(null, mapDispatchToProps)(EmailConfirmation);
+export default withRouter(injectIntl(connectedComponent));

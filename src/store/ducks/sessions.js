@@ -63,13 +63,14 @@ export function signUp(credentials) {
     });
 }
 
-export function confirmEmail(url) {
+export function confirmEmail(query) {
   return dispatch =>
     dispatch({
       type: TYPES.CONFIRM_EMAIL,
       payload: {
         method: 'GET',
-        url,
+        url: '/auth/confirmation',
+        query,
       },
     }).then(() => {
       dispatch(resourceSuccessNotification('email', 'confirmed'));
