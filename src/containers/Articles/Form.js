@@ -28,6 +28,15 @@ const FIELDS = [
   'title', 'shortDescription', 'content', 'categoryList', 'majorId',
 ];
 
+function getInitialValues(id, majorId, article) {
+  if (!id) return { majorId };
+
+  return {
+    ...omitBy(pick(article, FIELDS), isNil),
+    categoryList: article.categoryList && article.categoryList.join(', '),
+  };
+}
+
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps.match.params, collection };
   const id = +params.id;
@@ -41,7 +50,7 @@ function mapStateToProps(state, ownProps) {
   return {
     id,
     loading,
-    initialValues: id ? omitBy(pick(article, FIELDS), isNil) : { majorId },
+    initialValues: getInitialValues(id, majorId, article),
     majorOptions,
     categoryOptions,
     currentPictureURL: get(article, 'picture.medium', articlePlaceholder),

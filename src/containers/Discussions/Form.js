@@ -21,6 +21,15 @@ const FIELDS = [
   'title', 'pinned', 'description', 'tagList',
 ];
 
+function getInitialValues(id, discussion) {
+  if (!id) return {};
+
+  return {
+    ...omitBy(pick(discussion, FIELDS), isNil),
+    tagList: discussion.tagList && discussion.tagList.join(', '),
+  };
+}
+
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps.match.params, collection };
   const id = params.id && +params.id;
@@ -32,7 +41,7 @@ function mapStateToProps(state, ownProps) {
     id,
     loading,
     noData: !!id && !discussion && !loading,
-    initialValues: id ? omitBy(pick(discussion, FIELDS), isNil) : {},
+    initialValues: getInitialValues(id, discussion),
     previousAttachments: get(discussion, 'attachments', []),
   };
 }

@@ -58,7 +58,7 @@ export function CustomTagsSelect(props) {
 }
 
 CustomTagsSelect.propTypes = {
-  value: PropTypes.arrayOf(PropTypes.string),
+  value: PropTypes.string,
   options: PropTypes.arrayOf(optionShape).isRequired,
   onBlur: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
