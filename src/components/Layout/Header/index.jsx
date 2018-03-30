@@ -6,6 +6,7 @@ import Radium from 'radium';
 import { Button } from 'antd';
 import UserAvatar from '../../Users/Profile/Avatar';
 import LocaleSelect from '../../../containers/Layout/Header/LocaleSelect';
+import ButtonLink from '../../../containers/ButtonLink';
 import HeaderLink from './Link';
 import Hideable from '../Hideable';
 import Spaced from '../Spaced';
@@ -52,7 +53,7 @@ const styles = {
   },
 };
 
-function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, t) {
+function renderUpperHeader(currentUser, signOut, t) {
   return (
     <Spaced style={styles.upperHeader} padded>
       <Link to={ROUTES.LANDING} href={ROUTES.LANDING} style={styles.innerUpperHeader}>
@@ -78,12 +79,12 @@ function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, t) {
           )
           : (
             <div>
-              <Button type="primary" icon="login" onClick={goToSignIn} style={styles.button}>
+              <ButtonLink type="primary" icon="login" to={ROUTES.SIGN_IN} style={styles.button}>
                 <Hideable>{t({ id: 'routing.signIn' })}</Hideable>
-              </Button>
-              <Button icon="rocket" onClick={goToSignUp} style={styles.button} ghost>
+              </ButtonLink>
+              <ButtonLink icon="rocket" to={ROUTES.SIGN_UP} style={styles.button} ghost>
                 <Hideable>{t({ id: 'routing.signUp' })}</Hideable>
-              </Button>
+              </ButtonLink>
             </div>
           )
         }
@@ -134,12 +135,10 @@ function renderLowerHeader(currentUser, t) {
   );
 }
 
-function Header({
-  currentUser, goToSignIn, goToSignUp, signOut, intl: { formatMessage: t },
-}) {
+function Header({ currentUser, signOut, intl: { formatMessage: t } }) {
   return (
     <div>
-      {renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, t)}
+      {renderUpperHeader(currentUser, signOut, t)}
       {renderLowerHeader(currentUser, t)}
     </div>
   );
@@ -147,8 +146,6 @@ function Header({
 
 Header.propTypes = {
   currentUser: userShape,
-  goToSignIn: PropTypes.func.isRequired,
-  goToSignUp: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };

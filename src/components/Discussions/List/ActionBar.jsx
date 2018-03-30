@@ -38,25 +38,25 @@ function DiscussionsActionBar({
   ];
 
   if (loggedIn) {
-    const newDiscussionHref = ROUTES.DISCUSSIONS_NEW;
-    actions.push(<ButtonLink to={newDiscussionHref} content={t({ id: 'discussions.new' })} />);
+    const buttonLink = (
+      <ButtonLink to={ROUTES.DISCUSSIONS_NEW}>{t({ id: 'discussions.new' })}</ButtonLink>
+    );
+    actions.push(buttonLink);
   }
 
-  actions.push(mine
+  const buttonLink = mine
     ? (
-      <ButtonLink
-        key="goToAllDiscussions"
-        to={ROUTES.DISCUSSIONS}
-        content={t({ id: 'discussions' })}
-      />
+      <ButtonLink key="goToAllDiscussions" to={ROUTES.DISCUSSIONS}>
+        {t({ id: 'discussions' })}
+      </ButtonLink>
     )
     : (
-      <ButtonLink
-        key="goToMyDiscussions"
-        to={ROUTES.MY_DISCUSSIONS}
-        content={t({ id: 'discussions.mine' })}
-      />
-    ));
+      <ButtonLink key="goToMyDiscussions" to={ROUTES.MY_DISCUSSIONS}>
+        {t({ id: 'discussions.mine' })}
+      </ButtonLink>
+    );
+
+  actions.push(buttonLink);
 
   return <ActionBar actions={actions} />;
 }

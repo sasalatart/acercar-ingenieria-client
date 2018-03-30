@@ -28,7 +28,7 @@ export default class DiscussionsList extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.mine !== this.props.mine) {
-      nextProps.loadDiscussions();
+      nextProps.loadDiscussions({ page: 1 });
     }
   }
 

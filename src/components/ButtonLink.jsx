@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { Button } from 'antd';
 
 function ButtonLink({
-  type, content, goToRoute, ...extraProps
+  type, children, goToRoute, ...extraProps
 }) {
-  return <Button type={type} onClick={goToRoute} {...extraProps}>{content}</Button>;
+  return <Button type={type} onClick={goToRoute} {...extraProps}>{children}</Button>;
 }
 
 ButtonLink.propTypes = {
   type: PropTypes.string,
-  content: PropTypes.oneOfType([
+  children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,
   ]),
@@ -19,7 +19,7 @@ ButtonLink.propTypes = {
 
 ButtonLink.defaultProps = {
   type: 'primary',
-  content: null,
+  children: null,
 };
 
 export default ButtonLink;

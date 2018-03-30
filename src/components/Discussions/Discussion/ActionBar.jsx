@@ -26,8 +26,18 @@ function DiscussionActionBar({
   ];
 
   if (admin || isAuthor) {
-    actions.push(<ButtonLink key="edit" to={ROUTES.DISCUSSION_EDIT(id)} icon="edit" content={t({ id: 'forms.edit' })} />);
-    actions.push(<DestroyButton key="destroy" collection="discussions" id={id} callback={onDestroy} />);
+    const editButton = (
+      <ButtonLink key="edit" to={ROUTES.DISCUSSION_EDIT(id)} icon="edit">
+        {t({ id: 'forms.edit' })}
+      </ButtonLink>
+    );
+
+    const destroyButton = (
+      <DestroyButton key="destroy" collection="discussions" id={id} callback={onDestroy} />
+    );
+
+    actions.push(editButton);
+    actions.push(destroyButton);
   }
 
   return <ActionBar actions={actions} />;

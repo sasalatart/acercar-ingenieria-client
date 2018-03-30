@@ -10,7 +10,13 @@ function MajorsActionBar({ admin, intl: { formatMessage: t } }) {
   const actions = [];
 
   if (admin) {
-    actions.push(<ButtonLink to={ROUTES.MAJORS_NEW} content={t({ id: 'majors.new' })} />);
+    const buttonLink = (
+      <ButtonLink to={ROUTES.MAJORS_NEW}>
+        {t({ id: 'majors.new' })}
+      </ButtonLink>
+    );
+
+    actions.push(buttonLink);
   }
 
   return <ActionBar actions={actions} />;

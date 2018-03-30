@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from 'antd';
 import DestroyButton from '../../../containers/DestroyButton';
 import LikeButton from '../../../containers/LikeButton';
+import ButtonLink from '../../../containers/ButtonLink';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import { articleShape } from '../../../shapes';
+import ROUTES from '../../../routes';
 
 function ArticleActionBar({
   article: {
@@ -17,7 +18,6 @@ function ArticleActionBar({
   adminOrMajorAdmin,
   isAuthor,
   onDestroy,
-  goToArticleEdit,
   intl: { formatMessage: t },
 }) {
   const actions = [
@@ -31,8 +31,29 @@ function ArticleActionBar({
   ];
 
   if (adminOrMajorAdmin || isAuthor) {
-    actions.push(<Button key="edit" type="primary" icon="edit" onClick={goToArticleEdit}>{t({ id: 'forms.edit' })}</Button>);
-    actions.push(<DestroyButton key="destroy" collection="articles" id={id} baseResourceId={majorId} callback={onDestroy} />);
+    const articleEditButton = (
+      <ButtonLink
+        key="edit"
+        type="primary"
+        icon="edit"
+        to={ROUTES.ARTICLE_EDIT(id, majorId)}
+      >
+        {t({ id: 'forms.edit' })}
+      </ButtonLink>
+    );
+
+    const destroyButton = (
+      <DestroyButton
+        key="destroy"
+        collection="articles"
+        id={id}
+        baseResourceId={majorId}
+        callback={onDestroy}
+      />
+    );
+
+    actions.push(articleEditButton);
+    actions.push(destroyButton);
   }
 
   return <ActionBar actions={actions} />;
@@ -43,7 +64,6 @@ ArticleActionBar.propTypes = {
   isAuthor: PropTypes.bool.isRequired,
   article: articleShape.isRequired,
   onDestroy: PropTypes.func.isRequired,
-  goToArticleEdit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 

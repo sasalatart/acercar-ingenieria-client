@@ -8,24 +8,12 @@ export function goToLanding() {
   return push(ROUTES.LANDING);
 }
 
-export function goToSignIn() {
-  return push(ROUTES.SIGN_IN);
-}
-
-export function goToSignUp() {
-  return push(ROUTES.SIGN_UP);
-}
-
 export function goToProfile() {
   return push(ROUTES.PROFILE);
 }
 
 export function goToUser(userId) {
   return push(ROUTES.USER(userId));
-}
-
-export function goToMajorsNew() {
-  return push(ROUTES.MAJORS_NEW);
 }
 
 export function goToMajor(majorId) {
@@ -38,10 +26,6 @@ export function goToArticles(majorId) {
 
 export function goToArticle(id, majorId) {
   return push(ROUTES.ARTICLE(id, majorId));
-}
-
-export function goToArticleEdit(id, majorId) {
-  return push(ROUTES.ARTICLE_EDIT(id, majorId));
 }
 
 export function goToDiscussions() {

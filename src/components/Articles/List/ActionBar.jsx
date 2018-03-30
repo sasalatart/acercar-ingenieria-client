@@ -82,11 +82,9 @@ export default class ArticlesActionBar extends Component {
 
     if (loggedIn) {
       const newArticleButtonLink = (
-        <ButtonLink
-          key="new"
-          to={ROUTES.ARTICLES_NEW(majorId)}
-          content={t({ id: 'articles.new' })}
-        />
+        <ButtonLink key="new" to={ROUTES.ARTICLES_NEW(majorId)} >
+          {t({ id: 'articles.new' })}
+        </ButtonLink>
       );
       actions.push(newArticleButtonLink);
     }
