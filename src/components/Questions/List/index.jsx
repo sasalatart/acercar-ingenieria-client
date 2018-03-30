@@ -48,7 +48,7 @@ export default class QuestionsList extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.pending !== this.props.pending) {
-      nextProps.loadQuestions();
+      nextProps.loadQuestions({ page: 1 });
     }
   }
 

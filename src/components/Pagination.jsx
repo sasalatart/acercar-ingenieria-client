@@ -32,7 +32,7 @@ export default class PaginationControls extends Component {
   }
 
   componentDidMount() {
-    this.props.loadFn(this.props.current);
+    this.props.loadFn({ page: this.props.current });
   }
 
   componentWillReceiveProps(nextProps) {
