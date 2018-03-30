@@ -4,7 +4,7 @@ import { Select } from 'antd';
 
 function LocaleSelect({ locale, setLocale, style }) {
   return (
-    <Select defaultValue={locale} onChange={setLocale} style={style}>
+    <Select defaultValue={locale} onChange={setLocale} style={style} size="small">
       <Select.Option value="es-ES">es-ES</Select.Option>
       <Select.Option value="en-US">en-US</Select.Option>
     </Select>

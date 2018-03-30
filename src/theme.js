@@ -1,3 +1,5 @@
+import keyMirror from 'keymirror';
+
 export const colors = {
   primaryLight: '#85C8FF',
   primaryDark: '#40A9FF',
@@ -8,8 +10,16 @@ export const colors = {
   error: '#F5222D',
 };
 
-export const measures = {
-  paddingHorizontal: '75px',
+export const breakpointsKeys = keyMirror({
+  lg: null, bg: null, md: null, sm: null, xs: null,
+});
+
+export const breakpoints = {
+  lg: '@media (max-width : 1400px)',
+  bg: '@media (max-width : 1200px)',
+  md: '@media (max-width : 992px)',
+  sm: '@media (max-width : 768px)',
+  xs: '@media (max-width : 480px)',
 };
 
 export const themeStyles = {
@@ -44,12 +54,4 @@ export const themeStyles = {
     textAlign: 'justify',
     whiteSpace: 'pre-wrap',
   },
-};
-
-export const breakpoints = {
-  lg: '@media (max-width : 1400px)',
-  bg: '@media (max-width : 1200px)',
-  md: '@media (max-width : 992px)',
-  sm: '@media (max-width : 768px)',
-  xs: '@media (max-width : 480px)',
 };

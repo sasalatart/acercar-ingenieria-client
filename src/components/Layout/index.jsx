@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Header from '../../containers/Layout/Header';
 import Footer from './Footer';
-import { colors, measures } from '../../theme';
+import Spaced from './Spaced';
+import { colors } from '../../theme';
 
 const styles = {
   background: {
@@ -14,8 +15,6 @@ const styles = {
   body: {
     flex: 1,
     position: 'relative',
-    marginLeft: measures.paddingHorizontal,
-    marginRight: measures.paddingHorizontal,
   },
 };
 
@@ -23,9 +22,9 @@ function AILayout({ children }) {
   return (
     <div style={styles.background}>
       <Header />
-      <div style={styles.body}>
+      <Spaced style={styles.body}>
         {children}
-      </div>
+      </Spaced>
       <Footer />
     </div>
   );

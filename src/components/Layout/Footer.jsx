@@ -1,5 +1,6 @@
 import React from 'react';
-import { colors, measures } from '../../theme';
+import Spaced from './Spaced';
+import { colors } from '../../theme';
 
 const styles = {
   wrapper: {
@@ -8,8 +9,6 @@ const styles = {
     justifyContent: 'space-around',
     background: colors.primaryLight,
     minHeight: '36px',
-    paddingLeft: measures.paddingHorizontal,
-    paddingRight: measures.paddingHorizontal,
     marginTop: '25px',
   },
   text: {
@@ -22,10 +21,10 @@ const styles = {
 function Footer() {
   return (
     <div style={styles.wrapper}>
-      <div>
+      <Spaced padded>
         <p style={styles.text}>Acercar Ingeniería</p>
         <p style={styles.text}>2014-2018</p>
-      </div>
+      </Spaced>
     </div>
   );
 }

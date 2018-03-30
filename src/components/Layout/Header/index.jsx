@@ -4,13 +4,15 @@ import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import Radium from 'radium';
 import { Button } from 'antd';
-import ROUTES from '../../routes';
-import UserAvatar from '../Users/Profile/Avatar';
-import LocaleSelect from '../../containers/LocaleSelect';
-import HeaderLink from './HeaderLink';
-import { userShape } from '../../shapes';
-import { colors, measures } from '../../theme';
-import logo from '../../images/logo.png';
+import UserAvatar from '../../Users/Profile/Avatar';
+import LocaleSelect from '../../../containers/Layout/Header/LocaleSelect';
+import HeaderLink from './Link';
+import Hideable from '../Hideable';
+import Spaced from '../Spaced';
+import { userShape } from '../../../shapes';
+import ROUTES from '../../../routes';
+import { colors } from '../../../theme';
+import logo from '../../../images/logo.png';
 
 const styles = {
   upperHeader: {
@@ -19,8 +21,6 @@ const styles = {
     justifyContent: 'space-between',
     background: colors.primaryLight,
     minHeight: '96px',
-    paddingLeft: measures.paddingHorizontal,
-    paddingRight: measures.paddingHorizontal,
   },
   innerUpperHeader: {
     display: 'flex',
@@ -39,7 +39,7 @@ const styles = {
     marginRight: '5px',
   },
   localeSelect: {
-    marginLeft: '25px',
+    marginLeft: '5px',
   },
   lowerHeader: {
     display: 'flex',
@@ -48,21 +48,21 @@ const styles = {
     background: colors.primaryDark,
     boxShadow: '0 0.5em 1.0em rgba(0, 0, 0, 0.6)',
     minHeight: '36px',
-    paddingLeft: measures.paddingHorizontal,
-    paddingRight: measures.paddingHorizontal,
     marginBottom: '25px',
   },
 };
 
 function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, t) {
   return (
-    <div style={styles.upperHeader}>
+    <Spaced style={styles.upperHeader} padded>
       <Link to={ROUTES.LANDING} href={ROUTES.LANDING} style={styles.innerUpperHeader}>
         <img src={logo} alt="logo" style={styles.logo} />
-        <div>
-          <h1 style={styles.titleText}>Acercar</h1>
-          <h1 style={styles.titleText}>Ingeniería</h1>
-        </div>
+        <Hideable>
+          <div>
+            <h1 style={styles.titleText}>Acercar</h1>
+            <h1 style={styles.titleText}>Ingeniería</h1>
+          </div>
+        </Hideable>
       </Link>
       <div style={styles.innerUpperHeader}>
         {currentUser
@@ -71,31 +71,31 @@ function renderUpperHeader(currentUser, goToSignIn, goToSignUp, signOut, t) {
               <Link to={ROUTES.PROFILE} href={ROUTES.PROFILE}>
                 <UserAvatar user={currentUser} style={styles.button} />
               </Link>
-              <Button type="danger" icon="logout" style={styles.button} onClick={signOut}>
-                {t({ id: 'auth.signOut' })}
+              <Button type="danger" icon="logout" onClick={signOut} style={styles.button}>
+                <Hideable>{t({ id: 'auth.signOut' })}</Hideable>
               </Button>
             </div>
           )
           : (
             <div>
-              <Button type="primary" icon="login" style={styles.button} onClick={goToSignIn}>
-                {t({ id: 'routing.signIn' })}
+              <Button type="primary" icon="login" onClick={goToSignIn} style={styles.button}>
+                <Hideable>{t({ id: 'routing.signIn' })}</Hideable>
               </Button>
-              <Button icon="rocket" style={styles.button} onClick={goToSignUp} ghost>
-                {t({ id: 'routing.signUp' })}
+              <Button icon="rocket" onClick={goToSignUp} style={styles.button} ghost>
+                <Hideable>{t({ id: 'routing.signUp' })}</Hideable>
               </Button>
             </div>
           )
         }
         <LocaleSelect style={styles.localeSelect} />
       </div>
-    </div>
+    </Spaced>
   );
 }
 
 function renderLowerHeader(currentUser, t) {
   return (
-    <div style={styles.lowerHeader}>
+    <Spaced style={styles.lowerHeader} padded>
       <HeaderLink
         to={ROUTES.MAJORS}
         text="Majors"
@@ -130,7 +130,7 @@ function renderLowerHeader(currentUser, t) {
         text={t({ id: 'aboutUs' })}
         icon="smile"
       />
-    </div>
+    </Spaced>
   );
 }
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { Icon } from 'antd';
 import Radium from 'radium';
-import { colors, breakpoints } from '../../theme';
+import { Icon } from 'antd';
+import Hideable from '../Hideable';
+import { colors } from '../../../theme';
 
 const Link = Radium(ReactRouterLink);
 
@@ -18,9 +19,6 @@ const styles = {
   },
   text: {
     marginLeft: '5px',
-    [breakpoints.md]: {
-      display: 'none',
-    },
   },
 };
 
@@ -28,7 +26,9 @@ function HeaderLink({ to, text, icon }) {
   return (
     <Link to={to} href={to} style={styles.link}>
       <Icon type={icon} />
-      <span style={styles.text}>{text}</span>
+      <Hideable>
+        <span style={styles.text}>{text}</span>
+      </Hideable>
     </Link>
   );
 }
@@ -43,4 +43,4 @@ HeaderLink.defaultProps = {
   icon: 'link',
 };
 
-export default Radium(HeaderLink);
+export default HeaderLink;
