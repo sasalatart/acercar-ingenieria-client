@@ -7,6 +7,7 @@ import { Editor } from 'react-draft-wysiwyg';
 
 const styles = {
   editorWrapper: {
+    backgroundColor: '#FDFDFD',
     borderStyle: 'solid',
     borderWidth: '1px',
     padding: '5px',
