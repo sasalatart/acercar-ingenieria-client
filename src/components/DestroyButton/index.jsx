@@ -5,7 +5,11 @@ import { Popconfirm } from 'antd';
 import DestroyIconOrButton from './IconOrButton';
 
 function DestroyButton({
-  loading, iconOnly, onDestroy, intl: { formatMessage: t },
+  loading,
+  iconOnly,
+  label,
+  onDestroy,
+  intl: { formatMessage: t },
 }) {
   return (
     <Popconfirm
@@ -14,7 +18,11 @@ function DestroyButton({
       ancelText={t({ id: 'forms.confirm.cancel' })}
       onConfirm={onDestroy}
     >
-      <DestroyIconOrButton loading={loading} iconOnly={iconOnly} />
+      <DestroyIconOrButton
+        loading={loading}
+        iconOnly={iconOnly}
+        label={label}
+      />
     </Popconfirm>
   );
 }
@@ -22,6 +30,7 @@ function DestroyButton({
 DestroyButton.propTypes = {
   loading: PropTypes.bool,
   iconOnly: PropTypes.bool,
+  label: PropTypes.string,
   onDestroy: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
@@ -29,6 +38,7 @@ DestroyButton.propTypes = {
 DestroyButton.defaultProps = {
   loading: false,
   iconOnly: false,
+  label: undefined,
 };
 
 export default injectIntl(DestroyButton);

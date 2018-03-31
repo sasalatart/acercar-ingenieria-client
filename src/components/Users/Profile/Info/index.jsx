@@ -5,7 +5,7 @@ import { userShape } from '../../../../shapes';
 import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
-import ActionBar from '../../../../containers/Layout/ActionBar';
+import ActionBar from '../../../../containers/Users/Profile/Info/ActionBar';
 import Title from '../../../Layout/Title';
 import SubTitle from '../../../Layout/SubTitle';
 
@@ -24,7 +24,7 @@ const styles = {
 function ProfileInfo({ user, intl: { formatMessage: t } }) {
   return (
     <div>
-      <ActionBar />
+      <ActionBar user={user} />
       <Row type="flex" justify="center" gutter={8}>
         <Col md={6}>
           <div style={styles.cardWrapper}>

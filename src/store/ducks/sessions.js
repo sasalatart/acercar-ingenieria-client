@@ -25,6 +25,7 @@ export const TYPES = {
   SIGN_OUT: 'sessions/SIGN_OUT',
   UPDATE: 'sessions/UPDATE',
   CHANGE_PASSWORD: 'sessions/CHANGE_PASSWORD',
+  DESTROY_ACCOUNT: 'sessions/DESTROY_ACCOUNT',
 };
 
 export function setTokens(tokens) {
@@ -79,14 +80,14 @@ export function confirmEmail(query) {
 
 export function signOut() {
   return (dispatch) => {
-    dispatch({
+    dispatch(goToLanding());
+    return dispatch({
       type: TYPES.SIGN_OUT,
       payload: {
         method: 'DELETE',
         url: '/auth/sign_out',
       },
     });
-    dispatch(goToLanding());
   };
 }
 
@@ -97,7 +98,7 @@ export function updateProfile(id, body) {
       payload: {
         method: 'PUT',
         url: `/users/${id}`,
-        urlParams: { collection: 'profiles', id },
+        urlParams: { collection: 'users', id },
         body,
         responseSchema: usersSchema,
       },
@@ -119,6 +120,22 @@ export function changePassword(body) {
       dispatch(resourceSuccessNotification('password', 'updated'));
       dispatch(goToProfile());
     });
+}
+
+export function destroyAccount() {
+  return (dispatch) => {
+    dispatch(goToLanding());
+    return dispatch({
+      type: TYPES.DESTROY_ACCOUNT,
+      payload: {
+        method: 'DELETE',
+        url: '/auth',
+        urlParams: { collection: 'auth' },
+      },
+    }).then(() => {
+      dispatch(resourceSuccessNotification('profile', 'destroyed'));
+    });
+  };
 }
 
 export default function sessionsReducer(state = INITIAL_STATE, action) {

@@ -96,8 +96,10 @@ function getIsChangingFactory(action) {
     getLoadingData,
     getCollection,
     getId,
-    (loadingData, collection, id) =>
-      (loadingData.getIn([action, collection]) || new Set([])).has(id),
+    (loadingData, collection, id) => {
+      if (!id) return !!loadingData.getIn([action, collection]);
+      return (loadingData.getIn([action, collection]) || new Set([])).has(id);
+    },
   );
 }
 

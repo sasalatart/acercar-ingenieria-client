@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import pick from 'lodash/pick';
+import { destroyAccount } from '../store/ducks/sessions';
 import { destroyUser } from '../store/ducks/users';
 import { destroyAnnouncement } from '../store/ducks/announcements';
 import { destroyMajor } from '../store/ducks/majors';
@@ -33,6 +34,8 @@ function getDestroyAction(ownProps) {
   } = ownProps;
 
   switch (collection) {
+    case 'auth':
+      return destroyAccount();
     case 'users':
       return destroyUser(id);
     case 'announcements':

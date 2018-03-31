@@ -7,6 +7,7 @@ export default {
     'sessions.forgotPassword': 'Forgot your password?',
     'sessions.signOut': 'Sign Out',
     'sessions.changePassword': 'Change Password',
+    'sessions.destroyMyAccount': 'Delete My Account',
   },
   'es-ES': {
     'sessions.signIn': 'Ingresar',
@@ -16,5 +17,6 @@ export default {
     'sessions.forgotPassword': '¿Olvidaste tu contraseña?',
     'sessions.signOut': 'Cerrar sesión',
     'sessions.changePassword': 'Cambiar contraseña',
+    'sessions.destroyMyAccount': 'Eliminar mi cuenta',
   },
 };

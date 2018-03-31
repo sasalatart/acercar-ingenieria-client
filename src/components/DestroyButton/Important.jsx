@@ -14,6 +14,7 @@ class ImportantDestroyButton extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     iconOnly: PropTypes.bool,
+    label: PropTypes.string,
     warningMessage: PropTypes.string.isRequired,
     textToFill: PropTypes.string.isRequired,
     onDestroy: PropTypes.func.isRequired,
@@ -22,6 +23,7 @@ class ImportantDestroyButton extends Component {
 
   static defaultProps = {
     iconOnly: false,
+    label: undefined,
   }
 
   state = { modalOpen: false, disabled: true };
@@ -44,7 +46,7 @@ class ImportantDestroyButton extends Component {
   }
 
   renderFooter() {
-    const { intl: { formatMessage: t } } = this.props;
+    const { label, intl: { formatMessage: t } } = this.props;
     const { disabled } = this.state;
 
     return (
@@ -53,7 +55,7 @@ class ImportantDestroyButton extends Component {
           {t({ id: 'forms.confirm.cancel' })}
         </Button>,
         <Button key="submit" type="danger" disabled={disabled} onClick={this.handleDestroy}>
-          {t({ id: 'forms.delete' })}
+          {label || t({ id: 'forms.delete' })}
         </Button>,
       ]
     );
@@ -61,12 +63,17 @@ class ImportantDestroyButton extends Component {
 
   render() {
     const {
-      loading, iconOnly, warningMessage, textToFill, intl: { formatMessage: t },
+      loading, iconOnly, label, warningMessage, textToFill, intl: { formatMessage: t },
     } = this.props;
 
     return (
       <span>
-        <DestroyIconOrButton loading={loading} iconOnly={iconOnly} onClick={this.handleShowModal} />
+        <DestroyIconOrButton
+          loading={loading}
+          iconOnly={iconOnly}
+          label={label}
+          onClick={this.handleShowModal}
+        />
         <Modal
           visible={this.state.modalOpen}
           title={t({ id: 'forms.confirm.message' })}

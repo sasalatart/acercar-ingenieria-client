@@ -5,7 +5,11 @@ import { Icon, Button } from 'antd';
 import noop from 'lodash/noop';
 
 function DestroyIconOrButton({
-  loading, iconOnly, onClick, intl: { formatMessage: t },
+  loading,
+  iconOnly,
+  label,
+  onClick,
+  intl: { formatMessage: t },
 }) {
   if (iconOnly) {
     return <Icon type={loading ? 'loading' : 'delete'} onClick={onClick} />;
@@ -18,7 +22,7 @@ function DestroyIconOrButton({
       loading={loading}
       onClick={onClick}
     >
-      {t({ id: 'forms.delete' })}
+      {label || t({ id: 'forms.delete' })}
     </Button>
   );
 }
@@ -26,11 +30,13 @@ function DestroyIconOrButton({
 DestroyIconOrButton.propTypes = {
   loading: PropTypes.bool.isRequired,
   iconOnly: PropTypes.bool.isRequired,
+  label: PropTypes.string,
   onClick: PropTypes.func,
   intl: intlShape.isRequired,
 };
 
 DestroyIconOrButton.defaultProps = {
+  label: undefined,
   onClick: noop,
 };
 

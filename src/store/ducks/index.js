@@ -41,7 +41,7 @@ const appReducer = combineReducers({
 const TO_KEEP_ON_SIGN_OUT = ['i18n', 'announcements'];
 
 export default function rootReducer(state, action) {
-  if (action.type !== `${TYPES.SIGN_OUT}_PENDING`) {
+  if (action.type !== `${TYPES.SIGN_OUT}_PENDING` && action.type !== `${TYPES.DESTROY_ACCOUNT}_PENDING`) {
     return appReducer(state, action);
   }
 
