@@ -4,8 +4,10 @@ import mapValues from 'lodash/mapValues';
 const ROUTES = {
   LANDING: '/',
   ANNOUNCEMENTS: '/announcements',
-  SIGN_IN: '/sign-in',
-  SIGN_UP: '/sign-up',
+  SIGN_IN: '/auth/sign-in',
+  SIGN_UP: '/auth/sign-up',
+  RECOVER_PASSWORD: '/auth/password/recover',
+  EDIT_PASSWORD: '/auth/password/edit',
   USERS: '/users',
   PROFILE: '/users/profile',
   USER: id => `/users/${id}`,

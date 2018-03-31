@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 import URI from 'urijs';
 import { confirmEmail } from '../../store/ducks/sessions';
-import EmailConfirmation from '../../components/SignUp/EmailConfirmation';
+import EmailConfirmation from '../../components/Auth/EmailConfirmation';
 
 function mapDispatchToProps(dispatch, ownProps) {
   const { search } = ownProps.location;

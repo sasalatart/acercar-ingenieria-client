@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
-import ROUTES from '../../routes';
-import SignUpForm from '../../containers/SignUp/Form';
-import Title from '../Layout/Title';
+import SignUpForm from '../../../containers/Auth/SignUp/Form';
+import Title from '../../Layout/Title';
+import ROUTES from '../../../routes';
 
 const styles = {
   extra: {

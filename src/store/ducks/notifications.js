@@ -55,9 +55,20 @@ export function confirmationEmailSentNotification() {
   return (dispatch, getState) => {
     const locale = getLocale(getState());
     dispatch(displayInfoNotification({
-      message: messages[locale]['notifications.signUpOneMoreStep.message'],
+      message: messages[locale]['notifications.justOneMoreStep'],
       description: messages[locale]['notifications.signUpOneMoreStep.description'],
-      duration: 60,
+      duration: 30,
+    }));
+  };
+}
+
+export function recoverPasswordEmailSentNotification() {
+  return (dispatch, getState) => {
+    const locale = getLocale(getState());
+    dispatch(displayInfoNotification({
+      message: messages[locale]['notifications.justOneMoreStep'],
+      description: messages[locale]['notifications.recoverPassword.description'],
+      duration: 30,
     }));
   };
 }

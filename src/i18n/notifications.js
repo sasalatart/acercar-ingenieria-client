@@ -17,8 +17,9 @@ export default {
     'notifications.actions.confirmed': '{resource} has been confirmed',
     'notifications.actions.sent': '{resource} has been sent',
 
-    'notifications.signUpOneMoreStep.message': 'Just one more step!',
-    'notifications.signUpOneMoreStep.description': 'A confirmation email has been sent to you. Once you confirm this email, you will be able to sign in',
+    'notifications.justOneMoreStep': 'Just one more step!',
+    'notifications.signUpOneMoreStep.description': 'A confirmation email will be sent to you briefly. Once you confirm this email, you will be able to sign in',
+    'notifications.recoverPassword.description': 'An email with further instructions will be sent to you briefly',
   },
   'es-ES': {
     'notifications.resource.user': 'el usuario',
@@ -38,7 +39,8 @@ export default {
     'notifications.actions.confirmed': 'Se ha verificado {resource}',
     'notifications.actions.sent': 'Se ha enviado {resource}',
 
-    'notifications.signUpOneMoreStep.message': '¡Sólo un paso más!',
-    'notifications.signUpOneMoreStep.description': 'Un email de confirmación fue enviado a tu correo electrónico. Una vez validada tu dirección, podrás ingresar a la plataforma con tu cuenta',
+    'notifications.justOneMoreStep': '¡Sólo un paso más!',
+    'notifications.signUpOneMoreStep.description': 'Un email de confirmación será enviado a tu correo en los próximos minutos. Una vez validada tu dirección, podrás ingresar a la plataforma con tu cuenta',
+    'notifications.recoverPassword.description': 'Un email con más instrucciones será enviado a tu correo en los próximos minutos',
   },
 };

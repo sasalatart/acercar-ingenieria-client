@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
-import ROUTES from '../../routes';
-import SignInForm from '../../containers/SignIn/Form';
-import Title from '../Layout/Title';
+import SignInForm from '../../../containers/Auth/SignIn/Form';
+import Title from '../../Layout/Title';
+import ROUTES from '../../../routes';
 
 const styles = {
   extra: {
@@ -28,7 +28,7 @@ function SignIn({ intl: { formatMessage: t } }) {
             </Link>
           </p>
           <p style={styles.extra}>
-            <Link to={ROUTES.SIGN_UP} href={ROUTES.SIGN_UP}>
+            <Link to={ROUTES.RECOVER_PASSWORD} href={ROUTES.RECOVER_PASSWORD}>
               {t({ id: 'sessions.forgotPassword' })}
             </Link>
           </p>

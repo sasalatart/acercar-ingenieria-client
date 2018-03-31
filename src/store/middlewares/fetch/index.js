@@ -1,4 +1,5 @@
 import URI from 'urijs';
+import get from 'lodash/get';
 import { getTokens } from '../../ducks/sessions';
 import { getLocale } from '../../ducks/i18n';
 import refreshTokens from './tokens';
@@ -6,7 +7,7 @@ import buildParams from './params';
 import parseResponse from './response';
 import parseError from './errors';
 
-const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
 const fetchMiddleware = store => next => (action) => {
   if (!action.payload || !action.payload.url || action.type.includes('REJECTED')) {
@@ -15,11 +16,11 @@ const fetchMiddleware = store => next => (action) => {
 
   const state = store.getState();
   const locale = getLocale(state);
-  const tokens = getTokens(state);
+  const tokens = get(action.payload, 'tokens', getTokens(state));
   const params = buildParams(action.payload, tokens, locale);
 
   const { url, query, ...rest } = params;
-  const finalUrl = URI(`${BASE_URL}${url}`).query({ ...query }).toString();
+  const finalUrl = URI(`${BASE_API_URL}${url}`).query({ ...query }).toString();
 
   const promise = window.fetch(finalUrl, rest)
     .then(async (response) => {

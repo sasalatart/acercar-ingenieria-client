@@ -5,12 +5,16 @@ import { getEntities } from './entities';
 import { usersSchema } from '../../schemas';
 import {
   confirmationEmailSentNotification,
+  recoverPasswordEmailSentNotification,
   resourceSuccessNotification,
 } from './notifications';
-import {
+import ROUTES, {
   goToLanding,
+  goToSignIn,
   goToProfile,
 } from './routes';
+
+const BASE_CLIENT_URL = process.env.REACT_APP_CLIENT_URL || 'http://localhost:3000';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
@@ -21,6 +25,7 @@ export const TYPES = {
   SET_TOKENS: 'sessions/SET_TOKENS',
   SIGN_IN: 'sessions/SIGN_IN',
   SIGN_UP: 'sessions/SIGN_UP',
+  RECOVER_PASSWORD: 'sessions/RECOVER_PASSWORD',
   CONFIRM_EMAIL: 'sessions/CONFIRM_EMAIL',
   SIGN_OUT: 'sessions/SIGN_OUT',
   UPDATE: 'sessions/UPDATE',
@@ -61,6 +66,24 @@ export function signUp(credentials) {
     }).then(() => {
       dispatch(confirmationEmailSentNotification());
       dispatch(goToLanding());
+    });
+}
+
+export function recoverPassword(body) {
+  return dispatch =>
+    dispatch({
+      type: TYPES.RECOVER_PASSWORD,
+      payload: {
+        method: 'POST',
+        url: '/auth/password',
+        body: {
+          ...body,
+          redirectUrl: `${BASE_CLIENT_URL}${ROUTES.EDIT_PASSWORD}`,
+        },
+      },
+    }).then(() => {
+      dispatch(recoverPasswordEmailSentNotification());
+      dispatch(goToSignIn());
     });
 }
 
@@ -107,7 +130,7 @@ export function updateProfile(id, body) {
     });
 }
 
-export function changePassword(body) {
+export function changePassword(body, tokens) {
   return dispatch =>
     dispatch({
       type: TYPES.CHANGE_PASSWORD,
@@ -115,10 +138,11 @@ export function changePassword(body) {
         method: 'PUT',
         url: '/auth/password',
         body,
+        tokens,
       },
     }).then(() => {
       dispatch(resourceSuccessNotification('password', 'updated'));
-      dispatch(goToProfile());
+      dispatch(tokens ? goToSignIn() : goToProfile());
     });
 }
 

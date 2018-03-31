@@ -3,15 +3,12 @@ import { ConnectedRouter } from 'react-router-redux';
 import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import {
-  renderLoggedOutRoute,
   renderAdminRoute,
   renderQuestionsPrivilegesRoute,
 } from './containers/Routes';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-import EmailConfirmation from './containers/SignUp/EmailConfirmation';
 import PinnedAnnouncements from './containers/Announcements/Pinned';
 import Announcements from './containers/Announcements/List';
+import Auth from './components/Auth';
 import Users from './components/Users';
 import Majors from './components/Majors';
 import Articles from './components/Articles';
@@ -27,15 +24,13 @@ export default function Router() {
         <Switch>
           <Route exact path="/" component={PinnedAnnouncements} />
           <Route exact path="/announcements" render={renderAdminRoute(Announcements)} />
-          <Route path="/sign-in" render={renderLoggedOutRoute(SignIn)} />
-          <Route path="/sign-up" render={renderLoggedOutRoute(SignUp)} />
+          <Route path="/auth" component={Auth} />
           <Route path="/users" component={Users} />
           <Route path="/majors" component={Majors} />
           <Route path="/articles" component={Articles} />
           <Route path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
           <Route path="/discussions" component={Discussions} />
           <Route path="/about-us" component={AboutUs} />
-          <Route path="/auth/confirmation" component={EmailConfirmation} />
         </Switch>
       </Layout>
     </ConnectedRouter>

@@ -1,11 +1,16 @@
 import { push, replace } from 'react-router-redux';
 import { createSelector } from 'reselect';
 import URI from 'urijs';
+import humps from 'humps';
 import pick from 'lodash/pick';
 import ROUTES from '../../routes';
 
 export function goToLanding() {
   return push(ROUTES.LANDING);
+}
+
+export function goToSignIn() {
+  return push(ROUTES.SIGN_IN);
 }
 
 export function goToProfile() {
@@ -76,6 +81,24 @@ export const getPathname = createSelector(
 export const getSearch = createSelector(
   getLocation,
   location => location && location.search,
+);
+
+export const getTokensFromSearch = createSelector(
+  getSearch,
+  (search) => {
+    const parsedSearch = humps.camelizeKeys(URI.parseQuery(search));
+
+    if (!parsedSearch.clientId || !parsedSearch.token || !parsedSearch.uid || !parsedSearch.expiry) {
+      return undefined;
+    }
+
+    return {
+      ...pick(parsedSearch, 'uid', 'expiry'),
+      client: parsedSearch.clientId,
+      'access-token': parsedSearch.token,
+      'token-type': 'Bearer',
+    };
+  },
 );
 
 const getFilters = (state, params) => params.filters;

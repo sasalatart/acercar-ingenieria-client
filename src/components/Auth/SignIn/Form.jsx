@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Icon } from 'antd';
-import { TextField, SubmitButton } from '../Forms';
-import { colors } from '../../theme';
+import { TextField, SubmitButton } from '../../Forms';
+import { colors } from '../../../theme';
 
 const styles = {
   fieldPrefix: {
