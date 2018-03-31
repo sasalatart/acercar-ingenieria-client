@@ -28,23 +28,19 @@ function QuestionsActionBar({
   }
 
   if (adminOrMajorAdmin) {
-    actions.push(pending
+    const buttonLink = pending
       ? (
-        <ButtonLink
-          key="goToAnswered"
-          to={ROUTES.QUESTIONS(majorId)}
-          content={t({ id: 'questions' })}
-          icon="question-circle"
-        />
+        <ButtonLink key="goToAnswered" to={ROUTES.QUESTIONS(majorId)} icon="question-circle">
+          {t({ id: 'questions' })}
+        </ButtonLink>
       )
       : (
-        <ButtonLink
-          key="goToPending"
-          to={ROUTES.PENDING_QUESTIONS(majorId)}
-          content={t({ id: 'questions.pending' })}
-          icon="question-circle-o"
-        />
-      ));
+        <ButtonLink key="goToPending" to={ROUTES.PENDING_QUESTIONS(majorId)} icon="question-circle-o">
+          {t({ id: 'questions.pending' })}
+        </ButtonLink>
+      );
+
+    actions.push(buttonLink);
   }
 
   return <ActionBar actions={actions} />;
