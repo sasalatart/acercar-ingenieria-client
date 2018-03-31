@@ -61,7 +61,10 @@ export function signUp(credentials) {
       payload: {
         method: 'POST',
         url: '/auth',
-        body: credentials,
+        body: {
+          ...credentials,
+          confirmSuccessUrl: `${BASE_CLIENT_URL}${ROUTES.SIGN_IN}`,
+        },
       },
     }).then(() => {
       dispatch(confirmationEmailSentNotification());
@@ -84,20 +87,6 @@ export function recoverPassword(body) {
     }).then(() => {
       dispatch(recoverPasswordEmailSentNotification());
       dispatch(goToSignIn());
-    });
-}
-
-export function confirmEmail(query) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.CONFIRM_EMAIL,
-      payload: {
-        method: 'GET',
-        url: '/auth/confirmation',
-        query,
-      },
-    }).then(() => {
-      dispatch(resourceSuccessNotification('email', 'confirmed'));
     });
 }
 

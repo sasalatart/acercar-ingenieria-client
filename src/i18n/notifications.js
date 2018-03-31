@@ -2,7 +2,6 @@ export default {
   'en-US': {
     'notifications.resource.user': 'The user',
     'notifications.resource.profile': 'Your profile',
-    'notifications.resource.email': 'Your email',
     'notifications.resource.password': 'Your password',
     'notifications.resource.announcement': 'The announcement',
     'notifications.resource.major': 'The Major',
@@ -14,7 +13,6 @@ export default {
     'notifications.actions.created': '{resource} has been created',
     'notifications.actions.updated': '{resource} has been updated',
     'notifications.actions.destroyed': '{resource} has been removed',
-    'notifications.actions.confirmed': '{resource} has been confirmed',
     'notifications.actions.sent': '{resource} has been sent',
 
     'notifications.justOneMoreStep': 'Just one more step!',
@@ -24,7 +22,6 @@ export default {
   'es-ES': {
     'notifications.resource.user': 'el usuario',
     'notifications.resource.profile': 'tu perfil',
-    'notifications.resource.email': 'tu email',
     'notifications.resource.password': 'tu contraseña',
     'notifications.resource.announcement': 'el anuncio',
     'notifications.resource.major': 'el Major',
@@ -36,7 +33,6 @@ export default {
     'notifications.actions.created': 'Se ha creado {resource}',
     'notifications.actions.updated': 'Se ha actualizado {resource}',
     'notifications.actions.destroyed': 'Se ha eliminado {resource}',
-    'notifications.actions.confirmed': 'Se ha verificado {resource}',
     'notifications.actions.sent': 'Se ha enviado {resource}',
 
     'notifications.justOneMoreStep': '¡Sólo un paso más!',
