@@ -8,7 +8,7 @@ function ProfileEdit({ intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar />
-      <Title text={t({ id: 'routing.profileEdit' })} />
+      <Title text={t({ id: 'profile.edit' })} />
 
       <EditForm />
     </div>

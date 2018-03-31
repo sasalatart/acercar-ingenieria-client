@@ -33,7 +33,7 @@ function QuestionsActionBar({
         <ButtonLink
           key="goToAnswered"
           to={ROUTES.QUESTIONS(majorId)}
-          content={t({ id: 'routing.questions' })}
+          content={t({ id: 'questions' })}
           icon="question-circle"
         />
       )
@@ -41,7 +41,7 @@ function QuestionsActionBar({
         <ButtonLink
           key="goToPending"
           to={ROUTES.PENDING_QUESTIONS(majorId)}
-          content={t({ id: 'routing.pendingQuestions' })}
+          content={t({ id: 'questions.pending' })}
           icon="question-circle-o"
         />
       ));

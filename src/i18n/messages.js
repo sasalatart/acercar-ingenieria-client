@@ -1,7 +1,6 @@
-import routing from './routing';
 import forms from './forms';
 import notifications from './notifications';
-import auth from './auth';
+import sessions from './sessions';
 import users from './users';
 import announcements from './announcements';
 import majors from './majors';
@@ -13,7 +12,6 @@ import comments from './comments';
 import admins from './admins';
 import emails from './emails';
 import aboutUs from './about-us';
-import attachments from './attachments';
 import search from './search';
 import errors from './errors';
 import misc from './misc';
@@ -24,10 +22,9 @@ const esES = 'es-ES';
 const messages = { [enUS]: {}, [esES]: {} };
 
 [
-  routing,
   forms,
   notifications,
-  auth,
+  sessions,
   users,
   announcements,
   majors,
@@ -39,7 +36,6 @@ const messages = { [enUS]: {}, [esES]: {} };
   admins,
   emails,
   aboutUs,
-  attachments,
   errors,
   search,
   misc,

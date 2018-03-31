@@ -8,7 +8,7 @@ function ChangePassword({ intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar />
-      <Title text={t({ id: 'routing.changePassword' })} />
+      <Title text={t({ id: 'sessions.changePassword' })} />
 
       <Form />
     </div>

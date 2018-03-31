@@ -27,7 +27,7 @@ function RolesList({ user, intl: { formatMessage: t } }) {
   }
 
   if (!roles.length) {
-    roles.push({ icon: 'user', name: t({ id: 'roles.student' }) });
+    roles.push({ icon: 'user', name: t({ id: 'student' }) });
   }
 
   return (

@@ -27,7 +27,7 @@ function renderActions(actions) {
 function ActionBar({ actions, goBack, intl: { formatMessage: t } }) {
   return (
     <div style={styles.actionBar(actions.length)}>
-      <Button type="primary" icon="left" onClick={goBack}>{t({ id: 'routing.goBack' })}</Button>
+      <Button type="primary" icon="left" onClick={goBack}>{t({ id: 'goBack' })}</Button>
       {renderActions(actions)}
     </div>
   );

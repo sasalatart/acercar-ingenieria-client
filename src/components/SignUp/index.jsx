@@ -16,7 +16,7 @@ const styles = {
 function SignUp({ intl: { formatMessage: t } }) {
   return (
     <div>
-      <Title text={t({ id: 'routing.signUp' })} />
+      <Title text={t({ id: 'sessions.signUp' })} />
 
       <Row type="flex" justify="center">
         <Col sm={24} lg={12} xl={10}>
@@ -24,7 +24,7 @@ function SignUp({ intl: { formatMessage: t } }) {
 
           <p style={styles.extra}>
             <Link to={ROUTES.SIGN_IN} href={ROUTES.SIGN_IN}>
-              {t({ id: 'auth.orSignIn' })}
+              {t({ id: 'sessions.orSignIn' })}
             </Link>
           </p>
         </Col>

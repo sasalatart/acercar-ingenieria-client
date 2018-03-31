@@ -73,17 +73,17 @@ function renderUpperHeader(currentUser, signOut, t) {
                 <UserAvatar user={currentUser} style={styles.button} />
               </Link>
               <Button type="danger" icon="logout" onClick={signOut} style={styles.button}>
-                <Hideable>{t({ id: 'auth.signOut' })}</Hideable>
+                <Hideable>{t({ id: 'sessions.signOut' })}</Hideable>
               </Button>
             </div>
           )
           : (
             <div>
               <ButtonLink type="primary" icon="login" to={ROUTES.SIGN_IN} style={styles.button}>
-                <Hideable>{t({ id: 'routing.signIn' })}</Hideable>
+                <Hideable>{t({ id: 'sessions.signIn' })}</Hideable>
               </ButtonLink>
               <ButtonLink icon="rocket" to={ROUTES.SIGN_UP} style={styles.button} ghost>
-                <Hideable>{t({ id: 'routing.signUp' })}</Hideable>
+                <Hideable>{t({ id: 'sessions.signUp' })}</Hideable>
               </ButtonLink>
             </div>
           )
