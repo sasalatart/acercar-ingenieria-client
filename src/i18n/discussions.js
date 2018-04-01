@@ -5,7 +5,6 @@ export default {
     'discussions.new': 'New Discussion',
     'discussions.edit': 'Edit Discussion',
     'discussions.defaultTag': 'Question',
-    'discussions.author': 'By: {authorName}',
   },
   'es-ES': {
     discussions: 'Foro',
@@ -13,6 +12,5 @@ export default {
     'discussions.new': 'Nuevo tema',
     'discussions.edit': 'Editar tema',
     'discussions.defaultTag': 'Duda',
-    'discussions.author': 'Por: {authorName}',
   },
 };

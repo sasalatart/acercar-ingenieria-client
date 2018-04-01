@@ -80,9 +80,8 @@ export default class Article extends Component {
 
     return (
       <p style={styles.author}>
-        <Link to={href} href={href}>
-          {t({ id: 'articles.author' }, { authorName })}
-        </Link>
+        <span>{t({ id: 'submittedBy' })}</span>
+        <Link to={href} href={href}>{authorName}</Link>
       </p>
     );
   }
@@ -128,7 +127,7 @@ export default class Article extends Component {
           </Col>
           <Col sm={18}>
             {this.renderAuthor()}
-            <DateWithFormat dateString={article.createdAt} style={styles.date} />
+            <DateWithFormat dateString={article.createdAt} style={styles.date} withTime />
             {this.renderShortDescription()}
           </Col>
         </Row>

@@ -55,9 +55,8 @@ export default class Discussion extends Component {
 
     return (
       <p style={styles.author}>
-        <Link to={href} href={href}>
-          {t({ id: 'discussions.author' }, { authorName })}
-        </Link>
+        <span>{t({ id: 'submittedBy' })}</span>
+        <Link to={href} href={href}>{authorName}</Link>
       </p>
     );
   }

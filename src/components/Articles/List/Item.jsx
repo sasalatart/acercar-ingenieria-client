@@ -79,7 +79,7 @@ function renderMeta(article, articleHref, t) {
   const authorHref = ROUTES.USER(author.id);
   const authorName = (
     <span>
-      <span>{t({ id: 'submittedBy' })}: </span>
+      <span>{t({ id: 'submittedBy' })}</span>
       <Link to={authorHref} href={authorHref}>
         {`${author.firstName} ${author.lastName}`}
       </Link>

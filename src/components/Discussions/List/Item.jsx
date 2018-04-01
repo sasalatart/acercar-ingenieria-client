@@ -74,7 +74,7 @@ function renderMeta(discussion, t) {
   const authorHref = ROUTES.USER(author.id);
   const description = (
     <span>
-      <span>{t({ id: 'submittedBy' })}: </span>
+      <span>{t({ id: 'submittedBy' })}</span>
       <Link to={authorHref} href={authorHref}>
         {`${author.firstName} ${author.lastName}`}
       </Link>,
