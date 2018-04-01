@@ -30,8 +30,6 @@ const styles = {
 };
 
 function renderActions(loggedIn, adminOrMajorAdmin, article) {
-  if (!loggedIn) return [];
-
   const {
     id,
     majorId,
@@ -48,8 +46,11 @@ function renderActions(loggedIn, adminOrMajorAdmin, article) {
       likesCount={likesCount}
       iconOnly
     />,
-    <IconText type="message" text={commentsCount} />,
   ];
+
+  if (loggedIn) {
+    actions.push(<IconText type="message" text={commentsCount} />);
+  }
 
   if (adminOrMajorAdmin) {
     actions.push(<DestroyButton collection="articles" id={id} baseResourceId={majorId} iconOnly />);

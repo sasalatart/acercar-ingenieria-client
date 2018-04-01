@@ -15,7 +15,7 @@ function LikeButton({
   const icon = likedByCurrentUser ? 'like' : 'like-o';
 
   if (iconOnly) {
-    return <IconText type={icon} text={likesCount} onClick={onClick} />;
+    return <IconText type={icon} text={likesCount} onClick={onClick} withPointer={loggedIn} />;
   }
 
   const type = likedByCurrentUser ? 'primary' : 'secondary';

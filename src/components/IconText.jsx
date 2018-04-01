@@ -7,11 +7,16 @@ const styles = {
   icon: {
     marginRight: '6px',
   },
+  cursor: withPointer => ({
+    cursor: withPointer ? 'pointer' : 'default',
+  }),
 };
 
-function IconText({ type, text, onClick }) {
+function IconText({
+  type, text, withPointer, onClick, style,
+}) {
   return (
-    <span>
+    <span style={{ ...style, ...styles.cursor(withPointer) }}>
       <Icon type={type} style={styles.icon} onClick={onClick} />
       {text}
     </span>
@@ -24,11 +29,15 @@ IconText.propTypes = {
     PropTypes.string.isRequired,
     PropTypes.number.isRequired,
   ]).isRequired,
+  withPointer: PropTypes.bool,
   onClick: PropTypes.func,
+  style: PropTypes.shape({}),
 };
 
 IconText.defaultProps = {
+  withPointer: false,
   onClick: noop,
+  style: undefined,
 };
 
 export default IconText;

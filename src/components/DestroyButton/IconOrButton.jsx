@@ -4,6 +4,12 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Icon, Button } from 'antd';
 import noop from 'lodash/noop';
 
+const styles = {
+  cursor: withPointer => ({
+    cursor: withPointer ? 'pointer' : 'default',
+  }),
+};
+
 function DestroyIconOrButton({
   loading,
   iconOnly,
@@ -12,7 +18,8 @@ function DestroyIconOrButton({
   intl: { formatMessage: t },
 }) {
   if (iconOnly) {
-    return <Icon type={loading ? 'loading' : 'delete'} onClick={onClick} />;
+    const type = loading ? 'loading' : 'delete';
+    return <Icon type={type} onClick={onClick} style={styles.cursor(!loading)} />;
   }
 
   return (
