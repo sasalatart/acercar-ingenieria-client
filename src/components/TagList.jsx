@@ -1,12 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tag } from 'antd';
+import { Icon, Tag } from 'antd';
 import noop from 'lodash/noop';
 import { colors } from '../theme';
 
-function TagList({ tags, onTagClick }) {
+const styles = {
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '16px',
+  },
+  icon: {
+    fontSize: '20px',
+  },
+};
+
+function TagList({ tags, onTagClick, withIcon }) {
   return (
-    <span>
+    <span style={styles.container}>
+      {withIcon && <Icon type="tags" style={styles.icon} />}
       {tags.map(tag => (
         <Tag key={tag} color={colors.primaryDark} onClick={() => onTagClick(tag)}>
           {tag}
@@ -18,10 +30,12 @@ function TagList({ tags, onTagClick }) {
 
 TagList.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+  withIcon: PropTypes.bool,
   onTagClick: PropTypes.func,
 };
 
 TagList.defaultProps = {
+  withIcon: false,
   onTagClick: noop,
 };
 

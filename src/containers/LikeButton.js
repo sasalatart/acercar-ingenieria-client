@@ -1,16 +1,15 @@
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
-import { getCurrentUserEntity } from '../store/ducks/sessions';
 import {
   like,
   unlike,
   getResourceLikeLoading,
 } from '../store/ducks/likes';
+import WithAuthorization from '../hoc/WithAuthorization';
 import LikeButton from '../components/LikeButton';
 
 function mapStateToProps(state, ownProps) {
   return {
-    loggedIn: !!getCurrentUserEntity(state),
     likingOrUnliking: getResourceLikeLoading(state, ownProps),
   };
 }
@@ -28,13 +27,9 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
   return {
     ...ownProps,
     ...stateProps,
-    onClick: stateProps.loggedIn ? () => onClickFn(collection, id) : noop,
+    onClick: ownProps.loggedIn ? () => onClickFn(collection, id) : noop,
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps,
-)(LikeButton);
-
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps, mergeProps)(LikeButton);
+export default WithAuthorization(connectedComponent);
