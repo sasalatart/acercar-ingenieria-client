@@ -24,6 +24,7 @@ function CommentForm({
   validators,
   valid,
   submitting,
+  autoFocus,
   handleSubmit,
   style,
   intl: { formatMessage: t },
@@ -37,7 +38,7 @@ function CommentForm({
           placeholder={t({ id: 'forms.content' })}
           validate={[validators.required, validators.maxLength]}
           disabled={submitting}
-          autoFocus
+          autoFocus={autoFocus}
         />
       </div>
       <SubmitButton
@@ -53,12 +54,14 @@ CommentForm.propTypes = {
   validators: PropTypes.shape({}).isRequired,
   valid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
+  autoFocus: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
   style: PropTypes.shape({}),
   intl: intlShape.isRequired,
 };
 
 CommentForm.defaultProps = {
+  autoFocus: false,
   style: {},
 };
 

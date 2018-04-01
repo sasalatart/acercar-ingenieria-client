@@ -88,6 +88,7 @@ export default class Comment extends Component {
               baseResourceId={comment.commentableId}
               comment={comment}
               onSubmitSuccess={this.handleStopEditing}
+              autoFocus
             />
           </div>
           {this.renderCancelButton(this.handleStopEditing)}
@@ -205,6 +206,7 @@ export default class Comment extends Component {
             baseResourceName={this.getBaseResourceName()}
             baseResourceId={commentableId}
             onSubmitSuccess={this.handleStopAnswering}
+            autoFocus
           />
         </div>
         {this.renderCancelButton(this.handleStopAnswering)}
