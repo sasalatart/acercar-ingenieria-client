@@ -82,7 +82,7 @@ function renderUpperHeader(currentUser, signOut, t) {
               <ButtonLink type="primary" icon="login" to={ROUTES.SIGN_IN} style={styles.button}>
                 <Hideable>{t({ id: 'sessions.signIn' })}</Hideable>
               </ButtonLink>
-              <ButtonLink icon="rocket" to={ROUTES.SIGN_UP} style={styles.button} ghost>
+              <ButtonLink type="default" icon="rocket" to={ROUTES.SIGN_UP} style={styles.button} ghost>
                 <Hideable>{t({ id: 'sessions.signUp' })}</Hideable>
               </ButtonLink>
             </div>
