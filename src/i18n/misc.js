@@ -4,13 +4,13 @@ export default {
     nothingHereYet: 'There is nothing here yet.',
     attachments: 'Attached files',
     student: 'Student',
-    author: 'Author',
+    submittedBy: 'Submitted by',
   },
   'es-ES': {
     goBack: 'Volver',
     nothingHereYet: 'No hay nada aquí aún.',
     attachments: 'Archivos adjuntos',
     student: 'Estudiante',
-    author: 'Autor',
+    submittedBy: 'Subido por',
   },
 };

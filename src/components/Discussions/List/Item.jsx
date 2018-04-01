@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
@@ -24,25 +25,17 @@ const styles = {
   },
 };
 
-function DiscussionListItem({
-  admin,
-  discussion: {
+function renderActions(admin, discussion) {
+  const {
     id,
-    author,
-    title,
-    tagList,
-    pinned,
     impressionsCount,
     commentsCount,
     likesCount,
     likedByCurrentUser,
-    createdAt,
-  },
-  onTagClick,
-}) {
+  } = discussion;
+
   const actions = [
     <IconText type="eye" text={impressionsCount} />,
-    <IconText type="message" text={commentsCount} />,
     <LikeButton
       collection="discussions"
       id={id}
@@ -50,11 +43,24 @@ function DiscussionListItem({
       likesCount={likesCount}
       iconOnly
     />,
+    <IconText type="message" text={commentsCount} />,
   ];
 
   if (admin) {
     actions.push(<DestroyButton collection="discussions" id={id} iconOnly />);
   }
+
+  return actions;
+}
+
+function renderMeta(discussion, t) {
+  const {
+    id,
+    title,
+    pinned,
+    author,
+    createdAt,
+  } = discussion;
 
   const titleHref = ROUTES.DISCUSSION(id);
   const titleLink = <Link to={titleHref} href={titleHref}>{title}</Link>;
@@ -68,6 +74,7 @@ function DiscussionListItem({
   const authorHref = ROUTES.USER(author.id);
   const description = (
     <span>
+      <span>{t({ id: 'submittedBy' })}: </span>
       <Link to={authorHref} href={authorHref}>
         {`${author.firstName} ${author.lastName}`}
       </Link>,
@@ -75,15 +82,21 @@ function DiscussionListItem({
     </span>
   );
 
+  return <Meta title={titleTag} description={description} />;
+}
+
+function DiscussionListItem({
+  admin,
+  discussion,
+  onTagClick,
+  intl: { formatMessage: t },
+}) {
+  const { tagList } = discussion;
+
   return (
-    <Item actions={actions}>
-      <Meta title={titleTag} description={description} />
-      {tagList.length > 0 &&
-        <div>
-          <Icon type="tags" />
-          <TagList tags={tagList} onTagClick={onTagClick} />
-        </div>
-      }
+    <Item actions={renderActions(admin, discussion)}>
+      {renderMeta(discussion, t)}
+      {tagList.length > 0 && <TagList tags={tagList} onTagClick={onTagClick} withIcon />}
     </Item>
   );
 }
@@ -92,6 +105,7 @@ DiscussionListItem.propTypes = {
   admin: PropTypes.bool.isRequired,
   discussion: discussionShape.isRequired,
   onTagClick: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default WithAuthorization(DiscussionListItem);
+export default injectIntl(WithAuthorization(DiscussionListItem));

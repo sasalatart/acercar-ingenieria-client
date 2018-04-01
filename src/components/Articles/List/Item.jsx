@@ -41,7 +41,6 @@ function renderActions(loggedIn, adminOrMajorAdmin, article) {
   } = article;
 
   const actions = [
-    <IconText type="message" text={commentsCount} />,
     <LikeButton
       collection="articles"
       id={id}
@@ -49,6 +48,7 @@ function renderActions(loggedIn, adminOrMajorAdmin, article) {
       likesCount={likesCount}
       iconOnly
     />,
+    <IconText type="message" text={commentsCount} />,
   ];
 
   if (adminOrMajorAdmin) {
@@ -79,7 +79,7 @@ function renderMeta(article, articleHref, t) {
   const authorHref = ROUTES.USER(author.id);
   const authorName = (
     <span>
-      <span>{t({ id: 'author' })}: </span>
+      <span>{t({ id: 'submittedBy' })}: </span>
       <Link to={authorHref} href={authorHref}>
         {`${author.firstName} ${author.lastName}`}
       </Link>
