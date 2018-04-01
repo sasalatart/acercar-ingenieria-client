@@ -13,7 +13,6 @@ import admins from './admins';
 import emails from './emails';
 import aboutUs from './about-us';
 import search from './search';
-import errors from './errors';
 import misc from './misc';
 
 const enUS = 'en-US';
@@ -36,7 +35,6 @@ const messages = { [enUS]: {}, [esES]: {} };
   admins,
   emails,
   aboutUs,
-  errors,
   search,
   misc,
 ].forEach((translations) => {

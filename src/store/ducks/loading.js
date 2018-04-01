@@ -43,7 +43,7 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
     const path = compact(['fetching', 'pages', collection, baseResourceName || 'platform', baseResourceId, suffix]);
     return pending
       ? state.updateIn(path, pages => (pages ? pages.add(+page) : new Set([+page])))
-      : state.updateIn(path, pages => pages.delete(+page));
+      : state.updateIn(path, pages => pages && pages.delete(+page));
   }
 
   const path = compact([getCategory(fetching, updating, destroying), collection, suffix]);
