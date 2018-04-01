@@ -8,23 +8,19 @@ import {
 import { displayErrorNotification } from '../../ducks/notifications';
 import messages from '../../../i18n/messages';
 
-function getMessage(status, locale) {
-  return status === 401 || status === 403
-    ? messages[locale]['errors.unauthorized']
-    : 'Error';
-}
-
 function getDescription(status, body, locale) {
-  if (status === 401 || status === 403) {
-    return messages[locale]['errors.unauthorizedDescription'];
+  switch (true) {
+    case (status === 401 || status === 403):
+      return messages[locale]['errors.unauthorized'];
+    case (status === 404):
+      return messages[locale]['errors.notFound'];
+    case (status >= 500):
+      return messages[locale]['errors.server'];
+    default: {
+      const { message, error, errors } = body;
+      return message || error || errors.fullMessages;
+    }
   }
-
-  if (status >= 500) {
-    return messages[locale]['errors.server'];
-  }
-
-  const { message, error, errors } = body;
-  return message || error || errors.fullMessages;
 }
 
 export default async function parseError(body, status, payload, store) {
@@ -39,7 +35,7 @@ export default async function parseError(body, status, payload, store) {
   }
 
   store.dispatch(displayErrorNotification({
-    message: getMessage(status, locale),
+    message: 'Error',
     description: getDescription(status, camelizedBody, locale),
   }));
 
