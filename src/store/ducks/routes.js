@@ -88,7 +88,11 @@ export const getTokensFromSearch = createSelector(
   (search) => {
     const parsedSearch = humps.camelizeKeys(URI.parseQuery(search));
 
-    if (!parsedSearch.clientId || !parsedSearch.token || !parsedSearch.uid || !parsedSearch.expiry) {
+    if (!parsedSearch.clientId
+      || !parsedSearch.token
+      || !parsedSearch.uid
+      || !parsedSearch.expiry
+    ) {
       return undefined;
     }
 
