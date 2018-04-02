@@ -14,7 +14,7 @@ import ROUTES from '../../../routes';
 
 export default class ArticlesActionBar extends Component {
   static propTypes = {
-    loggedIn: PropTypes.bool.isRequired,
+    canCreateArticles: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
     majorOptions: PropTypes.arrayOf(optionShape).isRequired,
     categoryOptions: PropTypes.arrayOf(optionShape).isRequired,
@@ -64,7 +64,7 @@ export default class ArticlesActionBar extends Component {
 
   render() {
     const {
-      loggedIn,
+      canCreateArticles,
       majorId,
       resetPagination,
       intl: { formatMessage: t },
@@ -80,7 +80,7 @@ export default class ArticlesActionBar extends Component {
       />,
     ];
 
-    if (loggedIn) {
+    if (canCreateArticles) {
       const newArticleButtonLink = (
         <ButtonLink key="new" to={ROUTES.ARTICLES_NEW(majorId)} >
           {t({ id: 'articles.new' })}

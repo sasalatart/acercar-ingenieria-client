@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
+import { getCanCreateArticles } from '../../../store/ducks/sessions';
 import {
   loadMajors,
   getMajorOptions,
@@ -9,13 +11,15 @@ import {
   getCategoryOptions,
 } from '../../../store/ducks/categories';
 import { resetPagination } from '../../../store/ducks/articles';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import ActionBar from '../../../components/Articles/List/ActionBar';
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  const params = { majorId: ownProps.match.params.majorId };
+
   return {
     majorOptions: getMajorOptions(state),
     categoryOptions: getCategoryOptions(state),
+    canCreateArticles: getCanCreateArticles(state, params),
   };
 }
 
@@ -28,4 +32,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(ActionBar);
-export default injectIntl(WithAuthorization(connectedComponent));
+export default injectIntl(withRouter(connectedComponent));

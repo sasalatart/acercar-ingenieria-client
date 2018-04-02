@@ -39,8 +39,8 @@ function getInitialValues(id, majorId, article) {
 
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps.match.params, collection };
-  const id = +params.id;
-  const majorId = +params.majorId;
+  const id = params.id && +params.id;
+  const majorId = params.majorId && +params.majorId;
 
   const article = getArticleEntity(state, params);
   const majorOptions = getCurrentUserMajorOptions(state);

@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import {
   renderAdminRoute,
-  renderQuestionsPrivilegesRoute,
+  renderQuestionsAdministrationRoute,
 } from './containers/Routes';
 import PinnedAnnouncements from './containers/Announcements/Pinned';
 import Announcements from './containers/Announcements/List';
@@ -28,7 +28,7 @@ export default function Router() {
           <Route path="/users" component={Users} />
           <Route path="/majors" component={Majors} />
           <Route path="/articles" component={Articles} />
-          <Route path="/questions/:pending?" render={renderQuestionsPrivilegesRoute(Questions)} />
+          <Route path="/questions/:pending?" render={renderQuestionsAdministrationRoute(Questions)} />
           <Route path="/discussions" component={Discussions} />
           <Route path="/about-us" component={AboutUs} />
         </Switch>

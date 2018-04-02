@@ -207,3 +207,22 @@ export const getIsAdminOrMajorAdmin = createSelector(
   getIsAdminOfMajor,
   (admin, adminOfMajor) => admin || adminOfMajor,
 );
+
+export const getIsInterestedInMajor = createSelector(
+  getCurrentUserEntity,
+  getMajorId,
+  (currentUser, majorId) => {
+    if (!currentUser || !majorId) return false;
+
+    return currentUser.majorsOfInterest
+      .some(majorOfInterest => majorOfInterest.majorId === +majorId);
+  },
+);
+
+export const getCanCreateArticles = createSelector(
+  getMajorId,
+  getIsInterestedInMajor,
+  getIsLoggedIn,
+  (majorId, interestedInMajor, loggedIn) =>
+    loggedIn && (!majorId || interestedInMajor),
+);

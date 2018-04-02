@@ -6,7 +6,7 @@ import { Layout, Menu, Icon } from 'antd';
 import {
   renderLoggedInRoute,
   renderMajorAdminRoute,
-  renderQuestionsPrivilegesRoute,
+  renderQuestionsAdministrationRoute,
 } from '../../../containers/Routes';
 import MajorInfo from './Info';
 import Edit from './Edit';
@@ -159,7 +159,7 @@ export default class Major extends Component {
 
             <Route
               path={`${this.majorRoutes.questions}/:pending?`}
-              render={renderQuestionsPrivilegesRoute(Questions)}
+              render={renderQuestionsAdministrationRoute(Questions)}
             />
 
             <Route

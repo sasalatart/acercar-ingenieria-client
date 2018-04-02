@@ -16,7 +16,7 @@ import { getIsFetching } from '../../store/ducks/loading';
 import DataPlaceholder from '../../components/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
 
-class ArticlePrivileges extends Component {
+class ArticleAdministration extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     loadArticle: PropTypes.func.isRequired,
@@ -63,4 +63,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ArticlePrivileges);
+)(ArticleAdministration);

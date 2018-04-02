@@ -1,36 +1,41 @@
 import React from 'react';
-import LoggedOutRoute from './LoggedOut';
-import LoggedInRoute from './LoggedIn';
-import AdminRoute from './Admin';
-import MajorAdminRoute from './MajorAdmin';
-import QuestionsPrivilegesRoute from './QuestionsPrivileges';
-import ArticlePrivilegesRoute from './ArticlePrivileges';
-import DiscussionPrivilegesRoute from './DiscussionPrivileges';
+import LoggedOut from './LoggedOut';
+import LoggedIn from './LoggedIn';
+import Admin from './Admin';
+import MajorAdmin from './MajorAdmin';
+import QuestionsAdministration from './QuestionsAdministration';
+import ArticleCreation from './ArticleCreation';
+import ArticleAdministration from './ArticleAdministration';
+import DiscussionAdministration from './DiscussionAdministration';
 
 export function renderLoggedOutRoute(component, extraParams) {
-  return props => <LoggedOutRoute {...props} {...extraParams} component={component} />;
+  return props => <LoggedOut {...props} {...extraParams} component={component} />;
 }
 
 export function renderLoggedInRoute(component, extraParams) {
-  return props => <LoggedInRoute {...props} {...extraParams} component={component} />;
+  return props => <LoggedIn {...props} {...extraParams} component={component} />;
 }
 
 export function renderAdminRoute(component, extraParams) {
-  return props => <AdminRoute {...props} {...extraParams} component={component} />;
+  return props => <Admin {...props} {...extraParams} component={component} />;
 }
 
 export function renderMajorAdminRoute(component, extraParams) {
-  return props => <MajorAdminRoute {...props} {...extraParams} component={component} />;
+  return props => <MajorAdmin {...props} {...extraParams} component={component} />;
 }
 
-export function renderQuestionsPrivilegesRoute(component, extraParams) {
-  return props => <QuestionsPrivilegesRoute {...props} {...extraParams} component={component} />;
+export function renderQuestionsAdministrationRoute(component, extraParams) {
+  return props => <QuestionsAdministration {...props} {...extraParams} component={component} />;
 }
 
-export function renderArticlePrivilegesRoute(component, extraParams) {
-  return props => <ArticlePrivilegesRoute {...props} {...extraParams} component={component} />;
+export function renderArticleCreationRoute(component, extraParams) {
+  return props => <ArticleCreation {...props} {...extraParams} component={component} />;
 }
 
-export function renderDiscussionPrivilegesRoute(component, extraParams) {
-  return props => <DiscussionPrivilegesRoute {...props} {...extraParams} component={component} />;
+export function renderArticleAdministrationRoute(component, extraParams) {
+  return props => <ArticleAdministration {...props} {...extraParams} component={component} />;
+}
+
+export function renderDiscussionAdministrationRoute(component, extraParams) {
+  return props => <DiscussionAdministration {...props} {...extraParams} component={component} />;
 }
