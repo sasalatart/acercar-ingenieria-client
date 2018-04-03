@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import DestroyButton from '../../../containers/DestroyButton';
 import LikeButton from '../../../containers/LikeButton';
-import ButtonLink from '../../../containers/ButtonLink';
 import ActionBar from '../../../containers/Layout/ActionBar';
+import HideableButton from '../../HideableButton';
 import { articleShape } from '../../../shapes';
 import ROUTES from '../../../routes';
 
@@ -32,14 +32,14 @@ function ArticleActionBar({
 
   if (adminOrMajorAdmin || isAuthor) {
     const articleEditButton = (
-      <ButtonLink
+      <HideableButton
         key="edit"
         type="primary"
         icon="edit"
         to={ROUTES.ARTICLE_EDIT(id, majorId)}
       >
         {t({ id: 'forms.edit' })}
-      </ButtonLink>
+      </HideableButton>
     );
 
     const destroyButton = (

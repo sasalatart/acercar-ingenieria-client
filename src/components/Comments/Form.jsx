@@ -15,7 +15,7 @@ const styles = {
     margin: 0,
   },
   submitButton: {
-    minWidth: '150px',
+    minWidth: '75px',
     margin: '0 0 24px 5px',
   },
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
-import { Button } from 'antd';
+import HideableButton from '../HideableButton';
 
 const styles = {
   actionBar: hasActions => ({
@@ -27,7 +27,9 @@ function renderActions(actions) {
 function ActionBar({ actions, goBack, intl: { formatMessage: t } }) {
   return (
     <div style={styles.actionBar(actions.length)}>
-      <Button type="primary" icon="left" onClick={goBack}>{t({ id: 'goBack' })}</Button>
+      <HideableButton type="primary" icon="left" onClick={goBack}>
+        {t({ id: 'goBack' })}
+      </HideableButton>
       {renderActions(actions)}
     </div>
   );

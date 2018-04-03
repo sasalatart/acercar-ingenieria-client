@@ -18,7 +18,7 @@ const styles = {
     margin: '-25px 0 25px 0',
   },
   select: {
-    minWidth: '400px',
+    minWidth: '350px',
   },
 };
 

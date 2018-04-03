@@ -4,7 +4,7 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import Radium from 'radium';
 import { Icon } from 'antd';
 import Hideable from '../Hideable';
-import { colors } from '../../../theme';
+import { colors, breakpoints } from '../../../theme';
 
 const Link = Radium(ReactRouterLink);
 
@@ -15,6 +15,9 @@ const styles = {
     padding: '4px 35px',
     ':hover': {
       textShadow: '0 0 1em white',
+    },
+    [breakpoints.md]: {
+      padding: '4px 20px',
     },
   },
   text: {
@@ -43,4 +46,4 @@ HeaderLink.defaultProps = {
   icon: 'link',
 };
 
-export default HeaderLink;
+export default Radium(HeaderLink);

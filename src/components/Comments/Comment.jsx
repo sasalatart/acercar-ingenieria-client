@@ -4,9 +4,10 @@ import { intlShape } from 'react-intl';
 import { Button, Icon, Divider } from 'antd';
 import Linkify from 'react-linkify';
 import { commentShape } from '../../shapes';
+import Form from '../../containers/Comments/Form';
 import LikeButton from '../../containers/LikeButton';
 import DestroyButton from '../../containers/DestroyButton';
-import Form from '../../containers/Comments/Form';
+import HideableButton from '../HideableButton';
 import ProfileAvatar from '../Users/Profile/Avatar';
 import DateWithFormat from '../DateWithFormat';
 import ChildComments from './ChildComments';
@@ -155,9 +156,9 @@ export default class Comment extends Component {
 
     return (
       <div style={styles.cancelButtonWrapper}>
-        <Button icon="close" onClick={onClick}>
+        <HideableButton icon="close" onClick={onClick}>
           {t({ id: 'forms.confirm.cancel' })}
-        </Button>
+        </HideableButton>
       </div>
     );
   }

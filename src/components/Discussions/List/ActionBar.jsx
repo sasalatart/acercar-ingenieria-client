@@ -6,6 +6,7 @@ import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
 import { TagsField } from '../../Forms';
+import HideableButton from '../../HideableButton';
 import ROUTES from '../../../routes';
 
 function renderExtraFields(t) {
@@ -39,7 +40,9 @@ function DiscussionsActionBar({
 
   if (loggedIn) {
     const buttonLink = (
-      <ButtonLink to={ROUTES.DISCUSSIONS_NEW}>{t({ id: 'discussions.new' })}</ButtonLink>
+      <HideableButton to={ROUTES.DISCUSSIONS_NEW} icon="plus">
+        {t({ id: 'discussions.new' })}
+      </HideableButton>
     );
     actions.push(buttonLink);
   }

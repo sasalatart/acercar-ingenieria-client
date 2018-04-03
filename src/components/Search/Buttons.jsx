@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
+import HideableButton from '../HideableButton';
 import Form from '../../containers/Search/Form';
 
 const styles = {
@@ -40,14 +41,14 @@ class SearchButton extends Component {
 
     return (
       <span>
-        <Button type="primary" icon="search" onClick={this.handleOpenModal} style={styles.button}>
+        <HideableButton type="primary" icon="search" onClick={this.handleOpenModal} style={styles.button}>
           {title}
-        </Button>
+        </HideableButton>
 
         {filtersActive &&
-          <Button onClick={removeFilter} style={styles.button}>
+          <HideableButton icon="close" onClick={removeFilter} style={styles.button}>
             {t({ id: 'search.reset' })}
-          </Button>
+          </HideableButton>
         }
 
         <Modal

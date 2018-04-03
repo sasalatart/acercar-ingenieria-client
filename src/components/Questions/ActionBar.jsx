@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Button } from 'antd';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
-import ButtonLink from '../../containers/ButtonLink';
+import HideableButton from '../HideableButton';
 import ROUTES from '../../routes';
 
 function QuestionsActionBar({
@@ -19,25 +18,27 @@ function QuestionsActionBar({
 
   if (loggedIn) {
     const proposeOneButton = (
-      <Button type="primary" icon="form" onClick={onProposeClicked}>
+      <HideableButton type="primary" icon="form" onClick={onProposeClicked}>
         {t({ id: 'forms.proposeOne' })}
-      </Button>
+      </HideableButton>
     );
 
     actions.push(proposeOneButton);
   }
 
   if (adminOrMajorAdmin) {
+    const route = pending ? ROUTES.QUESTIONS(majorId) : ROUTES.PENDING_QUESTIONS(majorId);
+
     const buttonLink = pending
       ? (
-        <ButtonLink key="goToAnswered" to={ROUTES.QUESTIONS(majorId)} icon="question-circle">
+        <HideableButton key="goToAnswered" to={route} icon="question-circle">
           {t({ id: 'questions' })}
-        </ButtonLink>
+        </HideableButton>
       )
       : (
-        <ButtonLink key="goToPending" to={ROUTES.PENDING_QUESTIONS(majorId)} icon="question-circle-o">
+        <HideableButton key="goToPending" to={route} icon="question-circle-o">
           {t({ id: 'questions.pending' })}
-        </ButtonLink>
+        </HideableButton>
       );
 
     actions.push(buttonLink);

@@ -9,9 +9,10 @@ import LikeButton from '../../../containers/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import TagList from '../..//TagList';
 import IconText from '../../IconText';
+import Hideable from '../../Layout/Hideable';
 import ROUTES from '../../../routes';
 import { articleShape } from '../../../shapes';
-import { themeStyles } from '../../../theme';
+import { themeStyles, breakpointsKeys } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
 
 const { Item } = List;
@@ -62,9 +63,9 @@ function renderActions(loggedIn, adminOrMajorAdmin, article) {
 function renderExtra(picture) {
   const imageSrc = picture ? picture.medium : articlePlaceholder;
   return (
-    <div style={styles.imageWrapper}>
+    <Hideable breakpoint={breakpointsKeys.xs} style={styles.imageWrapper}>
       <img alt="summary-logo" src={imageSrc} style={styles.image} />
-    </div>
+    </Hideable>
   );
 }
 

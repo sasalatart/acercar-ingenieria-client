@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { intlShape } from 'react-intl';
 import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
-import ButtonLink from '../../../containers/ButtonLink';
+import HideableButton from '../../HideableButton';
 import {
   SelectField,
   TagsField,
@@ -82,9 +82,9 @@ export default class ArticlesActionBar extends Component {
 
     if (canCreateArticles) {
       const newArticleButtonLink = (
-        <ButtonLink key="new" to={ROUTES.ARTICLES_NEW(majorId)} >
+        <HideableButton key="new" to={ROUTES.ARTICLES_NEW(majorId)} icon="plus">
           {t({ id: 'articles.new' })}
-        </ButtonLink>
+        </HideableButton>
       );
       actions.push(newArticleButtonLink);
     }
