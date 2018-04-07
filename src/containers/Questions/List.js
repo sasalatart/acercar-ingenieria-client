@@ -5,10 +5,10 @@ import {
   getCollectionParams,
   loadQuestions,
   getPagingFns,
-} from '../../../store/ducks/questions';
-import { getIsFetching } from '../../../store/ducks/loading';
-import WithAuthorization from '../../../hoc/WithAuthorization';
-import QuestionsList from '../../../components/Questions/List';
+} from '../../store/ducks/questions';
+import { getIsFetching } from '../../store/ducks/loading';
+import WithAuthorization from '../../hoc/WithAuthorization';
+import QuestionsList from '../../components/Questions/List';
 
 function mapStateToProps(state, ownProps) {
   const params = {

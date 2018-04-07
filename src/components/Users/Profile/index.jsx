@@ -5,6 +5,7 @@ import { intlShape } from 'react-intl';
 import { Layout, Menu, Icon } from 'antd';
 import { userShape } from '../../../shapes';
 import ProfileInfo from './Info';
+import Notifications from './Notifications';
 import ProfileEdit from './Edit';
 import ChangePassword from './ChangePassword';
 import DataPlaceholder from '../../DataPlaceholder';
@@ -22,6 +23,7 @@ const styles = {
 class Profile extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    id: PropTypes.number.isRequired,
     user: userShape,
     mine: PropTypes.bool,
     activeMenuKey: PropTypes.string.isRequired,
@@ -37,6 +39,12 @@ class Profile extends Component {
 
   componentWillMount() {
     this.props.loadUser();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.id !== nextProps.id) {
+      nextProps.loadUser();
+    }
   }
 
   getMenus() {
@@ -106,6 +114,7 @@ class Profile extends Component {
           <Switch>
             <Route path={this.profileKeys.password} component={ChangePassword} />
             <Route path={this.profileKeys.edit} component={ProfileEdit} />
+            <Route path={`${this.profileKeys.notifications}/:seen?`} component={Notifications} />
             <Route path={this.profileKeys.info} render={() => <ProfileInfo user={user} />} />
           </Switch>
         </Content>

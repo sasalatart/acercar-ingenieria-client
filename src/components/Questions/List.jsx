@@ -5,10 +5,10 @@ import { Collapse, Button } from 'antd';
 import Linkify from 'react-linkify';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import DestroyButton from '../../../containers/DestroyButton';
-import PaginationControls from '../../../containers/Pagination';
-import IconText from '../../IconText';
-import { paginationShape, questionShape } from '../../../shapes';
+import DestroyButton from '../../containers/DestroyButton';
+import PaginationControls from '../../containers/Pagination';
+import IconText from '../IconText';
+import { paginationShape, questionShape } from '../../shapes';
 
 const { Panel } = Collapse;
 

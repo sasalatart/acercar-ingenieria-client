@@ -10,6 +10,10 @@ const ROUTES = {
   EDIT_PASSWORD: '/auth/password/edit',
   USERS: '/users',
   PROFILE: '/users/profile',
+  NOTIFICATIONS: seen => (seen
+    ? '/users/profile/notifications/seen'
+    : '/users/profile/notifications'
+  ),
   USER: id => `/users/${id}`,
   MAJORS: '/majors',
   MAJORS_NEW: '/majors/new',

@@ -7,6 +7,7 @@ import entities, {
   INITIAL_STATE as INITIAL_ENTITIES_STATE,
 } from './entities';
 import sessions, { TYPES } from './sessions';
+import notifications from './notifications';
 import announcements from './announcements';
 import users from './users';
 import admins from './admins';
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
   i18n,
   entities,
   sessions,
+  notifications,
   announcements,
   users,
   admins,

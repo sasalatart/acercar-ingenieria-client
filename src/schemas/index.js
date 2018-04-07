@@ -39,3 +39,7 @@ export const commentsSchema = new schema.Entity('comments', {
   author: userSummariesSchema,
   childComments: [childCommentsSchema],
 });
+
+export const notificationsSchema = new schema.Entity('notifications', {
+  notificator: userSummariesSchema,
+});

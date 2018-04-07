@@ -147,6 +147,15 @@ export const commentShape = PropTypes.shape({
   childComments: PropTypes.arrayOf(childCommentShape),
 });
 
+export const notificationShape = PropTypes.shape({
+  notificator: userSummaryShape.isRequired,
+  actionType: PropTypes.string.isRequired,
+  notifyableId: PropTypes.number.isRequired,
+  notifyableType: PropTypes.string.isRequired,
+  notifyableMeta: PropTypes.shape({}),
+  createdAt: PropTypes.string.isRequired,
+});
+
 export const lightboxImageShape = PropTypes.shape({
   src: PropTypes.string.isRequired,
   thumbnail: PropTypes.string,

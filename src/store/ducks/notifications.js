@@ -1,14 +1,61 @@
+import { Map } from 'immutable';
 import keyMirror from 'keymirror';
 import { getLocale } from './i18n';
+import pagingFnsFactory from './paginations';
 import messages from '../../i18n/messages';
+import { notificationsSchema } from '../../schemas';
+
+export const collection = 'notifications';
+const commonArgs = [collection, notificationsSchema];
+
+const pendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'seen' });
+const seenPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'pending' });
+
+const INITIAL_STATE = new Map({
+  pagination: new Map({
+    platform: new Map({}),
+  }),
+});
+
+export function getPagingFns(seen) {
+  return seen ? seenPagingFns : pendingPagingFns;
+}
 
 export const NOTIFICATION_TYPES = keyMirror({
   success: null, info: null, warning: null, error: null, open: null,
 });
 
 export const TYPES = {
+  LOAD_UNSEEN: 'notifications/LOAD_UNSEEN',
+  LOAD_SEEN: 'notifications/LOAD_SEEN',
   DISPLAY: 'notifications/DISPLAY',
 };
+
+export function loadNotifications(page = 1, seen) {
+  return {
+    type: seen ? TYPES.LOAD_SEEN : TYPES.LOAD_UNSEEN,
+    payload: {
+      method: 'GET',
+      url: seen ? '/notifications/seen' : '/notifications',
+      query: { page },
+      urlParams: { collection, page },
+      responseSchema: [notificationsSchema],
+    },
+  };
+}
+
+export default function notificationsReducer(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case `${TYPES.LOAD_SEEN}_FULFILLED`:
+    case `${TYPES.LOAD_UNSEEN}_FULFILLED`: {
+      return getPagingFns(action.type.includes(TYPES.LOAD_SEEN))
+        .reducer
+        .setPage(state, action.payload);
+    }
+    default:
+      return state;
+  }
+}
 
 function displayNotification(
   message,
