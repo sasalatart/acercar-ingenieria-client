@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Divider } from 'antd';
 import isEmpty from 'lodash/isEmpty';
@@ -12,8 +11,8 @@ import DateWithFormat from '../../DateWithFormat';
 import RichText from '../../RichText';
 import Attachments from '../../Attachments';
 import Comments from '../../Comments';
+import ProfileLink from '../../Users/Profile/Link';
 import { discussionShape } from '../../../shapes';
-import ROUTES from '../../../routes';
 
 const styles = {
   author: {
@@ -50,13 +49,10 @@ export default class Discussion extends Component {
   renderAuthor() {
     const { discussion: { author }, intl: { formatMessage: t } } = this.props;
 
-    const href = ROUTES.USER(author.id);
-    const authorName = `${author.firstName} ${author.lastName}`;
-
     return (
       <p style={styles.author}>
         <span>{t({ id: 'submittedBy' })}</span>
-        <Link to={href} href={href}>{authorName}</Link>
+        <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>
       </p>
     );
   }

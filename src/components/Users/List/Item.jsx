@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import DestroyButton from '../../../containers/DestroyButton';
 import ProfileAvatar from '../../Users/Profile/Avatar';
-import ROUTES from '../../../routes';
+import ProfileLink from '../../Users/Profile/Link';
 import { userShape } from '../../../shapes';
 
 const { Item } = List;
@@ -15,9 +14,7 @@ function UserListItem({
   admin, adminOrMajorAdmin, user, setSelectedUser, intl: { formatMessage: t },
 }) {
   const avatar = <ProfileAvatar user={user} />;
-
-  const route = ROUTES.USER(user.id);
-  const title = <Link to={route} href={route}>{user.firstName} {user.lastName}</Link>;
+  const title = <ProfileLink id={user.id}>{user.firstName} {user.lastName}</ProfileLink>;
 
   const actions = [];
   if (admin) {

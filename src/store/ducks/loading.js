@@ -50,7 +50,7 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
   if (id) {
     return pending
       ? state.updateIn(path, ids => (ids ? ids.add(+id) : new Set([+id])))
-      : state.updateIn(path, ids => ids.delete(+id));
+      : state.updateIn(path, ids => ids && ids.delete(+id));
   }
 
   return state.setIn(path, pending);

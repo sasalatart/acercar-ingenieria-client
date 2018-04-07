@@ -41,7 +41,7 @@ function renderActionText(user, actionType) {
     <FormattedMessage
       id={`notifications.actions.has${humps.pascalize(actionType)}`}
       values={{
-        userName: <ProfileLink id={id} firstName={firstName} lastName={lastName} />,
+        userName: <ProfileLink id={id}>{firstName} {lastName}</ProfileLink>,
       }}
     />
   );
@@ -50,10 +50,10 @@ function renderActionText(user, actionType) {
 function renderResourceSuffix(notifyableType, notifyableId, notifyableMeta) {
   switch (notifyableType) {
     case NOTIFYABLE_TYPES.discussion:
-      return <DiscussionLink id={notifyableId} title={notifyableMeta.title} />;
+      return <DiscussionLink id={notifyableId}>{notifyableMeta.title}</DiscussionLink>;
     case NOTIFYABLE_TYPES.article: {
       const { majorId, title } = notifyableMeta;
-      return <ArticleLink id={notifyableId} majorId={majorId} title={title} />;
+      return <ArticleLink id={notifyableId} majorId={majorId}>{title}</ArticleLink>;
     }
     case NOTIFYABLE_TYPES.comment:
       return <span style={styles.comment}>{truncate(notifyableMeta.content)}</span>;

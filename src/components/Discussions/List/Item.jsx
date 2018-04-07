@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import WithAuthorization from '../../../hoc/WithAuthorization';
@@ -9,7 +8,8 @@ import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import DateWithFormat from '../../DateWithFormat';
 import TagList from '../../TagList';
-import ROUTES from '../../../routes';
+import ProfileLink from '../../Users/Profile/Link';
+import DiscussionLink from '../../Discussions/Discussion/Link';
 import { colors } from '../../../theme';
 import { discussionShape } from '../../../shapes';
 
@@ -62,22 +62,17 @@ function renderMeta(discussion, t) {
     createdAt,
   } = discussion;
 
-  const titleHref = ROUTES.DISCUSSION(id);
-  const titleLink = <Link to={titleHref} href={titleHref}>{title}</Link>;
   const titleTag = (
     <span>
       {pinned && <Icon type="star" style={styles.star} />}
-      {titleLink}
+      <DiscussionLink id={id}>{title}</DiscussionLink>
     </span>
   );
 
-  const authorHref = ROUTES.USER(author.id);
   const description = (
     <span>
       <span>{t({ id: 'submittedBy' })}</span>
-      <Link to={authorHref} href={authorHref}>
-        {`${author.firstName} ${author.lastName}`}
-      </Link>,
+      <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>,
       <DateWithFormat dateString={createdAt} withTime style={styles.date} />
     </span>
   );

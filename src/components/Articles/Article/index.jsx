@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Row, Col, Divider } from 'antd';
 import Linkify from 'react-linkify';
@@ -15,9 +14,10 @@ import RichText from '../../RichText';
 import Attachments from '../../Attachments';
 import Comments from '../../Comments';
 import TagList from '../../TagList';
+import ProfileLink from '../../Users/Profile/Link';
+import MajorLink from '../../Majors/Major/Link';
 import { articleShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
-import ROUTES from '../../../routes';
 import articlePlaceholder from '../../../images/article.png';
 
 const styles = {
@@ -64,24 +64,20 @@ export default class Article extends Component {
       return null;
     }
 
-    const href = ROUTES.MAJOR(majorSummary.id);
     return (
-      <Link to={href} href={href}>
+      <MajorLink id={majorSummary.id}>
         <SubTitle text={majorSummary.name} />
-      </Link>
+      </MajorLink>
     );
   }
 
   renderAuthor() {
     const { article: { author }, intl: { formatMessage: t } } = this.props;
 
-    const href = ROUTES.USER(author.id);
-    const authorName = `${author.firstName} ${author.lastName}`;
-
     return (
       <p style={styles.author}>
         <span>{t({ id: 'submittedBy' })}</span>
-        <Link to={href} href={href}>{authorName}</Link>
+        <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>
       </p>
     );
   }

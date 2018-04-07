@@ -11,6 +11,7 @@ import HideableButton from '../HideableButton';
 import ProfileAvatar from '../Users/Profile/Avatar';
 import DateWithFormat from '../DateWithFormat';
 import ChildComments from './ChildComments';
+import ProfileLink from '../Users/Profile/Link';
 import { themeStyles } from '../../theme';
 
 const styles = {
@@ -101,7 +102,8 @@ export default class Comment extends Component {
     return (
       <div style={styles.mainContent}>
         <p style={styles.metaData}>
-          {author.firstName} {author.lastName}, <DateWithFormat dateString={createdAt} withTime />
+          <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>{', '}
+          <DateWithFormat dateString={createdAt} withTime />
         </p>
         <Linkify>
           <p style={styles.content}>{content}</p>

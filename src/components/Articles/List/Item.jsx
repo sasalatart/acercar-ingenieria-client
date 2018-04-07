@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List } from 'antd';
 import Linkify from 'react-linkify';
@@ -10,7 +9,8 @@ import DestroyButton from '../../../containers/DestroyButton';
 import TagList from '../..//TagList';
 import IconText from '../../IconText';
 import Hideable from '../../Layout/Hideable';
-import ROUTES from '../../../routes';
+import ProfileLink from '../../Users/Profile/Link';
+import ArticleLink from '../../Articles/Article/Link';
 import { articleShape } from '../../../shapes';
 import { themeStyles, breakpointsKeys } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
@@ -69,33 +69,29 @@ function renderExtra(picture) {
   );
 }
 
-function renderMeta(article, articleHref, t) {
-  const { title, author } = article;
-
+function renderMeta(article, t) {
   const titleTag = (
     <span>
-      <Link to={articleHref} href={articleHref}>{title}</Link>
+      <ArticleLink id={article.id} majorId={article.majorId}>{article.title}</ArticleLink>
     </span>
   );
 
-  const authorHref = ROUTES.USER(author.id);
+  const { author } = article;
   const authorName = (
     <span>
       <span>{t({ id: 'submittedBy' })}</span>
-      <Link to={authorHref} href={authorHref}>
-        {`${author.firstName} ${author.lastName}`}
-      </Link>
+      <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>
     </span>
   );
 
   return <Meta title={titleTag} description={authorName} />;
 }
 
-function renderShortDescription(shortDescription, articleHref, t) {
+function renderShortDescription(id, shortDescription, t) {
   return (
     <Linkify>
       <p style={styles.shortDescription}>{shortDescription}</p>
-      <Link to={articleHref} href={articleHref}>{t({ id: 'articles.readMore' })}</Link>
+      <ArticleLink id={id}>{t({ id: 'articles.readMore' })}</ArticleLink>
     </Linkify>
   );
 }
@@ -107,17 +103,16 @@ function ArticleListItem({
   onTagClick,
   intl: { formatMessage: t },
 }) {
-  const articleHref = ROUTES.ARTICLE(article.id, article.majorId);
   const actions = renderActions(loggedIn, adminOrMajorAdmin, article);
   const extra = renderExtra(article.picture);
 
   return (
     <Item actions={actions} extra={extra}>
-      {renderMeta(article, articleHref, t)}
+      {renderMeta(article, t)}
       {article.categoryList.length > 0 &&
         <TagList tags={article.categoryList} onTagClick={onTagClick} withIcon />
       }
-      {renderShortDescription(article.shortDescription, articleHref, t)}
+      {renderShortDescription(article.id, article.shortDescription, t)}
     </Item>
   );
 }

@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Avatar } from 'antd';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import ROUTES from '../../../../routes';
+import MajorLink from '../../../Majors/Major/Link';
 import { majorOfInterestShape } from '../../../../shapes';
 import majorPlaceholder from '../../../../images/major.png';
+
+const { Item } = List;
+const { Meta } = Item;
 
 const styles = {
   noneOfInterest: {
@@ -16,16 +18,14 @@ const styles = {
 };
 
 function renderMajor(major, t) {
-  const href = ROUTES.MAJOR(major.id);
-
   return (
-    <List.Item>
-      <List.Item.Meta
+    <Item>
+      <Meta
         avatar={<Avatar src={get(major.logo, 'thumb') || majorPlaceholder} shape="square" />}
-        title={<Link to={href} href={href}>{major.name}</Link>}
+        title={<MajorLink id={major.majorId}>{major.name}</MajorLink>}
         description={t({ id: `majors.${major.category}` })}
       />
-    </List.Item>
+    </Item>
   );
 }
 

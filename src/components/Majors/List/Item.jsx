@@ -6,6 +6,7 @@ import { List, Avatar, Icon } from 'antd';
 import get from 'lodash/get';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
+import MajorLink from '../Major/Link';
 import { majorShape } from '../../../shapes';
 import ROUTES from '../../../routes';
 import { themeStyles } from '../../../theme';
@@ -30,10 +31,9 @@ function MajorItem({
 }) {
   const avatar = <Avatar src={get(logo, 'thumb') || majorPlaceholder} shape="square" />;
 
-  const titleHref = ROUTES.MAJOR(id);
-  const title = <Link to={titleHref} href={titleHref}>{name}</Link>;
+  const title = <MajorLink id={id}>{name}</MajorLink>;
   const actions = [
-    <Link to={titleHref} href={titleHref}><Icon type="info-circle" /></Link>,
+    <MajorLink id={id}><Icon type="info-circle" /></MajorLink>,
   ];
 
   if (admin) {
