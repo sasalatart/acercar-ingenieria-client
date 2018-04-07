@@ -32,13 +32,15 @@ export const TYPES = {
 };
 
 export function loadNotifications(page = 1, seen) {
+  const suffix = seen ? 'seen' : 'pending';
+
   return {
     type: seen ? TYPES.LOAD_SEEN : TYPES.LOAD_UNSEEN,
     payload: {
       method: 'GET',
       url: seen ? '/notifications/seen' : '/notifications',
       query: { page },
-      urlParams: { collection, page },
+      urlParams: { collection, page, suffix },
       responseSchema: [notificationsSchema],
     },
   };
