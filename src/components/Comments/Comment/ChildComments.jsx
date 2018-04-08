@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Comment from '../../containers/Comments/Comment';
-import { childCommentShape } from '../../shapes';
+import Comment from '../../../containers/Comments/Comment';
+import { childCommentShape } from '../../../shapes';
 
 function ChildComments({ comments }) {
   return (

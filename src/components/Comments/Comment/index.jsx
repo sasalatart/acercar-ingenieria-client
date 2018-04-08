@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Button, Icon, Divider } from 'antd';
 import Linkify from 'react-linkify';
-import { commentShape } from '../../shapes';
-import Form from '../../containers/Comments/Form';
-import LikeButton from '../../containers/LikeButton';
-import EnrollButton from '../../containers/EnrollButton';
-import DestroyButton from '../../containers/DestroyButton';
-import HideableButton from '../HideableButton';
-import ProfileAvatar from '../Users/Profile/Avatar';
-import DateWithFormat from '../DateWithFormat';
+import lowerFirst from 'lodash/lowerFirst';
+import { commentShape } from '../../../shapes';
+import Form from '../../../containers/Comments/Form';
+import LikeButton from '../../../containers/LikeButton';
+import EnrollButton from '../../../containers/EnrollButton';
+import DestroyButton from '../../../containers/DestroyButton';
+import HideableButton from '../../HideableButton';
+import ProfileAvatar from '../../Users/Profile/Avatar';
+import DateWithFormat from '../../DateWithFormat';
 import ChildComments from './ChildComments';
-import ProfileLink from '../Users/Profile/Link';
-import { themeStyles } from '../../theme';
+import ProfileLink from '../../Users/Profile/Link';
+import { themeStyles } from '../../../theme';
 
 const styles = {
   parentWrapper: {
@@ -51,6 +52,9 @@ const styles = {
   answerButton: {
     marginTop: '10px',
   },
+  editButton: {
+    cursor: 'pointer',
+  },
   childNode: {
     marginLeft: '66px',
   },
@@ -67,8 +71,7 @@ export default class Comment extends Component {
   state = { editing: false, answering: false };
 
   getBaseResourceName() {
-    const { commentableType } = this.props.comment;
-    return `${commentableType.charAt(0).toLowerCase()}${commentableType.slice(1)}s`;
+    return `${lowerFirst(this.props.comment.commentableType)}s`;
   }
 
   handleStartEditing = () => this.setState({ editing: true });
@@ -147,7 +150,7 @@ export default class Comment extends Component {
     return (
       <span>
         <Divider type="vertical" />
-        <Icon type="edit" onClick={this.handleStartEditing} />
+        <Icon type="edit" onClick={this.handleStartEditing} style={styles.editButton} />
       </span>
     );
   }

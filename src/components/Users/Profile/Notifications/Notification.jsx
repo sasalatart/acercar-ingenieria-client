@@ -10,6 +10,7 @@ import truncate from 'lodash/truncate';
 import ProfileLink from '../Link';
 import DiscussionLink from '../../../Discussions/Discussion/Link';
 import ArticleLink from '../../../Articles/Article/Link';
+import CommentsLink from '../../../Comments/Link';
 import DateWithFormat from '../../../DateWithFormat';
 import { notificationShape } from '../../../../shapes';
 
@@ -26,6 +27,12 @@ const styles = {
   comment: {
     fontStyle: 'italic',
   },
+};
+
+const LINK_TAGS = {
+  [NOTIFYABLE_TYPES.discussion]: DiscussionLink,
+  [NOTIFYABLE_TYPES.article]: ArticleLink,
+  [NOTIFYABLE_TYPES.comment]: CommentsLink,
 };
 
 const ICON_TYPES = {
@@ -47,26 +54,41 @@ function renderActionText(user, actionType) {
   );
 }
 
-function renderResourceSuffix(notifyableType, notifyableId, notifyableMeta) {
-  switch (notifyableType) {
-    case NOTIFYABLE_TYPES.discussion:
-      return <DiscussionLink id={notifyableId}>{notifyableMeta.title}</DiscussionLink>;
-    case NOTIFYABLE_TYPES.article: {
-      const { majorId, title } = notifyableMeta;
-      return <ArticleLink id={notifyableId} majorId={majorId}>{title}</ArticleLink>;
-    }
-    case NOTIFYABLE_TYPES.comment:
-      return <span style={styles.comment}>{truncate(notifyableMeta.content)}</span>;
-    default:
-      return undefined;
+function renderResourceSuffix(notifyableType, notifyableId, notifyableMeta, t) {
+  if (notifyableType !== NOTIFYABLE_TYPES.comment) {
+    const LinkTag = LINK_TAGS[notifyableType];
+    return (
+      <LinkTag id={notifyableId} {...notifyableMeta}>
+        {truncate(notifyableMeta.title)}
+      </LinkTag>
+    );
   }
+
+  const { commentableType, commentableId, content } = notifyableMeta;
+  const CommentableLink = LINK_TAGS[commentableType];
+  return (
+    <span>
+      <span style={styles.comment}>{truncate(content)}</span>{' '}
+      <FormattedMessage
+        id="notifications.resource.toTheEnrolled"
+        values={{
+          enrollable: (
+            <CommentableLink id={commentableId} {...notifyableMeta}>
+              {t({ id: commentableType.toLowerCase() })}
+            </CommentableLink>
+          ),
+        }}
+      />
+    </span>
+  );
 }
 
 function renderNotifyableText(notifyableType, notifyableId, notifyableMeta, t) {
   const resourceText = t({ id: `notifications.resource.${notifyableType.toLowerCase()}` });
   return (
     <span>
-      {resourceText}{' '}{renderResourceSuffix(notifyableType, notifyableId, notifyableMeta)}
+      {resourceText}{' '}
+      {renderResourceSuffix(notifyableType, notifyableId, notifyableMeta, t)}
     </span>
   );
 }
