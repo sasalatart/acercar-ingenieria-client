@@ -1,16 +1,22 @@
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import {
+  suffix,
   like,
   unlike,
-  getResourceLikeLoading,
 } from '../store/ducks/likes';
+import {
+  getIsCreating,
+  getIsDestroying,
+} from '../store/ducks/loading';
 import WithAuthorization from '../hoc/WithAuthorization';
 import LikeButton from '../components/LikeButton';
 
 function mapStateToProps(state, ownProps) {
+  const params = { ...ownProps, suffix };
+
   return {
-    likingOrUnliking: getResourceLikeLoading(state, ownProps),
+    loading: getIsCreating(state, params) || getIsDestroying(state, params),
   };
 }
 

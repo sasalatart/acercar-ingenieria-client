@@ -9,8 +9,9 @@ const INITIAL_STATE = new Map({
   destroying: new Map({}),
 });
 
-function getCategory(fetching, updating, destroying) {
+function getCategory(fetching, creating, updating, destroying) {
   if (fetching) return 'fetching';
+  if (creating) return 'creating';
   if (updating) return 'updating';
   if (destroying) return 'destroying';
   return undefined;
@@ -27,10 +28,11 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
   }
 
   const fetching = type.includes('LOAD');
+  const creating = type.includes('CREATE');
   const updating = type.includes('UPDATE');
   const destroying = type.includes('DESTROY');
 
-  if (!fetching && !updating && !destroying) {
+  if (!fetching && !creating && !updating && !destroying) {
     return state;
   }
 
@@ -46,14 +48,17 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
       : state.updateIn(path, pages => pages && pages.delete(+page));
   }
 
-  const path = compact([getCategory(fetching, updating, destroying), collection, suffix]);
+  const category = getCategory(fetching, creating, updating, destroying);
+  const path = compact([category, collection, suffix]);
   if (id) {
     return pending
       ? state.updateIn(path, ids => (ids ? ids.add(+id) : new Set([+id])))
       : state.updateIn(path, ids => ids && ids.delete(+id));
   }
 
-  return state.setIn(path, pending);
+  return pending
+    ? state.setIn(path, pending)
+    : state.deleteIn(path);
 }
 
 export const getLoadingData = state => state.loading;
@@ -91,17 +96,21 @@ export const getIsFetching = createSelector(
   },
 );
 
-function getIsChangingFactory(action) {
+function getIsChangingFactory(category) {
   return createSelector(
     getLoadingData,
     getCollection,
     getId,
-    (loadingData, collection, id) => {
-      if (!id) return !!loadingData.getIn([action, collection]);
-      return (loadingData.getIn([action, collection]) || new Set([])).has(id);
+    getSuffix,
+    (loadingData, collection, id, suffix) => {
+      const path = compact([category, collection, suffix]);
+      if (!id) return !!loadingData.getIn(path);
+      return (loadingData.getIn(path) || new Set([])).has(id);
     },
   );
 }
+
+export const getIsCreating = getIsChangingFactory('creating');
 
 export const getIsUpdating = getIsChangingFactory('updating');
 

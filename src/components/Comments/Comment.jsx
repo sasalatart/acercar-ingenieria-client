@@ -6,6 +6,7 @@ import Linkify from 'react-linkify';
 import { commentShape } from '../../shapes';
 import Form from '../../containers/Comments/Form';
 import LikeButton from '../../containers/LikeButton';
+import EnrollButton from '../../containers/EnrollButton';
 import DestroyButton from '../../containers/DestroyButton';
 import HideableButton from '../HideableButton';
 import ProfileAvatar from '../Users/Profile/Avatar';
@@ -126,6 +127,22 @@ export default class Comment extends Component {
     );
   }
 
+  renderEnrollButton() {
+    const { id, enrolledByCurrentUser } = this.props.comment;
+
+    return (
+      <span>
+        <Divider type="vertical" />
+        <EnrollButton
+          collection="comments"
+          id={id}
+          enrolledByCurrentUser={enrolledByCurrentUser}
+          iconOnly
+        />
+      </span>
+    );
+  }
+
   renderEditButton() {
     return (
       <span>
@@ -187,11 +204,12 @@ export default class Comment extends Component {
   }
 
   renderActions() {
-    const { adminOrMajorAdmin, isAuthor } = this.props;
+    const { adminOrMajorAdmin, isAuthor, comment: { parentCommentId } } = this.props;
 
     return (
       <div>
         {this.renderLikeButton()}
+        {!parentCommentId && this.renderEnrollButton()}
         {isAuthor && this.renderEditButton()}
         {(adminOrMajorAdmin || isAuthor) && this.renderDestroyButton()}
       </div>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import DestroyButton from '../../../containers/DestroyButton';
 import LikeButton from '../../../containers/LikeButton';
+import EnrollButton from '../../../containers/EnrollButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
 import { discussionShape } from '../../../shapes';
@@ -11,7 +12,12 @@ import ROUTES from '../../../routes';
 function DiscussionActionBar({
   admin,
   isAuthor,
-  discussion: { id, likedByCurrentUser, likesCount },
+  discussion: {
+    id,
+    likedByCurrentUser,
+    likesCount,
+    enrolledByCurrentUser,
+  },
   onDestroy,
   intl: { formatMessage: t },
 }) {
@@ -22,6 +28,12 @@ function DiscussionActionBar({
       id={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
+    />,
+    <EnrollButton
+      key="enroll"
+      collection="discussions"
+      id={id}
+      enrolledByCurrentUser={enrolledByCurrentUser}
     />,
   ];
 

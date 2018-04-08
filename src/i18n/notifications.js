@@ -24,6 +24,9 @@ export default {
     'notifications.justOneMoreStep': 'Just one more step!',
     'notifications.signUpOneMoreStep.description': 'A confirmation email will be sent to you briefly. Once you confirm this email, you will be able to sign in',
     'notifications.recoverPassword.description': 'An email with further instructions will be sent to you briefly',
+
+    'notifications.on': 'Notify me',
+    'notifications.off': 'Don\'t notify me',
   },
   'es-ES': {
     'notifications.pending': 'Notificaciones pendientes',
@@ -50,5 +53,8 @@ export default {
     'notifications.justOneMoreStep': '¡Sólo un paso más!',
     'notifications.signUpOneMoreStep.description': 'Un email de confirmación será enviado a tu correo en los próximos minutos. Una vez validada tu dirección, podrás ingresar a la plataforma con tu cuenta',
     'notifications.recoverPassword.description': 'Un email con más instrucciones será enviado a tu correo en los próximos minutos',
+
+    'notifications.on': 'notificarme',
+    'notifications.off': 'no notificarme',
   },
 };

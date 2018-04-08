@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 import noop from 'lodash/noop';
+import Hideable from './Layout/Hideable';
 
 const styles = {
   icon: {
@@ -13,12 +14,15 @@ const styles = {
 };
 
 function IconText({
-  type, text, withPointer, onClick, style,
+  type, text, withPointer, hideable, onClick, style,
 }) {
   return (
     <span style={{ ...style, ...styles.cursor(withPointer) }}>
       <Icon type={type} style={styles.icon} onClick={onClick} />
-      {text}
+      {hideable
+        ? <Hideable>{text}</Hideable>
+        : <span>{text}</span>
+      }
     </span>
   );
 }
@@ -30,12 +34,14 @@ IconText.propTypes = {
     PropTypes.number.isRequired,
   ]).isRequired,
   withPointer: PropTypes.bool,
+  hideable: PropTypes.bool,
   onClick: PropTypes.func,
   style: PropTypes.shape({}),
 };
 
 IconText.defaultProps = {
   withPointer: false,
+  hideable: false,
   onClick: noop,
   style: undefined,
 };

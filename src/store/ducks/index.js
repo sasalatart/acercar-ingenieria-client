@@ -17,7 +17,6 @@ import articles from './articles';
 import discussions from './discussions';
 import categories from './categories';
 import comments from './comments';
-import likes from './likes';
 import loading from './loading';
 
 const appReducer = combineReducers({
@@ -36,7 +35,6 @@ const appReducer = combineReducers({
   discussions,
   categories,
   comments,
-  likes,
   loading,
 });
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon, Button } from 'antd';
+import { Icon } from 'antd';
 import noop from 'lodash/noop';
+import HideableButton from '../HideableButton';
 
 const styles = {
   cursor: withPointer => ({
@@ -23,14 +24,14 @@ function DestroyIconOrButton({
   }
 
   return (
-    <Button
+    <HideableButton
       type="danger"
       icon="delete"
       loading={loading}
       onClick={onClick}
     >
       {label || t({ id: 'forms.delete' })}
-    </Button>
+    </HideableButton>
   );
 }
 
