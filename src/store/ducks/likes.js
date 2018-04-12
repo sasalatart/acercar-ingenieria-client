@@ -1,42 +1,42 @@
 import { updateEntities, getEntity } from './entities';
 
-export const suffix = 'likes';
+export const collection = 'likes';
 
 const TYPES = {
   CREATE_LIKE: 'likes/CREATE_LIKE',
   DESTROY_LIKE: 'likes/DESTROY_LIKE',
 };
 
-export function like(collection, id) {
+export function like(baseResourceName, baseResourceId) {
   return (dispatch, getState) =>
     dispatch({
       type: TYPES.CREATE_LIKE,
       payload: {
         method: 'POST',
-        url: `/${collection}/${id}/likes`,
-        urlParams: { collection, id, suffix },
+        url: `/${baseResourceName}/${baseResourceId}/likes`,
+        urlParams: { baseResourceName, baseResourceId, collection },
       },
     }).then(() => {
-      const entity = getEntity(getState(), { collection, id });
+      const entity = getEntity(getState(), { collection: baseResourceName, id: baseResourceId });
       entity.likesCount += 1;
       entity.likedByCurrentUser = true;
-      dispatch(updateEntities(collection, { [id]: { ...entity } }));
+      dispatch(updateEntities(collection, { [baseResourceId]: { ...entity } }));
     });
 }
 
-export function unlike(collection, id) {
+export function unlike(baseResourceName, baseResourceId) {
   return (dispatch, getState) =>
     dispatch({
       type: TYPES.DESTROY_LIKE,
       payload: {
         method: 'DELETE',
-        url: `/${collection}/${id}/likes`,
-        urlParams: { collection, id, suffix },
+        url: `/${baseResourceName}/${baseResourceId}/likes`,
+        urlParams: { baseResourceName, baseResourceId, collection },
       },
     }).then(() => {
-      const entity = getEntity(getState(), { collection, id });
+      const entity = getEntity(getState(), { collection: baseResourceName, id: baseResourceId });
       entity.likesCount -= 1;
       entity.likedByCurrentUser = false;
-      dispatch(updateEntities(collection, { [id]: { ...entity } }));
+      dispatch(updateEntities(collection, { [baseResourceId]: { ...entity } }));
     });
 }

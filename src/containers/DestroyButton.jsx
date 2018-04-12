@@ -49,7 +49,7 @@ function getDestroyAction(ownProps) {
     case 'discussions':
       return destroyDiscussion(id);
     case 'comments':
-      return destroyComment(id, baseResourceName, baseResourceId, ownProps.parentCommentId);
+      return destroyComment(id, baseResourceName, baseResourceId);
     default:
       return undefined;
   }

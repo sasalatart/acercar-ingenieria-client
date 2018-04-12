@@ -5,6 +5,7 @@ import { getPage } from './routes';
 
 const INITIAL_STATE = new Map({
   fetching: new Map({}),
+  creating: new Map({}),
   updating: new Map({}),
   destroying: new Map({}),
 });
@@ -50,10 +51,11 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
 
   const category = getCategory(fetching, creating, updating, destroying);
   const path = compact([category, collection, suffix]);
-  if (id) {
+  if (id || (creating && baseResourceId) || (destroying && baseResourceId)) {
+    const effectiveId = id || baseResourceId;
     return pending
-      ? state.updateIn(path, ids => (ids ? ids.add(+id) : new Set([+id])))
-      : state.updateIn(path, ids => ids && ids.delete(+id));
+      ? state.updateIn(path, ids => (ids ? ids.add(+effectiveId) : new Set([+effectiveId])))
+      : state.updateIn(path, ids => ids && ids.delete(+effectiveId));
   }
 
   return pending
@@ -99,13 +101,15 @@ export const getIsFetching = createSelector(
 function getIsChangingFactory(category) {
   return createSelector(
     getLoadingData,
+    getBaseResourceId,
     getCollection,
     getId,
     getSuffix,
-    (loadingData, collection, id, suffix) => {
+    (loadingData, baseResourceId, collection, id, suffix) => {
       const path = compact([category, collection, suffix]);
-      if (!id) return !!loadingData.getIn(path);
-      return (loadingData.getIn(path) || new Set([])).has(id);
+      const effectiveId = id || baseResourceId;
+      if (!effectiveId) return !!loadingData.getIn(path);
+      return (loadingData.getIn(path) || new Set([])).has(effectiveId);
     },
   );
 }

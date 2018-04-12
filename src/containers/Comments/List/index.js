@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import {
   collection,
   loadComments,
   getPagingFns,
-} from '../../store/ducks/comments';
-import { getIsFetching } from '../../store/ducks/loading';
-import CommentsList from '../../components/Comments/List';
+} from '../../../store/ducks/comments';
+import { getIsFetching } from '../../../store/ducks/loading';
+import CommentsList from '../../../components/Comments/List';
 
 function mapStateToProps(state, ownProps) {
   const { baseResourceName, baseResourceId } = ownProps;
@@ -25,24 +26,14 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-const mapDispatchToProps = {
-  loadComments,
-};
-
-function mergeProps(stateProps, dispatchProps, ownProps) {
+function mapDispatchToProps(dispatch, ownProps) {
   const { baseResourceName, baseResourceId } = ownProps;
 
   return {
-    ...ownProps,
-    ...stateProps,
-    ...dispatchProps,
     loadComments: ({ page }) =>
-      dispatchProps.loadComments(baseResourceName, baseResourceId, page),
+      dispatch(loadComments(baseResourceName, baseResourceId, page)),
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps,
-)(CommentsList);
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(CommentsList);
+export default injectIntl(connectedComponent);

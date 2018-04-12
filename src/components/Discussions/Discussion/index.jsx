@@ -10,7 +10,7 @@ import TagList from '../../TagList';
 import DateWithFormat from '../../DateWithFormat';
 import RichText from '../../RichText';
 import Attachments from '../../Attachments';
-import Comments from '../../Comments';
+import CommentsSection from '../../Comments/Section';
 import ProfileLink from '../../Users/Profile/Link';
 import { discussionShape } from '../../../shapes';
 
@@ -94,7 +94,7 @@ export default class Discussion extends Component {
         {loggedIn &&
           <div>
             <Divider />
-            <Comments baseResourceName="discussions" baseResourceId={discussion.id} />
+            <CommentsSection baseResourceName="discussions" baseResourceId={discussion.id} />
           </div>
         }
       </div>

@@ -12,7 +12,7 @@ import SubTitle from '../../Layout/SubTitle';
 import DateWithFormat from '../../DateWithFormat';
 import RichText from '../../RichText';
 import Attachments from '../../Attachments';
-import Comments from '../../Comments';
+import CommentsSection from '../../Comments/Section';
 import TagList from '../../TagList';
 import ProfileLink from '../../Users/Profile/Link';
 import MajorLink from '../../Majors/Major/Link';
@@ -141,7 +141,7 @@ export default class Article extends Component {
         {loggedIn &&
           <div>
             <Divider />
-            <Comments baseResourceName="articles" baseResourceId={article.id} />
+            <CommentsSection baseResourceName="articles" baseResourceId={article.id} />
           </div>
         }
       </div>

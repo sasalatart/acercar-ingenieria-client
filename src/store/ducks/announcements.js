@@ -61,7 +61,7 @@ export function createAnnouncement(body) {
         responseSchema: announcementsSchema,
       },
     }).then(({ value: { result } }) => {
-      dispatch(pagingFns.actions.addToPage(TYPES.ADD_TO_PAGINATION, result, 1));
+      dispatch(pagingFns.actions.addToPagination(TYPES.ADD_TO_PAGINATION, result));
     });
 }
 

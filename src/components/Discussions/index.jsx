@@ -4,6 +4,7 @@ import {
   renderLoggedInRoute,
   renderDiscussionAdministrationRoute,
 } from '../../containers/Routes';
+import Comment from '../../containers/Comments/Comment';
 import List from '../../containers/Discussions/List';
 import Form from '../../containers/Discussions/Form';
 import Discussion from '../../containers/Discussions/Discussion';
@@ -11,6 +12,7 @@ import Discussion from '../../containers/Discussions/Discussion';
 export default function Discussions() {
   return (
     <Switch>
+      <Route path="/discussions/:discussionId/comments/:id" render={renderLoggedInRoute(Comment)} />
       <Route path="/discussions/:id/edit" render={renderDiscussionAdministrationRoute(Form)} />
       <Route path="/discussions/new" render={renderLoggedInRoute(Form)} />
       <Route path="/discussions/mine" render={renderLoggedInRoute(List, { mine: true })} />

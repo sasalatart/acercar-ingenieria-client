@@ -14,7 +14,7 @@ import MajorAdmins from '../../../containers/Majors/Major/Admins';
 import UsersList from '../../../containers/Users/List';
 import ArticlesList from '../../../containers/Articles/List';
 import Questions from '../../Questions';
-import Comments from '../../Comments';
+import CommentsSection from '../../Comments/Section';
 import Email from './Email';
 import DataPlaceholder from '../../DataPlaceholder';
 import { majorShape } from '../../../shapes';
@@ -169,7 +169,7 @@ export default class Major extends Component {
 
             <Route
               path={this.majorRoutes.comments}
-              render={renderLoggedInRoute(Comments, { baseResourceName: 'majors', baseResourceId: id, withActionBar: true })}
+              render={renderLoggedInRoute(CommentsSection, { baseResourceName: 'majors', baseResourceId: id, withActionBar: true })}
             />
 
             <Route

@@ -1,42 +1,42 @@
 import { updateEntities, getEntity } from './entities';
 
-export const suffix = 'enrollments';
+export const collection = 'enrollments';
 
 const TYPES = {
   CREATE_ENROLLMENT: 'enrollments/CREATE_ENROLLMENT',
   DESTROY_ENROLLMENT: 'enrollments/DESTROY_ENROLLMENT',
 };
 
-function toggleEnrollStatus(dispatch, getState, collection, id) {
-  const entity = getEntity(getState(), { collection, id });
+function toggleEnrollStatus(dispatch, getState, baseResourceName, baseResourceId) {
+  const entity = getEntity(getState(), { collection: baseResourceName, id: baseResourceId });
   entity.enrolledByCurrentUser = !entity.enrolledByCurrentUser;
-  dispatch(updateEntities(collection, { [id]: { ...entity } }));
+  dispatch(updateEntities(collection, { [baseResourceId]: { ...entity } }));
 }
 
-export function enroll(collection, id) {
+export function enroll(baseResourceName, baseResourceId) {
   return (dispatch, getState) =>
     dispatch({
       type: TYPES.CREATE_ENROLLMENT,
       payload: {
         method: 'POST',
-        url: `/${collection}/${id}/enrollments`,
-        urlParams: { collection, id, suffix },
+        url: `/${baseResourceName}/${baseResourceId}/enrollments`,
+        urlParams: { baseResourceName, baseResourceId, collection },
       },
     }).then(() => {
-      toggleEnrollStatus(dispatch, getState, collection, id);
+      toggleEnrollStatus(dispatch, getState, baseResourceName, baseResourceId);
     });
 }
 
-export function unenroll(collection, id) {
+export function unenroll(baseResourceName, baseResourceId) {
   return (dispatch, getState) =>
     dispatch({
       type: TYPES.DESTROY_ENROLLMENT,
       payload: {
         method: 'DELETE',
-        url: `/${collection}/${id}/enrollments`,
-        urlParams: { collection, id, suffix },
+        url: `/${baseResourceName}/${baseResourceId}/enrollments`,
+        urlParams: { baseResourceName, baseResourceId, collection },
       },
     }).then(() => {
-      toggleEnrollStatus(dispatch, getState, collection, id);
+      toggleEnrollStatus(dispatch, getState, baseResourceName, baseResourceId);
     });
 }

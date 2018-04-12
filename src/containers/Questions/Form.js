@@ -23,10 +23,13 @@ function mapStateToProps(state, ownProps) {
 
 const form = reduxForm({
   form: 'question',
-  onSubmit: (values, dispatch, { id, majorId, onSubmitSuccess }) => {
+  onSubmit: (values, dispatch, ownProps) => {
+    const { id, majorId, onSubmitSuccess } = ownProps;
+    const fromAnsweredRoute = !ownProps.match.params.pending;
+
     const action = id
       ? updateQuestion(id, values, majorId)
-      : createQuestion(values, majorId);
+      : createQuestion(values, majorId, fromAnsweredRoute === !!values.answer);
 
     return dispatch(action)
       .then(() => onSubmitSuccess && onSubmitSuccess());

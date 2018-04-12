@@ -137,14 +137,12 @@ const sharedCommentShape = {
   createdAt: PropTypes.string.isRequired,
 };
 
-export const childCommentShape = PropTypes.shape({
-  ...sharedCommentShape,
-  parentCommentId: PropTypes.number.isRequired,
-});
+export const childCommentShape = PropTypes.shape(sharedCommentShape);
 
 export const commentShape = PropTypes.shape({
   ...sharedCommentShape,
   childComments: PropTypes.arrayOf(childCommentShape),
+  extraComments: PropTypes.number,
 });
 
 export const notificationShape = PropTypes.shape({

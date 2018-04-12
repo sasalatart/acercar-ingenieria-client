@@ -26,8 +26,8 @@ function ArticleActionBar({
   const actions = [
     <LikeButton
       key="like"
-      collection="articles"
-      id={id}
+      baseResourceName="articles"
+      baseResourceId={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
@@ -37,8 +37,8 @@ function ArticleActionBar({
     const enrollButton = (
       <EnrollButton
         key="enroll"
-        collection="articles"
-        id={id}
+        baseResourceName="articles"
+        baseResourceId={id}
         enrolledByCurrentUser={enrolledByCurrentUser}
       />
     );

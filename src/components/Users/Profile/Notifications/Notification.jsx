@@ -10,7 +10,7 @@ import truncate from 'lodash/truncate';
 import ProfileLink from '../Link';
 import DiscussionLink from '../../../Discussions/Discussion/Link';
 import ArticleLink from '../../../Articles/Article/Link';
-import CommentsLink from '../../../Comments/Link';
+import CommentLink from '../../../Comments/Comment/Link';
 import DateWithFormat from '../../../DateWithFormat';
 import { notificationShape } from '../../../../shapes';
 
@@ -20,6 +20,18 @@ const NOTIFYABLE_TYPES = {
   comment: 'Comment',
 };
 
+const LINK_TAGS = {
+  [NOTIFYABLE_TYPES.discussion]: DiscussionLink,
+  [NOTIFYABLE_TYPES.article]: ArticleLink,
+  [NOTIFYABLE_TYPES.comment]: CommentLink,
+};
+
+const ICON_TYPES = {
+  [NOTIFYABLE_TYPES.discussion]: 'star',
+  [NOTIFYABLE_TYPES.article]: 'file-text',
+  [NOTIFYABLE_TYPES.comment]: 'message',
+};
+
 const styles = {
   icon: {
     marginRight: '5px',
@@ -27,18 +39,6 @@ const styles = {
   comment: {
     fontStyle: 'italic',
   },
-};
-
-const LINK_TAGS = {
-  [NOTIFYABLE_TYPES.discussion]: DiscussionLink,
-  [NOTIFYABLE_TYPES.article]: ArticleLink,
-  [NOTIFYABLE_TYPES.comment]: CommentsLink,
-};
-
-const ICON_TYPES = {
-  [NOTIFYABLE_TYPES.discussion]: 'star',
-  [NOTIFYABLE_TYPES.article]: 'file-text',
-  [NOTIFYABLE_TYPES.comment]: 'message',
 };
 
 function renderActionText(user, actionType) {
@@ -54,7 +54,7 @@ function renderActionText(user, actionType) {
   );
 }
 
-function renderResourceSuffix(notifyableType, notifyableId, notifyableMeta, t) {
+function renderResourceSuffix(actionType, notifyableType, notifyableId, notifyableMeta, t) {
   if (notifyableType !== NOTIFYABLE_TYPES.comment) {
     const LinkTag = LINK_TAGS[notifyableType];
     return (
@@ -66,6 +66,7 @@ function renderResourceSuffix(notifyableType, notifyableId, notifyableMeta, t) {
 
   const { commentableType, commentableId, content } = notifyableMeta;
   const CommentableLink = LINK_TAGS[commentableType];
+
   return (
     <span>
       <span style={styles.comment}>{truncate(content)}</span>{' '}
@@ -73,7 +74,7 @@ function renderResourceSuffix(notifyableType, notifyableId, notifyableMeta, t) {
         id="notifications.resource.toTheEnrolled"
         values={{
           enrollable: (
-            <CommentableLink id={commentableId} {...notifyableMeta}>
+            <CommentableLink id={commentableId}>
               {t({ id: commentableType.toLowerCase() })}
             </CommentableLink>
           ),
@@ -83,12 +84,12 @@ function renderResourceSuffix(notifyableType, notifyableId, notifyableMeta, t) {
   );
 }
 
-function renderNotifyableText(notifyableType, notifyableId, notifyableMeta, t) {
+function renderNotifyableText(actionType, notifyableType, notifyableId, notifyableMeta, t) {
   const resourceText = t({ id: `notifications.resource.${notifyableType.toLowerCase()}` });
   return (
     <span>
       {resourceText}{' '}
-      {renderResourceSuffix(notifyableType, notifyableId, notifyableMeta, t)}
+      {renderResourceSuffix(actionType, notifyableType, notifyableId, notifyableMeta, t)}
     </span>
   );
 }
@@ -110,7 +111,7 @@ function Notification({
       <DateWithFormat dateString={createdAt} withTime />
       <p>
         {renderActionText(notificator, actionType)}{' '}
-        {renderNotifyableText(notifyableType, notifyableId, notifyableMeta, t)}
+        {renderNotifyableText(actionType, notifyableType, notifyableId, notifyableMeta, t)}
       </p>
     </div>
   );

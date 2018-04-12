@@ -24,15 +24,15 @@ function DiscussionActionBar({
   const actions = [
     <LikeButton
       key="like"
-      collection="discussions"
-      id={id}
+      baseResourceName="discussions"
+      baseResourceId={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
     <EnrollButton
       key="enroll"
-      collection="discussions"
-      id={id}
+      baseResourceName="discussions"
+      baseResourceId={id}
       enrolledByCurrentUser={enrolledByCurrentUser}
     />,
   ];

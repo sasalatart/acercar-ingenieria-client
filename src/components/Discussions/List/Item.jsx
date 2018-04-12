@@ -37,8 +37,8 @@ function renderActions(admin, discussion) {
   const actions = [
     <IconText type="eye" text={impressionsCount} />,
     <LikeButton
-      collection="discussions"
-      id={id}
+      baseResourceName="discussions"
+      baseResourceId={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
       iconOnly

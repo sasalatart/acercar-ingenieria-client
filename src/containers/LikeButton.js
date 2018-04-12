@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import {
-  suffix,
+  collection,
   like,
   unlike,
 } from '../store/ducks/likes';
@@ -13,29 +13,21 @@ import WithAuthorization from '../hoc/WithAuthorization';
 import LikeButton from '../components/LikeButton';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps, suffix };
+  const params = { ...ownProps, collection };
 
   return {
     loading: getIsCreating(state, params) || getIsDestroying(state, params),
   };
 }
 
-const mapDispatchToProps = {
-  like,
-  unlike,
-};
+function mapDispatchToProps(dispatch, ownProps) {
+  const { baseResourceName, baseResourceId, likedByCurrentUser } = ownProps;
 
-function mergeProps(stateProps, dispatchProps, ownProps) {
-  const { collection, id, likedByCurrentUser } = ownProps;
-
-  const onClickFn = likedByCurrentUser ? dispatchProps.unlike : dispatchProps.like;
-
+  const onClickFn = likedByCurrentUser ? unlike : like;
   return {
-    ...ownProps,
-    ...stateProps,
-    onClick: ownProps.loggedIn ? () => onClickFn(collection, id) : noop,
+    onClick: ownProps.loggedIn ? () => dispatch(onClickFn(baseResourceName, baseResourceId)) : noop,
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps, mergeProps)(LikeButton);
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(LikeButton);
 export default WithAuthorization(connectedComponent);

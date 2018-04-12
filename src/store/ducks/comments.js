@@ -1,7 +1,12 @@
 import { Map } from 'immutable';
-import { reset } from 'redux-form';
+import { createSelector } from 'reselect';
+import { denormalize } from 'normalizr';
 import remove from 'lodash/remove';
-import { updateEntities, getEntity } from './entities';
+import {
+  updateEntities,
+  getEntity,
+  getEntities,
+} from './entities';
 import pagingFnsFactory from './paginations';
 import { commentsSchema } from '../../schemas';
 
@@ -10,17 +15,20 @@ const commonArgs = [collection, commentsSchema];
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 const articlesPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'articles' });
 const discussionsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'discussions' });
+const commentsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'comments' });
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
     majors: new Map({}),
     articles: new Map({}),
     discussions: new Map({}),
+    comments: new Map({}),
   }),
 });
 
 const TYPES = {
   LOAD_INDEX: 'comments/LOAD_INDEX',
+  LOAD: 'comments/LOAD',
   CREATE: 'comments/CREATE',
   UPDATE: 'comments/UPDATE',
   DESTROY: 'comments/DESTROY',
@@ -32,6 +40,7 @@ export function getPagingFns(resourceName) {
     case 'majors': return majorsPagingFns;
     case 'articles': return articlesPagingFns;
     case 'discussions': return discussionsPagingFns;
+    case 'comments': return commentsPagingFns;
     default: return undefined;
   }
 }
@@ -47,6 +56,22 @@ export function loadComments(baseResourceName, baseResourceId, page = 1) {
         collection, page, baseResourceName, baseResourceId,
       },
       responseSchema: [commentsSchema],
+    },
+  };
+}
+
+export function loadComment(id, baseResourceName, baseResourceId) {
+  const urlPrefix = baseResourceName ? `/${baseResourceName}/${baseResourceId}` : '';
+
+  return {
+    type: TYPES.LOAD,
+    payload: {
+      method: 'GET',
+      url: `${urlPrefix}/comments/${id}`,
+      urlParams: {
+        baseResourceName, baseResourceId, collection, id,
+      },
+      responseSchema: commentsSchema,
     },
   };
 }
@@ -68,7 +93,7 @@ function removeCommentFromParent(id, parentCommentId) {
   };
 }
 
-export function createComment(body, baseResourceName, baseResourceId) {
+export function createComment(body, baseResourceName, baseResourceId, reverseList) {
   return dispatch =>
     dispatch({
       type: TYPES.CREATE,
@@ -80,15 +105,16 @@ export function createComment(body, baseResourceName, baseResourceId) {
         responseSchema: commentsSchema,
       },
     }).then(({ value: { result } }) => {
-      const { parentCommentId } = body;
-      dispatch(reset(parentCommentId ? `commentAnswer${result}` : 'commentNew'));
+      const isChild = baseResourceName === collection;
 
-      if (parentCommentId) {
-        dispatch(addCommentToParent(parentCommentId, result));
-      } else {
-        const pagingFns = getPagingFns(baseResourceName);
-        dispatch(pagingFns.actions.addToPage(TYPES.ADD_TO_PAGINATION, result, 1, baseResourceId));
+      if (isChild) {
+        dispatch(addCommentToParent(baseResourceId, result));
+        if (!reverseList) return;
       }
+
+      const pagingFns = getPagingFns(baseResourceName);
+      const type = TYPES.ADD_TO_PAGINATION;
+      dispatch(pagingFns.actions.addToPagination(type, result, baseResourceId, reverseList));
     });
 }
 
@@ -107,10 +133,10 @@ export function updateComment(id, body, baseResourceName, baseResourceId) {
   };
 }
 
-export function destroyComment(id, baseResourceName, baseResourceId, parentCommentId) {
+export function destroyComment(id, baseResourceName, baseResourceId) {
   return (dispatch) => {
-    if (parentCommentId) {
-      dispatch(removeCommentFromParent(id, parentCommentId));
+    if (baseResourceName === collection) {
+      dispatch(removeCommentFromParent(id, baseResourceId));
     }
 
     return dispatch({
@@ -129,21 +155,33 @@ export function destroyComment(id, baseResourceName, baseResourceId, parentComme
 export default function commentsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
-      const pagingFns = getPagingFns(urlParams.baseResourceName);
+      const { baseResourceName } = action.payload.request.urlParams;
+      const pagingFns = getPagingFns(baseResourceName);
       return pagingFns.reducer.setPage(state, action.payload);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { urlParams } = action.payload.request;
-      return getPagingFns(urlParams.baseResourceName).reducer.removeFromPage(state, urlParams);
+      return getPagingFns(urlParams.baseResourceName)
+        .reducer
+        .removeFromPage(state, urlParams);
     }
     case TYPES.ADD_TO_PAGINATION: {
       const {
-        baseResourceName, baseResourceId, id, page,
+        baseResourceName, baseResourceId, id, page, addToEnd,
       } = action.payload;
-      return getPagingFns(baseResourceName).reducer.addToPage(state, id, page, baseResourceId);
+      return getPagingFns(baseResourceName)
+        .reducer
+        .addToPage(state, id, page, baseResourceId, addToEnd);
     }
     default:
       return state;
   }
 }
+
+const getId = (state, params) => params.id;
+
+export const getCommentEntity = createSelector(
+  getId,
+  getEntities,
+  (commentId, entities) => denormalize(commentId, commentsSchema, entities),
+);

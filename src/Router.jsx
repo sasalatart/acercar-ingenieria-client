@@ -14,6 +14,7 @@ import Majors from './components/Majors';
 import Articles from './components/Articles';
 import Questions from './components/Questions';
 import Discussions from './components/Discussions';
+import Comments from './components/Comments';
 import AboutUs from './components/AboutUs';
 import Layout from './components/Layout';
 
@@ -30,6 +31,7 @@ export default function Router() {
           <Route path="/articles" component={Articles} />
           <Route path="/questions/:pending?" render={renderQuestionsAdministrationRoute(Questions)} />
           <Route path="/discussions" component={Discussions} />
+          <Route path="/comments" component={Comments} />
           <Route path="/about-us" component={AboutUs} />
         </Switch>
       </Layout>

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { reduxForm } from 'redux-form';
+import { reduxForm, reset } from 'redux-form';
 import pick from 'lodash/pick';
 import {
   createComment,
@@ -9,36 +9,39 @@ import I18nForm from '../../hoc/I18nForm';
 import CommentForm from '../../components/Comments/Form';
 import commentsValidations from '../../validations/comments';
 
-const FIELDS = [
-  'content', 'parentCommentId',
-];
+const FIELDS = ['content'];
 
-function getFormName(parentCommentId, comment) {
-  if (parentCommentId) return `commentAnswer${parentCommentId}`;
+function getFormName(comment) {
+  if (comment && comment.commentableType === 'Comment') {
+    return `commentAnswer${comment.commentableId}`;
+  }
 
   return comment ? `commentEdit${comment.id}` : 'commentNew';
 }
 
-function mapStateToProps(state, ownProps) {
-  const { parentCommentId, comment } = ownProps;
-
+function mapStateToProps(state, { comment }) {
   return {
-    form: getFormName(parentCommentId, comment),
+    form: getFormName(comment),
     initialValues: comment
       ? pick(comment, FIELDS)
-      : { parentCommentId },
+      : {},
   };
 }
 
 const form = reduxForm({
   onSubmit: (values, dispatch, props) => {
-    const { baseResourceName, baseResourceId, comment } = props;
+    const {
+      form: formName, baseResourceName, baseResourceId, comment, reverseList,
+    } = props;
 
     const action = comment
       ? updateComment(comment.id, values, baseResourceName, baseResourceId)
-      : createComment(values, baseResourceName, baseResourceId);
+      : createComment(values, baseResourceName, baseResourceId, reverseList);
 
-    return dispatch(action).then(() => props.onSubmitSuccess && props.onSubmitSuccess());
+    return dispatch(action).then(() => {
+      if (!comment) dispatch(reset(formName));
+      if (props.onSubmitSuccess) props.onSubmitSuccess();
+    });
   },
 })(CommentForm);
 

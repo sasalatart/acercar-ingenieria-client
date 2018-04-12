@@ -19,4 +19,5 @@ export { default as SwitchField } from './CustomSwitch';
 export const SelectField = createComponent(CustomSelect, selectFieldMap);
 export const TagsField = createComponent(CustomTagsSelect, selectFieldMap);
 export const RadioField = createComponent(CustomRadio, eventMap);
+export { default as CancelButton } from './CancelButton';
 export { default as SubmitButton } from './SubmitButton';

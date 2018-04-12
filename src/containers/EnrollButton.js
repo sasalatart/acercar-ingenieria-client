@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import {
-  suffix,
+  collection,
   enroll,
   unenroll,
 } from '../store/ducks/enrollments';
@@ -13,7 +13,7 @@ import WithAuthorization from '../hoc/WithAuthorization';
 import EnrollButton from '../components/EnrollButton';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps, suffix };
+  const params = { ...ownProps, collection };
 
   return {
     loading: getIsCreating(state, params) || getIsDestroying(state, params),
@@ -21,11 +21,11 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { collection, id, enrolledByCurrentUser } = ownProps;
+  const { baseResourceName, baseResourceId, enrolledByCurrentUser } = ownProps;
 
   const onClickFn = enrolledByCurrentUser ? unenroll : enroll;
   return {
-    onClick: () => dispatch(onClickFn(collection, id)),
+    onClick: () => dispatch(onClickFn(baseResourceName, baseResourceId)),
   };
 }
 

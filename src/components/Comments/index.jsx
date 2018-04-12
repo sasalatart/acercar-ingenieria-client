@@ -1,38 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
-import { Divider } from 'antd';
-import ActionBar from '../../containers/Layout/ActionBar';
-import Title from '../Layout/Title';
-import Form from '../../containers/Comments/Form';
-import List from '../../containers/Comments/List';
+import { Route, Switch } from 'react-router-dom';
+import {
+  renderLoggedInRoute,
+} from '../../containers/Routes';
+import Comment from '../../containers/Comments/Comment';
 
-function CommentsSection({
-  baseResourceName, baseResourceId, withActionBar, intl: { formatMessage: t },
-}) {
-  const commonProps = { baseResourceName, baseResourceId };
-
+export default function Comments() {
   return (
-    <div>
-      {withActionBar && <ActionBar />}
-      <Title text={t({ id: 'comments' })} />
-
-      <Form {...commonProps} />
-      <Divider />
-      <List {...commonProps} />
-    </div>
+    <Switch>
+      <Route path="/comments/:id" render={renderLoggedInRoute(Comment)} />
+      <Route path="/comments/:commentId/comments/:id" render={renderLoggedInRoute(Comment)} />
+    </Switch>
   );
 }
-
-CommentsSection.propTypes = {
-  baseResourceName: PropTypes.string.isRequired,
-  baseResourceId: PropTypes.number.isRequired,
-  withActionBar: PropTypes.bool,
-  intl: intlShape.isRequired,
-};
-
-CommentsSection.defaultProps = {
-  withActionBar: false,
-};
-
-export default injectIntl(CommentsSection);

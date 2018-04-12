@@ -65,7 +65,7 @@ export function loadQuestions(page = 1, majorId, pending) {
   };
 }
 
-export function createQuestion(values, majorId) {
+export function createQuestion(values, majorId, shouldAddToPagination) {
   return dispatch =>
     dispatch({
       type: TYPES.CREATE,
@@ -77,12 +77,14 @@ export function createQuestion(values, majorId) {
         responseSchema: questionsSchema,
       },
     }).then(({ value: { result } }) => {
+      if (!shouldAddToPagination) return;
+
       const type = values.answer
         ? TYPES.ADD_TO_ANSWERED_PAGINATION
         : TYPES.ADD_TO_UNANSWERED_PAGINATION;
 
       const pagingFns = getPagingFns(!values.answer, majorId);
-      dispatch(pagingFns.actions.addToPage(type, result, 1, majorId));
+      dispatch(pagingFns.actions.addToPagination(type, result, majorId));
     });
 }
 

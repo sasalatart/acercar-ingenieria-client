@@ -18,95 +18,125 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
     ? basePagingPath.concat([`${suffix}Meta`])
     : ['pagination', `${baseResourceName || 'platform'}Meta`];
 
+  // Selectors
   const getData = state => state[resourceName];
+  const getParamsPage = (state, params = {}) => params.page;
   const getBaseResourceId = (state, params = {}) => params.baseResourceId;
   const getPagingPath = baseResourceId => compact([...pagingPath, baseResourceId]);
   const getMetaPath = baseResourceId => compact([...metaPath, baseResourceId]);
 
   const getPagedIds = createSelector(
     getBaseResourceId,
+    getParamsPage,
     getPage,
     getData,
-    (baseResourceId, page = 1, data) =>
-      data.getIn([...getPagingPath(baseResourceId), String(page)]),
+    (baseResourceId, paramsPage, page = 1, data) =>
+      data.getIn([...getPagingPath(baseResourceId), String(paramsPage || page)]),
   );
+
+  const getPagedEntities = createSelector(
+    getPagedIds,
+    getEntities,
+    (ids, entities) => {
+      const pagedEntities = denormalize(ids, [schema], entities);
+      return pagedEntities ? pagedEntities.toJS() : undefined;
+    },
+  );
+
+  const getMeta = createSelector(
+    getBaseResourceId,
+    getData,
+    (baseResourceId, data) => {
+      const meta = data.getIn(getMetaPath(baseResourceId));
+      return Map.isMap(meta) ? undefined : meta;
+    },
+  );
+
+  // Actions
+  const addToPagination = (type, id, baseResourceId, addToEnd) =>
+    (dispatch, getState) => {
+      const state = getState();
+      const currentPage = getPage(state) || 1;
+
+      const { totalPages, totalRecords, perPage } = getMeta(state, { baseResourceId });
+
+      const onFirstPage = currentPage === 1;
+      const onLastPage = currentPage === totalPages;
+      const newPageNeeded = totalRecords + 1 > perPage * totalPages;
+      const localChange = (addToEnd && onLastPage && !newPageNeeded) || (!addToEnd && onFirstPage);
+
+      if (localChange) {
+        return dispatch({
+          type,
+          payload: {
+            baseResourceName,
+            baseResourceId,
+            id,
+            page: addToEnd ? totalPages : 1,
+            addToEnd,
+          },
+        });
+      }
+
+      if (addToEnd) {
+        const toPage = newPageNeeded ? totalPages + 1 : totalPages;
+        return dispatch(addQueryToCurrentUri({ page: toPage }));
+      }
+
+      return dispatch(addQueryToCurrentUri({ page: 1 }));
+    };
+
+  // Reducer Utils
+  const setPage = (state, payload) => {
+    const { pagination, result, request: { urlParams: { baseResourceId } } } = payload;
+
+    const ids = new OrderedSet(result);
+    return state
+      .mergeIn(getPagingPath(baseResourceId), new Map({ [pagination.page]: ids }))
+      .setIn(getMetaPath(baseResourceId), pagination);
+  };
+
+  const removeFromPage = (state, { id, baseResourceId }) => {
+    const pages = state.getIn(getPagingPath(baseResourceId));
+    if (!pages) return state;
+
+    const pageIndex = pages.findKey(page => page.has(id));
+    if (!pageIndex) return state;
+
+    return state.updateIn([...getPagingPath(baseResourceId), pageIndex], ids => ids.delete(id));
+  };
+
+  const addToPage = (state, id, page, baseResourceId, addToEnd) => {
+    const setToAdd = new OrderedSet([id]);
+    return state.updateIn(
+      [...getPagingPath(baseResourceId), String(page)],
+      (ids) => {
+        if (!ids) return setToAdd;
+        return addToEnd ? ids.add(id) : setToAdd.merge(ids);
+      },
+    );
+  };
+
+  const reset = (state, baseResourceId) =>
+    state
+      .setIn(getPagingPath(baseResourceId), new Map({}))
+      .removeIn(getMetaPath(baseResourceId));
 
   return {
     actions: {
-      addToPage(type, id, page, baseResourceId) {
-        return (dispatch, getState) => {
-          const currentPage = getPage(getState()) || 1;
-
-          if (currentPage && currentPage !== page) {
-            dispatch(addQueryToCurrentUri({ page }));
-          }
-
-          return dispatch({
-            type,
-            payload: {
-              baseResourceName,
-              baseResourceId,
-              id,
-              page,
-            },
-          });
-        };
-      },
+      addToPagination,
     },
 
     selectors: {
-      getPagedEntities: createSelector(
-        getPagedIds,
-        getEntities,
-        (ids, entities) => {
-          const pagedEntities = denormalize(ids, [schema], entities);
-          return pagedEntities ? pagedEntities.toJS() : undefined;
-        },
-      ),
-
-      getMeta: createSelector(
-        getBaseResourceId,
-        getData,
-        (baseResourceId, data) => {
-          const meta = data.getIn(getMetaPath(baseResourceId));
-          return Map.isMap(meta) ? undefined : meta;
-        },
-      ),
+      getPagedEntities,
+      getMeta,
     },
 
     reducer: {
-      setPage(state, payload) {
-        const { pagination, result, request: { urlParams: { baseResourceId } } } = payload;
-
-        const ids = new OrderedSet(result);
-        return state
-          .mergeIn(getPagingPath(baseResourceId), new Map({ [pagination.page]: ids }))
-          .setIn(getMetaPath(baseResourceId), pagination);
-      },
-
-      removeFromPage(state, { id, baseResourceId }) {
-        const pages = state.getIn(getPagingPath(baseResourceId));
-        if (!pages) return state;
-
-        const pageIndex = pages.findKey(page => page.has(id));
-        if (!pageIndex) return state;
-
-        return state.updateIn([...getPagingPath(baseResourceId), pageIndex], ids => ids.delete(id));
-      },
-
-      addToPage(state, id, page, baseResourceId) {
-        const setToAdd = new OrderedSet([id]);
-        return state.updateIn(
-          [...getPagingPath(baseResourceId), String(page)],
-          pages => (pages ? setToAdd.merge(pages) : setToAdd),
-        );
-      },
-
-      reset(state, baseResourceId) {
-        return state
-          .setIn(getPagingPath(baseResourceId), new Map({}))
-          .removeIn(getMetaPath(baseResourceId));
-      },
+      setPage,
+      removeFromPage,
+      addToPage,
+      reset,
     },
   };
 }

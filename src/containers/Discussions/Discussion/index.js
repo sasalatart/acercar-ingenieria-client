@@ -27,7 +27,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-export default injectIntl(WithAuthorization(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Discussion)));
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Discussion);
+export default injectIntl(WithAuthorization(connectedComponent));

@@ -41,8 +41,8 @@ function renderActions(loggedIn, adminOrMajorAdmin, article) {
 
   const actions = [
     <LikeButton
-      collection="articles"
-      id={id}
+      baseResourceName="articles"
+      baseResourceId={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
       iconOnly

@@ -48,7 +48,9 @@ const ROUTES = {
   DISCUSSIONS_NEW: '/discussions/new',
   DISCUSSION: id => `/discussions/${id}`,
   DISCUSSION_EDIT: id => `/discussions/${id}/edit`,
-  COMMENT: (baseResourceName, baseResourceId) => `/${baseResourceName}/${baseResourceId}/comments`,
+  COMMENT: (id, baseResourceName, baseResourceId) => (baseResourceName
+    ? `/${baseResourceName}/${baseResourceId}/comments/${id}`
+    : `/comments/${id}`),
   ABOUT_US: '/about-us',
 };
 
