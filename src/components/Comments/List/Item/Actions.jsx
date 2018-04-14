@@ -13,6 +13,15 @@ const styles = {
   },
 };
 
+function withDivider(tag) {
+  return (
+    <span>
+      <Divider type="vertical" />
+      {tag}
+    </span>
+  );
+}
+
 function renderLikeButton(comment) {
   const { id, likedByCurrentUser, likesCount } = comment;
 
@@ -29,44 +38,33 @@ function renderLikeButton(comment) {
 
 function renderEnrollButton(comment) {
   const { id, enrolledByCurrentUser } = comment;
-
-  return (
-    <span>
-      <Divider type="vertical" />
-      <EnrollButton
-        baseResourceName="comments"
-        baseResourceId={id}
-        enrolledByCurrentUser={enrolledByCurrentUser}
-        iconOnly
-      />
-    </span>
+  const enrollButton = (
+    <EnrollButton
+      baseResourceName="comments"
+      baseResourceId={id}
+      enrolledByCurrentUser={enrolledByCurrentUser}
+      iconOnly
+    />
   );
+  return withDivider(enrollButton);
 }
 
 function renderEditButton(onStartEditing) {
-  return (
-    <span>
-      <Divider type="vertical" />
-      <Icon type="edit" onClick={onStartEditing} style={styles.editButton} />
-    </span>
-  );
+  return withDivider(<Icon type="edit" onClick={onStartEditing} style={styles.editButton} />);
 }
 
 function renderDestroyButton(comment) {
   const { id, commentableType, commentableId } = comment;
-
-  return (
-    <span>
-      <Divider type="vertical" />
-      <DestroyButton
-        collection="comments"
-        id={id}
-        baseResourceName={`${lowerFirst(commentableType)}s`}
-        baseResourceId={commentableId}
-        iconOnly
-      />
-    </span>
+  const destroyButton = (
+    <DestroyButton
+      collection="comments"
+      id={id}
+      baseResourceName={`${lowerFirst(commentableType)}s`}
+      baseResourceId={commentableId}
+      iconOnly
+    />
   );
+  return withDivider(destroyButton);
 }
 
 function CommentActions({
