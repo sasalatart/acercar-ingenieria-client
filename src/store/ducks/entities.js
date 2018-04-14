@@ -18,14 +18,20 @@ const TYPES = {
   UPDATE: 'entities/UPDATE',
 };
 
-export function updateEntities(collectionName, entities) {
-  return {
-    type: TYPES.UPDATE,
-    payload: {
-      entities: {
-        [collectionName]: entities,
+export function updateEntity(collection, id, updateFn) {
+  return (dispatch, getState) => {
+    // eslint-disable-next-line no-use-before-define
+    const entity = getEntity(getState(), { collection, id });
+    return dispatch({
+      type: TYPES.UPDATE,
+      payload: {
+        entities: {
+          [collection]: {
+            [id]: { ...updateFn(entity) },
+          },
+        },
       },
-    },
+    });
   };
 }
 

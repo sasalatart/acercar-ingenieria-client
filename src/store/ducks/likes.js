@@ -1,4 +1,4 @@
-import { updateEntities, getEntity } from './entities';
+import { updateEntity } from './entities';
 
 export const collection = 'likes';
 
@@ -7,36 +7,26 @@ const TYPES = {
   DESTROY_LIKE: 'likes/DESTROY_LIKE',
 };
 
-export function like(baseResourceName, baseResourceId) {
-  return (dispatch, getState) =>
-    dispatch({
-      type: TYPES.CREATE_LIKE,
-      payload: {
-        method: 'POST',
-        url: `/${baseResourceName}/${baseResourceId}/likes`,
-        urlParams: { baseResourceName, baseResourceId, collection },
-      },
-    }).then(() => {
-      const entity = getEntity(getState(), { collection: baseResourceName, id: baseResourceId });
-      entity.likesCount += 1;
-      entity.likedByCurrentUser = true;
-      dispatch(updateEntities(collection, { [baseResourceId]: { ...entity } }));
-    });
+function likingFactory(liking) {
+  return (baseResourceName, baseResourceId) =>
+    dispatch =>
+      dispatch({
+        type: liking ? TYPES.CREATE_LIKE : TYPES.DESTROY_LIKE,
+        payload: {
+          method: liking ? 'POST' : 'DELETE',
+          url: `/${baseResourceName}/${baseResourceId}/likes`,
+          urlParams: { baseResourceName, baseResourceId, collection },
+        },
+      }).then(() => {
+        const updateFn = entity => ({
+          ...entity,
+          likesCount: entity.likesCount + (liking ? 1 : -1),
+          likedByCurrentUser: liking,
+        });
+        return dispatch(updateEntity(baseResourceName, baseResourceId, updateFn));
+      });
 }
 
-export function unlike(baseResourceName, baseResourceId) {
-  return (dispatch, getState) =>
-    dispatch({
-      type: TYPES.DESTROY_LIKE,
-      payload: {
-        method: 'DELETE',
-        url: `/${baseResourceName}/${baseResourceId}/likes`,
-        urlParams: { baseResourceName, baseResourceId, collection },
-      },
-    }).then(() => {
-      const entity = getEntity(getState(), { collection: baseResourceName, id: baseResourceId });
-      entity.likesCount -= 1;
-      entity.likedByCurrentUser = false;
-      dispatch(updateEntities(collection, { [baseResourceId]: { ...entity } }));
-    });
-}
+export const like = likingFactory(true);
+
+export const unlike = likingFactory(false);

@@ -2,11 +2,7 @@ import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import remove from 'lodash/remove';
-import {
-  updateEntities,
-  getEntity,
-  getEntities,
-} from './entities';
+import { updateEntity, getEntities } from './entities';
 import pagingFnsFactory from './paginations';
 import { commentsSchema } from '../../schemas';
 
@@ -76,23 +72,6 @@ export function loadComment(id, baseResourceName, baseResourceId) {
   };
 }
 
-function addCommentToParent(parentCommentId, childId) {
-  return (dispatch, getState) => {
-    const comment = getEntity(getState(), { collection, id: parentCommentId });
-    comment.childComments.push(childId);
-    dispatch(updateEntities(collection, { [parentCommentId]: { ...comment } }));
-  };
-}
-
-function removeCommentFromParent(id, parentCommentId) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const parent = getEntity(state, { collection, id: parentCommentId });
-    remove(parent.childComments, childId => childId === id);
-    dispatch(updateEntities(collection, { [parent.id]: { ...parent } }));
-  };
-}
-
 export function createComment(body, baseResourceName, baseResourceId, reverseList) {
   return dispatch =>
     dispatch({
@@ -108,7 +87,12 @@ export function createComment(body, baseResourceName, baseResourceId, reverseLis
       const isChild = baseResourceName === collection;
 
       if (isChild) {
-        dispatch(addCommentToParent(baseResourceId, result));
+        const updateFn = parentComment => ({
+          ...parentComment,
+          childComments: [...parentComment.childComments, result],
+        });
+        dispatch(updateEntity(collection, baseResourceId, updateFn));
+
         if (!reverseList) return;
       }
 
@@ -136,7 +120,11 @@ export function updateComment(id, body, baseResourceName, baseResourceId) {
 export function destroyComment(id, baseResourceName, baseResourceId) {
   return (dispatch) => {
     if (baseResourceName === collection) {
-      dispatch(removeCommentFromParent(id, baseResourceId));
+      const updateFn = (parentComment) => {
+        remove(parentComment.childComments, childId => childId === id);
+        return { ...parentComment };
+      };
+      dispatch(updateEntity(collection, baseResourceId, updateFn));
     }
 
     return dispatch({
