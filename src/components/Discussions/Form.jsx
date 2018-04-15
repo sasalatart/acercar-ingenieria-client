@@ -124,7 +124,7 @@ export default class DiscussionForm extends Component {
             name="description"
             component={RichTextField}
             editorProps={{ placeholder: t({ id: 'forms.content' }) }}
-            validate={validators.required}
+            validate={validators.requiredRichText}
           />
           <div style={styles.tagsInputWrapper}>
             <Field
@@ -141,6 +141,7 @@ export default class DiscussionForm extends Component {
               component={FilesField}
               previousAttachments={previousAttachments}
               instructions={t({ id: 'forms.dropzone' })}
+              validate={validators.maxSizePerAttachment}
             />
           </div>
           <SubmitButton disabled={!valid || submitting} loading={submitting} />

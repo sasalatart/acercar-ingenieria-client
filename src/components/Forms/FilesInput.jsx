@@ -6,7 +6,8 @@ import { List } from 'antd';
 import uniqBy from 'lodash/uniqBy';
 import IconText from '../IconText';
 import DestroyButton from '../DestroyButton';
-import { attachmentShape } from '../../shapes';
+import { attachmentShape, fieldMetaShape } from '../../shapes';
+import { themeStyles } from '../../theme';
 
 const { Item } = List;
 
@@ -20,12 +21,14 @@ const styles = {
   attachmentsList: {
     marginBottom: '5px',
   },
+  error: themeStyles.error,
 };
 
 class FilesInput extends Component {
   static propTypes = {
     previousAttachments: PropTypes.arrayOf(attachmentShape).isRequired,
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
+    meta: fieldMetaShape.isRequired,
     instructions: PropTypes.string.isRequired,
   };
 
@@ -33,7 +36,11 @@ class FilesInput extends Component {
     activeFiles: [],
     destroyedFiles: [],
     previousFiles: this.props.previousAttachments
-      .map(({ id, documentFileName }) => ({ id, name: documentFileName })),
+      .map(({ id, documentFileName, documentFileSize }) => ({
+        id,
+        name: documentFileName,
+        size: documentFileSize,
+      })),
   };
 
   handleOnDrop = (newFiles) => {
@@ -60,9 +67,11 @@ class FilesInput extends Component {
   renderFile = (file) => {
     const actions = [<DestroyButton onDestroy={() => this.handleRemoveFile(file)} iconOnly />];
 
+    const size = Math.round((file.size / (1024 ** 2)) * 100) / 100;
+    const text = `${file.name} (${size}MB)`;
     return (
       <Item actions={actions}>
-        <IconText type="paper-clip" text={file.name} />
+        <IconText type="paper-clip" text={text} />
       </Item>
     );
   }
@@ -87,7 +96,7 @@ class FilesInput extends Component {
   }
 
   render() {
-    const { instructions } = this.props;
+    const { instructions, meta: { error } } = this.props;
 
     return (
       <div>
@@ -95,6 +104,7 @@ class FilesInput extends Component {
         <Dropzone onDrop={this.handleOnDrop} style={styles.dropzone}>
           <p>{instructions}</p>
         </Dropzone>
+        {error && <p style={styles.error}>{error}</p>}
       </div>
     );
   }

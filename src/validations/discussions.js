@@ -1,16 +1,20 @@
 import {
   required,
+  requiredRichText,
   maxLength,
   minLength,
   maxCSVLength,
+  maxSizePerAttachment,
 } from './validators';
 
 const MIN_TITLE_LENGTH = 10;
 const MAX_TITLE_LENGTH = 255;
 const MAX_TAG_COUNT = 5;
+const MAX_ATTACHMENT_SIZE_IN_MB = 5;
 
 export default t => ({
   required: required(t({ id: 'forms.required' })),
+  requiredRichText: requiredRichText(t({ id: 'forms.required' })),
 
   minTitleLength: minLength(
     t({ id: 'forms.minLength' }, { length: MIN_TITLE_LENGTH }),
@@ -25,5 +29,10 @@ export default t => ({
   maxTagCount: maxCSVLength(
     t({ id: 'forms.maxOptions' }, { length: MAX_TAG_COUNT }),
     MAX_TAG_COUNT,
+  ),
+
+  maxSizePerAttachment: maxSizePerAttachment(
+    t({ id: 'forms.maxSizePerAttachment' }, { size: MAX_ATTACHMENT_SIZE_IN_MB }),
+    MAX_ATTACHMENT_SIZE_IN_MB * 1024 * 1024,
   ),
 });

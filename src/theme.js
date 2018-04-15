@@ -54,4 +54,7 @@ export const themeStyles = {
     textAlign: 'justify',
     whiteSpace: 'pre-wrap',
   },
+  error: {
+    color: colors.error,
+  },
 };

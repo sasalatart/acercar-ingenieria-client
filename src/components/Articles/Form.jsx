@@ -117,7 +117,7 @@ export default class ArticleForm extends Component {
             name="content"
             component={RichTextField}
             editorProps={{ placeholder: t({ id: 'forms.content' }) }}
-            validate={validators.required}
+            validate={validators.requiredRichText}
           />
           <Row gutter={GUTTER}>
             <Col {...COLUMN_LAYOUT}>
@@ -137,6 +137,7 @@ export default class ArticleForm extends Component {
                   component={FilesField}
                   previousAttachments={previousAttachments}
                   instructions={t({ id: 'forms.dropzone' })}
+                  validate={validators.maxSizePerAttachment}
                 />
               </div>
             </Col>

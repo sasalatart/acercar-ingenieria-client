@@ -89,6 +89,7 @@ function MajorForm({
         name="description"
         component={RichTextField}
         editorProps={{ placeholder: t({ id: 'forms.description' }) }}
+        validate={validators.requiredRichText}
       />
       <SubmitButton disabled={!valid || submitting} loading={submitting} />
     </form>

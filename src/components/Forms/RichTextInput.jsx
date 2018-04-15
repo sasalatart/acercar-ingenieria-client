@@ -4,6 +4,8 @@ import { fieldInputPropTypes } from 'redux-form';
 import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 import { Editor } from 'react-draft-wysiwyg';
+import { fieldMetaShape } from '../../shapes';
+import { themeStyles } from '../../theme';
 
 const styles = {
   editorWrapper: {
@@ -12,6 +14,7 @@ const styles = {
     borderWidth: '1px',
     padding: '5px',
   },
+  error: themeStyles.error,
 };
 
 export function stateFromContent(content) {
@@ -25,6 +28,7 @@ export function htmlFromContent(content) {
 class RichTextInput extends Component {
   static propTypes = {
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
+    meta: fieldMetaShape.isRequired,
     editorProps: PropTypes.shape({}),
   };
 
@@ -47,16 +51,19 @@ class RichTextInput extends Component {
   }
 
   render() {
-    const { editorProps } = this.props;
+    const { editorProps, meta: { error } } = this.props;
 
     return (
-      <div style={styles.editorWrapper}>
-        <Editor
-          editorState={this.state.editorState}
-          onEditorStateChange={this.handleEditorStateChange}
-          style={styles.editor}
-          {...editorProps}
-        />
+      <div>
+        <div style={styles.editorWrapper}>
+          <Editor
+            editorState={this.state.editorState}
+            onEditorStateChange={this.handleEditorStateChange}
+            style={styles.editor}
+            {...editorProps}
+          />
+        </div>
+        {error && <p style={styles.error}>{error}</p>}
       </div>
     );
   }

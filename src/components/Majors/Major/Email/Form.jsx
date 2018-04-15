@@ -51,7 +51,7 @@ class EmailForm extends Component {
           component={RichTextField}
           disabled={submitting}
           placeholder={t({ id: 'forms.content' })}
-          validate={validators.required}
+          validate={validators.requiredRichText}
         />
         <SubmitButton disabled={!valid || submitting} loading={submitting} />
       </form>

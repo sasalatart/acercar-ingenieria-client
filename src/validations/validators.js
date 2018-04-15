@@ -1,6 +1,23 @@
+import { convertToRaw, EditorState } from 'draft-js';
+import isEqual from 'lodash/isEqual';
+
+const EMPTY_RICH_TEXT = convertToRaw(EditorState.createEmpty().getCurrentContent());
+delete EMPTY_RICH_TEXT.blocks[0].key;
+
 export const required = message => value => (
   value ? undefined : message
 );
+
+export const requiredRichText = message => (value) => {
+  if (!value) return message;
+
+  const parsedValue = JSON.parse(value);
+  delete parsedValue.blocks[0].key;
+
+  return isEqual(parsedValue, EMPTY_RICH_TEXT)
+    ? message
+    : undefined;
+};
 
 export const minLength = (message, minValue) => value => (
   value && value.length < minValue
@@ -49,6 +66,14 @@ export const maxFileSize = (message, maxSize) => value => (
     ? message
     : undefined
 );
+
+export const maxSizePerAttachment = (message, maxSize) => (value) => {
+  if (!value) return undefined;
+
+  return value
+    .filter(({ _delete }) => !_delete)
+    .find(({ size }) => size > maxSize) ? message : undefined;
+};
 
 export const image = message => value => (
   value && !value.type.includes('image')

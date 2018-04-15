@@ -1,5 +1,6 @@
 import {
   required,
+  requiredRichText,
   url,
   image,
   maxLength,
@@ -11,6 +12,7 @@ const MAX_LOGO_SIZE_IN_MB = 2;
 
 export default t => ({
   required: required(t({ id: 'forms.required' })),
+  requiredRichText: requiredRichText(t({ id: 'forms.required' })),
   videoUrl: url(t({ id: 'forms.url' })),
   image: image(t({ id: 'forms.image' })),
 

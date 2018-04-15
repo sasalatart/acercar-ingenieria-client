@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { fieldInputPropTypes } from 'redux-form';
 import { Upload, Icon } from 'antd';
 import { fieldMetaShape } from '../../shapes';
-import { colors } from '../../theme';
+import { themeStyles } from '../../theme';
 
 const styles = {
   container: {
@@ -14,10 +14,7 @@ const styles = {
   image: {
     maxHeight: '200px',
   },
-  error: {
-    color: colors.error,
-    margin: 0,
-  },
+  error: themeStyles.error,
 };
 
 export default class ImageInput extends Component {
