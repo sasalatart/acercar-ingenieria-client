@@ -1,4 +1,5 @@
 import { Map } from 'immutable';
+import { createSelector } from 'reselect';
 import keyMirror from 'keymirror';
 import { getLocale } from './i18n';
 import pagingFnsFactory from './paginations';
@@ -12,6 +13,7 @@ const pendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'seen' });
 const seenPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'pending' });
 
 const INITIAL_STATE = new Map({
+  count: 0,
   pagination: new Map({
     platform: new Map({}),
   }),
@@ -28,6 +30,7 @@ export const NOTIFICATION_TYPES = keyMirror({
 export const TYPES = {
   LOAD_UNSEEN: 'notifications/LOAD_UNSEEN',
   LOAD_SEEN: 'notifications/LOAD_SEEN',
+  LOAD_COUNT: 'notifications/LOAD_COUNT',
   DISPLAY: 'notifications/DISPLAY',
 };
 
@@ -46,8 +49,21 @@ export function loadNotifications(page = 1, seen) {
   };
 }
 
+export function loadNotificationsCount() {
+  return {
+    type: TYPES.LOAD_COUNT,
+    payload: {
+      method: 'GET',
+      url: '/notifications/count',
+      urlParams: { collection, suffix: 'count' },
+    },
+  };
+}
+
 export default function notificationsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case `${TYPES.LOAD_COUNT}_FULFILLED`:
+      return state.set('count', action.payload.count);
     case `${TYPES.LOAD_SEEN}_FULFILLED`:
     case `${TYPES.LOAD_UNSEEN}_FULFILLED`: {
       return getPagingFns(action.type.includes(TYPES.LOAD_SEEN))
@@ -58,6 +74,13 @@ export default function notificationsReducer(state = INITIAL_STATE, action) {
       return state;
   }
 }
+
+const getNotificationsData = state => state.notifications;
+
+export const getNotificationsCount = createSelector(
+  getNotificationsData,
+  notificationsData => notificationsData.get('count'),
+);
 
 function displayNotification(
   message,

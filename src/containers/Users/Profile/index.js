@@ -8,6 +8,7 @@ import {
   getUserEntity,
 } from '../../../store/ducks/users';
 import { getCurrentUserEntity } from '../../../store/ducks/sessions';
+import { getNotificationsCount } from '../../../store/ducks/notifications';
 import { getIsFetching } from '../../../store/ducks/loading';
 import Profile from '../../../components/Users/Profile';
 
@@ -21,6 +22,7 @@ function mapStateToProps(state, ownProps) {
     loading: !!id && !user && getIsFetching(state, params),
     user,
     id,
+    notificationsCount: getNotificationsCount(state),
     activeMenuKey: getPathname(state),
   };
 }
