@@ -9,6 +9,7 @@ import createHistory from 'history/createBrowserHistory';
 import root from './ducks';
 import fetchMiddleWare from './middlewares/fetch';
 import notificationsMiddleware from './middlewares/notifications';
+import PusherService from '../services/pusher';
 
 const persistConfig = {
   transforms: [immutableTransform()],
@@ -31,6 +32,7 @@ const middleware = [
 
 let store;
 let persistor;
+
 export default () => {
   if (!store) {
     store = createStore(
@@ -44,6 +46,8 @@ export default () => {
   if (!persistor) {
     persistor = persistStore(store);
   }
+
+  store.subscribe(PusherService.lifecycleManagerFactory(store.getState));
 
   return { store, persistor };
 };

@@ -14,6 +14,7 @@ const seenPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'pending' });
 
 const INITIAL_STATE = new Map({
   count: 0,
+  countTimestamp: new Date(),
   pagination: new Map({
     platform: new Map({}),
   }),
@@ -31,6 +32,7 @@ export const TYPES = {
   LOAD_UNSEEN: 'notifications/LOAD_UNSEEN',
   LOAD_SEEN: 'notifications/LOAD_SEEN',
   LOAD_COUNT: 'notifications/LOAD_COUNT',
+  SET_COUNT: 'notifications/SET_COUNT',
   DISPLAY: 'notifications/DISPLAY',
 };
 
@@ -60,15 +62,28 @@ export function loadNotificationsCount() {
   };
 }
 
+export function setNotificationsCount(data) {
+  return {
+    type: TYPES.SET_COUNT,
+    payload: data,
+  };
+}
+
 export default function notificationsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case `${TYPES.LOAD_COUNT}_FULFILLED`:
-      return state.set('count', action.payload.count);
     case `${TYPES.LOAD_SEEN}_FULFILLED`:
     case `${TYPES.LOAD_UNSEEN}_FULFILLED`: {
       return getPagingFns(action.type.includes(TYPES.LOAD_SEEN))
         .reducer
         .setPage(state, action.payload);
+    }
+    case `${TYPES.LOAD_COUNT}_FULFILLED`:
+      return state.set('count', action.payload.count);
+    case TYPES.SET_COUNT: {
+      const { count, timestamp } = action.payload;
+      return new Date(timestamp) > new Date(state.get('countTimestamp'))
+        ? state.merge({ count, countTimestamp: timestamp })
+        : state;
     }
     default:
       return state;
