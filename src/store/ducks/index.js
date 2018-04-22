@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
+import { loadingBarReducer } from 'react-redux-loading-bar';
 import pick from 'lodash/pick';
 import i18n from './i18n';
 import entities, {
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
   comments,
   credits,
   loading,
+  loadingBar: loadingBarReducer,
 });
 
 const TO_KEEP_ON_SIGN_OUT = ['i18n', 'announcements'];

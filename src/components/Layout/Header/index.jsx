@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import Radium from 'radium';
+import LoadingBar from 'react-redux-loading-bar';
 import AvatarWithNotifications from '../../../containers/Users/Profile/AvatarWithNotifications';
 import LocaleSelect from '../../../containers/Layout/Header/LocaleSelect';
 import HeaderLink from './Link';
@@ -52,6 +53,10 @@ const styles = {
     boxShadow: '0 0.5em 1.0em rgba(0, 0, 0, 0.6)',
     minHeight: '36px',
     marginBottom: '25px',
+  },
+  loadingBar: {
+    marginTop: '-25px',
+    backgroundColor: 'white',
   },
 };
 
@@ -148,6 +153,7 @@ function Header({ currentUser, signOut, intl: { formatMessage: t } }) {
     <div>
       {renderUpperHeader(currentUser, signOut, t)}
       {renderLowerHeader(currentUser, t)}
+      <LoadingBar style={styles.loadingBar} />
     </div>
   );
 }

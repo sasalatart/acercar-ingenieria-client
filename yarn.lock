@@ -6039,6 +6039,10 @@ react-lazy-load@^3.0.12:
     lodash.throttle "^4.0.0"
     prop-types "^15.5.8"
 
+react-lifecycles-compat@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.2.tgz#7279047275bd727a912e25f734c0559527e84eff"
+
 react-linkify@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/react-linkify/-/react-linkify-0.2.2.tgz#55b99b1cc7244446a0f9bdebbe13b2c30f789e65"
@@ -6054,6 +6058,13 @@ react-player@^1.1.2:
     deepmerge "^2.0.1"
     load-script "^1.0.0"
     prop-types "^15.5.6"
+
+react-redux-loading-bar@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-redux-loading-bar/-/react-redux-loading-bar-4.0.3.tgz#05db3444ba925d9129fd7d6cdb6998c49468133e"
+  dependencies:
+    prop-types "^15.5.6"
+    react-lifecycles-compat "^3.0.2"
 
 react-redux@^5.0.6:
   version "5.0.6"

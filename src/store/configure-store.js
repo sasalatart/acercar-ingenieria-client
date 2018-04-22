@@ -5,6 +5,7 @@ import immutableTransform from 'redux-persist-transform-immutable';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import { routerMiddleware } from 'react-router-redux';
+import { loadingBarMiddleware } from 'react-redux-loading-bar';
 import createHistory from 'history/createBrowserHistory';
 import root from './ducks';
 import fetchMiddleWare from './middlewares/fetch';
@@ -28,6 +29,7 @@ const middleware = [
   fetchMiddleWare,
   notificationsMiddleware,
   promiseMiddleware(),
+  loadingBarMiddleware(),
 ];
 
 let store;
