@@ -16,6 +16,7 @@ import Questions from './components/Questions';
 import Discussions from './components/Discussions';
 import Comments from './components/Comments';
 import AboutUs from './components/AboutUs';
+import Credits from './containers/Credits';
 import Layout from './components/Layout';
 
 export default function Router() {
@@ -33,6 +34,7 @@ export default function Router() {
           <Route path="/discussions" component={Discussions} />
           <Route path="/comments" component={Comments} />
           <Route path="/about-us" component={AboutUs} />
+          <Route path="/credits" component={Credits} />
         </Switch>
       </Layout>
     </ConnectedRouter>

@@ -12,6 +12,7 @@ import comments from './comments';
 import admins from './admins';
 import emails from './emails';
 import aboutUs from './about-us';
+import credits from './credits';
 import search from './search';
 import misc from './misc';
 
@@ -35,6 +36,7 @@ const messages = { [enUS]: {}, [esES]: {} };
   admins,
   emails,
   aboutUs,
+  credits,
   search,
   misc,
 ].forEach((translations) => {

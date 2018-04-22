@@ -12,6 +12,7 @@ export default {
     'notifications.resource.article': 'the article',
     'notifications.resource.discussion': 'the discussion',
     'notifications.resource.comment': 'the comment',
+    'notifications.resource.credit': 'the credit',
     'notifications.resource.toTheEnrolled': 'on the {enrollable} you were subscribed to',
 
     'notifications.actions.created': '{resource} has been created',
@@ -42,6 +43,7 @@ export default {
     'notifications.resource.article': 'el artículo',
     'notifications.resource.discussion': 'el tema',
     'notifications.resource.comment': 'el comentario',
+    'notifications.resource.credit': 'el crédito',
     'notifications.resource.toTheEnrolled': 'en el {enrollable} al cual te inscribiste',
 
     'notifications.actions.created': 'se ha creado {resource}',

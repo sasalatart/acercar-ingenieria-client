@@ -173,6 +173,15 @@ export const discussionShape = PropTypes.shape({
   createdAt: PropTypes.string.isRequired,
 });
 
+export const creditShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  resourceName: PropTypes.string.isRequired,
+  resourceUrl: PropTypes.string.isRequired,
+  authorName: PropTypes.string.isRequired,
+  resource: imageShape.isRequired,
+  createdAt: PropTypes.string.isRequired,
+});
+
 export const fieldMetaShape = PropTypes.shape({
   error: PropTypes.string,
 });

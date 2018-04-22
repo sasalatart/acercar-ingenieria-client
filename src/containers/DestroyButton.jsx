@@ -10,6 +10,7 @@ import { destroyQuestion } from '../store/ducks/questions';
 import { destroyArticle } from '../store/ducks/articles';
 import { destroyDiscussion } from '../store/ducks/discussions';
 import { destroyComment } from '../store/ducks/comments';
+import { destroyCredit } from '../store/ducks/credits';
 import { getIsDestroying } from '../store/ducks/loading';
 import ImportantDestroyButton from '../components/DestroyButton/Important';
 import DestroyButton from '../components/DestroyButton';
@@ -50,6 +51,8 @@ function getDestroyAction(ownProps) {
       return destroyDiscussion(id);
     case 'comments':
       return destroyComment(id, baseResourceName, baseResourceId);
+    case 'credits':
+      return destroyCredit(id);
     default:
       return undefined;
   }

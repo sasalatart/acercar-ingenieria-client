@@ -49,3 +49,13 @@ The server's machine should now be redirecting its port 80 to the container's po
 ## API
 
 Ruby on Rails API can be found [in this repo](https://github.com/sasalatart/acercar-ingenieria-api).
+
+## Credits
+
+Some of the assets used in the project are licensed as Creative Commons CCBY, from [The Noun Project](https://thenounproject.com/). These are:
+
+- [Article](https://thenounproject.com/term/article/1091930/) by Creative Stall
+- [School](https://thenounproject.com/term/school/1276289/) by AliWijaya
+- [User](https://thenounproject.com/term/user/1688840/) by Alena Artemova
+
+If you wish to use them, you must give credit to their authors.

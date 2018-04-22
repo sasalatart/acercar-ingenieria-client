@@ -52,6 +52,7 @@ const ROUTES = {
     ? `/${baseResourceName}/${baseResourceId}/comments/${id}`
     : `/comments/${id}`),
   ABOUT_US: '/about-us',
+  CREDITS: '/credits',
 };
 
 export const MAJORS_TAB_NAMES = keyMirror({

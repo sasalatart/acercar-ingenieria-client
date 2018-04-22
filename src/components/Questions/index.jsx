@@ -1,71 +1,58 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Modal } from 'antd';
+import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/Questions/Form';
 import QuestionsList from '../../containers/Questions/List';
 import QuestionsActionBar from './ActionBar';
 import Title from '../Layout/Title';
 import { matchShape } from '../../shapes';
 
-class Questions extends Component {
-  static propTypes = {
-    match: matchShape.isRequired,
-    intl: intlShape.isRequired,
-  }
+function Questions({
+  match,
+  formVisible,
+  editingId,
+  onNewClicked,
+  onEditClicked,
+  onFormClose,
+  intl: { formatMessage: t },
+}) {
+  const majorId = +match.params.majorId;
+  const pending = !!match.params.pending;
 
-  state = { formVisible: false };
+  return (
+    <div>
+      <QuestionsActionBar majorId={majorId} pending={pending} onProposeClicked={onNewClicked} />
+      <Title text={pending ? t({ id: 'questions.pending' }) : 'FAQs'} />
 
-  handleProposeClicked = () => {
-    this.setState({ formVisible: true });
-  }
+      <QuestionsList majorId={majorId} pending={pending} onEditClicked={onEditClicked} />
 
-  handleEditClicked = (id) => {
-    this.setState({ formVisible: true, editingId: id });
-  }
-
-  handleFormClose = () => {
-    this.setState({ formVisible: false, editingId: undefined });
-  }
-
-  renderFormModal() {
-    const { match, intl: { formatMessage: t } } = this.props;
-    const { formVisible, editingId } = this.state;
-
-    const majorId = +match.params.majorId;
-
-    return (
       <Modal
         title={editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' })}
         visible={formVisible}
         footer={null}
-        onCancel={this.handleFormClose}
+        onCancel={onFormClose}
         destroyOnClose
       >
-        <Form id={editingId} majorId={majorId} onSubmitSuccess={this.handleFormClose} />
+        <Form id={editingId} majorId={majorId} onSubmitSuccess={onFormClose} />
       </Modal>
-    );
-  }
-
-  render() {
-    const { match, intl: { formatMessage: t } } = this.props;
-    const majorId = +match.params.majorId;
-    const pending = !!match.params.pending;
-
-    return (
-      <div>
-        <QuestionsActionBar
-          majorId={majorId}
-          pending={pending}
-          onProposeClicked={this.handleProposeClicked}
-        />
-        <Title text={pending ? t({ id: 'questions.pending' }) : 'FAQs'} />
-
-        <QuestionsList majorId={majorId} pending={pending} onEditClicked={this.handleEditClicked} />
-
-        {this.renderFormModal()}
-      </div>
-    );
-  }
+    </div>
+  );
 }
 
-export default injectIntl(Questions);
+Questions.propTypes = {
+  match: matchShape.isRequired,
+  formVisible: PropTypes.bool.isRequired,
+  editingId: PropTypes.number,
+  onNewClicked: PropTypes.func.isRequired,
+  onEditClicked: PropTypes.func.isRequired,
+  onFormClose: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+};
+
+Questions.defaultProps = {
+  editingId: undefined,
+};
+
+export default injectIntl(WithModalForm(Questions));

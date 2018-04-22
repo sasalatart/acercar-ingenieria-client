@@ -43,3 +43,5 @@ export const commentsSchema = new schema.Entity('comments', {
 export const notificationsSchema = new schema.Entity('notifications', {
   notificator: userSummariesSchema,
 });
+
+export const creditsSchema = new schema.Entity('credits');
