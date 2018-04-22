@@ -13,6 +13,7 @@ import majorPlaceholder from '../../../images/major.png';
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
   shortDescription: themeStyles.justifiedTextContainer,
+  logo: themeStyles.mediumImage,
 };
 
 function MajorInfo({ major, intl: { formatMessage: t } }) {
@@ -25,7 +26,11 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
       <Row type="flex" align="middle" gutter={24}>
         <Col sm={6}>
           <div style={styles.mediaContainer}>
-            <img src={get(major.logo, 'medium') || majorPlaceholder} alt="major-logo" />
+            <img
+              src={get(major.logo, 'medium', majorPlaceholder)}
+              alt="major-logo"
+              style={styles.logo}
+            />
           </div>
         </Col>
         <Col sm={18}>

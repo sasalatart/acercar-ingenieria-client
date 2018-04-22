@@ -38,6 +38,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
   },
+  picture: themeStyles.mediumImage,
 };
 
 export default class Article extends Component {
@@ -118,7 +119,11 @@ export default class Article extends Component {
         <Row gutter={24}>
           <Col sm={6}>
             <div style={styles.mediaContainer}>
-              <img src={get(article.picture, 'medium', articlePlaceholder)} alt="major-logo" />
+              <img
+                src={get(article.picture, 'medium', articlePlaceholder)}
+                alt="article-logo"
+                style={styles.picture}
+              />
             </div>
           </Col>
           <Col sm={18}>

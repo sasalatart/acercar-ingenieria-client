@@ -57,4 +57,8 @@ export const themeStyles = {
   error: {
     color: colors.error,
   },
+  mediumImage: {
+    maxWidth: '200px',
+    maxHeight: '200px',
+  },
 };
