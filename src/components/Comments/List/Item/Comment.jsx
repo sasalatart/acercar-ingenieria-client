@@ -7,6 +7,7 @@ import MainContent from '../../Comment/MainContent';
 import AnswerForm from './AnswerForm';
 import ProfileAvatar from '../../../Users/Profile/Avatar';
 import ChildComments from './Children';
+import Hideable from '../../../Layout/Hideable';
 import { commentShape } from '../../../../shapes';
 
 const styles = {
@@ -86,7 +87,10 @@ class CommentItem extends Component {
     return (
       <div>
         <div style={(isChild && !answeringDisabled) ? styles.childWrapper : styles.parentWrapper}>
-          <ProfileAvatar user={author} style={styles.avatar} />
+          <Hideable>
+            <ProfileAvatar user={author} style={styles.avatar} />
+          </Hideable>
+
           <MainContent
             comment={comment}
             editing={editing}

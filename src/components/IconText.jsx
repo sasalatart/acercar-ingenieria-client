@@ -5,8 +5,8 @@ import noop from 'lodash/noop';
 import Hideable from './Layout/Hideable';
 
 const styles = {
-  icon: {
-    marginRight: '6px',
+  text: {
+    marginLeft: '6px',
   },
   cursor: withPointer => ({
     cursor: withPointer ? 'pointer' : 'default',
@@ -16,12 +16,14 @@ const styles = {
 function IconText({
   type, text, withPointer, hideable, onClick, style,
 }) {
+  const textTag = <span style={styles.text}>{text}</span>;
+
   return (
     <span style={{ ...style, ...styles.cursor(withPointer) }}>
-      <Icon type={type} style={styles.icon} onClick={onClick} />
+      <Icon type={type} onClick={onClick} />
       {hideable
-        ? <Hideable>{text}</Hideable>
-        : <span>{text}</span>
+        ? <Hideable>{textTag}</Hideable>
+        : <span>{textTag}</span>
       }
     </span>
   );

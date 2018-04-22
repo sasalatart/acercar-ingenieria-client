@@ -1,13 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Divider } from 'antd';
+import Radium from 'radium';
 import lowerFirst from 'lodash/lowerFirst';
 import LikeButton from '../../../../containers/LikeButton';
 import EnrollButton from '../../../../containers/EnrollButton';
 import DestroyButton from '../../../../containers/DestroyButton';
+import Hideable from '../../../../components/Layout/Hideable';
+import { breakpoints } from '../../../../theme';
 import { commentShape } from '../../../../shapes';
 
 const styles = {
+  wrapper: {
+    [breakpoints.sm]: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+  },
   editButton: {
     cursor: 'pointer',
   },
@@ -16,7 +26,9 @@ const styles = {
 function withDivider(tag) {
   return (
     <span>
-      <Divider type="vertical" />
+      <Hideable>
+        <Divider type="vertical" />
+      </Hideable>
       {tag}
     </span>
   );
@@ -74,7 +86,7 @@ function CommentActions({
   onStartEditing,
 }) {
   return (
-    <div>
+    <div style={styles.wrapper}>
       {renderLikeButton(comment)}
       {comment.commentableType !== 'Comment' && renderEnrollButton(comment)}
       {isAuthor && renderEditButton(onStartEditing)}
@@ -90,4 +102,4 @@ CommentActions.propTypes = {
   onStartEditing: PropTypes.func.isRequired,
 };
 
-export default CommentActions;
+export default Radium(CommentActions);
