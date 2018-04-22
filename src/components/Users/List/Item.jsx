@@ -10,12 +10,26 @@ import { userShape } from '../../../shapes';
 const { Item } = List;
 const { Meta } = Item;
 
-function UserListItem({
-  admin, adminOrMajorAdmin, user, setSelectedUser, intl: { formatMessage: t },
-}) {
-  const avatar = <ProfileAvatar user={user} />;
-  const title = <ProfileLink id={user.id}>{user.firstName} {user.lastName}</ProfileLink>;
+function renderDescription(user, admin, t) {
+  const descriptionPrefix = t({ id: 'profile.generation' }, { year: user.generation });
 
+  if (!admin) return descriptionPrefix;
+
+  return (
+    <span>
+      {descriptionPrefix}{', '}
+      <a href={`mailto:${user.email}`}>{user.email}</a>
+    </span>
+  );
+}
+
+function UserListItem({
+  admin,
+  adminOrMajorAdmin,
+  user,
+  setSelectedUser,
+  intl: { formatMessage: t },
+}) {
   const actions = [];
   if (admin) {
     const iconType = user.admin || user.adminOfMajors.length
@@ -39,13 +53,13 @@ function UserListItem({
     actions.push(destroyButton);
   }
 
+  const avatar = <ProfileAvatar user={user} />;
+  const title = <ProfileLink id={user.id}>{user.firstName} {user.lastName}</ProfileLink>;
+  const description = renderDescription(user, adminOrMajorAdmin, t);
+
   return (
     <Item actions={actions}>
-      <Meta
-        avatar={avatar}
-        title={title}
-        description={t({ id: 'profile.generation' }, { year: user.generation })}
-      />
+      <Meta avatar={avatar} title={title} description={description} />
     </Item>
   );
 }

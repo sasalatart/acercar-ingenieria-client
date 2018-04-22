@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import { userShape } from '../../../../shapes';
 import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
+import WithAuthorization from '../../../../hoc/WithAuthorization';
 import ActionBar from '../../../../containers/Users/Profile/Info/ActionBar';
 import Title from '../../../Layout/Title';
 import SubTitle from '../../../Layout/SubTitle';
@@ -21,7 +23,12 @@ const styles = {
   },
 };
 
-function ProfileInfo({ user, intl: { formatMessage: t } }) {
+function renderSubTitleText(user, admin, t) {
+  const textPrefix = t({ id: 'profile.generation' }, { year: user.generation });
+  return admin ? `${textPrefix}, ${user.email}` : textPrefix;
+}
+
+function ProfileInfo({ admin, user, intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar user={user} />
@@ -33,7 +40,7 @@ function ProfileInfo({ user, intl: { formatMessage: t } }) {
         </Col>
         <Col md={18}>
           <Title text={`${user.firstName} ${user.lastName}`} />
-          <SubTitle text={t({ id: 'profile.generation' }, { year: user.generation })} />
+          <SubTitle text={renderSubTitleText(user, admin, t)} />
 
           <Divider>Roles</Divider>
           <RolesList user={user} />
@@ -47,6 +54,7 @@ function ProfileInfo({ user, intl: { formatMessage: t } }) {
 }
 
 ProfileInfo.propTypes = {
+  admin: PropTypes.bool.isRequired,
   user: userShape,
   intl: intlShape.isRequired,
 };
@@ -55,4 +63,4 @@ ProfileInfo.defaultProps = {
   user: undefined,
 };
 
-export default injectIntl(ProfileInfo);
+export default injectIntl(WithAuthorization(ProfileInfo));
