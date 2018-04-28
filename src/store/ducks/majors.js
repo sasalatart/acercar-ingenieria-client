@@ -19,7 +19,7 @@ export const TYPES = {
   CREATE: 'majors/CREATE',
   UPDATE: 'majors/UPDATE',
   DESTROY: 'majors/DESTROY',
-  BROADCAST: 'majors/BROADCAST',
+  EMAIL: 'majors/EMAIL',
 };
 
 export function loadMajors() {
@@ -89,13 +89,15 @@ export function destroyMajor(id) {
   };
 }
 
-export function sendEmail(id, body) {
+export function sendEmail(id, body, personal) {
+  const urlSuffix = personal ? 'personal-email' : 'email';
+
   return dispatch =>
     dispatch({
-      type: TYPES.BROADCAST,
+      type: TYPES.EMAIL,
       payload: {
         method: 'POST',
-        url: `/majors/${id}/broadcast`,
+        url: `/majors/${id}/${urlSuffix}`,
         urlParams: { collection, id },
         body,
       },

@@ -1,15 +1,18 @@
 import { reduxForm } from 'redux-form';
-import { injectIntl } from 'react-intl';
 import { sendEmail } from '../../../../store/ducks/majors';
+import I18nForm from '../../../../hoc/I18nForm';
 import { htmlFromContent } from '../../../../components/Forms/RichTextInput';
 import EmailForm from '../../../../components/Majors/Major/Email/Form';
+import emailValidations from '../../../../validations/email';
 
 function processValues(values) {
-  return { ...values, content: htmlFromContent(values.content) };
+  return { ...values, body: htmlFromContent(values.body) };
 }
 
-export default injectIntl(reduxForm({
+const form = reduxForm({
   form: 'email',
   onSubmit: (values, dispatch, props) =>
-    dispatch(sendEmail(props.majorId, processValues(values))),
-})(EmailForm));
+    dispatch(sendEmail(props.majorId, processValues(values), props.personal)),
+})(EmailForm);
+
+export default I18nForm(form, emailValidations);

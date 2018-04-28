@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import { goToUser } from '../../../store/ducks/routes';
+import { goToUser } from '../../../../store/ducks/routes';
 import {
   getCollectionParams,
   loadAdmins,
   getPagingFns,
-} from '../../../store/ducks/admins';
-import { getIsFetching } from '../../../store/ducks/loading';
-import MajorAdmins from '../../../components/Majors/Major/Admins';
+} from '../../../../store/ducks/admins';
+import { getIsFetching } from '../../../../store/ducks/loading';
+import MajorAdmins from '../../../../components/Majors/Major/Admins';
 
 function mapStateToProps(state, ownProps) {
   const params = { ...getCollectionParams(ownProps.majorId), paged: true };

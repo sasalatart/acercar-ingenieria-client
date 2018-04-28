@@ -5,6 +5,7 @@ export default {
 
     'notifications.resource.user': 'the user',
     'notifications.resource.profile': 'your profile',
+    'notifications.resource.email': 'the email',
     'notifications.resource.password': 'your password',
     'notifications.resource.announcement': 'the announcement',
     'notifications.resource.major': 'the Major',
@@ -36,6 +37,7 @@ export default {
 
     'notifications.resource.user': 'el usuario',
     'notifications.resource.profile': 'tu perfil',
+    'notifications.resource.email': 'el email',
     'notifications.resource.password': 'tu contraseña',
     'notifications.resource.announcement': 'el anuncio',
     'notifications.resource.major': 'el Major',
