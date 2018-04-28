@@ -10,7 +10,6 @@ import { articleShape } from '../../../shapes';
 import ROUTES from '../../../routes';
 
 function ArticleActionBar({
-  loggedIn,
   adminOrMajorAdmin,
   isAuthor,
   article: {
@@ -31,20 +30,13 @@ function ArticleActionBar({
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
+    <EnrollButton
+      key="enroll"
+      baseResourceName="articles"
+      baseResourceId={id}
+      enrolledByCurrentUser={enrolledByCurrentUser}
+    />,
   ];
-
-  if (loggedIn) {
-    const enrollButton = (
-      <EnrollButton
-        key="enroll"
-        baseResourceName="articles"
-        baseResourceId={id}
-        enrolledByCurrentUser={enrolledByCurrentUser}
-      />
-    );
-
-    actions.push(enrollButton);
-  }
 
   if (adminOrMajorAdmin || isAuthor) {
     const articleEditButton = (
@@ -76,7 +68,6 @@ function ArticleActionBar({
 }
 
 ArticleActionBar.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   isAuthor: PropTypes.bool.isRequired,
   article: articleShape.isRequired,

@@ -30,7 +30,7 @@ const styles = {
   },
 };
 
-function renderActions(loggedIn, adminOrMajorAdmin, article) {
+function renderActions(adminOrMajorAdmin, article) {
   const {
     id,
     majorId,
@@ -47,11 +47,8 @@ function renderActions(loggedIn, adminOrMajorAdmin, article) {
       likesCount={likesCount}
       iconOnly
     />,
+    <IconText type="message" text={commentsCount} />,
   ];
-
-  if (loggedIn) {
-    actions.push(<IconText type="message" text={commentsCount} />);
-  }
 
   if (adminOrMajorAdmin) {
     actions.push(<DestroyButton collection="articles" id={id} baseResourceId={majorId} iconOnly />);
@@ -97,13 +94,12 @@ function renderShortDescription(id, shortDescription, t) {
 }
 
 function ArticleListItem({
-  loggedIn,
   adminOrMajorAdmin,
   article,
   onTagClick,
   intl: { formatMessage: t },
 }) {
-  const actions = renderActions(loggedIn, adminOrMajorAdmin, article);
+  const actions = renderActions(adminOrMajorAdmin, article);
   const extra = renderExtra(article.picture);
 
   return (
@@ -118,7 +114,6 @@ function ArticleListItem({
 }
 
 ArticleListItem.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   article: articleShape.isRequired,
   onTagClick: PropTypes.func.isRequired,

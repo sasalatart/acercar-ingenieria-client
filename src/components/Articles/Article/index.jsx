@@ -43,7 +43,6 @@ const styles = {
 
 export default class Article extends Component {
   static propTypes = {
-    loggedIn: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     article: articleShape,
     loadArticle: PropTypes.func.isRequired,
@@ -94,7 +93,7 @@ export default class Article extends Component {
   }
 
   render() {
-    const { loggedIn, loading, article } = this.props;
+    const { loading, article } = this.props;
 
     const noData = !loading && !article;
     if (loading || noData) {
@@ -143,12 +142,8 @@ export default class Article extends Component {
           </div>
         }
 
-        {loggedIn &&
-          <div>
-            <Divider />
-            <CommentsSection baseResourceName="articles" baseResourceId={article.id} />
-          </div>
-        }
+        <Divider />
+        <CommentsSection baseResourceName="articles" baseResourceId={article.id} />
       </div>
     );
   }

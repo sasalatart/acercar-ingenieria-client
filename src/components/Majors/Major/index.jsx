@@ -128,7 +128,7 @@ export default class Major extends Component {
             {loggedIn && this.renderMenuItem(menus.admins)}
             {loggedIn && this.renderMenuItem(menus.users)}
             {this.renderMenuItem(menus.questions)}
-            {this.renderMenuItem(menus.articles)}
+            {loggedIn && this.renderMenuItem(menus.articles)}
             {loggedIn && this.renderMenuItem(menus.comments)}
             {adminOrMajorAdmin && this.renderMenuItem(menus.email)}
           </Menu>
@@ -164,7 +164,7 @@ export default class Major extends Component {
 
             <Route
               path={this.majorRoutes.articles}
-              render={() => <ArticlesList majorId={id} />}
+              render={renderLoggedInRoute(ArticlesList, { majorId: id })}
             />
 
             <Route

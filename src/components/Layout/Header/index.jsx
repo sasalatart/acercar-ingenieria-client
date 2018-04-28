@@ -115,11 +115,13 @@ function renderLowerHeader(currentUser, t) {
         text="Majors"
         icon="pushpin"
       />
-      <HeaderLink
-        to={ROUTES.ARTICLES()}
-        text={t({ id: 'articles' })}
-        icon="file-text"
-      />
+      {currentUser &&
+        <HeaderLink
+          to={ROUTES.ARTICLES()}
+          text={t({ id: 'articles' })}
+          icon="file-text"
+        />
+      }
       <HeaderLink
         to={ROUTES.QUESTIONS()}
         text="FAQs"

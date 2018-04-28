@@ -3,6 +3,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import {
+  renderLoggedInRoute,
   renderAdminRoute,
   renderQuestionsAdministrationRoute,
 } from './containers/Routes';
@@ -29,7 +30,7 @@ export default function Router() {
           <Route path="/auth" component={Auth} />
           <Route path="/users" component={Users} />
           <Route path="/majors" component={Majors} />
-          <Route path="/articles" component={Articles} />
+          <Route path="/articles" render={renderLoggedInRoute(Articles)} />
           <Route path="/questions/:pending?" render={renderQuestionsAdministrationRoute(Questions)} />
           <Route path="/discussions" component={Discussions} />
           <Route path="/comments" component={Comments} />

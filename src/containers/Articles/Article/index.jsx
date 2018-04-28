@@ -8,7 +8,6 @@ import {
   getArticleEntity,
 } from '../../../store/ducks/articles';
 import { getIsFetching } from '../../../store/ducks/loading';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import Article from '../../../components/Articles/Article';
 import ROUTES from '../../../routes';
 import { articleShape, matchShape } from '../../../shapes';
@@ -49,4 +48,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(ArticleWrapper);
-export default injectIntl(withRouter(WithAuthorization(connectedComponent)));
+export default injectIntl(withRouter(connectedComponent));
