@@ -13,6 +13,7 @@ export default {
     'notifications.resource.article': 'the article',
     'notifications.resource.discussion': 'the discussion',
     'notifications.resource.comment': 'the comment',
+    'notifications.resource.videoLink': 'the video link',
     'notifications.resource.credit': 'the credit',
     'notifications.resource.toTheEnrolled': 'on the {enrollable} you were subscribed to',
 
@@ -45,6 +46,7 @@ export default {
     'notifications.resource.article': 'el artículo',
     'notifications.resource.discussion': 'el tema',
     'notifications.resource.comment': 'el comentario',
+    'notifications.resource.videoLink': 'el link de video',
     'notifications.resource.credit': 'el crédito',
     'notifications.resource.toTheEnrolled': 'en el {enrollable} al cual te inscribiste',
 

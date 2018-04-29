@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import { parseBaseResource } from '../../../routes';
 import {
   collection,
   loadComment,
@@ -21,9 +22,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch, ownProps) {
   const { params } = ownProps.match;
 
-  const baseResourceKey = Object.keys(params).find(key => /Id/.test(key));
-  const baseResourceName = baseResourceKey && baseResourceKey.replace('Id', 's');
-  const baseResourceId = baseResourceKey && params[baseResourceKey];
+  const { baseResourceName, baseResourceId } = parseBaseResource(params) || {};
 
   return {
     loadComment: () => dispatch(loadComment(params.id, baseResourceName, baseResourceId)),

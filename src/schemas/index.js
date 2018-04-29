@@ -40,6 +40,8 @@ export const commentsSchema = new schema.Entity('comments', {
   childComments: [childCommentsSchema],
 });
 
+export const videoLinksSchema = new schema.Entity('videos');
+
 export const notificationsSchema = new schema.Entity('notifications', {
   notificator: userSummariesSchema,
 });

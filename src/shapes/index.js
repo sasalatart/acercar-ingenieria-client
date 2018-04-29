@@ -145,6 +145,15 @@ export const commentShape = PropTypes.shape({
   extraComments: PropTypes.number,
 });
 
+export const videoLinkShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  pinned: PropTypes.bool.isRequired,
+  videoLinkableType: PropTypes.string.isRequired,
+  videoLinkableId: PropTypes.number.isRequired,
+});
+
 export const notificationShape = PropTypes.shape({
   notificator: userSummaryShape.isRequired,
   actionType: PropTypes.string.isRequired,

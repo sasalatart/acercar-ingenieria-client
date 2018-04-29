@@ -15,6 +15,7 @@ import UsersList from '../../../containers/Users/List';
 import ArticlesList from '../../../containers/Articles/List';
 import Questions from '../../Questions';
 import CommentsSection from '../../Comments/Section';
+import VideoLinks from '../../VideoLinks';
 import Email from './Email';
 import DataPlaceholder from '../../DataPlaceholder';
 import { majorShape } from '../../../shapes';
@@ -58,6 +59,11 @@ export default class Major extends Component {
         key: this.majorKeys.info,
         icon: 'info-circle',
         text: name,
+      },
+      videoLinks: {
+        icon: 'video-camera',
+        key: this.majorKeys.videoLinks,
+        text: 'Videos',
       },
       edit: {
         key: this.majorKeys.edit,
@@ -124,6 +130,7 @@ export default class Major extends Component {
         <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
           <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)}>
             {this.renderMenuItem(menus.info)}
+            {this.renderMenuItem(menus.videoLinks)}
             {adminOrMajorAdmin && this.renderMenuItem(menus.edit)}
             {loggedIn && this.renderMenuItem(menus.admins)}
             {loggedIn && this.renderMenuItem(menus.users)}
@@ -140,6 +147,12 @@ export default class Major extends Component {
               exact
               path={this.majorRoutes.info}
               render={() => <MajorInfo major={major} />}
+            />
+
+            <Route
+              exact
+              path={this.majorRoutes.videoLinks}
+              component={VideoLinks}
             />
 
             <Route

@@ -7,11 +7,11 @@ import {
 const MAX_LENGTH = 100;
 
 export default t => ({
-  required: required(t({ id: 'forms.required' })),
-  requiredRichText: requiredRichText(t({ id: 'forms.required' })),
+  required: required(t({ id: 'validations.required' })),
+  requiredRichText: requiredRichText(t({ id: 'validations.required' })),
 
   maxLength: maxLength(
-    t({ id: 'forms.maxLength' }, { length: MAX_LENGTH }),
+    t({ id: 'validations.maxLength' }, { length: MAX_LENGTH }),
     MAX_LENGTH,
   ),
 });

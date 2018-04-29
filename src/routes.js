@@ -75,6 +75,7 @@ export const getProfilePaths = () => {
 export const getMajorPaths = (majorId) => {
   const subPaths = {
     info: '',
+    videoLinks: '/video-links',
     edit: '/edit',
     admins: '/admins',
     users: '/users',
@@ -89,5 +90,16 @@ export const getMajorPaths = (majorId) => {
     routes: mapValues(subPaths, path => `/majors/:majorId${path}`),
   };
 };
+
+export function parseBaseResource(params) {
+  const baseResourceKey = Object.keys(params).find(key => /Id/.test(key));
+
+  if (!baseResourceKey) return undefined;
+
+  return {
+    baseResourceName: baseResourceKey.replace('Id', 's'),
+    baseResourceId: +params[baseResourceKey],
+  };
+}
 
 export default ROUTES;

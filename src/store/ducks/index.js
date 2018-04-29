@@ -18,6 +18,7 @@ import articles from './articles';
 import discussions from './discussions';
 import categories from './categories';
 import comments from './comments';
+import videoLinks from './video-links';
 import credits from './credits';
 import loading from './loading';
 
@@ -37,6 +38,7 @@ const appReducer = combineReducers({
   discussions,
   categories,
   comments,
+  videoLinks,
   credits,
   loading,
   loadingBar: loadingBarReducer,

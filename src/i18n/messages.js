@@ -9,6 +9,7 @@ import articles from './articles';
 import discussions from './discussions';
 import categories from './categories';
 import comments from './comments';
+import videoLinks from './video-links';
 import admins from './admins';
 import emails from './emails';
 import aboutUs from './about-us';
@@ -33,6 +34,7 @@ const messages = { [enUS]: {}, [esES]: {} };
   discussions,
   categories,
   comments,
+  videoLinks,
   admins,
   emails,
   aboutUs,
