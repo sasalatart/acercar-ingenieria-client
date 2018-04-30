@@ -6,27 +6,27 @@ import ActionBar from '../../containers/Layout/ActionBar';
 import HideableButton from '../HideableButton';
 
 function VideosActionBar({
-  loggedIn,
+  adminOrMajorAdmin,
   onNewClicked,
   intl: { formatMessage: t },
 }) {
   const actions = [];
 
-  if (loggedIn) {
-    const proposeOneButton = (
+  if (adminOrMajorAdmin) {
+    const newVideoLinkButton = (
       <HideableButton type="primary" icon="form" onClick={onNewClicked}>
         {t({ id: 'videoLinks.new' })}
       </HideableButton>
     );
 
-    actions.push(proposeOneButton);
+    actions.push(newVideoLinkButton);
   }
 
   return <ActionBar actions={actions} />;
 }
 
 VideosActionBar.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   onNewClicked: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
