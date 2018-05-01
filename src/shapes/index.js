@@ -54,7 +54,7 @@ export const majorOfInterestShape = PropTypes.shape({
 
 const sharedUserShape = {
   id: PropTypes.number.isRequired,
-  email: PropTypes.string.isRequired,
+  email: PropTypes.string,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   generation: PropTypes.number.isRequired,
