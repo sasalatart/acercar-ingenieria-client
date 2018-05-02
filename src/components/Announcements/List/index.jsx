@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
-import { List, Modal } from 'antd';
+import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
 import Form from '../../../containers/Announcements/Form';
@@ -20,6 +20,9 @@ export default class Announcements extends Component {
     pagination: paginationShape,
     announcements: PropTypes.arrayOf(announcementShape),
     loadAnnouncements: PropTypes.func.isRequired,
+    onModalOpen: PropTypes.func.isRequired,
+    onModalClose: PropTypes.func.isRequired,
+    renderModal: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -28,25 +31,17 @@ export default class Announcements extends Component {
     announcements: [],
   }
 
-  state = { lightboxOpen: false, clickedIndex: undefined, formVisible: false };
+  state = { lightboxOpen: false, clickedIndex: undefined };
 
   handleAnnouncementClicked = (announcementId) => {
     this.setState({
       lightboxOpen: true,
-      clickedIndex: this.props.announcements.map(({ id }) => id).toList().indexOf(announcementId),
+      clickedIndex: this.props.announcements.map(({ id }) => id).indexOf(announcementId),
     });
   }
 
   handleLightboxClosed = () => {
     this.setState({ lightboxOpen: false, clickedIndex: undefined });
-  }
-
-  handleCreateClicked = () => {
-    this.setState({ formVisible: true });
-  }
-
-  handleFormClose = () => {
-    this.setState({ formVisible: false });
   }
 
   createImagesArray() {
@@ -57,32 +52,22 @@ export default class Announcements extends Component {
   renderAnnouncement = announcement =>
     <AnnouncementItem announcement={announcement} onClick={this.handleAnnouncementClicked} />;
 
-  renderFormModal() {
-    const { intl: { formatMessage: t } } = this.props;
-    const { formVisible } = this.state;
-
-    return (
-      <Modal
-        title={t({ id: 'announcements.new' })}
-        visible={formVisible}
-        footer={null}
-        onCancel={this.handleFormClose}
-        destroyOnClose
-      >
-        <Form onSubmitSuccess={this.handleFormClose} />
-      </Modal>
-    );
-  }
-
   render() {
     const {
-      loading, pagination, announcements, loadAnnouncements, intl: { formatMessage: t },
+      loading,
+      pagination,
+      announcements,
+      loadAnnouncements,
+      onModalOpen,
+      onModalClose,
+      renderModal,
+      intl: { formatMessage: t },
     } = this.props;
     const { lightboxOpen, clickedIndex } = this.state;
 
     return (
       <div>
-        <AnnouncementsActionBar onCreateClicked={this.handleCreateClicked} />
+        <AnnouncementsActionBar onCreateClicked={onModalOpen} />
         <Title text={t({ id: 'announcements' })} />
 
         <PaginationControls
@@ -107,7 +92,10 @@ export default class Announcements extends Component {
             onClose={this.handleLightboxClosed}
           />}
 
-        {this.renderFormModal()}
+        {renderModal(
+          t({ id: 'announcements.new' }),
+          <Form onSubmitSuccess={onModalClose} />,
+        )}
       </div>
     );
   }

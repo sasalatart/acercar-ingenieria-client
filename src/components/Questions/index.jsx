@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Modal } from 'antd';
 import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/Questions/Form';
 import QuestionsList from '../../containers/Questions/List';
@@ -11,11 +10,11 @@ import { matchShape } from '../../shapes';
 
 function Questions({
   match,
-  formVisible,
   editingId,
   onNewClicked,
   onEditClicked,
   onFormClose,
+  renderModal,
   intl: { formatMessage: t },
 }) {
   const majorId = +match.params.majorId;
@@ -28,26 +27,21 @@ function Questions({
 
       <QuestionsList majorId={majorId} pending={pending} onEditClicked={onEditClicked} />
 
-      <Modal
-        title={editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' })}
-        visible={formVisible}
-        footer={null}
-        onCancel={onFormClose}
-        destroyOnClose
-      >
-        <Form id={editingId} majorId={majorId} onSubmitSuccess={onFormClose} />
-      </Modal>
+      {renderModal(
+        editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' }),
+        <Form id={editingId} majorId={majorId} onSubmitSuccess={onFormClose} />,
+      )}
     </div>
   );
 }
 
 Questions.propTypes = {
   match: matchShape.isRequired,
-  formVisible: PropTypes.bool.isRequired,
   editingId: PropTypes.number,
   onNewClicked: PropTypes.func.isRequired,
   onEditClicked: PropTypes.func.isRequired,
   onFormClose: PropTypes.func.isRequired,
+  renderModal: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 

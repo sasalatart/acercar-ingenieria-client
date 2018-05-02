@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Modal } from 'antd';
+import WithModal from '../../hoc/WithModal';
 import HideableButton from '../HideableButton';
 import Form from '../../containers/Search/Form';
 
@@ -11,58 +11,41 @@ const styles = {
   },
 };
 
-class SearchButton extends Component {
-  static propTypes = {
-    filtersActive: PropTypes.bool.isRequired,
-    removeFilter: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
-  }
+function SearchButton({
+  filtersActive,
+  removeFilter,
+  onModalOpen,
+  onModalClose,
+  renderModal,
+  intl: { formatMessage: t },
+  ...restProps
+}) {
+  const title = t({ id: 'search' });
 
-  state = { formVisible: false }
+  return (
+    <span>
+      <HideableButton type="primary" icon="search" onClick={onModalOpen} style={styles.button}>
+        {title}
+      </HideableButton>
 
-  handleOpenModal = () => {
-    this.setState({ formVisible: true });
-  }
-
-  handleCloseModal = () => {
-    this.setState({ formVisible: false });
-  }
-
-  render() {
-    const {
-      filtersActive,
-      removeFilter,
-      intl: { formatMessage: t },
-      ...restProps
-    } = this.props;
-    const { formVisible } = this.state;
-
-    const title = t({ id: 'search' });
-
-    return (
-      <span>
-        <HideableButton type="primary" icon="search" onClick={this.handleOpenModal} style={styles.button}>
-          {title}
+      {filtersActive &&
+        <HideableButton icon="close" onClick={removeFilter} style={styles.button}>
+          {t({ id: 'search.reset' })}
         </HideableButton>
+      }
 
-        {filtersActive &&
-          <HideableButton icon="close" onClick={removeFilter} style={styles.button}>
-            {t({ id: 'search.reset' })}
-          </HideableButton>
-        }
-
-        <Modal
-          title={title}
-          visible={formVisible}
-          footer={null}
-          onCancel={this.handleCloseModal}
-          destroyOnClose
-        >
-          <Form {...restProps} onSubmitSuccess={this.handleCloseModal} />
-        </Modal>
-      </span>
-    );
-  }
+      {renderModal(title, <Form {...restProps} onSubmitSuccess={onModalClose} />)}
+    </span>
+  );
 }
 
-export default injectIntl(SearchButton);
+SearchButton.propTypes = {
+  filtersActive: PropTypes.bool.isRequired,
+  removeFilter: PropTypes.func.isRequired,
+  onModalOpen: PropTypes.func.isRequired,
+  onModalClose: PropTypes.func.isRequired,
+  renderModal: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
+};
+
+export default injectIntl(WithModal(SearchButton));

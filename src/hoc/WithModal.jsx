@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Modal } from 'antd';
 
 export default function HOC(WrappedComponent) {
   return class WithModal extends Component {
@@ -12,6 +13,18 @@ export default function HOC(WrappedComponent) {
       this.setState({ modalVisible: false });
     }
 
+    renderModal = (title, contents, footer = null) => (
+      <Modal
+        title={title}
+        visible={this.state.modalVisible}
+        footer={footer}
+        onCancel={this.handleClose}
+        destroyOnClose
+      >
+        {contents}
+      </Modal>
+    )
+
     render() {
       return (
         <WrappedComponent
@@ -19,6 +32,7 @@ export default function HOC(WrappedComponent) {
           modalVisible={this.state.modalVisible}
           onModalOpen={this.handleOpen}
           onModalClose={this.handleClose}
+          renderModal={this.renderModal}
         />
       );
     }

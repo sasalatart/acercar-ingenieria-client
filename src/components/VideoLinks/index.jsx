@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Modal } from 'antd';
 import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/VideoLinks/Form';
 import VideosList from '../../containers/VideoLinks/List';
@@ -12,11 +11,11 @@ import { matchShape } from '../../shapes';
 
 function VideoLinks({
   match,
-  formVisible,
   editingId,
   onNewClicked,
   onEditClicked,
   onFormClose,
+  renderModal,
   intl: { formatMessage: t },
 }) {
   const videoLinkableProps = parseBaseResource(match.params);
@@ -28,15 +27,10 @@ function VideoLinks({
 
       <VideosList {...videoLinkableProps} onEditClicked={onEditClicked} />
 
-      <Modal
-        title={editingId ? t({ id: 'videoLinks.edit' }) : t({ id: 'videoLinks.new' })}
-        visible={formVisible}
-        footer={null}
-        onCancel={onFormClose}
-        destroyOnClose
-      >
-        <Form id={editingId} {...videoLinkableProps} onSubmitSuccess={onFormClose} />
-      </Modal>
+      {renderModal(
+        editingId ? t({ id: 'videoLinks.edit' }) : t({ id: 'videoLinks.new' }),
+        <Form id={editingId} {...videoLinkableProps} onSubmitSuccess={onFormClose} />,
+      )}
     </div>
   );
 }
@@ -48,6 +42,7 @@ VideoLinks.propTypes = {
   onNewClicked: PropTypes.func.isRequired,
   onEditClicked: PropTypes.func.isRequired,
   onFormClose: PropTypes.func.isRequired,
+  renderModal: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };
 

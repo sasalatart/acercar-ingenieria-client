@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Modal } from 'antd';
 
 export default function HOC(WrappedComponent) {
   return class WithModalForm extends Component {
@@ -16,6 +17,18 @@ export default function HOC(WrappedComponent) {
       this.setState({ formVisible: false, editingId: undefined });
     }
 
+    renderModal = (title, contents, footer = null) => (
+      <Modal
+        title={title}
+        visible={this.state.formVisible}
+        footer={footer}
+        onCancel={this.handleFormClose}
+        destroyOnClose
+      >
+        {contents}
+      </Modal>
+    )
+
     render() {
       return (
         <WrappedComponent
@@ -25,6 +38,7 @@ export default function HOC(WrappedComponent) {
           onNewClicked={this.handleNewClicked}
           onEditClicked={this.handleEditClicked}
           onFormClose={this.handleFormClose}
+          renderModal={this.renderModal}
         />
       );
     }

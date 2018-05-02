@@ -7,6 +7,7 @@ import {
   loadAnnouncements,
 } from '../../../store/ducks/announcements';
 import { getIsFetching } from '../../../store/ducks/loading';
+import WithModal from '../../../hoc/WithModal';
 import Announcements from '../../../components/Announcements/List';
 
 function mapStateToProps(state) {
@@ -26,7 +27,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Announcements));
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Announcements);
+
+export default injectIntl(WithModal(connectedComponent));

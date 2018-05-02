@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape, FormattedMessage } from 'react-intl';
-import { List, Modal } from 'antd';
+import { List } from 'antd';
 import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/Credits/Form';
 import ActionBar from './ActionBar';
@@ -23,11 +23,11 @@ class Credits extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     credits: PropTypes.arrayOf(creditShape).isRequired,
-    formVisible: PropTypes.bool.isRequired,
     editingId: PropTypes.number,
     onNewClicked: PropTypes.func.isRequired,
     onEditClicked: PropTypes.func.isRequired,
     onFormClose: PropTypes.func.isRequired,
+    renderModal: PropTypes.func.isRequired,
     loadCredits: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
@@ -40,33 +40,15 @@ class Credits extends Component {
     this.props.loadCredits();
   }
 
-  renderFormModal() {
-    const {
-      formVisible,
-      editingId,
-      onFormClose,
-      intl: { formatMessage: t },
-    } = this.props;
-
-    return (
-      <Modal
-        title={editingId ? t({ id: 'credits.edit' }) : t({ id: 'credits.new' })}
-        visible={formVisible}
-        footer={null}
-        onCancel={onFormClose}
-        destroyOnClose
-      >
-        <Form id={editingId} onSubmitSuccess={onFormClose} />
-      </Modal>
-    );
-  }
-
   render() {
     const {
       loading,
       credits,
+      editingId,
       onNewClicked,
       onEditClicked,
+      onFormClose,
+      renderModal,
       intl: { formatMessage: t },
     } = this.props;
 
@@ -85,7 +67,11 @@ class Credits extends Component {
           dataSource={credits}
           renderItem={credit => <CreditItem credit={credit} onEditClicked={onEditClicked} />}
         />
-        {this.renderFormModal()}
+
+        {renderModal(
+          editingId ? t({ id: 'credits.edit' }) : t({ id: 'credits.new' }),
+          <Form id={editingId} onSubmitSuccess={onFormClose} />,
+        )}
       </div>
     );
   }
