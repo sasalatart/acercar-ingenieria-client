@@ -8,34 +8,23 @@ import ArticleCreation from './ArticleCreation';
 import ArticleAdministration from './ArticleAdministration';
 import DiscussionAdministration from './DiscussionAdministration';
 
-export function renderLoggedOutRoute(component, extraParams) {
-  return props => <LoggedOut {...props} {...extraParams} component={component} />;
+function routeFactory(Wrapper) {
+  return (component, extraParams) =>
+    props => <Wrapper {...props} {...extraParams} component={component} />;
 }
 
-export function renderLoggedInRoute(component, extraParams) {
-  return props => <LoggedIn {...props} {...extraParams} component={component} />;
-}
+export const loggedOutRoute = routeFactory(LoggedOut);
 
-export function renderAdminRoute(component, extraParams) {
-  return props => <Admin {...props} {...extraParams} component={component} />;
-}
+export const loggedInRoute = routeFactory(LoggedIn);
 
-export function renderMajorAdminRoute(component, extraParams) {
-  return props => <MajorAdmin {...props} {...extraParams} component={component} />;
-}
+export const adminRoute = routeFactory(Admin);
 
-export function renderQuestionsAdministrationRoute(component, extraParams) {
-  return props => <QuestionsAdministration {...props} {...extraParams} component={component} />;
-}
+export const majorAdminRoute = routeFactory(MajorAdmin);
 
-export function renderArticleCreationRoute(component, extraParams) {
-  return props => <ArticleCreation {...props} {...extraParams} component={component} />;
-}
+export const questionsAdministrationRoute = routeFactory(QuestionsAdministration);
 
-export function renderArticleAdministrationRoute(component, extraParams) {
-  return props => <ArticleAdministration {...props} {...extraParams} component={component} />;
-}
+export const articleCreationRoute = routeFactory(ArticleCreation);
 
-export function renderDiscussionAdministrationRoute(component, extraParams) {
-  return props => <DiscussionAdministration {...props} {...extraParams} component={component} />;
-}
+export const articleAdministrationRoute = routeFactory(ArticleAdministration);
+
+export const discussionAdministrationRoute = routeFactory(DiscussionAdministration);

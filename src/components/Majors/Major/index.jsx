@@ -4,9 +4,9 @@ import { Route, Switch } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import { Layout, Menu, Icon } from 'antd';
 import {
-  renderLoggedInRoute,
-  renderMajorAdminRoute,
-  renderQuestionsAdministrationRoute,
+  loggedInRoute,
+  majorAdminRoute,
+  questionsAdministrationRoute,
 } from '../../../containers/Routes';
 import MajorInfo from './Info';
 import Edit from './Edit';
@@ -157,37 +157,37 @@ export default class Major extends Component {
 
             <Route
               path={this.majorRoutes.edit}
-              render={renderMajorAdminRoute(Edit, { major })}
+              render={majorAdminRoute(Edit, { major })}
             />
 
             <Route
               path={this.majorRoutes.admins}
-              render={renderLoggedInRoute(MajorAdmins, { majorId: id })}
+              render={loggedInRoute(MajorAdmins, { majorId: id })}
             />
 
             <Route
               path={this.majorRoutes.users}
-              render={renderLoggedInRoute(UsersList, { majorId: id, withTitle: true })}
+              render={loggedInRoute(UsersList, { majorId: id, withTitle: true })}
             />
 
             <Route
               path={`${this.majorRoutes.questions}/:pending?`}
-              render={renderQuestionsAdministrationRoute(Questions)}
+              render={questionsAdministrationRoute(Questions)}
             />
 
             <Route
               path={this.majorRoutes.articles}
-              render={renderLoggedInRoute(ArticlesList, { majorId: id })}
+              render={loggedInRoute(ArticlesList, { majorId: id })}
             />
 
             <Route
               path={this.majorRoutes.comments}
-              render={renderLoggedInRoute(CommentsSection, { baseResourceName: 'majors', baseResourceId: id, withActionBar: true })}
+              render={loggedInRoute(CommentsSection, { baseResourceName: 'majors', baseResourceId: id, withActionBar: true })}
             />
 
             <Route
               path={this.majorRoutes.email}
-              render={renderMajorAdminRoute(Email, { majorId: id })}
+              render={majorAdminRoute(Email, { majorId: id })}
             />
           </Switch>
         </Content>

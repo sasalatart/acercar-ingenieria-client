@@ -3,9 +3,10 @@ import { ConnectedRouter } from 'react-router-redux';
 import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import {
-  renderLoggedInRoute,
-  renderAdminRoute,
-  renderQuestionsAdministrationRoute,
+  loggedOutRoute,
+  loggedInRoute,
+  adminRoute,
+  questionsAdministrationRoute,
 } from './containers/Routes';
 import PinnedAnnouncements from './containers/Announcements/Pinned';
 import Announcements from './containers/Announcements/List';
@@ -26,14 +27,14 @@ export default function Router() {
       <Layout>
         <Switch>
           <Route exact path="/" component={PinnedAnnouncements} />
-          <Route exact path="/announcements" render={renderAdminRoute(Announcements)} />
-          <Route path="/auth" component={Auth} />
-          <Route path="/users" component={Users} />
+          <Route exact path="/announcements" render={adminRoute(Announcements)} />
+          <Route path="/auth" render={loggedOutRoute(Auth)} />
+          <Route path="/users" render={loggedInRoute(Users)} />
           <Route path="/majors" component={Majors} />
-          <Route path="/articles" render={renderLoggedInRoute(Articles)} />
-          <Route path="/questions/:pending?" render={renderQuestionsAdministrationRoute(Questions)} />
-          <Route path="/discussions" component={Discussions} />
-          <Route path="/comments" component={Comments} />
+          <Route path="/articles" render={loggedInRoute(Articles)} />
+          <Route path="/questions/:pending?" render={questionsAdministrationRoute(Questions)} />
+          <Route path="/discussions" render={loggedInRoute(Discussions)} />
+          <Route path="/comments" render={loggedInRoute(Comments)} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/credits" component={Credits} />
         </Switch>
