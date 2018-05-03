@@ -25,11 +25,9 @@ class DiscussionAdministration extends Component {
   }
 
   render() {
-    if (this.props.loading) {
-      return <DataPlaceholder absolute />;
-    }
-
-    return <Restricted {...this.props} />;
+    return this.props.loading
+      ? <DataPlaceholder absolute />
+      : <Restricted {...this.props} />;
   }
 }
 

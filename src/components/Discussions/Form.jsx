@@ -107,9 +107,7 @@ export default class DiscussionForm extends Component {
       intl: { formatMessage: t },
     } = this.props;
 
-    if (loading || noData) {
-      return <DataPlaceholder noData={noData} absolute />;
-    }
+    if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
 
     const defaultTag = t({ id: 'discussions.defaultTag' });
 

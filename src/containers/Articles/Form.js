@@ -50,6 +50,7 @@ function mapStateToProps(state, ownProps) {
   return {
     id,
     loading,
+    noData: !loading && ownProps.articleId,
     initialValues: getInitialValues(id, majorId, article),
     majorOptions,
     categoryOptions,

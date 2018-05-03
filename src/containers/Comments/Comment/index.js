@@ -7,6 +7,7 @@ import {
   getCommentEntity,
 } from '../../../store/ducks/comments';
 import { getIsFetching } from '../../../store/ducks/loading';
+import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Comment from '../../../components/Comments/Comment';
 
 function mapStateToProps(state, ownProps) {
@@ -21,7 +22,6 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
   const { params } = ownProps.match;
-
   const { baseResourceName, baseResourceId } = parseBaseResource(params) || {};
 
   return {
@@ -29,5 +29,8 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Comment);
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WithLoadableResource('loadComment', 'comment')(Comment));
 export default injectIntl(connectedComponent);

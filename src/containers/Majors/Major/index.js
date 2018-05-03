@@ -8,6 +8,7 @@ import {
   getMajorEntity,
 } from '../../../store/ducks/majors';
 import { getIsFetching } from '../../../store/ducks/loading';
+import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import Major from '../../../components/Majors/Major';
 
@@ -30,5 +31,8 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Major);
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WithLoadableResource('loadMajor', 'major')(Major));
 export default injectIntl(WithAuthorization(connectedComponent));

@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import React from 'react';
 import { Row, Col, Divider } from 'antd';
 import Linkify from 'react-linkify';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import DataPlaceholder from '../../DataPlaceholder';
 import ActionBar from '../../../containers/Articles/Article/ActionBar';
 import Title from '../../Layout/Title';
 import SubTitle from '../../Layout/SubTitle';
@@ -14,7 +11,7 @@ import RichText from '../../RichText';
 import Attachments from '../../Attachments';
 import CommentsSection from '../../Comments/Section';
 import TagList from '../../TagList';
-import ProfileLink from '../../Users/Profile/Link';
+import Author from '../../Author';
 import MajorLink from '../../Majors/Major/Link';
 import { articleShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
@@ -22,11 +19,6 @@ import articlePlaceholder from '../../../images/article.png';
 
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
-  author: {
-    fontWeight: 'bold',
-    fontSize: '1.25em',
-    margin: '5px 0',
-  },
   date: {
     fontWeight: 'bold',
   },
@@ -41,110 +33,67 @@ const styles = {
   picture: themeStyles.mediumImage,
 };
 
-export default class Article extends Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    article: articleShape,
-    loadArticle: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
-  };
+function Article({ article }) {
+  const { majorSummary } = article;
 
-  static defaultProps = {
-    article: undefined,
-  }
+  return (
+    <div>
+      <ActionBar article={article} />
 
-  componentDidMount() {
-    this.props.loadArticle();
-  }
+      <Title text={article.title} />
 
-  renderSubtitle() {
-    const { majorSummary } = this.props.article;
+      {majorSummary &&
+        <MajorLink id={majorSummary.id}>
+          <SubTitle text={majorSummary.name} />
+        </MajorLink>
+      }
 
-    if (!majorSummary) {
-      return null;
-    }
+      {article.categoryList.length > 0 &&
+        <div style={styles.tagsContainer}>
+          <TagList tags={article.categoryList} />
+        </div>
+      }
 
-    return (
-      <MajorLink id={majorSummary.id}>
-        <SubTitle text={majorSummary.name} />
-      </MajorLink>
-    );
-  }
+      <Divider />
 
-  renderAuthor() {
-    const { article: { author }, intl: { formatMessage: t } } = this.props;
-
-    return (
-      <p style={styles.author}>
-        <span>{t({ id: 'submittedBy' })}</span>
-        <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>
-      </p>
-    );
-  }
-
-  renderShortDescription() {
-    const { shortDescription } = this.props.article;
-
-    return (
-      <Linkify>
-        <p style={styles.shortDescription}>{shortDescription}</p>
-      </Linkify>
-    );
-  }
-
-  render() {
-    const { loading, article } = this.props;
-
-    const noData = !loading && !article;
-    if (loading || noData) {
-      return <DataPlaceholder noData={noData} absolute />;
-    }
-
-    return (
-      <div>
-        <ActionBar article={article} />
-
-        <Title text={article.title} />
-        {this.renderSubtitle()}
-
-        {article.categoryList.length > 0 &&
-          <div style={styles.tagsContainer}>
-            <TagList tags={article.categoryList} />
+      <Row gutter={24}>
+        <Col sm={6}>
+          <div style={styles.mediaContainer}>
+            <img
+              src={get(article.picture, 'medium', articlePlaceholder)}
+              alt="article-logo"
+              style={styles.picture}
+            />
           </div>
-        }
+        </Col>
+        <Col sm={18}>
+          <Author author={article.author} />
+          <DateWithFormat dateString={article.createdAt} style={styles.date} withTime />
 
-        <Divider />
+          <Linkify>
+            <p style={styles.shortDescription}>{article.shortDescription}</p>
+          </Linkify>
+        </Col>
+      </Row>
 
-        <Row gutter={24}>
-          <Col sm={6}>
-            <div style={styles.mediaContainer}>
-              <img
-                src={get(article.picture, 'medium', articlePlaceholder)}
-                alt="article-logo"
-                style={styles.picture}
-              />
-            </div>
-          </Col>
-          <Col sm={18}>
-            {this.renderAuthor()}
-            <DateWithFormat dateString={article.createdAt} style={styles.date} withTime />
-            {this.renderShortDescription()}
-          </Col>
-        </Row>
+      <Divider />
+      <RichText content={article.content} />
 
-        <Divider />
-        <RichText content={article.content} />
+      {!isEmpty(article.attachments) &&
+        <div>
+          <Divider />
+          <Attachments attachments={article.attachments} />
+        </div>
+      }
 
-        {!isEmpty(article.attachments) &&
-          <div>
-            <Divider />
-            <Attachments attachments={article.attachments} />
-          </div>
-        }
-
-        <Divider />
-        <CommentsSection baseResourceName="articles" baseResourceId={article.id} />
-      </div>
-    );
-  }
+      <Divider />
+      <CommentsSection baseResourceName="articles" baseResourceId={article.id} />
+    </div>
+  );
 }
+
+Article.propTypes = {
+  article: articleShape.isRequired,
+};
+
+export default Article;

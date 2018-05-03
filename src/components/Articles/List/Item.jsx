@@ -6,10 +6,10 @@ import Linkify from 'react-linkify';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
-import TagList from '../..//TagList';
+import Author from '../../Author';
+import TagList from '../../TagList';
 import IconText from '../../IconText';
 import Hideable from '../../Layout/Hideable';
-import ProfileLink from '../../Users/Profile/Link';
 import ArticleLink from '../../Articles/Article/Link';
 import { articleShape } from '../../../shapes';
 import { themeStyles, breakpointsKeys } from '../../../theme';
@@ -66,20 +66,14 @@ function renderExtra(picture) {
   );
 }
 
-function renderMeta(article, t) {
+function renderMeta(article) {
   const titleTag = (
     <span>
       <ArticleLink id={article.id} majorId={article.majorId}>{article.title}</ArticleLink>
     </span>
   );
 
-  const { author } = article;
-  const authorName = (
-    <span>
-      <span>{t({ id: 'submittedBy' })}</span>
-      <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>
-    </span>
-  );
+  const authorName = <Author author={article.author} spanned />;
 
   return <Meta title={titleTag} description={authorName} />;
 }

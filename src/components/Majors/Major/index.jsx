@@ -17,7 +17,6 @@ import Questions from '../../Questions';
 import CommentsSection from '../../Comments/Section';
 import VideoLinks from '../../VideoLinks';
 import Email from './Email';
-import DataPlaceholder from '../../DataPlaceholder';
 import { majorShape } from '../../../shapes';
 import { getMajorPaths } from '../../../routes';
 import { themeStyles } from '../../../theme';
@@ -34,22 +33,12 @@ export default class Major extends Component {
   static propTypes = {
     loggedIn: PropTypes.bool.isRequired,
     adminOrMajorAdmin: PropTypes.bool.isRequired,
-    loading: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
-    major: majorShape,
+    major: majorShape.isRequired,
     activeMenuKey: PropTypes.string.isRequired,
-    loadMajor: PropTypes.func.isRequired,
     replaceRoute: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
-
-  static defaultProps = {
-    major: undefined,
-  }
-
-  componentDidMount() {
-    this.props.loadMajor();
-  }
 
   getMenus() {
     const { major: { name }, intl: { formatMessage: t } } = this.props;
@@ -115,13 +104,13 @@ export default class Major extends Component {
 
   render() {
     const {
-      loggedIn, adminOrMajorAdmin, loading, id, major, activeMenuKey, replaceRoute,
+      loggedIn,
+      adminOrMajorAdmin,
+      id,
+      major,
+      activeMenuKey,
+      replaceRoute,
     } = this.props;
-
-    const noData = !loading && !major;
-    if (loading || noData) {
-      return <DataPlaceholder noData={noData} absolute />;
-    }
 
     const menus = this.getMenus();
 

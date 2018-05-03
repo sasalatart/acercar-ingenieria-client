@@ -17,9 +17,11 @@ function mapStateToProps(state, ownProps) {
   const id = +ownProps.match.params.id || currentUser.id;
   const params = { collection, id };
   const user = getUserEntity(state, params);
+  const loading = !!id && !user && getIsFetching(state, params);
 
   return {
-    loading: !!id && !user && getIsFetching(state, params),
+    loading,
+    noData: !loading && !ownProps.mine && !user,
     user,
     id,
     notificationsCount: getNotificationsCount(state),

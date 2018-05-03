@@ -33,6 +33,7 @@ export default class ArticleForm extends Component {
   static propTypes = {
     validators: PropTypes.shape({}).isRequired,
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     articleId: PropTypes.number,
     majorOptions: PropTypes.arrayOf(optionShape).isRequired,
     categoryOptions: PropTypes.arrayOf(optionShape).isRequired,
@@ -59,6 +60,7 @@ export default class ArticleForm extends Component {
     const {
       validators,
       loading,
+      noData,
       articleId,
       majorOptions,
       categoryOptions,
@@ -70,10 +72,7 @@ export default class ArticleForm extends Component {
       intl: { formatMessage: t },
     } = this.props;
 
-    const noData = !loading && articleId;
-    if (loading || noData) {
-      return <DataPlaceholder noData={noData} absolute />;
-    }
+    if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
 
     return (
       <div>

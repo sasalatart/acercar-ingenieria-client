@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
 import {
   collection,
   loadArticle,
   getArticleEntity,
 } from '../../../store/ducks/articles';
 import { getIsFetching } from '../../../store/ducks/loading';
+import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Article from '../../../components/Articles/Article';
 import ROUTES from '../../../routes';
 import { articleShape, matchShape } from '../../../shapes';
@@ -47,5 +47,9 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(ArticleWrapper);
-export default injectIntl(withRouter(connectedComponent));
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WithLoadableResource('loadArticle', 'article')(ArticleWrapper));
+
+export default withRouter(connectedComponent);

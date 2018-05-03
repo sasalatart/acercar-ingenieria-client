@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import {
   collection,
   loadDiscussion,
   getDiscussionEntity,
 } from '../../../store/ducks/discussions';
 import { getIsFetching } from '../../../store/ducks/loading';
-import WithAuthorization from '../../../hoc/WithAuthorization';
+import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Discussion from '../../../components/Discussions/Discussion';
 
 function mapStateToProps(state, ownProps) {
@@ -27,5 +26,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Discussion);
-export default injectIntl(WithAuthorization(connectedComponent));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WithLoadableResource('loadDiscussion', 'discussion')(Discussion));

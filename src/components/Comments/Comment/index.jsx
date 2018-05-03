@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Icon, Divider } from 'antd';
 import MainContent from './MainContent';
@@ -8,7 +7,6 @@ import ActionBar from '../../../containers/Comments/Comment/ActionBar';
 import CommentsSection from '../Section';
 import Title from '../../Layout/Title';
 import ProfileAvatar from '../../Users/Profile/Avatar';
-import DataPlaceholder from '../../DataPlaceholder';
 
 const styles = {
   wrapper: {
@@ -24,33 +22,18 @@ const styles = {
 
 export default class Comment extends Component {
   static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    comment: commentShape,
-    loadComment: PropTypes.func.isRequired,
+    comment: commentShape.isRequired,
     intl: intlShape.isRequired,
   };
 
-  static defaultProps = {
-    comment: undefined,
-  };
-
   state = { editing: false };
-
-  componentDidMount() {
-    this.props.loadComment();
-  }
 
   handleStartEditing = () => this.setState({ editing: true });
 
   handleStopEditing = () => this.setState({ editing: false });
 
   render() {
-    const { loading, comment, intl: { formatMessage: t } } = this.props;
-
-    const noData = !loading && !comment;
-    if (loading || noData) {
-      return <DataPlaceholder noData={noData} absolute />;
-    }
+    const { comment, intl: { formatMessage: t } } = this.props;
 
     const { editing } = this.state;
 

@@ -6,6 +6,7 @@ import {
   getPinnedAnnouncementsEntities,
 } from '../../store/ducks/announcements';
 import { getIsFetching } from '../../store/ducks/loading';
+import WithLoadableResource from '../../hoc/WithLoadableResource';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import PinnedAnnouncements from '../../components/Announcements/Pinned';
 
@@ -23,7 +24,9 @@ const mapDispatchToProps = {
   loadPinnedAnnouncements,
 };
 
-export default WithAuthorization(connect(
+const connectedComponent = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(PinnedAnnouncements));
+)(WithLoadableResource('loadPinnedAnnouncements', 'announcements')(PinnedAnnouncements));
+
+export default WithAuthorization(connectedComponent);

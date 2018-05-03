@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
@@ -8,7 +7,7 @@ import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import DateWithFormat from '../../DateWithFormat';
 import TagList from '../../TagList';
-import ProfileLink from '../../Users/Profile/Link';
+import Author from '../../Author';
 import DiscussionLink from '../../Discussions/Discussion/Link';
 import { colors } from '../../../theme';
 import { discussionShape } from '../../../shapes';
@@ -53,7 +52,7 @@ function renderActions(admin, discussion) {
   return actions;
 }
 
-function renderMeta(discussion, t) {
+function renderMeta(discussion) {
   const {
     id,
     title,
@@ -71,8 +70,7 @@ function renderMeta(discussion, t) {
 
   const description = (
     <span>
-      <span>{t({ id: 'submittedBy' })}</span>
-      <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>,
+      <Author author={author} spanned />
       <DateWithFormat dateString={createdAt} withTime style={styles.date} />
     </span>
   );
@@ -80,17 +78,12 @@ function renderMeta(discussion, t) {
   return <Meta title={titleTag} description={description} />;
 }
 
-function DiscussionListItem({
-  admin,
-  discussion,
-  onTagClick,
-  intl: { formatMessage: t },
-}) {
+function DiscussionListItem({ admin, discussion, onTagClick }) {
   const { tagList } = discussion;
 
   return (
     <Item actions={renderActions(admin, discussion)}>
-      {renderMeta(discussion, t)}
+      {renderMeta(discussion)}
       {tagList.length > 0 && <TagList tags={tagList} onTagClick={onTagClick} withIcon />}
     </Item>
   );
@@ -100,7 +93,6 @@ DiscussionListItem.propTypes = {
   admin: PropTypes.bool.isRequired,
   discussion: discussionShape.isRequired,
   onTagClick: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithAuthorization(DiscussionListItem));
+export default WithAuthorization(DiscussionListItem);

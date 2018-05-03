@@ -34,6 +34,7 @@ const styles = {
 class Profile extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     user: userShape,
     mine: PropTypes.bool,
@@ -98,13 +99,16 @@ class Profile extends Component {
 
   render() {
     const {
-      loading, user, mine, notificationsCount, activeMenuKey, replaceRoute,
+      loading,
+      noData,
+      user,
+      mine,
+      notificationsCount,
+      activeMenuKey,
+      replaceRoute,
     } = this.props;
 
-    const noData = !loading && !mine && !user;
-    if (loading || noData) {
-      return <DataPlaceholder noData={noData} absolute />;
-    }
+    if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
 
     if (!mine) {
       return <ProfileInfo user={user} />;
