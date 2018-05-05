@@ -54,9 +54,9 @@ class Profile extends Component {
     this.props.loadUser();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.id !== nextProps.id) {
-      nextProps.loadUser();
+  componentDidUpdate(prevProps) {
+    if (this.props.id !== prevProps.id) {
+      this.props.loadUser();
     }
   }
 

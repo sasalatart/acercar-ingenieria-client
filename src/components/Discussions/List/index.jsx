@@ -26,9 +26,9 @@ export default class DiscussionsList extends Component {
     mine: false,
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.mine !== this.props.mine) {
-      nextProps.loadDiscussions({ page: 1 });
+  componentDidUpdate(prevProps) {
+    if (prevProps.mine !== this.props.mine) {
+      this.props.loadDiscussions({ page: 1 });
     }
   }
 

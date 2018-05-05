@@ -20,9 +20,9 @@ export default class NotificationsList extends Component {
     pagination: undefined,
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.seen !== this.props.seen) {
-      nextProps.loadNotifications({ page: 1 });
+  componentDidUpdate(prevProps) {
+    if (prevProps.seen !== this.props.seen) {
+      this.props.loadNotifications({ page: 1 });
     }
   }
 

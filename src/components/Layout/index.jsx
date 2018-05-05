@@ -26,9 +26,10 @@ class AILayout extends Component {
     children: PropTypes.node.isRequired,
   };
 
-  componentWillReceiveProps({ location: { pathname, search } }) {
-    const pathnameChanged = pathname !== this.props.location.pathname;
-    const searchChanged = search !== this.props.location.search;
+  componentDidUpdate(prevProps) {
+    const { pathname, search } = this.props.location;
+    const pathnameChanged = prevProps.location.pathname !== pathname;
+    const searchChanged = prevProps.location.search !== search;
 
     if (this.contentTop && (pathnameChanged || searchChanged)) {
       this.contentTop.scrollIntoView({ behavior: 'smooth' });

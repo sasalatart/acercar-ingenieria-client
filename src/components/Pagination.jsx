@@ -35,13 +35,13 @@ export default class PaginationControls extends Component {
     this.props.loadFn({ page: this.props.current });
   }
 
-  componentWillReceiveProps(nextProps) {
-    const pageChanged = nextProps.current !== this.props.current;
-    const searchChanged = nextProps.search !== this.props.search;
+  componentDidUpdate(prevProps) {
+    const { current, search, loadFn } = this.props;
+    const pageChanged = prevProps.current !== current;
+    const searchChanged = prevProps.search !== search;
 
     if (pageChanged || searchChanged) {
-      const query = URI.parseQuery(nextProps.search);
-      nextProps.loadFn({ page: nextProps.current, ...query });
+      loadFn({ page: current, ...URI.parseQuery(search) });
     }
   }
 
