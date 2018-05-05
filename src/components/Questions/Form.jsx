@@ -33,7 +33,7 @@ function QuestionForm({
     <div>
       {!id &&
         <Alert
-          type="warning"
+          type="info"
           message={t({ id: 'forms.beforeCreatingQuestionAlert.message' })}
           description={t({ id: 'forms.beforeCreatingQuestionAlert.description' })}
           style={styles.alert}
