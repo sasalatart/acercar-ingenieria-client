@@ -91,7 +91,7 @@ export default class SearchUsers extends Component {
     return (
       <div>
         <ActionBar {...searchFilter} />
-        <Title text={t({ id: 'users' })} />
+        <Title>{t({ id: 'users' })}</Title>
 
         {this.renderSelect()}
         <UsersList {...searchFilter} />

@@ -55,7 +55,7 @@ class Credits extends Component {
     return (
       <div>
         <ActionBar onNewClicked={onNewClicked} />
-        <Title text={t({ id: 'credits' })} />
+        <Title>{t({ id: 'credits' })}</Title>
 
         <div style={styles.obtainedFromWrapper}>
           <FormattedMessage id="credits.obtainedFrom" values={{ link: OBTAINED_FROM_LINK }} />

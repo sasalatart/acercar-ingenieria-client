@@ -8,7 +8,7 @@ function NewMajor({ intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar />
-      <Title text={t({ id: 'majors.new' })} />
+      <Title>{t({ id: 'majors.new' })}</Title>
 
       <Form />
     </div>

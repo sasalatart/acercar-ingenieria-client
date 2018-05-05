@@ -23,7 +23,7 @@ function Questions({
   return (
     <div>
       <QuestionsActionBar majorId={majorId} pending={pending} onProposeClicked={onNewClicked} />
-      <Title text={pending ? t({ id: 'questions.pending' }) : 'FAQs'} />
+      <Title>{pending ? t({ id: 'questions.pending' }) : 'FAQs'}</Title>
 
       <QuestionsList majorId={majorId} pending={pending} onEditClicked={onEditClicked} />
 

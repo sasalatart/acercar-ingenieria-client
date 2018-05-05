@@ -5,9 +5,9 @@ import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
 import Form from '../../../containers/Announcements/Form';
-import AnnouncementItem from './Item';
+import Item from './Item';
 import Lightbox from '../../Lightbox';
-import AnnouncementsActionBar from './ActionBar';
+import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
 
 import { paginationShape, announcementShape } from '../../../shapes';
@@ -50,7 +50,7 @@ export default class Announcements extends Component {
   }
 
   renderAnnouncement = announcement =>
-    <AnnouncementItem announcement={announcement} onClick={this.handleAnnouncementClicked} />;
+    <Item announcement={announcement} onClick={this.handleAnnouncementClicked} />;
 
   render() {
     const {
@@ -67,8 +67,8 @@ export default class Announcements extends Component {
 
     return (
       <div>
-        <AnnouncementsActionBar onCreateClicked={onModalOpen} />
-        <Title text={t({ id: 'announcements' })} />
+        <ActionBar onCreateClicked={onModalOpen} />
+        <Title>{t({ id: 'announcements' })}</Title>
 
         <PaginationControls
           pagination={pagination}

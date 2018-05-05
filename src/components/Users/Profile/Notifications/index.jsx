@@ -12,7 +12,7 @@ function Notifications({ match, intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar seen={seen} />
-      <Title text={seen ? t({ id: 'notifications.seen' }) : t({ id: 'notifications.pending' })} />
+      <Title>{t({ id: `notifications.${seen ? 'seen' : 'pending'}` })}</Title>
 
       <List seen={seen} />
     </div>

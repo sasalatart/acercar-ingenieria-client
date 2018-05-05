@@ -16,7 +16,7 @@ const styles = {
 function SignUp({ intl: { formatMessage: t } }) {
   return (
     <div>
-      <Title text={t({ id: 'sessions.signUp' })} />
+      <Title>{t({ id: 'sessions.signUp' })}</Title>
 
       <Row type="flex" justify="center">
         <Col sm={24} lg={12} xl={10}>

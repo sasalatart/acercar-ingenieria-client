@@ -44,7 +44,7 @@ export default class DiscussionsList extends Component {
     return (
       <div>
         <ActionBar mine={mine} />
-        <Title text={t({ id: mine ? 'discussions.mine' : 'discussions' })} />
+        <Title>{t({ id: mine ? 'discussions.mine' : 'discussions' })}</Title>
 
         <PaginationControls
           pagination={pagination}

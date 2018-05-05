@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/VideoLinks/Form';
 import VideosList from '../../containers/VideoLinks/List';
-import VideosActionBar from './ActionBar';
+import ActionBar from './ActionBar';
 import Title from '../Layout/Title';
 import { parseBaseResource } from '../../routes';
 import { matchShape } from '../../shapes';
@@ -22,8 +22,8 @@ function VideoLinks({
 
   return (
     <div>
-      <VideosActionBar {...videoLinkableProps} onNewClicked={onNewClicked} />
-      <Title text="Videos" />
+      <ActionBar {...videoLinkableProps} onNewClicked={onNewClicked} />
+      <Title>Videos</Title>
 
       <VideosList {...videoLinkableProps} onEditClicked={onEditClicked} />
 

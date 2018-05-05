@@ -77,7 +77,7 @@ export default class ArticleForm extends Component {
     return (
       <div>
         <ActionBar />
-        <Title text={t({ id: `articles.${articleId ? 'edit' : 'new'}` })} />
+        <Title>{t({ id: `articles.${articleId ? 'edit' : 'new'}` })}</Title>
 
         <form onSubmit={handleSubmit}>
           <Field

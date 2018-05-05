@@ -67,7 +67,7 @@ export default class UsersList extends Component {
     return (
       <div>
         {withTitle && <ActionBar majorId={majorId} admins={admins} />}
-        {withTitle && <Title text={t({ id: 'users' })} />}
+        {withTitle && <Title>{t({ id: 'users' })}</Title>}
 
         <PaginationControls
           pagination={pagination}

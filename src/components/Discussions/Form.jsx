@@ -114,7 +114,7 @@ export default class DiscussionForm extends Component {
     return (
       <div>
         <ActionBar />
-        <Title text={t({ id: `discussions.${id ? 'edit' : 'new'}` })} />
+        <Title>{t({ id: `discussions.${id ? 'edit' : 'new'}` })}</Title>
 
         <form onSubmit={handleSubmit}>
           {this.renderTopRow()}

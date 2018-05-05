@@ -7,7 +7,7 @@ import Title from '../../Layout/Title';
 function RecoverPassword({ intl: { formatMessage: t } }) {
   return (
     <div>
-      <Title text={t({ id: 'sessions.recoverPassword' })} />
+      <Title>{t({ id: 'sessions.recoverPassword' })}</Title>
 
       <Row type="flex" justify="center">
         <Col sm={24} lg={12} xl={10}>

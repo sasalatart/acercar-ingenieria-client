@@ -39,13 +39,12 @@ function Article({ article }) {
   return (
     <div>
       <ActionBar article={article} />
-
-      <Title text={article.title} />
+      <Title>{article.title}</Title>
 
       {majorSummary &&
-        <MajorLink id={majorSummary.id}>
-          <SubTitle text={majorSummary.name} />
-        </MajorLink>
+        <SubTitle>
+          <MajorLink id={majorSummary.id}>{majorSummary.name}</MajorLink>
+        </SubTitle>
       }
 
       {article.categoryList.length > 0 &&

@@ -24,7 +24,7 @@ function AboutUs({ intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar />
-      <Title text={t({ id: 'aboutUs' })} />
+      <Title>{t({ id: 'aboutUs' })}</Title>
 
       <Row gutter={36}>
         <Col sm={12}>

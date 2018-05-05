@@ -25,7 +25,7 @@ function Discussion({ discussion }) {
   return (
     <div>
       <ActionBar discussion={discussion} />
-      <Title text={discussion.title} />
+      <Title>{discussion.title}</Title>
 
       {discussion.tagList.length > 0 &&
         <div style={styles.tagsContainer}>

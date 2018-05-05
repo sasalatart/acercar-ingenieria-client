@@ -51,7 +51,7 @@ export default class MajorsList extends Component {
     return (
       <div>
         <ActionBar />
-        <Title text="Majors" />
+        <Title>Majors</Title>
 
         <Tabs activeKey={this.state.activeTab} size="large" onChange={this.handleTabChange}>
           <TabPane key={TAB_NAMES.disciplinaries} tab={t({ id: 'majors.disciplinaries' })}>

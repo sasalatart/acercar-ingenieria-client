@@ -23,9 +23,13 @@ const styles = {
   },
 };
 
-function renderSubTitleText(user, admin, t) {
+function renderSubTitle(user, admin, t) {
   const textPrefix = t({ id: 'profile.generation' }, { year: user.generation });
-  return admin ? `${textPrefix}, ${user.email}` : textPrefix;
+
+  if (!admin) return textPrefix;
+
+  const emailTag = <a href={`mailto:${user.email}`}>{user.email}</a>;
+  return <p>{textPrefix}, {emailTag}</p>;
 }
 
 function ProfileInfo({ admin, user, intl: { formatMessage: t } }) {
@@ -39,8 +43,8 @@ function ProfileInfo({ admin, user, intl: { formatMessage: t } }) {
           </div>
         </Col>
         <Col md={18}>
-          <Title text={`${user.firstName} ${user.lastName}`} />
-          <SubTitle text={renderSubTitleText(user, admin, t)} />
+          <Title>{user.firstName} {user.lastName}</Title>
+          <SubTitle>{renderSubTitle(user, admin, t)}</SubTitle>
 
           <Divider>Roles</Divider>
           <RolesList user={user} />

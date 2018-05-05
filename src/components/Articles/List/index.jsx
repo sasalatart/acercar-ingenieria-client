@@ -38,7 +38,7 @@ export default class ArticlesList extends Component {
     return (
       <div>
         <ActionBar majorId={majorId} />
-        <Title text={t({ id: 'articles' })} />
+        <Title>{t({ id: 'articles' })}</Title>
 
         <PaginationControls
           pagination={pagination}

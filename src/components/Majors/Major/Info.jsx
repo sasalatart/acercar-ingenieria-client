@@ -20,7 +20,7 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar />
-      <Title text={major.name} />
+      <Title>{major.name}</Title>
 
       <Divider>{t({ id: 'majors.review' })}</Divider>
       <Row type="flex" align="middle" gutter={24}>

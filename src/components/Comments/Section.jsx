@@ -20,7 +20,7 @@ function CommentsSection({
   return (
     <div>
       {withActionBar && <ActionBar />}
-      <Title text={t({ id: answers ? 'answers' : 'comments' })} />
+      <Title>{t({ id: answers ? 'answers' : 'comments' })}</Title>
 
       <Form {...commonProps} reverseList={reverseList} />
       <Divider />

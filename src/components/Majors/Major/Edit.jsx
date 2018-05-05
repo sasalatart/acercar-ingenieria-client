@@ -9,7 +9,7 @@ function MajorEdit({ major, intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar />
-      <Title text={t({ id: 'majors.edit' })} />
+      <Title>{t({ id: 'majors.edit' })}</Title>
 
       <Form major={major} />
     </div>

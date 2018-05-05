@@ -47,7 +47,7 @@ function MajorAdmins({
   return (
     <div>
       <ActionBar majorId={majorId} hasAdmins={majorAdmins.length > 0} />
-      <Title text={t({ id: 'majors.admins' })} />
+      <Title>{t({ id: 'majors.admins' })}</Title>
 
       <PaginationControls
         pagination={pagination}

@@ -6,12 +6,15 @@ const styles = {
   title: themeStyles.title,
 };
 
-function Title({ text }) {
-  return <h1 style={styles.title}>{text}</h1>;
+function Title({ children }) {
+  return <h1 style={styles.title}>{children}</h1>;
 }
 
 Title.propTypes = {
-  text: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.arrayOf(PropTypes.node),
+  ]).isRequired,
 };
 
 export default Title;

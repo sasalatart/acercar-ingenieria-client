@@ -40,7 +40,7 @@ export default class Comment extends Component {
     return (
       <div>
         <ActionBar comment={comment} />
-        <Title text={t({ id: 'comment' })} />
+        <Title>{t({ id: 'comment' })}</Title>
 
         <div style={styles.wrapper}>
           <ProfileAvatar user={comment.author} style={styles.avatar} />

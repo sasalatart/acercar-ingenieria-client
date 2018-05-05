@@ -9,7 +9,7 @@ function Email({ majorId, intl: { formatMessage: t } }) {
   return (
     <div>
       <ActionBar />
-      <Title text={t({ id: 'emails.send' })} />
+      <Title>{t({ id: 'emails.send' })}</Title>
 
       <Form majorId={majorId} />
     </div>
