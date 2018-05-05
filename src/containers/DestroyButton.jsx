@@ -39,7 +39,7 @@ function getDestroyAction(ownProps) {
     case 'auth':
       return destroyAccount();
     case 'users':
-      return destroyUser(id);
+      return destroyUser(id, baseResourceId);
     case 'announcements':
       return destroyAnnouncement(id);
     case 'majors':

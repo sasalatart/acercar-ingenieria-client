@@ -27,6 +27,7 @@ function UserListItem({
   admin,
   adminOrMajorAdmin,
   user,
+  majorId,
   setSelectedUser,
   intl: { formatMessage: t },
 }) {
@@ -40,8 +41,11 @@ function UserListItem({
   }
 
   if (adminOrMajorAdmin) {
+    const baseResourceProps = majorId && { baseResourceId: majorId, baseResourceName: 'majors' };
+
     const destroyButton = (
       <DestroyButton
+        {...baseResourceProps}
         collection="users"
         id={user.id}
         warningMessage={t({ id: 'users.destroyWarning' })}
@@ -68,8 +72,13 @@ UserListItem.propTypes = {
   admin: PropTypes.bool.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   user: userShape.isRequired,
+  majorId: PropTypes.number,
   setSelectedUser: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
+};
+
+UserListItem.defaultProps = {
+  majorId: undefined,
 };
 
 export default UserListItem;

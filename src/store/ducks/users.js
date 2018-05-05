@@ -66,13 +66,13 @@ export function loadUser(id) {
   };
 }
 
-export function destroyUser(id) {
+export function destroyUser(id, majorId) {
   return {
     type: TYPES.DESTROY,
     payload: {
       method: 'DELETE',
-      url: `/users/${id}`,
-      urlParams: { collection, id },
+      url: majorId ? `/majors/${majorId}/users/${id}` : `/users/${id}`,
+      urlParams: { ...getCollectionParams(majorId), id },
     },
   };
 }

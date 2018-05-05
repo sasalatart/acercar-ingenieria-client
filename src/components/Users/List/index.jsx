@@ -33,7 +33,7 @@ export default class UsersList extends Component {
     withTitle: false,
   }
 
-  renderUser = user => <UserListItem user={user} />;
+  renderUser = user => <UserListItem user={user} majorId={this.props.majorId} />;
 
   renderAdminStatusPanelModal() {
     const { selectedUser, unsetSelectedUser, intl: { formatMessage: t } } = this.props;
