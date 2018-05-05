@@ -30,8 +30,7 @@ const TYPES = {
   LOAD_INDEX: 'admins/LOAD_INDEX',
   SET_SELECTED_USER: 'admins/SET_SELECTED_USER',
   UNSET_SELECTED_USER: 'admins/UNSET_SELECTED_USER',
-  PROMOTE: 'admins/PROMOTE',
-  DEMOTE: 'admins/DEMOTE',
+  TOGGLE: 'admins/TOGGLE',
   RESET_PAGINATION: 'admins/RESET_PAGINATION',
 };
 
@@ -52,7 +51,7 @@ export function loadAdmins(page = 1, majorId, query) {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: majorId ? `/majors/${majorId}/admins` : '/users/admins',
+      url: majorId ? `/majors/${majorId}/admins` : '/admins',
       query: { page, ...query },
       urlParams: { page, ...query, ...getCollectionParams(majorId) },
       responseSchema: [usersSchema],
@@ -73,27 +72,13 @@ export function unsetSelectedUser() {
   };
 }
 
-export function promoteToAdmin(id, majorId) {
+export function toggleAdmin(id, majorId, promote) {
   const suffixUrl = `/users/${id}/admin`;
 
   return {
-    type: TYPES.PROMOTE,
+    type: TYPES.TOGGLE,
     payload: {
-      method: 'POST',
-      url: majorId ? `/majors/${majorId}${suffixUrl}` : suffixUrl,
-      urlParams: { id, baseResourceId: majorId },
-      responseSchema: usersSchema,
-    },
-  };
-}
-
-export function demoteFromAdmin(id, majorId) {
-  const suffixUrl = `/users/${id}/admin`;
-
-  return {
-    type: TYPES.DEMOTE,
-    payload: {
-      method: 'DELETE',
+      method: promote ? 'POST' : 'DELETE',
       url: majorId ? `/majors/${majorId}${suffixUrl}` : suffixUrl,
       urlParams: { id, baseResourceId: majorId },
       responseSchema: usersSchema,
@@ -115,14 +100,12 @@ export default function adminsReducer(state = INITIAL_STATE, { type, payload }) 
       return state.set('selectedUserId', payload.id);
     case TYPES.UNSET_SELECTED_USER:
       return state.set('selectedUserId', undefined);
-    case `${TYPES.PROMOTE}_PENDING`:
-    case `${TYPES.DEMOTE}_PENDING`: {
+    case `${TYPES.TOGGLE}_PENDING`: {
       const { id, baseResourceId } = payload.urlParams;
       return state
         .updateIn(getUpdatingPath(baseResourceId), ids => (ids ? ids.add(id) : new Set([id])));
     }
-    case `${TYPES.PROMOTE}_FULFILLED`:
-    case `${TYPES.DEMOTE}_FULFILLED`: {
+    case `${TYPES.TOGGLE}_FULFILLED`: {
       const pageAction = type.includes(TYPES.PROMOTE) ? 'addToPage' : 'removeFromPage';
 
       const { urlParams } = payload.request;

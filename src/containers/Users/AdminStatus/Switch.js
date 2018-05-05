@@ -1,9 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  promoteToAdmin,
-  demoteFromAdmin,
-  getIsAdminUpdating,
-} from '../../../store/ducks/admins';
+import { toggleAdmin, getIsAdminUpdating } from '../../../store/ducks/admins';
 import Switch from '../../../components/Users/AdminStatus/Switch';
 
 function mapStateToProps(state, ownProps) {
@@ -14,11 +10,9 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const toggleFn = ownProps.active ? demoteFromAdmin : promoteToAdmin;
-
+function mapDispatchToProps(dispatch, { userId, majorId, active }) {
   return {
-    onChange: () => dispatch(toggleFn(ownProps.userId, ownProps.majorId)),
+    onChange: () => dispatch(toggleAdmin(userId, majorId, !active)),
   };
 }
 
