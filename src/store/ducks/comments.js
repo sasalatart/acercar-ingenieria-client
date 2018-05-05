@@ -3,7 +3,8 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import remove from 'lodash/remove';
 import { updateEntity, getEntities } from './entities';
-import pagingFnsFactory from './paginations';
+import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
+import { getId } from './shared';
 import { commentsSchema } from '../../schemas';
 
 export const collection = 'comments';
@@ -31,15 +32,15 @@ const TYPES = {
   ADD_TO_PAGINATION: 'comments/ADD_TO_PAGINATION',
 };
 
-export function getPagingFns(resourceName) {
-  switch (resourceName) {
+export const getPagingFns = prepareGetPagingFns(({ baseResourceName }) => {
+  switch (baseResourceName) {
     case 'majors': return majorsPagingFns;
     case 'articles': return articlesPagingFns;
     case 'discussions': return discussionsPagingFns;
     case 'comments': return commentsPagingFns;
     default: return undefined;
   }
-}
+});
 
 export function loadComments(baseResourceName, baseResourceId, page = 1) {
   return {
@@ -96,7 +97,7 @@ export function createComment(body, baseResourceName, baseResourceId, reverseLis
         if (!reverseList) return;
       }
 
-      const pagingFns = getPagingFns(baseResourceName);
+      const pagingFns = getPagingFns({ baseResourceName }, true);
       const type = TYPES.ADD_TO_PAGINATION;
       dispatch(pagingFns.actions.addToPagination(type, result, baseResourceId, reverseList));
     });
@@ -140,33 +141,18 @@ export function destroyComment(id, baseResourceName, baseResourceId) {
   };
 }
 
-export default function commentsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`: {
-      const { baseResourceName } = action.payload.request.urlParams;
-      const pagingFns = getPagingFns(baseResourceName);
-      return pagingFns.reducer.setPage(state, action.payload);
-    }
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
-      return getPagingFns(urlParams.baseResourceName)
-        .reducer
-        .removeFromPage(state, urlParams);
-    }
-    case TYPES.ADD_TO_PAGINATION: {
-      const {
-        baseResourceName, baseResourceId, id, page, addToEnd,
-      } = action.payload;
-      return getPagingFns(baseResourceName)
-        .reducer
-        .addToPage(state, id, page, baseResourceId, addToEnd);
-    }
+export default function commentsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
+      return getPagingFns(payload).setPage(state, payload);
+    case `${TYPES.DESTROY}_FULFILLED`:
+      return getPagingFns(payload).removeFromPage(state, payload.request.urlParams);
+    case TYPES.ADD_TO_PAGINATION:
+      return getPagingFns(payload).addToPage(state, payload);
     default:
       return state;
   }
 }
-
-const getId = (state, params) => params.id;
 
 export const getCommentEntity = createSelector(
   getId,

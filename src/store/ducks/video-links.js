@@ -3,7 +3,8 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { videoLinksSchema } from '../../schemas';
 import { getEntities } from './entities';
-import pagingFnsFactory from './paginations';
+import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
+import { getVideoLinkId } from './shared';
 
 export const collection = 'videoLinks';
 
@@ -23,12 +24,12 @@ const TYPES = {
   ADD_TO_PAGINATION: 'videos/ADD_TO_PAGINATION',
 };
 
-export function getPagingFns(baseResourceName) {
+export const getPagingFns = prepareGetPagingFns(({ baseResourceName }) => {
   switch (baseResourceName) {
     case 'majors': return majorsPagingFns;
     default: return undefined;
   }
-}
+});
 
 export function loadVideoLinks(page = 1, baseResourceName, baseResourceId) {
   return {
@@ -57,7 +58,7 @@ export function createVideoLink(values, baseResourceName, baseResourceId) {
         responseSchema: videoLinksSchema,
       },
     }).then(({ value: { result } }) => {
-      const pagingFns = getPagingFns(baseResourceName);
+      const pagingFns = getPagingFns({ baseResourceName });
       dispatch(pagingFns.actions.addToPagination(TYPES.ADD_TO_PAGINATION, result, baseResourceId));
     });
 }
@@ -90,26 +91,18 @@ export function destroyVideoLink(id, baseResourceName, baseResourceId) {
   };
 }
 
-export default function videoLinksReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`: {
-      const { baseResourceName } = action.payload.request.urlParams;
-      return getPagingFns(baseResourceName).reducer.setPage(state, action.payload);
-    }
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
-      return getPagingFns(urlParams.baseResourceName).reducer.removeFromPage(state, urlParams);
-    }
-    case TYPES.ADD_TO_PAGINATION: {
-      const { id, baseResourceName, baseResourceId } = action.payload;
-      return getPagingFns(baseResourceName).reducer.addToPage(state, id, 1, baseResourceId);
-    }
+export default function videoLinksReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
+      return getPagingFns(payload).setPage(state, payload);
+    case `${TYPES.DESTROY}_FULFILLED`:
+      return getPagingFns(payload).removeFromPage(state, payload.request.urlParams);
+    case TYPES.ADD_TO_PAGINATION:
+      return getPagingFns(payload).addToPage(state, payload);
     default:
       return state;
   }
 }
-
-const getVideoLinkId = (state, params) => params.videoLinkId;
 
 export const getVideoLinkEntity = createSelector(
   getVideoLinkId,

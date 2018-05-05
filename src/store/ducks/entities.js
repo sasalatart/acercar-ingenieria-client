@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import { createSelector } from 'reselect';
+import { getId } from './shared';
 
 export const INITIAL_STATE = new Map({
   users: new Map({}),
@@ -62,7 +63,6 @@ export default function entitiesReducer(state = INITIAL_STATE, action) {
 export const getEntities = state => state.entities;
 
 const getCollection = (state, params) => params.collection;
-const getId = (state, params) => params.id;
 
 export const getEntity = createSelector(
   getEntities,

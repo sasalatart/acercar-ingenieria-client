@@ -19,15 +19,14 @@ function mapStateToProps(state, ownProps) {
   const { majorId, admins } = ownProps;
   const params = { ...getCollectionParams(majorId, admins), paged: true };
 
-  const pagingFns = admins
-    ? getAdminsPagingFns(majorId)
-    : getUsersPagingFns(majorId);
+  const pagingFnsGetter = admins ? getAdminsPagingFns : getUsersPagingFns;
+  const pagingFns = pagingFnsGetter(params, true).selectors;
 
-  const users = pagingFns.selectors.getPagedEntities(state, params);
+  const users = pagingFns.getPagedEntities(state, params);
 
   return {
     loading: isEmpty(users) && getIsFetching(state, params),
-    pagination: pagingFns.selectors.getMeta(state, params),
+    pagination: pagingFns.getMeta(state, params),
     users,
     selectedUser: getSelectedUserEntity(state),
   };

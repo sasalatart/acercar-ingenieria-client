@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import {
+  getSuffix,
   getCollectionParams,
   loadQuestions,
   getPagingFns,
@@ -13,16 +14,16 @@ import QuestionsList from '../../components/Questions/List';
 function mapStateToProps(state, ownProps) {
   const params = {
     ...getCollectionParams(ownProps.majorId),
-    suffix: ownProps.pending ? 'pending' : 'answered',
+    suffix: getSuffix(ownProps.pending),
     paged: true,
   };
 
-  const pagingFns = getPagingFns(ownProps.pending, ownProps.majorId);
-  const questions = pagingFns.selectors.getPagedEntities(state, params);
+  const pagingFns = getPagingFns(params, true).selectors;
+  const questions = pagingFns.getPagedEntities(state, params);
 
   return {
     loading: isEmpty(questions) && getIsFetching(state, params),
-    pagination: pagingFns.selectors.getMeta(state, params),
+    pagination: pagingFns.getMeta(state, params),
     questions,
   };
 }

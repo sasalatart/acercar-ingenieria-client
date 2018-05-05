@@ -1,14 +1,18 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
+import keyMirror from 'keymirror';
 import { questionsSchema } from '../../schemas';
 import { getEntities } from './entities';
-import pagingFnsFactory from './paginations';
+import pagingFnsFactory, { prepareGetPagingFns, removeFromAllPages } from './paginations';
+import { getQuestionId } from './shared';
 
 export const collection = 'questions';
+export const suffixes = keyMirror({ answered: null, pending: null });
+
 const commonArgs = [collection, questionsSchema];
-const answeredSuffix = { suffix: 'answered' };
-const pendingSuffix = { suffix: 'pending' };
+const answeredSuffix = { suffix: suffixes.answered };
+const pendingSuffix = { suffix: suffixes.pending };
 
 const majorsAnsweredPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', ...answeredSuffix });
 const majorsPendingPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', ...pendingSuffix });
@@ -33,33 +37,36 @@ const TYPES = {
   ADD_TO_UNANSWERED_PAGINATION: 'questions/ADD_TO_UNANSWERED_PAGINATION',
 };
 
-export function getCollectionParams(majorId) {
+export function getCollectionParams(baseResourceId) {
   return {
     collection,
-    baseResourceName: majorId && 'majors',
-    baseResourceId: majorId,
+    baseResourceName: baseResourceId && 'majors',
+    baseResourceId,
   };
 }
 
-export function getPagingFns(isUnanswered, isOfMajor) {
-  if (isOfMajor) {
-    return isUnanswered ? majorsPendingPagingFns : majorsAnsweredPagingFns;
-  }
-
-  return isUnanswered ? platformPendingPagingFns : platformAnsweredPagingFns;
+export function getSuffix(pending) {
+  return pending ? suffixes.pending : suffixes.answered;
 }
 
-export function loadQuestions(page = 1, majorId, pending) {
+export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => {
+  if (baseResourceId) {
+    return suffix === suffixes.pending ? majorsPendingPagingFns : majorsAnsweredPagingFns;
+  }
+
+  return suffix === suffixes.pending ? platformPendingPagingFns : platformAnsweredPagingFns;
+});
+
+export function loadQuestions(page = 1, baseResourceId, pending) {
   const urlSuffix = pending ? '/pending' : '';
-  const suffix = pending ? 'pending' : 'answered';
 
   return {
     type: pending ? TYPES.LOAD_UNANSWERED : TYPES.LOAD_ANSWERED,
     payload: {
       method: 'GET',
-      url: majorId ? `/majors/${majorId}/questions${urlSuffix}` : `/questions${urlSuffix}`,
+      url: baseResourceId ? `/majors/${baseResourceId}/questions${urlSuffix}` : `/questions${urlSuffix}`,
       query: { page },
-      urlParams: { page, ...getCollectionParams(majorId), suffix },
+      urlParams: { page, ...getCollectionParams(baseResourceId), suffix: getSuffix(pending) },
       responseSchema: [questionsSchema],
     },
   };
@@ -83,7 +90,8 @@ export function createQuestion(values, majorId, shouldAddToPagination) {
         ? TYPES.ADD_TO_ANSWERED_PAGINATION
         : TYPES.ADD_TO_UNANSWERED_PAGINATION;
 
-      const pagingFns = getPagingFns(!values.answer, majorId);
+      const params = { baseResourceId: majorId, suffix: getSuffix(!values.answer) };
+      const pagingFns = getPagingFns(params, true);
       dispatch(pagingFns.actions.addToPagination(type, result, majorId));
     });
 }
@@ -112,45 +120,32 @@ export function destroyQuestion(id, majorId) {
   };
 }
 
-export default function questionsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case `${TYPES.LOAD_ANSWERED}_FULFILLED`: {
-      const { baseResourceId } = action.payload.request.urlParams;
-      return getPagingFns(false, baseResourceId).reducer.setPage(state, action.payload);
-    }
-    case `${TYPES.LOAD_UNANSWERED}_FULFILLED`: {
-      const { baseResourceId } = action.payload.request.urlParams;
-      return getPagingFns(true, baseResourceId).reducer.setPage(state, action.payload);
-    }
+export default function questionsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
+    case `${TYPES.LOAD_ANSWERED}_FULFILLED`:
+    case `${TYPES.LOAD_UNANSWERED}_FULFILLED`:
+      return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.UPDATE}_FULFILLED`: {
-      const { urlParams, body } = action.payload.request;
-      const pagingFns = getPagingFns(!!body.answer, urlParams.baseResourceId);
-      return pagingFns.reducer.removeFromPage(state, urlParams);
+      const { urlParams, body } = payload.request;
+      const pagingFns = getPagingFns({ ...urlParams, suffix: getSuffix(!!body.answer) });
+      return pagingFns.removeFromPage(state, urlParams);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
-      const pendingPagingFns = getPagingFns(true, urlParams.baseResourceId);
-      const answeredPagingFns = getPagingFns(false, urlParams.baseResourceId);
-
-      const fromPending = pendingPagingFns.reducer.removeFromPage(state, urlParams);
-      return answeredPagingFns.reducer.removeFromPage(fromPending, urlParams);
+      const { urlParams } = payload.request;
+      const pendingPagingFns = getPagingFns({ ...payload, ...pendingSuffix });
+      const answeredPagingFns = getPagingFns({ ...payload, ...answeredSuffix });
+      return removeFromAllPages(state, [pendingPagingFns, answeredPagingFns], urlParams);
     }
-    case TYPES.ADD_TO_ANSWERED_PAGINATION: {
-      const { id, baseResourceId } = action.payload;
-      return getPagingFns(false, baseResourceId).reducer.addToPage(state, id, 1, baseResourceId);
-    }
-    case TYPES.ADD_TO_UNANSWERED_PAGINATION: {
-      const { id, baseResourceId } = action.payload;
-      return getPagingFns(true, baseResourceId).reducer.addToPage(state, id, 1, baseResourceId);
-    }
+    case TYPES.ADD_TO_ANSWERED_PAGINATION:
+      return getPagingFns({ ...payload, ...answeredSuffix }).addToPage(state, payload);
+    case TYPES.ADD_TO_UNANSWERED_PAGINATION:
+      return getPagingFns({ ...payload, ...pendingSuffix }).addToPage(state, payload);
     default:
       return state;
   }
 }
 
 export const getQuestionsData = state => state.questions;
-
-const getQuestionId = (state, params) => params.questionId;
 
 export const getQuestionEntity = createSelector(
   getQuestionId,

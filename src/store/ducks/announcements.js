@@ -89,18 +89,16 @@ export function destroyAnnouncement(id) {
   };
 }
 
-export default function announcementsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
+export default function announcementsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return pagingFns.reducer.setPage(state, action.payload);
+      return pagingFns.reducer.setPage(state, payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
-      return state.set('pinned', new Set(action.payload.result));
-    case TYPES.ADD_TO_PAGINATION: {
-      const { id, page } = action.payload;
-      return pagingFns.reducer.addToPage(state, id, page);
-    }
+      return state.set('pinned', new Set(payload.result));
+    case TYPES.ADD_TO_PAGINATION:
+      return pagingFns.reducer.addToPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
+      const { urlParams } = payload.request;
       return pagingFns
         .reducer
         .removeFromPage(state, urlParams)

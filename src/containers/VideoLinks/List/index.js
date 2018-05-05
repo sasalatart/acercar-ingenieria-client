@@ -11,21 +11,14 @@ import VideoLinksList from '../../../components/VideoLinks/List';
 import { parseBaseResource } from '../../../routes';
 
 function mapStateToProps(state, ownProps) {
-  const { baseResourceName, baseResourceId } = parseBaseResource(ownProps.match.params);
+  const params = { ...parseBaseResource(ownProps.match.params), collection, paged: true };
 
-  const params = {
-    collection,
-    baseResourceName,
-    baseResourceId,
-    paged: true,
-  };
-
-  const pagingFns = getPagingFns(baseResourceName);
-  const videos = pagingFns.selectors.getPagedEntities(state, params);
+  const pagingFns = getPagingFns(params, true).selectors;
+  const videos = pagingFns.getPagedEntities(state, params);
 
   return {
     loading: isEmpty(videos) && getIsFetching(state, params),
-    pagination: pagingFns.selectors.getMeta(state, params),
+    pagination: pagingFns.getMeta(state, params),
     videos,
   };
 }

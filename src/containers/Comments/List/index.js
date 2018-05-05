@@ -16,12 +16,12 @@ function mapStateToProps(state, ownProps) {
     collection, baseResourceName, baseResourceId, paged: true,
   };
 
-  const pagingFns = getPagingFns(baseResourceName);
-  const comments = pagingFns.selectors.getPagedEntities(state, params);
+  const pagingFns = getPagingFns(params, true).selectors;
+  const comments = pagingFns.getPagedEntities(state, params);
 
   return {
     loading: isEmpty(comments) && getIsFetching(state, params),
-    pagination: pagingFns.selectors.getMeta(state, params),
+    pagination: pagingFns.getMeta(state, params),
     comments,
   };
 }

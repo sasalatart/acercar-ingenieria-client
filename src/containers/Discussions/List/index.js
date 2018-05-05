@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import { addQueryToCurrentUri } from '../../../store/ducks/routes';
 import {
   collection,
+  getSuffix,
   loadDiscussions,
   resetPagination,
   getPagingFns,
@@ -13,14 +14,14 @@ import WithAuthorization from '../../../hoc/WithAuthorization';
 import DiscussionsList from '../../../components/Discussions/List';
 
 function mapStateToProps(state, ownProps) {
-  const params = { collection, paged: true, suffix: ownProps.mine ? 'mine' : 'forum' };
-  const pagingFns = getPagingFns(ownProps.mine);
+  const params = { collection, suffix: getSuffix(ownProps.mine), paged: true };
+  const pagingFns = getPagingFns(params, true).selectors;
 
-  const discussions = pagingFns.selectors.getPagedEntities(state);
+  const discussions = pagingFns.getPagedEntities(state);
 
   return {
     loading: isEmpty(discussions) && getIsFetching(state, params),
-    pagination: pagingFns.selectors.getMeta(state),
+    pagination: pagingFns.getMeta(state),
     discussions,
   };
 }
@@ -29,7 +30,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     loadDiscussions: ({ page, ...query }) => dispatch(loadDiscussions(page, ownProps.mine, query)),
     onTagClick: (text) => {
-      dispatch(resetPagination(ownProps.mine));
+      dispatch(resetPagination(getSuffix(ownProps.mine)));
       dispatch(addQueryToCurrentUri({ tagList: text }));
     },
   };

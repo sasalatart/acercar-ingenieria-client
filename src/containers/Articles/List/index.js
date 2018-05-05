@@ -13,13 +13,13 @@ import ArticlesList from '../../../components/Articles/List';
 
 function mapStateToProps(state, ownProps) {
   const params = { ...getCollectionParams(ownProps.majorId), paged: true };
-  const pagingFns = getPagingFns(ownProps.majorId);
+  const pagingFns = getPagingFns(params, true).selectors;
 
-  const articles = pagingFns.selectors.getPagedEntities(state, params);
+  const articles = pagingFns.getPagedEntities(state, params);
 
   return {
     loading: isEmpty(articles) && getIsFetching(state, params),
-    pagination: pagingFns.selectors.getMeta(state, params),
+    pagination: pagingFns.getMeta(state, params),
     articles,
   };
 }

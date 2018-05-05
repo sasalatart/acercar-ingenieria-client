@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { creditsSchema } from '../../schemas';
 import { getEntities } from './entities';
+import { getCreditId } from './shared';
 
 export const collection = 'credits';
 
@@ -66,16 +67,14 @@ export function destroyCredit(id) {
   };
 }
 
-export default function creditsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
+export default function creditsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return state.set('activeIds', new OrderedSet(action.payload.result));
-    case `${TYPES.CREATE}_FULFILLED`: {
-      const id = action.payload.result;
-      return state.update('activeIds', ids => ids.add(id));
-    }
+      return state.set('activeIds', new OrderedSet(payload.result));
+    case `${TYPES.CREATE}_FULFILLED`:
+      return state.update('activeIds', ids => ids.add(payload.result));
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { id } = action.payload.request.urlParams;
+      const { id } = payload.request.urlParams;
       return state.update('activeIds', ids => ids.delete(id));
     }
     default:
@@ -95,8 +94,6 @@ export const getCreditsEntities = createSelector(
   getEntities,
   (activeIds, entities) => denormalize(activeIds, [creditsSchema], entities).toJS(),
 );
-
-const getCreditId = (state, params) => params.creditId;
 
 export const getCreditEntity = createSelector(
   getCreditId,

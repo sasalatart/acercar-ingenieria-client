@@ -2,8 +2,13 @@ import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
-import pagingFnsFactory from './paginations';
+import pagingFnsFactory, {
+  prepareGetPagingFns,
+  removeFromAllPages,
+  resetPaginationActionFactory,
+} from './paginations';
 import { goToArticle } from './routes';
+import { getId } from './shared';
 import { articlesSchema } from '../../schemas';
 
 export const collection = 'articles';
@@ -26,6 +31,10 @@ const TYPES = {
   DESTROY: 'articles/DESTROY',
   RESET_PAGINATION: 'articles/RESET_PAGINATION',
 };
+
+export const getPagingFns = prepareGetPagingFns(({ baseResourceId }) => (
+  baseResourceId ? majorsPagingFns : platformPagingFns
+));
 
 export function getCollectionParams(majorId) {
   return {
@@ -103,38 +112,22 @@ export function destroyArticle(id, majorId) {
   };
 }
 
-export function resetPagination(majorId) {
-  return {
-    type: TYPES.RESET_PAGINATION,
-    payload: { majorId },
-  };
-}
+export const resetPagination = resetPaginationActionFactory(TYPES.RESET_PAGINATION);
 
-export function getPagingFns(isOfMajor) {
-  return isOfMajor ? majorsPagingFns : platformPagingFns;
-}
-
-export default function articlesReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`: {
-      const { baseResourceId } = action.payload.request.urlParams;
-      return getPagingFns(baseResourceId).reducer.setPage(state, action.payload);
-    }
+export default function articlesReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
+      return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
-      const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
-      return platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
+      const { urlParams } = payload.request;
+      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], urlParams);
     }
-    case TYPES.RESET_PAGINATION: {
-      const { majorId } = action.payload;
-      return getPagingFns(majorId).reducer.reset(state, majorId);
-    }
+    case TYPES.RESET_PAGINATION:
+      return getPagingFns(payload).reset(state, payload.baseResourceId);
     default:
       return state;
   }
 }
-
-const getId = (state, params) => params.id;
 
 export const getArticleEntity = createSelector(
   getId,

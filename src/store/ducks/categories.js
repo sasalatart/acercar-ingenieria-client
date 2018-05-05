@@ -26,10 +26,10 @@ export function loadCategories() {
   };
 }
 
-export default function categoriesReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
+export default function categoriesReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return state.set('activeCategoryIds', action.payload.result);
+      return state.set('activeCategoryIds', payload.result);
     default:
       return state;
   }

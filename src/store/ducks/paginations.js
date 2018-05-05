@@ -3,6 +3,7 @@ import { Map, OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import compact from 'lodash/compact';
+import get from 'lodash/get';
 import {
   addQueryToCurrentUri,
   getPage,
@@ -106,10 +107,12 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
     return state.updateIn([...getPagingPath(baseResourceId), pageIndex], ids => ids.delete(id));
   };
 
-  const addToPage = (state, id, page, baseResourceId, addToEnd) => {
+  const addToPage = (state, payload) => {
+    const { id, baseResourceId, addToEnd } = payload;
+
     const setToAdd = new OrderedSet([id]);
     return state.updateIn(
-      [...getPagingPath(baseResourceId), String(page)],
+      [...getPagingPath(baseResourceId), String(payload.page || 1)],
       (ids) => {
         if (!ids) return setToAdd;
         return addToEnd ? ids.add(id) : setToAdd.merge(ids);
@@ -139,4 +142,31 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
       reset,
     },
   };
+}
+
+function getFinalParams(params) {
+  return params.urlParams || get(params.request, 'urlParams', params);
+}
+
+export function prepareGetPagingFns(switchFn) {
+  return (params, raw) => {
+    const pagingFns = switchFn(getFinalParams(params));
+    return raw ? pagingFns : pagingFns.reducer;
+  };
+}
+
+export function removeFromAllPages(state, pagingFns, urlParams) {
+  return pagingFns.reduce(
+    (tempState, pagingFn) => pagingFn.reducer.removeFromPage(tempState, urlParams),
+    state,
+  );
+}
+
+export function resetPaginationActionFactory(type, withSuffix) {
+  const propertyName = withSuffix ? 'suffix' : 'baseResourceId';
+
+  return value => ({
+    type,
+    payload: { [propertyName]: value },
+  });
 }

@@ -3,7 +3,12 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { usersSchema } from '../../schemas';
 import { getEntities } from './entities';
-import pagingFnsFactory from './paginations';
+import pagingFnsFactory, {
+  prepareGetPagingFns,
+  removeFromAllPages,
+  resetPaginationActionFactory,
+} from './paginations';
+import { getUserId, getMajorId } from './shared';
 import { TYPES as USERS_TYPES } from './users';
 
 const collection = 'admins';
@@ -25,10 +30,8 @@ const TYPES = {
   LOAD_INDEX: 'admins/LOAD_INDEX',
   SET_SELECTED_USER: 'admins/SET_SELECTED_USER',
   UNSET_SELECTED_USER: 'admins/UNSET_SELECTED_USER',
-  PROMOTE_TO_PLATFORM: 'admins/PROMOTE_TO_PLATFORM',
-  PROMOTE_TO_MAJOR: 'admins/PROMOTE_TO_MAJOR',
-  DEMOTE_FROM_PLATFORM: 'admins/DEMOTE_FROM_PLATFORM',
-  DEMOTE_FROM_MAJOR: 'admins/DEMOTE_FROM_MAJOR',
+  PROMOTE: 'admins/PROMOTE',
+  DEMOTE: 'admins/DEMOTE',
   RESET_PAGINATION: 'admins/RESET_PAGINATION',
 };
 
@@ -40,9 +43,9 @@ export function getCollectionParams(majorId) {
   };
 }
 
-export function getPagingFns(isOfMajor) {
-  return isOfMajor ? majorsPagingFns : platformPagingFns;
-}
+export const getPagingFns = prepareGetPagingFns(({ baseResourceId }) => (
+  baseResourceId ? majorsPagingFns : platformPagingFns
+));
 
 export function loadAdmins(page = 1, majorId, query) {
   return {
@@ -74,11 +77,11 @@ export function promoteToAdmin(id, majorId) {
   const suffixUrl = `/users/${id}/admin`;
 
   return {
-    type: majorId ? TYPES.PROMOTE_TO_MAJOR : TYPES.PROMOTE_TO_PLATFORM,
+    type: TYPES.PROMOTE,
     payload: {
       method: 'POST',
       url: majorId ? `/majors/${majorId}${suffixUrl}` : suffixUrl,
-      urlParams: { id, majorId },
+      urlParams: { id, baseResourceId: majorId },
       responseSchema: usersSchema,
     },
   };
@@ -88,69 +91,51 @@ export function demoteFromAdmin(id, majorId) {
   const suffixUrl = `/users/${id}/admin`;
 
   return {
-    type: majorId ? TYPES.DEMOTE_FROM_MAJOR : TYPES.DEMOTE_FROM_PLATFORM,
+    type: TYPES.DEMOTE,
     payload: {
       method: 'DELETE',
       url: majorId ? `/majors/${majorId}${suffixUrl}` : suffixUrl,
-      urlParams: { id, majorId },
+      urlParams: { id, baseResourceId: majorId },
       responseSchema: usersSchema,
     },
   };
 }
 
-export function resetPagination(majorId) {
-  return {
-    type: TYPES.RESET_PAGINATION,
-    payload: { majorId },
-  };
+export const resetPagination = resetPaginationActionFactory(TYPES.RESET_PAGINATION);
+
+function getUpdatingPath(majorId) {
+  return majorId ? ['updatingMajorAdminsIds', String(majorId)] : ['updatingAdminsIds'];
 }
 
-export default function adminsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`: {
-      const { baseResourceId } = action.payload.request.urlParams;
-      return getPagingFns(baseResourceId).reducer.setPage(state, action.payload);
-    }
+export default function adminsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
+    case `${TYPES.LOAD_INDEX}_FULFILLED`:
+      return getPagingFns(payload).setPage(state, payload);
     case TYPES.SET_SELECTED_USER:
-      return state.set('selectedUserId', action.payload.id);
+      return state.set('selectedUserId', payload.id);
     case TYPES.UNSET_SELECTED_USER:
       return state.set('selectedUserId', undefined);
-    case `${TYPES.PROMOTE_TO_PLATFORM}_PENDING`:
-    case `${TYPES.PROMOTE_TO_MAJOR}_PENDING`:
-    case `${TYPES.DEMOTE_FROM_PLATFORM}_PENDING`:
-    case `${TYPES.DEMOTE_FROM_MAJOR}_PENDING`: {
-      const { id, majorId } = action.payload.urlParams;
-      const path = majorId ? ['updatingMajorAdminsIds', String(majorId)] : ['updatingAdminsIds'];
-      return state.updateIn(path, ids => (ids ? ids.add(id) : new Set([id])));
+    case `${TYPES.PROMOTE}_PENDING`:
+    case `${TYPES.DEMOTE}_PENDING`: {
+      const { id, baseResourceId } = payload.urlParams;
+      return state
+        .updateIn(getUpdatingPath(baseResourceId), ids => (ids ? ids.add(id) : new Set([id])));
     }
-    case `${TYPES.PROMOTE_TO_PLATFORM}_FULFILLED`:
-    case `${TYPES.PROMOTE_TO_MAJOR}_FULFILLED`: {
-      const { id, majorId } = action.payload.request.urlParams;
-      const path = majorId ? ['updatingMajorAdminsIds', String(majorId)] : ['updatingAdminsIds'];
-      return getPagingFns(majorId)
-        .reducer
-        .addToPage(state, id, 1, majorId)
-        .updateIn(path, ids => ids.delete(id));
-    }
-    case `${TYPES.DEMOTE_FROM_PLATFORM}_FULFILLED`:
-    case `${TYPES.DEMOTE_FROM_MAJOR}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
-      const { id, majorId } = urlParams;
-      const path = majorId ? ['updatingMajorAdminsIds', String(majorId)] : ['updatingAdminsIds'];
-      return getPagingFns(majorId)
-        .reducer
-        .removeFromPage(state, urlParams)
-        .updateIn(path, ids => ids.delete(id));
+    case `${TYPES.PROMOTE}_FULFILLED`:
+    case `${TYPES.DEMOTE}_FULFILLED`: {
+      const pageAction = type.includes(TYPES.PROMOTE) ? 'addToPage' : 'removeFromPage';
+
+      const { urlParams } = payload.request;
+      const { baseResourceId, id } = urlParams;
+      return getPagingFns(payload)[pageAction](state, urlParams)
+        .updateIn(getUpdatingPath(baseResourceId), ids => ids.delete(id));
     }
     case `${USERS_TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = action.payload.request;
-      const fromMajors = majorsPagingFns.reducer.removeFromPage(state, urlParams);
-      return platformPagingFns.reducer.removeFromPage(fromMajors, urlParams);
+      const { urlParams } = payload.request;
+      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], urlParams);
     }
-    case TYPES.RESET_PAGINATION: {
-      const { majorId } = action.payload;
-      return getPagingFns(majorId).reducer.reset(state, majorId);
-    }
+    case TYPES.RESET_PAGINATION:
+      return getPagingFns(payload).reset(state, payload.baseResourceId);
     default:
       return state;
   }
@@ -168,9 +153,6 @@ export const getSelectedUserEntity = createSelector(
   getEntities,
   (userId, entities) => denormalize(userId, usersSchema, entities),
 );
-
-const getUserId = (state, params) => params.userId;
-const getMajorId = (state, params) => params.majorId;
 
 const getUpdatingAdminsIds = createSelector(
   getAdminsData,

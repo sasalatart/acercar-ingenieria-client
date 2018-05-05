@@ -2,15 +2,16 @@ import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import keyMirror from 'keymirror';
 import { getLocale } from './i18n';
-import pagingFnsFactory from './paginations';
+import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
 import messages from '../../i18n/messages';
 import { notificationsSchema } from '../../schemas';
 
 export const collection = 'notifications';
+export const suffixes = keyMirror({ seen: null, pending: null });
 const commonArgs = [collection, notificationsSchema];
 
-const pendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'seen' });
-const seenPagingFns = pagingFnsFactory(...commonArgs, { suffix: 'pending' });
+const pendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.seen });
+const seenPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.pending });
 
 const INITIAL_STATE = new Map({
   count: 0,
@@ -18,14 +19,6 @@ const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({}),
   }),
-});
-
-export function getPagingFns(seen) {
-  return seen ? seenPagingFns : pendingPagingFns;
-}
-
-export const NOTIFICATION_TYPES = keyMirror({
-  success: null, info: null, warning: null, error: null, open: null,
 });
 
 export const TYPES = {
@@ -36,16 +29,22 @@ export const TYPES = {
   DISPLAY: 'notifications/DISPLAY',
 };
 
-export function loadNotifications(page = 1, seen) {
-  const suffix = seen ? 'seen' : 'pending';
+export const getPagingFns = prepareGetPagingFns(({ suffix }) => (
+  suffix === suffixes.seen ? seenPagingFns : pendingPagingFns
+));
 
+export function getSuffix(seen) {
+  return seen ? suffixes.seen : suffixes.pending;
+}
+
+export function loadNotifications(page = 1, seen) {
   return {
     type: seen ? TYPES.LOAD_SEEN : TYPES.LOAD_UNSEEN,
     payload: {
       method: 'GET',
       url: seen ? '/notifications/seen' : '/notifications',
       query: { page },
-      urlParams: { collection, page, suffix },
+      urlParams: { collection, page, suffix: getSuffix(seen) },
       responseSchema: [notificationsSchema],
     },
   };
@@ -69,18 +68,15 @@ export function setNotificationsCount(data) {
   };
 }
 
-export default function notificationsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
+export default function notificationsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
     case `${TYPES.LOAD_SEEN}_FULFILLED`:
-    case `${TYPES.LOAD_UNSEEN}_FULFILLED`: {
-      return getPagingFns(action.type.includes(TYPES.LOAD_SEEN))
-        .reducer
-        .setPage(state, action.payload);
-    }
+    case `${TYPES.LOAD_UNSEEN}_FULFILLED`:
+      return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.LOAD_COUNT}_FULFILLED`:
-      return state.set('count', action.payload.count);
+      return state.set('count', payload.count);
     case TYPES.SET_COUNT: {
-      const { count, timestamp } = action.payload;
+      const { count, timestamp } = payload;
       return new Date(timestamp) > new Date(state.get('countTimestamp'))
         ? state.merge({ count, countTimestamp: timestamp })
         : state;
@@ -96,6 +92,10 @@ export const getNotificationsCount = createSelector(
   getNotificationsData,
   notificationsData => notificationsData.get('count'),
 );
+
+export const NOTIFICATION_TYPES = keyMirror({
+  success: null, info: null, warning: null, error: null, open: null,
+});
 
 function displayNotification(
   message,

@@ -12,13 +12,13 @@ import MajorAdmins from '../../../../components/Majors/Major/Admins';
 
 function mapStateToProps(state, ownProps) {
   const params = { ...getCollectionParams(ownProps.majorId), paged: true };
-  const pagingFns = getPagingFns(ownProps.majorId);
+  const pagingFns = getPagingFns(params, true).selectors;
 
-  const majorAdmins = pagingFns.selectors.getPagedEntities(state, params);
+  const majorAdmins = pagingFns.getPagedEntities(state, params);
 
   return {
     loading: isEmpty(majorAdmins) && getIsFetching(state, params),
-    pagination: pagingFns.selectors.getMeta(state, params),
+    pagination: pagingFns.getMeta(state, params),
     majorAdmins,
   };
 }

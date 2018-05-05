@@ -6,6 +6,7 @@ import { goToMajor } from './routes';
 import { getCurrentUserEntity } from './sessions';
 import { getEntities } from './entities';
 import { resourceSuccessNotification } from './notifications';
+import { getId } from './shared';
 
 export const collection = 'majors';
 
@@ -121,8 +122,6 @@ export default function majorsReducer(state = INITIAL_STATE, action) {
 }
 
 const getMajorsData = state => state.majors;
-
-const getId = (state, params) => params.id;
 
 const getActiveIds = createSelector(
   getMajorsData,
