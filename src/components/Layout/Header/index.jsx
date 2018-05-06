@@ -26,6 +26,7 @@ const styles = {
   innerUpperHeader: {
     display: 'flex',
     alignItems: 'center',
+    textDecoration: 'none',
   },
   logo: {
     height: '75px',
