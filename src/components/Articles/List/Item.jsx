@@ -57,11 +57,10 @@ function renderActions(adminOrMajorAdmin, article) {
   return actions;
 }
 
-function renderExtra(picture) {
-  const imageSrc = picture ? picture.medium : articlePlaceholder;
+function renderExtra(previewUrl) {
   return (
     <Hideable breakpoint={breakpointsKeys.xs} style={styles.imageWrapper}>
-      <img alt="summary-logo" src={imageSrc} style={styles.image} />
+      <img alt="summary-logo" src={previewUrl || articlePlaceholder} style={styles.image} />
     </Hideable>
   );
 }
@@ -94,7 +93,7 @@ function ArticleListItem({
   intl: { formatMessage: t },
 }) {
   const actions = renderActions(adminOrMajorAdmin, article);
-  const extra = renderExtra(article.picture);
+  const extra = renderExtra(article.previewUrl);
 
   return (
     <Item actions={actions} extra={extra}>

@@ -8,13 +8,10 @@ export const imageShape = PropTypes.shape({
 
 export const attachmentShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
-  attachableType: PropTypes.string.isRequired,
-  attachableId: PropTypes.number.isRequired,
-  documentFileName: PropTypes.string.isRequired,
-  documentContentType: PropTypes.string.isRequired,
-  documentFileSize: PropTypes.number.isRequired,
   url: PropTypes.string.isRequired,
-  createdAt: PropTypes.string.isRequired,
+  filename: PropTypes.string.isRequired,
+  contentType: PropTypes.string.isRequired,
+  byteSize: PropTypes.number.isRequired,
 });
 
 export const announcementShape = PropTypes.shape({
@@ -101,7 +98,6 @@ export const questionShape = PropTypes.shape({
 export const articleShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  picture: imageShape,
   shortDescription: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   author: userSummaryShape.isRequired,
@@ -109,6 +105,8 @@ export const articleShape = PropTypes.shape({
   categoryList: PropTypes.arrayOf(PropTypes.string),
   likesCount: PropTypes.number.isRequired,
   commentsCount: PropTypes.number.isRequired,
+  previewUrl: PropTypes.string,
+  attachments: PropTypes.arrayOf(attachmentShape),
   createdAt: PropTypes.string.isRequired,
 });
 
@@ -179,6 +177,7 @@ export const discussionShape = PropTypes.shape({
   commentsCount: PropTypes.number.isRequired,
   likesCount: PropTypes.number.isRequired,
   likedByCurrentUser: PropTypes.bool.isRequired,
+  attachments: PropTypes.arrayOf(attachmentShape),
   createdAt: PropTypes.string.isRequired,
 });
 

@@ -9,7 +9,6 @@ import {
   RichTextField,
   SelectField,
   TagsField,
-  ImageField,
   FilesField,
   SubmitButton,
 } from '../Forms';
@@ -34,10 +33,9 @@ export default class ArticleForm extends Component {
     validators: PropTypes.shape({}).isRequired,
     loading: PropTypes.bool.isRequired,
     noData: PropTypes.bool.isRequired,
-    articleId: PropTypes.number,
+    id: PropTypes.number,
     majorOptions: PropTypes.arrayOf(optionShape).isRequired,
     categoryOptions: PropTypes.arrayOf(optionShape).isRequired,
-    currentPictureURL: PropTypes.string.isRequired,
     previousAttachments: PropTypes.arrayOf(attachmentShape).isRequired,
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -48,7 +46,7 @@ export default class ArticleForm extends Component {
   }
 
   static defaultProps = {
-    articleId: undefined,
+    id: undefined,
   }
 
   componentDidMount() {
@@ -61,10 +59,9 @@ export default class ArticleForm extends Component {
       validators,
       loading,
       noData,
-      articleId,
+      id,
       majorOptions,
       categoryOptions,
-      currentPictureURL,
       previousAttachments,
       valid,
       submitting,
@@ -77,7 +74,7 @@ export default class ArticleForm extends Component {
     return (
       <div>
         <ActionBar />
-        <Title>{t({ id: `articles.${articleId ? 'edit' : 'new'}` })}</Title>
+        <Title>{t({ id: `articles.${id ? 'edit' : 'new'}` })}</Title>
 
         <form onSubmit={handleSubmit}>
           <Field
@@ -118,29 +115,15 @@ export default class ArticleForm extends Component {
             editorProps={{ placeholder: t({ id: 'forms.content' }) }}
             validate={validators.requiredRichText}
           />
-          <Row gutter={GUTTER}>
-            <Col {...COLUMN_LAYOUT}>
-              <div style={styles.fileInputWrapper}>
-                <Field
-                  name="picture"
-                  component={ImageField}
-                  imagePlaceholder={currentPictureURL}
-                  validate={[validators.image, validators.maxPictureSize]}
-                />
-              </div>
-            </Col>
-            <Col {...COLUMN_LAYOUT}>
-              <div style={styles.fileInputWrapper}>
-                <Field
-                  name="attachments_attributes"
-                  component={FilesField}
-                  previousAttachments={previousAttachments}
-                  instructions={t({ id: 'forms.dropzone' })}
-                  validate={validators.maxSizePerAttachment}
-                />
-              </div>
-            </Col>
-          </Row>
+          <div style={styles.fileInputWrapper}>
+            <Field
+              name="attachments"
+              component={FilesField}
+              previousAttachments={previousAttachments}
+              instructions={t({ id: 'forms.dropzone' })}
+              validate={validators.maxSizePerAttachment}
+            />
+          </div>
           <SubmitButton disabled={!valid || submitting} loading={submitting} />
         </form>
       </div>

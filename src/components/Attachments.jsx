@@ -19,7 +19,7 @@ function renderItem(attachment) {
   return (
     <Item style={styles.item}>
       <Icon type="paper-clip" style={styles.icon} />
-      <a href={attachment.url} target="_blank">{attachment.documentFileName}</a>
+      <a href={attachment.url} target="_blank">{attachment.filename}</a>
     </Item>
   );
 }

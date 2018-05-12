@@ -71,7 +71,7 @@ export const maxSizePerAttachment = (message, maxSize) => (value) => {
   if (!value) return undefined;
 
   return value
-    .filter(({ _delete }) => !_delete)
+    .filter(({ _destroy }) => !_destroy)
     .find(({ size }) => size > maxSize) ? message : undefined;
 };
 

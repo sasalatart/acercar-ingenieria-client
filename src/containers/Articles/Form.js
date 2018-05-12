@@ -19,10 +19,10 @@ import {
   getArticleEntity,
 } from '../../store/ducks/articles';
 import { getIsFetching } from '../../store/ducks/loading';
-import articlePlaceholder from '../../images/article.png';
 import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
 import articlesValidations from '../../validations/articles';
+import { processAttachableFormValues } from '../../lib/attachments';
 
 const FIELDS = [
   'title', 'shortDescription', 'content', 'categoryList', 'majorId',
@@ -50,11 +50,10 @@ function mapStateToProps(state, ownProps) {
   return {
     id,
     loading,
-    noData: !loading && ownProps.articleId,
+    noData: !loading && !!params.id && !article,
     initialValues: getInitialValues(id, majorId, article),
     majorOptions,
     categoryOptions,
-    currentPictureURL: get(article, 'picture.medium', articlePlaceholder),
     previousAttachments: get(article, 'attachments', []),
   };
 }
@@ -69,10 +68,11 @@ const form = reduxForm({
   enableReinitialize: true,
   onSubmit: (values, dispatch, props) => {
     const { id } = props.match.params;
+    const finalValues = processAttachableFormValues(values);
 
     const action = id
-      ? updateArticle(id, values, values.majorId)
-      : createArticle(values, values.majorId);
+      ? updateArticle(id, finalValues, finalValues.majorId)
+      : createArticle(finalValues, finalValues.majorId);
 
     return dispatch(action);
   },

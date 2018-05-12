@@ -22,22 +22,7 @@ function getFileKeys(body) {
 }
 
 function buildFormData(payload, params, fileKeys) {
-  const initialData = omit(params.body, fileKeys);
-
-  fileKeys.forEach((fileKey) => {
-    if (payload.body[fileKey] instanceof File) {
-      return;
-    }
-
-    payload.body[fileKey].forEach((file, index) => {
-      // eslint-disable-next-line no-underscore-dangle
-      if (!file._destroy) return;
-      initialData[fileKey] = initialData[fileKey] || {};
-      initialData[fileKey][index] = file;
-    });
-  });
-
-  const formData = objectToFormData(initialData);
+  const formData = objectToFormData(omit(params.body, fileKeys));
 
   fileKeys.forEach((fileKey) => {
     if (payload.body[fileKey] instanceof File) {
@@ -45,11 +30,9 @@ function buildFormData(payload, params, fileKeys) {
       return;
     }
 
-    payload.body[fileKey]
-      .filter(({ _destroy }) => !_destroy)
-      .forEach((file, index) => {
-        formData.append(`${fileKey}[${index}][document]`, file);
-      });
+    payload.body[fileKey].forEach((file) => {
+      formData.append(`${fileKey}[]`, file);
+    });
   });
 
   return formData;

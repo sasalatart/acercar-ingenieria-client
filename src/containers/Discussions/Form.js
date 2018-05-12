@@ -16,6 +16,7 @@ import withAuthorization from '../../hoc/WithAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import DiscussionForm from '../../components/Discussions/Form';
 import discussionsValidations from '../../validations/discussions';
+import { processAttachableFormValues } from '../../lib/attachments';
 
 const FIELDS = [
   'title', 'pinned', 'description', 'tagList',
@@ -56,10 +57,11 @@ const form = reduxForm({
   form: 'discussion',
   onSubmit: (values, dispatch, props) => {
     const { id } = props.match.params;
+    const finalValues = processAttachableFormValues(values);
 
     const action = id
-      ? updateDiscussion(id, values)
-      : createDiscussion(values);
+      ? updateDiscussion(id, finalValues)
+      : createDiscussion(finalValues);
 
     return dispatch(action);
   },

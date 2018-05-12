@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Divider } from 'antd';
 import Linkify from 'react-linkify';
-import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import ActionBar from '../../../containers/Articles/Article/ActionBar';
 import Title from '../../Layout/Title';
@@ -59,7 +58,7 @@ function Article({ article }) {
         <Col sm={6}>
           <div style={styles.mediaContainer}>
             <img
-              src={get(article.picture, 'medium', articlePlaceholder)}
+              src={article.previewUrl || articlePlaceholder}
               alt="article-logo"
               style={styles.picture}
             />

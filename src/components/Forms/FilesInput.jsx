@@ -36,10 +36,10 @@ class FilesInput extends Component {
     activeFiles: [],
     destroyedFiles: [],
     previousFiles: this.props.previousAttachments
-      .map(({ id, documentFileName, documentFileSize }) => ({
+      .map(({ id, filename, byteSize }) => ({
         id,
-        name: documentFileName,
-        size: documentFileSize,
+        name: filename,
+        size: byteSize,
       })),
   };
 

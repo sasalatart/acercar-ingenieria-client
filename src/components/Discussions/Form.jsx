@@ -135,7 +135,7 @@ export default class DiscussionForm extends Component {
           </div>
           <div style={styles.fileInputWrapper}>
             <Field
-              name="attachments_attributes"
+              name="attachments"
               component={FilesField}
               previousAttachments={previousAttachments}
               instructions={t({ id: 'forms.dropzone' })}
