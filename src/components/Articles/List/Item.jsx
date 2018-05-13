@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { List } from 'antd';
+import { List, Icon } from 'antd';
 import Linkify from 'react-linkify';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/LikeButton';
@@ -10,7 +10,8 @@ import Author from '../../Author';
 import TagList from '../../TagList';
 import IconText from '../../IconText';
 import Hideable from '../../Layout/Hideable';
-import ArticleLink from '../../Articles/Article/Link';
+import ArticleLink from '../Article/Link';
+import MajorLink from '../../Majors/Major/Link';
 import { articleShape } from '../../../shapes';
 import { themeStyles, breakpointsKeys } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
@@ -22,11 +23,22 @@ const styles = {
   shortDescription: themeStyles.justifiedTextContainer,
   imageWrapper: {
     display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    width: '200px',
   },
   image: {
     height: '150px',
+  },
+  majorContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '8px',
+  },
+  majorIcon: {
+    fontSize: '20px',
+    marginRight: '5px',
   },
 };
 
@@ -89,6 +101,7 @@ function renderShortDescription(id, shortDescription, t) {
 function ArticleListItem({
   adminOrMajorAdmin,
   article,
+  displayMajor,
   onTagClick,
   intl: { formatMessage: t },
 }) {
@@ -98,6 +111,12 @@ function ArticleListItem({
   return (
     <Item actions={actions} extra={extra}>
       {renderMeta(article, t)}
+      {displayMajor &&
+        <span style={styles.majorContainer}>
+          <Icon type="pushpin" style={styles.majorIcon} />
+          <MajorLink id={article.majorId}>{article.majorSummary.name}</MajorLink>
+        </span>
+      }
       {article.categoryList.length > 0 &&
         <TagList tags={article.categoryList} onTagClick={onTagClick} withIcon />
       }
@@ -109,6 +128,7 @@ function ArticleListItem({
 ArticleListItem.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   article: articleShape.isRequired,
+  displayMajor: PropTypes.bool.isRequired,
   onTagClick: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };

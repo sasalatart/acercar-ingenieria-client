@@ -12,6 +12,7 @@ const styles = {
   },
   icon: {
     fontSize: '20px',
+    marginRight: '5px',
   },
 };
 

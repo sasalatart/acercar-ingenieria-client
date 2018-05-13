@@ -27,7 +27,11 @@ export default class ArticlesList extends Component {
   }
 
   renderListItem = article => (
-    <ListItem article={article} onTagClick={this.props.onTagClick} />
+    <ListItem
+      article={article}
+      displayMajor={!this.props.majorId && !!article.majorSummary}
+      onTagClick={this.props.onTagClick}
+    />
   )
 
   render() {

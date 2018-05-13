@@ -11,8 +11,8 @@ import {
 import { getIsFetching } from '../../../store/ducks/loading';
 import ArticlesList from '../../../components/Articles/List';
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...getCollectionParams(ownProps.majorId), paged: true };
+function mapStateToProps(state, { majorId }) {
+  const params = { ...getCollectionParams(majorId), paged: true };
   const pagingFns = getPagingFns(params, true).selectors;
 
   const articles = pagingFns.getPagedEntities(state, params);
@@ -34,7 +34,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ArticlesList));
+const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(ArticlesList);
+export default injectIntl(connectedComponent);
