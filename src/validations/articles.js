@@ -8,7 +8,7 @@ import {
 } from './validators';
 
 const MAX_SHORT_DESCRIPTION_LENGTH = 300;
-const MAX_PICTURE_SIZE_IN_MB = 1;
+const MAX_PREVIEW_SIZE_IN_MB = 2;
 const MAX_ATTACHMENT_SIZE_IN_MB = 5;
 
 export default t => ({
@@ -21,9 +21,9 @@ export default t => ({
     MAX_SHORT_DESCRIPTION_LENGTH,
   ),
 
-  maxPictureSize: maxFileSize(
-    t({ id: 'validations.maxFileSize' }, { size: MAX_PICTURE_SIZE_IN_MB }),
-    MAX_PICTURE_SIZE_IN_MB * 1024 * 1024,
+  maxPreviewSize: maxFileSize(
+    t({ id: 'validations.maxFileSize' }, { size: MAX_PREVIEW_SIZE_IN_MB }),
+    MAX_PREVIEW_SIZE_IN_MB * 1024 * 1024,
   ),
 
   maxSizePerAttachment: maxSizePerAttachment(

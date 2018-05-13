@@ -9,6 +9,7 @@ import {
   RichTextField,
   SelectField,
   TagsField,
+  ImageField,
   FilesField,
   SubmitButton,
 } from '../Forms';
@@ -26,7 +27,6 @@ const styles = {
 };
 
 const GUTTER = 8;
-const COLUMN_LAYOUT = { sm: 24, lg: 12 };
 
 export default class ArticleForm extends Component {
   static propTypes = {
@@ -36,6 +36,7 @@ export default class ArticleForm extends Component {
     id: PropTypes.number,
     majorOptions: PropTypes.arrayOf(optionShape).isRequired,
     categoryOptions: PropTypes.arrayOf(optionShape).isRequired,
+    currentPreviewURL: PropTypes.string.isRequired,
     previousAttachments: PropTypes.arrayOf(attachmentShape).isRequired,
     valid: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -62,6 +63,7 @@ export default class ArticleForm extends Component {
       id,
       majorOptions,
       categoryOptions,
+      currentPreviewURL,
       previousAttachments,
       valid,
       submitting,
@@ -80,32 +82,41 @@ export default class ArticleForm extends Component {
           <Field
             name="title"
             component={TextField}
-            placeholder={t({ id: 'forms.title' })}
+            label={t({ id: 'forms.title' })}
             validate={[validators.required]}
           />
-          <Field
-            name="shortDescription"
-            component={TextArea}
-            placeholder={t({ id: 'forms.shortDescription' })}
-            validate={[validators.required, validators.maxShortDescriptionLength]}
-          />
           <Row gutter={GUTTER}>
-            {majorOptions.length > 0 &&
-              <Col {...COLUMN_LAYOUT}>
+            <Col sm={24} md={8}>
+              <div style={styles.fileInputWrapper}>
+                <Field
+                  name="preview"
+                  component={ImageField}
+                  label={t({ id: 'forms.optionalPicture' })}
+                  imagePlaceholder={currentPreviewURL}
+                  validate={[validators.image, validators.maxPreviewSize]}
+                />
+              </div>
+            </Col>
+            <Col sm={24} md={16}>
+              {majorOptions.length > 0 &&
                 <Field
                   name="majorId"
                   component={SelectField}
                   label="Major"
                   options={majorOptions}
                 />
-              </Col>
-            }
-            <Col {...COLUMN_LAYOUT}>
+              }
               <Field
                 name="categoryList"
                 component={TagsField}
                 label={t({ id: 'categories' })}
                 options={categoryOptions}
+              />
+              <Field
+                name="shortDescription"
+                component={TextArea}
+                label={t({ id: 'forms.shortDescription' })}
+                validate={[validators.required, validators.maxShortDescriptionLength]}
               />
             </Col>
           </Row>

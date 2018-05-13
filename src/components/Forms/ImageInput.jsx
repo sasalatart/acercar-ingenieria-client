@@ -19,12 +19,14 @@ const styles = {
 
 export default class ImageInput extends Component {
   static propTypes = {
-    imagePlaceholder: PropTypes.string,
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
+    label: PropTypes.string,
+    imagePlaceholder: PropTypes.string,
     meta: fieldMetaShape.isRequired,
   };
 
   static defaultProps = {
+    label: undefined,
     imagePlaceholder: undefined,
   };
 
@@ -58,10 +60,11 @@ export default class ImageInput extends Component {
   }
 
   render() {
-    const { input, meta: { error } } = this.props;
+    const { input, label, meta: { error } } = this.props;
 
     return (
       <div style={styles.container}>
+        {label && <p>{label}</p>}
         <Upload
           listType="picture-card"
           fileList={input.value ? [input.value] : undefined}

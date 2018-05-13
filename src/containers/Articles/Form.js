@@ -19,6 +19,7 @@ import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
 import articlesValidations from '../../validations/articles';
 import { processAttachableFormValues } from '../../lib/attachments';
+import articlePlaceholder from '../../images/article.png';
 
 const FIELDS = [
   'title', 'shortDescription', 'content', 'categoryList', 'majorId',
@@ -52,6 +53,7 @@ function mapStateToProps(state, ownProps) {
     initialValues: getInitialValues(id, majorId, article),
     majorOptions,
     categoryOptions,
+    currentPreviewURL: get(article, 'previewUrl', articlePlaceholder),
     previousAttachments: get(article, 'attachments', []),
   };
 }
