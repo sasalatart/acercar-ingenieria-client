@@ -44,12 +44,12 @@ function MajorForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Row gutter={GUTTER}>
+      <Row gutter={GUTTER} type="flex" align="bottom">
         <Col {...COLUMN_LAYOUT}>
           <Field
             name="name"
             component={TextField}
-            placeholder={t({ id: 'forms.name' })}
+            label={t({ id: 'forms.name' })}
             validate={validators.required}
           />
         </Col>
@@ -68,13 +68,13 @@ function MajorForm({
       <Field
         name="shortDescription"
         component={TextArea}
-        placeholder={t({ id: 'forms.shortDescription' })}
+        label={t({ id: 'forms.shortDescription' })}
         validate={[validators.required, validators.maxShortDescriptionLength]}
       />
       <Field
         name="videoUrl"
         component={TextField}
-        placeholder={t({ id: 'forms.videoURL' })}
+        label={t({ id: 'forms.videoURL' })}
         validate={[validators.required, validators.videoUrl]}
       />
       <div style={styles.logoFieldWrapper}>
@@ -82,13 +82,14 @@ function MajorForm({
           name="logo"
           component={ImageField}
           imagePlaceholder={currentLogoURL}
+          label="Logo"
           validate={[validators.image, validators.maxLogoSize]}
         />
       </div>
       <Field
         name="description"
         component={RichTextField}
-        editorProps={{ placeholder: t({ id: 'forms.description' }) }}
+        label={t({ id: 'forms.description' })}
         validate={validators.requiredRichText}
       />
       <SubmitButton disabled={!valid || submitting} loading={submitting} />

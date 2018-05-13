@@ -44,14 +44,14 @@ function QuestionForm({
         <Field
           name="question"
           component={TextArea}
-          placeholder={t({ id: 'forms.question' })}
+          label={t({ id: 'forms.question' })}
           validate={[validators.required, validators.minLength, validators.maxQuestionLength]}
         />
         {adminOrMajorAdmin &&
           <Field
             name="answer"
             component={TextArea}
-            placeholder={t({ id: 'forms.answer' })}
+            label={t({ id: 'forms.answer' })}
             validate={[validators.minLength, validators.maxAnswerLength]}
           />
         }

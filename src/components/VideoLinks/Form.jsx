@@ -25,13 +25,13 @@ function VideosForm({
       <Field
         name="title"
         component={TextField}
-        placeholder={t({ id: 'forms.title' })}
+        label={t({ id: 'forms.title' })}
         validate={validators.required}
       />
       <Field
         name="url"
         component={TextField}
-        placeholder="URL"
+        label="URL"
         validate={[validators.required, validators.url]}
       />
       <div style={styles.switchContainer}>

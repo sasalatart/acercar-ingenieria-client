@@ -61,4 +61,8 @@ export const themeStyles = {
     maxWidth: '200px',
     maxHeight: '200px',
   },
+  label: {
+    color: 'rgba(0, 0, 0, .85)',
+    cursor: 'default',
+  },
 };

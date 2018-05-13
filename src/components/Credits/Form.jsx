@@ -25,25 +25,26 @@ function CreditsForm({
         <Field
           name="resourceName"
           component={TextField}
-          placeholder={t({ id: 'forms.resourceName' })}
+          label={t({ id: 'forms.resourceName' })}
           validate={validators.required}
         />
         <Field
           name="resourceUrl"
           component={TextField}
-          placeholder={t({ id: 'forms.resourceUrl' })}
+          label={t({ id: 'forms.resourceUrl' })}
           validate={[validators.required, validators.resourceUrl]}
         />
         <Field
           name="authorName"
           component={TextField}
-          placeholder={t({ id: 'forms.authorName' })}
+          label={t({ id: 'forms.authorName' })}
           validate={validators.required}
         />
         <Field
           name="resource"
           component={ImageField}
           imagePlaceholder={currentResourceURL}
+          label={t({ id: 'forms.picture' })}
           validate={resourceValidators}
         />
         <SubmitButton disabled={!valid || submitting} loading={submitting} />

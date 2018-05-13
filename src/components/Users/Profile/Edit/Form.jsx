@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Alert, Icon, Row, Col } from 'antd';
+import { Alert, Row, Col } from 'antd';
 import {
   TextField,
   NumberField,
@@ -29,11 +29,6 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
   },
-};
-
-const fieldIcons = {
-  email: <Icon type="user" style={styles.fieldPrefix} />,
-  password: <Icon type="lock" style={styles.fieldPrefix} />,
 };
 
 const GUTTER = 8;
@@ -112,8 +107,7 @@ export default class ProfileEditForm extends Component {
               <Field
                 name="email"
                 component={TextField}
-                placeholder="e-mail"
-                prefix={fieldIcons.email}
+                label="e-mail"
                 validate={[validators.required, validators.pucEmail]}
                 onChange={this.checkEmailChanged}
               />
@@ -122,7 +116,7 @@ export default class ProfileEditForm extends Component {
               <Field
                 name="generation"
                 component={NumberField}
-                placeholder={t({ id: 'forms.generation' })}
+                label={t({ id: 'forms.generation' })}
                 validate={[validators.required, validators.isBetweenYears]}
                 style={styles.generationInput}
               />
@@ -133,7 +127,7 @@ export default class ProfileEditForm extends Component {
               <Field
                 name="firstName"
                 component={TextField}
-                placeholder={t({ id: 'forms.firstName' })}
+                label={t({ id: 'forms.firstName' })}
                 validate={[validators.required, validators.maxNameLength]}
               />
             </Col>
@@ -141,7 +135,7 @@ export default class ProfileEditForm extends Component {
               <Field
                 name="lastName"
                 component={TextField}
-                placeholder={t({ id: 'forms.lastName' })}
+                label={t({ id: 'forms.lastName' })}
                 validate={[validators.required, validators.maxNameLength]}
               />
             </Col>
@@ -149,7 +143,7 @@ export default class ProfileEditForm extends Component {
           <Field
             name="bio"
             component={TextArea}
-            placeholder="Bio"
+            label="Bio"
             validate={validators.maxBioLength}
           />
           <Field
@@ -164,6 +158,7 @@ export default class ProfileEditForm extends Component {
               name="avatar"
               component={ImageField}
               imagePlaceholder={currentAvatarURL}
+              label="Avatar"
               validate={[validators.image, validators.maxAvatarSize]}
             />
           </div>

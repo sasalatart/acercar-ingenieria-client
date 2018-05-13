@@ -29,10 +29,12 @@ class RichTextInput extends Component {
   static propTypes = {
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
     meta: fieldMetaShape.isRequired,
+    label: PropTypes.string,
     editorProps: PropTypes.shape({}),
   };
 
   static defaultProps = {
+    label: undefined,
     editorProps: {},
   }
 
@@ -51,10 +53,11 @@ class RichTextInput extends Component {
   }
 
   render() {
-    const { editorProps, meta: { error } } = this.props;
+    const { label, editorProps, meta: { error } } = this.props;
 
     return (
       <div>
+        {label && <p style={themeStyles.label}>{label}:</p>}
         <div style={styles.editorWrapper}>
           <Editor
             editorState={this.state.editorState}

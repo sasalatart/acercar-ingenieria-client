@@ -64,7 +64,7 @@ export default class ImageInput extends Component {
 
     return (
       <div style={styles.container}>
-        {label && <p>{label}</p>}
+        {label && <p style={themeStyles.label}>{label}:</p>}
         <Upload
           listType="picture-card"
           fileList={input.value ? [input.value] : undefined}

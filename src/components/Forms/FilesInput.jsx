@@ -29,7 +29,12 @@ class FilesInput extends Component {
     previousAttachments: PropTypes.arrayOf(attachmentShape).isRequired,
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
     meta: fieldMetaShape.isRequired,
+    label: PropTypes.string,
     instructions: PropTypes.string.isRequired,
+  };
+
+  static defaultProps = {
+    label: undefined,
   };
 
   state = {
@@ -96,10 +101,11 @@ class FilesInput extends Component {
   }
 
   render() {
-    const { instructions, meta: { error } } = this.props;
+    const { label, instructions, meta: { error } } = this.props;
 
     return (
       <div>
+        {label && <p style={themeStyles.label}>{label}:</p>}
         {this.renderAddedFiles()}
         <Dropzone onDrop={this.handleOnDrop} style={styles.dropzone}>
           <p>{instructions}</p>

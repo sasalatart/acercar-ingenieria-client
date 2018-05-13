@@ -123,7 +123,7 @@ export default class ArticleForm extends Component {
           <Field
             name="content"
             component={RichTextField}
-            editorProps={{ placeholder: t({ id: 'forms.content' }) }}
+            label={t({ id: 'forms.content' })}
             validate={validators.requiredRichText}
           />
           <div style={styles.fileInputWrapper}>
@@ -132,6 +132,7 @@ export default class ArticleForm extends Component {
               component={FilesField}
               previousAttachments={previousAttachments}
               instructions={t({ id: 'forms.dropzone' })}
+              label={t({ id: 'forms.attachments' })}
               validate={validators.maxSizePerAttachment}
             />
           </div>

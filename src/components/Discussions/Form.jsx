@@ -63,7 +63,7 @@ export default class DiscussionForm extends Component {
       <Field
         name="title"
         component={TextField}
-        placeholder={t({ id: 'forms.title' })}
+        label={t({ id: 'forms.title' })}
         validate={[
           validators.required,
           validators.minTitleLength,
@@ -77,7 +77,7 @@ export default class DiscussionForm extends Component {
     }
 
     return (
-      <Row gutter={8}>
+      <Row gutter={8} type="flex" align="middle">
         <Col sm={24} md={20}>
           {titleField}
         </Col>
@@ -121,7 +121,7 @@ export default class DiscussionForm extends Component {
           <Field
             name="description"
             component={RichTextField}
-            editorProps={{ placeholder: t({ id: 'forms.content' }) }}
+            label={t({ id: 'forms.content' })}
             validate={validators.requiredRichText}
           />
           <div style={styles.tagsInputWrapper}>
@@ -139,6 +139,7 @@ export default class DiscussionForm extends Component {
               component={FilesField}
               previousAttachments={previousAttachments}
               instructions={t({ id: 'forms.dropzone' })}
+              label={t({ id: 'forms.attachments' })}
               validate={validators.maxSizePerAttachment}
             />
           </div>

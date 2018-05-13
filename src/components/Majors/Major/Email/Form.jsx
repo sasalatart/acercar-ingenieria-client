@@ -21,14 +21,14 @@ function EmailForm({
         name="subject"
         component={TextField}
         disabled={submitting}
-        placeholder={t({ id: 'forms.subject' })}
+        label={t({ id: 'forms.subject' })}
         validate={[validators.required, validators.maxLength]}
       />
       <Field
         name="body"
         component={RichTextField}
         disabled={submitting}
-        placeholder={t({ id: 'forms.content' })}
+        label={t({ id: 'forms.content' })}
         validate={validators.requiredRichText}
       />
       <SubmitButton disabled={!valid || submitting} loading={submitting} />
