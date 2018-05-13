@@ -58,7 +58,7 @@ export function createVideoLink(values, baseResourceName, baseResourceId) {
         responseSchema: videoLinksSchema,
       },
     }).then(({ value: { result } }) => {
-      const pagingFns = getPagingFns({ baseResourceName });
+      const pagingFns = getPagingFns({ baseResourceName }, true);
       dispatch(pagingFns.actions.addToPagination(TYPES.ADD_TO_PAGINATION, result, baseResourceId));
     });
 }
