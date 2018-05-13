@@ -4,19 +4,15 @@ import get from 'lodash/get';
 import pick from 'lodash/pick';
 import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
-import {
-  loadMajors,
-  getCurrentUserMajorOptions,
-} from '../../store/ducks/majors';
-import {
-  loadCategories,
-  getCategoryOptions,
-} from '../../store/ducks/categories';
+import { getMajorOptionsForCurrentUser } from '../../store/ducks/sessions';
+import { loadMajors } from '../../store/ducks/majors';
+import { loadCategories, getCategoryOptions } from '../../store/ducks/categories';
 import {
   collection,
   createArticle,
   updateArticle,
   getArticleEntity,
+  getMajorOptionsForArticle,
 } from '../../store/ducks/articles';
 import { getIsFetching } from '../../store/ducks/loading';
 import I18nForm from '../../hoc/I18nForm';
@@ -43,7 +39,9 @@ function mapStateToProps(state, ownProps) {
   const majorId = params.majorId && +params.majorId;
 
   const article = getArticleEntity(state, params);
-  const majorOptions = getCurrentUserMajorOptions(state);
+  const majorOptions = article
+    ? getMajorOptionsForArticle(state, params)
+    : getMajorOptionsForCurrentUser(state);
   const categoryOptions = getCategoryOptions(state);
   const loading = (id && getIsFetching(state, params)) || !categoryOptions.length;
 

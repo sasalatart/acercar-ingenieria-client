@@ -13,6 +13,7 @@ import ROUTES, {
   goToSignIn,
   goToProfile,
 } from './routes';
+import { getMajorOptions } from './majors';
 
 const BASE_CLIENT_URL = process.env.REACT_APP_CLIENT_URL || 'http://localhost:3000';
 
@@ -225,4 +226,15 @@ export const getCanCreateArticles = createSelector(
   getIsLoggedIn,
   (majorId, interestedInMajor, loggedIn) =>
     loggedIn && (!majorId || interestedInMajor),
+);
+
+export const getMajorOptionsForCurrentUser = createSelector(
+  getCurrentUserEntity,
+  getMajorOptions,
+  (currentUser, allMajorOptions) => {
+    if (currentUser.admin) return allMajorOptions;
+
+    return currentUser.majorsOfInterest
+      .map(({ majorId, name }) => ({ key: majorId, value: majorId, label: name }));
+  },
 );

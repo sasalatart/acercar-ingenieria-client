@@ -1,12 +1,14 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
+import find from 'lodash/find';
 import { getEntities } from './entities';
 import pagingFnsFactory, {
   prepareGetPagingFns,
   removeFromAllPages,
   resetPaginationActionFactory,
 } from './paginations';
+import { getMajorOptionsForCurrentUser } from './sessions';
 import { goToArticle } from './routes';
 import { getId } from './shared';
 import { articlesSchema } from '../../schemas';
@@ -133,6 +135,19 @@ export const getArticleEntity = createSelector(
   getId,
   getEntities,
   (articleId, entities) => denormalize(articleId, articlesSchema, entities),
+);
+
+export const getMajorOptionsForArticle = createSelector(
+  getMajorOptionsForCurrentUser,
+  getArticleEntity,
+  (majorOptions, articleEntity) => {
+    if (!articleEntity.majorId || find(majorOptions, { value: articleEntity.majorId })) {
+      return majorOptions;
+    }
+
+    const { majorSummary: { id, name } } = articleEntity;
+    return majorOptions.concat({ key: id, value: id, label: name });
+  },
 );
 
 export function getArticleIdFromProps(props) {
