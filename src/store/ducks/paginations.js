@@ -23,8 +23,8 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
   const getData = state => state[resourceName];
   const getParamsPage = (state, params = {}) => params.page;
   const getBaseResourceId = (state, params = {}) => params.baseResourceId;
-  const getPagingPath = baseResourceId => compact([...pagingPath, baseResourceId]);
-  const getMetaPath = baseResourceId => compact([...metaPath, baseResourceId]);
+  const getPagingPath = baseResourceId => compact([...pagingPath, baseResourceName && baseResourceId]);
+  const getMetaPath = baseResourceId => compact([...metaPath, baseResourceName && baseResourceId]);
 
   const getPagedIds = createSelector(
     getBaseResourceId,
