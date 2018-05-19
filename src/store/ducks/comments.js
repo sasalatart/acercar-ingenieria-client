@@ -6,8 +6,8 @@ import { updateEntity, getEntities } from './entities';
 import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
 import { getId } from './shared';
 import { commentsSchema } from '../../schemas';
+import { commentsCollection as collection } from '../../lib/collections';
 
-export const collection = 'comments';
 const commonArgs = [collection, commentsSchema];
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 const articlesPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'articles' });
@@ -49,7 +49,7 @@ export function loadComments(baseResourceName, baseResourceId, page = 1) {
       method: 'GET',
       url: `/${baseResourceName}/${baseResourceId}/comments`,
       query: { page },
-      urlParams: {
+      fetchParams: {
         collection, page, baseResourceName, baseResourceId,
       },
       responseSchema: [commentsSchema],
@@ -65,7 +65,7 @@ export function loadComment(id, baseResourceName, baseResourceId) {
     payload: {
       method: 'GET',
       url: `${urlPrefix}/comments/${id}`,
-      urlParams: {
+      fetchParams: {
         baseResourceName, baseResourceId, collection, id,
       },
       responseSchema: commentsSchema,
@@ -80,7 +80,7 @@ export function createComment(body, baseResourceName, baseResourceId, reverseLis
       payload: {
         method: 'POST',
         url: `/${baseResourceName}/${baseResourceId}/comments`,
-        urlParams: { collection, baseResourceName, baseResourceId },
+        fetchParams: { collection, baseResourceName, baseResourceId },
         body,
         responseSchema: commentsSchema,
       },
@@ -109,7 +109,7 @@ export function updateComment(id, body, baseResourceName, baseResourceId) {
     payload: {
       method: 'PUT',
       url: `/${baseResourceName}/${baseResourceId}/comments/${id}`,
-      urlParams: {
+      fetchParams: {
         collection, id, baseResourceName, baseResourceId,
       },
       body,
@@ -133,7 +133,7 @@ export function destroyComment(id, baseResourceName, baseResourceId) {
       payload: {
         method: 'DELETE',
         url: `/${baseResourceName}/${baseResourceId}/comments/${id}`,
-        urlParams: {
+        fetchParams: {
           collection, id, baseResourceName, baseResourceId,
         },
       },
@@ -146,7 +146,7 @@ export default function commentsReducer(state = INITIAL_STATE, { type, payload }
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`:
-      return getPagingFns(payload).removeFromPage(state, payload.request.urlParams);
+      return getPagingFns(payload).removeFromPage(state, payload.request.fetchParams);
     case TYPES.ADD_TO_PAGINATION:
       return getPagingFns(payload).addToPage(state, payload);
     default:

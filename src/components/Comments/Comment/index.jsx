@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { intlShape } from 'react-intl';
 import { Icon, Divider } from 'antd';
 import MainContent from './MainContent';
@@ -38,7 +38,7 @@ export default class Comment extends Component {
     const { editing } = this.state;
 
     return (
-      <div>
+      <Fragment>
         <ActionBar comment={comment} />
         <Title>{t({ id: 'comment' })}</Title>
 
@@ -57,10 +57,11 @@ export default class Comment extends Component {
         <CommentsSection
           baseResourceName="comments"
           baseResourceId={comment.id}
+          disabled={!comment.approvedCommentable}
           reverseList
           answers
         />
-      </div>
+      </Fragment>
     );
   }
 }

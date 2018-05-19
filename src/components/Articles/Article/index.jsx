@@ -1,5 +1,11 @@
-import React from 'react';
-import { Row, Col, Divider } from 'antd';
+import React, { Fragment } from 'react';
+import { intlShape } from 'react-intl';
+import {
+  Alert,
+  Row,
+  Col,
+  Divider,
+} from 'antd';
 import Linkify from 'react-linkify';
 import isEmpty from 'lodash/isEmpty';
 import ActionBar from '../../../containers/Articles/Article/ActionBar';
@@ -32,26 +38,9 @@ const styles = {
   picture: themeStyles.mediumImage,
 };
 
-function Article({ article }) {
-  const { majorSummary } = article;
-
+function renderContent(article) {
   return (
-    <div>
-      <ActionBar article={article} />
-      <Title>{article.title}</Title>
-
-      {majorSummary &&
-        <SubTitle>
-          <MajorLink id={majorSummary.id}>{majorSummary.name}</MajorLink>
-        </SubTitle>
-      }
-
-      {article.categoryList.length > 0 &&
-        <div style={styles.tagsContainer}>
-          <TagList tags={article.categoryList} />
-        </div>
-      }
-
+    <Fragment>
       <Divider />
 
       <Row gutter={24}>
@@ -85,13 +74,52 @@ function Article({ article }) {
       }
 
       <Divider />
-      <CommentsSection baseResourceName="articles" baseResourceId={article.id} />
-    </div>
+      <CommentsSection
+        baseResourceName="articles"
+        baseResourceId={article.id}
+        disabled={!article.approved}
+      />
+    </Fragment>
+  );
+}
+
+function Article({ article, intl: { formatMessage: t } }) {
+  const { majorSummary } = article;
+
+  return (
+    <Fragment>
+      <ActionBar article={article} />
+      <Title>{article.title}</Title>
+
+      {majorSummary &&
+        <SubTitle>
+          <MajorLink id={majorSummary.id}>{majorSummary.name}</MajorLink>
+        </SubTitle>
+      }
+
+      {article.categoryList.length > 0 &&
+        <div style={styles.tagsContainer}>
+          <TagList tags={article.categoryList} />
+        </div>
+      }
+
+      {!article.approved &&
+        <Alert
+          type="warning"
+          message={t({ id: 'articles.approvalPending.message' })}
+          description={t({ id: 'articles.approvalPending.description' })}
+          showIcon
+        />
+      }
+
+      {renderContent(article)}
+    </Fragment>
   );
 }
 
 Article.propTypes = {
   article: articleShape.isRequired,
+  intl: intlShape.isRequired,
 };
 
 export default Article;

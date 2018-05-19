@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../../../containers/Pagination';
-import Notification from './Notification';
-import { paginationShape, notificationShape } from '../../../../shapes';
+import PaginationControls from '../../containers/Pagination';
+import Notification from '../../containers/Notifications/Notification';
+import { paginationShape, notificationShape } from '../../shapes';
 
 export default class NotificationsList extends Component {
   static propTypes = {

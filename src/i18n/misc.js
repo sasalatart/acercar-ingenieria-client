@@ -5,6 +5,8 @@ export default {
     attachments: 'Attached files',
     student: 'Student',
     submittedBy: 'Submitted by: ',
+    approve: 'Approve',
+    reject: 'Reject',
   },
   'es-ES': {
     goBack: 'Volver',
@@ -12,5 +14,7 @@ export default {
     attachments: 'Archivos adjuntos',
     student: 'Estudiante',
     submittedBy: 'Subido por: ',
+    approve: 'Aprobar',
+    reject: 'Rechazar',
   },
 };

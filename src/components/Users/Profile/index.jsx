@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import { userShape } from '../../../shapes';
 import ProfileInfo from './Info';
-import Notifications from './Notifications';
+import Notifications from '../../Notifications';
 import ProfileEdit from './Edit';
 import ChangePassword from './ChangePassword';
 import DataPlaceholder from '../../DataPlaceholder';

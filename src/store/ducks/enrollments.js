@@ -1,6 +1,5 @@
 import { updateEntity } from './entities';
-
-export const collection = 'enrollments';
+import { enrollmentsCollection as collection } from '../../lib/collections';
 
 const TYPES = {
   CREATE_ENROLLMENT: 'enrollments/CREATE_ENROLLMENT',
@@ -15,7 +14,7 @@ export function enrollingFactory(enrolling) {
         payload: {
           method: enrolling ? 'POST' : 'DELETE',
           url: `/${baseResourceName}/${baseResourceId}/enrollments`,
-          urlParams: { baseResourceName, baseResourceId, collection },
+          fetchParams: { baseResourceName, baseResourceId, collection },
         },
       }).then(() => {
         const updateFn = entity => ({

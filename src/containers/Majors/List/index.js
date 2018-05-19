@@ -2,13 +2,13 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import {
-  collection,
   loadMajors,
   getDisciplinaryMajors,
   getInterdisciplinaryMajors,
 } from '../../../store/ducks/majors';
 import { getIsFetching } from '../../../store/ducks/loading';
 import List from '../../../components/Majors/List';
+import { majorsCollection as collection } from '../../../lib/collections';
 
 function mapStateToProps(state) {
   const params = { collection, paged: true };

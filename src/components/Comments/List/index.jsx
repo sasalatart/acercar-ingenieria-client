@@ -10,7 +10,9 @@ export default class CommentsList extends Component {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
     comments: PropTypes.arrayOf(commentShape),
+    currentPage: PropTypes.number.isRequired,
     answeringDisabled: PropTypes.bool,
+    disabled: PropTypes.bool,
     loadComments: PropTypes.func.isRequired,
   }
 
@@ -18,6 +20,13 @@ export default class CommentsList extends Component {
     pagination: undefined,
     comments: [],
     answeringDisabled: false,
+    disabled: false,
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.disabled !== this.props.disabled) {
+      this.props.loadComments({ page: this.props.currentPage });
+    }
   }
 
   renderComments() {

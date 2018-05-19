@@ -4,8 +4,7 @@ import { denormalize } from 'normalizr';
 import { creditsSchema } from '../../schemas';
 import { getEntities } from './entities';
 import { getCreditId } from './shared';
-
-export const collection = 'credits';
+import { creditsCollection as collection } from '../../lib/collections';
 
 const INITIAL_STATE = new Map({
   activeIds: new OrderedSet(),
@@ -24,7 +23,7 @@ export function loadCredits() {
     payload: {
       method: 'GET',
       url: '/credits',
-      urlParams: { collection, page: 1 },
+      fetchParams: { collection, page: 1 },
       responseSchema: [creditsSchema],
     },
   };
@@ -36,7 +35,7 @@ export function createCredit(values) {
     payload: {
       method: 'POST',
       url: '/credits',
-      urlParams: { collection },
+      fetchParams: { collection },
       body: values,
       responseSchema: creditsSchema,
     },
@@ -49,7 +48,7 @@ export function updateCredit(id, values) {
     payload: {
       method: 'PUT',
       url: `/credits/${id}`,
-      urlParams: { id, collection },
+      fetchParams: { id, collection },
       body: values,
       responseSchema: creditsSchema,
     },
@@ -62,7 +61,7 @@ export function destroyCredit(id) {
     payload: {
       method: 'DELETE',
       url: `/credits/${id}`,
-      urlParams: { id, collection },
+      fetchParams: { id, collection },
     },
   };
 }
@@ -74,7 +73,7 @@ export default function creditsReducer(state = INITIAL_STATE, { type, payload })
     case `${TYPES.CREATE}_FULFILLED`:
       return state.update('activeIds', ids => ids.add(payload.result));
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { id } = payload.request.urlParams;
+      const { id } = payload.request.fetchParams;
       return state.update('activeIds', ids => ids.delete(id));
     }
     default:

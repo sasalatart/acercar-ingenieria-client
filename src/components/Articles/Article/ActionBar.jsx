@@ -4,6 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import DestroyButton from '../../../containers/DestroyButton';
 import LikeButton from '../../../containers/LikeButton';
 import EnrollButton from '../../../containers/EnrollButton';
+import ApprovalButton from '../../../containers/ApprovalButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import HideableButton from '../../HideableButton';
 import { articleShape } from '../../../shapes';
@@ -18,28 +19,31 @@ function ArticleActionBar({
     likedByCurrentUser,
     likesCount,
     enrolledByCurrentUser,
+    approved,
   },
   onDestroy,
   intl: { formatMessage: t },
 }) {
-  const actions = [
+  const articlesBaseResourceParams = { baseResourceName: 'articles', baseResourceId: id };
+  const majorsBaseResourceParams = { collection: 'articles', id, baseResourceId: majorId };
+
+  const approvedActions = [
     <LikeButton
       key="like"
-      baseResourceName="articles"
-      baseResourceId={id}
+      {...articlesBaseResourceParams}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
     <EnrollButton
       key="enroll"
-      baseResourceName="articles"
-      baseResourceId={id}
+      {...articlesBaseResourceParams}
       enrolledByCurrentUser={enrolledByCurrentUser}
     />,
   ];
+  const actions = approved ? approvedActions : [];
 
   if (adminOrMajorAdmin || isAuthor) {
-    const articleEditButton = (
+    const editButton = (
       <HideableButton
         key="edit"
         type="primary"
@@ -50,17 +54,16 @@ function ArticleActionBar({
       </HideableButton>
     );
 
-    const destroyButton = (
-      <DestroyButton
-        key="destroy"
-        collection="articles"
-        id={id}
-        baseResourceId={majorId}
-        callback={onDestroy}
-      />
+    const approvalButton = (
+      <ApprovalButton key="approval" {...majorsBaseResourceParams} approved={approved} />
     );
 
-    actions.push(articleEditButton);
+    const destroyButton = (
+      <DestroyButton key="destroy" {...majorsBaseResourceParams} callback={onDestroy} />
+    );
+
+    actions.push(editButton);
+    if (adminOrMajorAdmin) actions.push(approvalButton);
     actions.push(destroyButton);
   }
 

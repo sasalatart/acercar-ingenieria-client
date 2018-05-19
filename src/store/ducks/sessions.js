@@ -111,7 +111,7 @@ export function updateProfile(id, body) {
       payload: {
         method: 'PUT',
         url: `/users/${id}`,
-        urlParams: { collection: 'users', id },
+        fetchParams: { collection: 'users', id },
         body,
         responseSchema: usersSchema,
       },
@@ -144,7 +144,7 @@ export function destroyAccount() {
       payload: {
         method: 'DELETE',
         url: '/auth',
-        urlParams: { collection: 'auth' },
+        fetchParams: { collection: 'auth' },
       },
     }).then(() => {
       dispatch(resourceSuccessNotification('profile', 'destroyed'));

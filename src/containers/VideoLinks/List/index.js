@@ -1,14 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
-import {
-  collection,
-  loadVideoLinks,
-  getPagingFns,
-} from '../../../store/ducks/video-links';
+import { loadVideoLinks, getPagingFns } from '../../../store/ducks/video-links';
 import { getIsFetching } from '../../../store/ducks/loading';
 import VideoLinksList from '../../../components/VideoLinks/List';
 import { parseBaseResource } from '../../../routes';
+import { videoLinksCollection as collection } from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const params = { ...parseBaseResource(ownProps.match.params), collection, paged: true };

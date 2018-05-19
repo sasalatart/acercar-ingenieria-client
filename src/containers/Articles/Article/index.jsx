@@ -1,16 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
-import {
-  collection,
-  loadArticle,
-  getArticleEntity,
-} from '../../../store/ducks/articles';
+import { injectIntl } from 'react-intl';
+import { loadArticle, getArticleEntity } from '../../../store/ducks/articles';
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Article from '../../../components/Articles/Article';
 import ROUTES from '../../../routes';
 import { articleShape, matchShape } from '../../../shapes';
+import { articlesCollection as collection } from '../../../lib/collections';
 
 function ArticleWrapper(props) {
   const { article, match: { params } } = props;
@@ -52,4 +50,4 @@ const connectedComponent = connect(
   mapDispatchToProps,
 )(WithLoadableResource('loadArticle', 'article')(ArticleWrapper));
 
-export default withRouter(connectedComponent);
+export default injectIntl(withRouter(connectedComponent));

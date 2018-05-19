@@ -10,7 +10,7 @@ function mapStateToProps(state, ownProps) {
   const currentUser = getCurrentUserEntity(state);
 
   return {
-    isAuthor: !!(currentUser && article && currentUser.id === article.author.id),
+    isAuthor: !!(article && currentUser.id === article.author.id),
     article,
   };
 }

@@ -21,5 +21,5 @@ export default async function parseError(body, status, payload, store) {
   }));
 
   // eslint-disable-next-line prefer-promise-reject-errors
-  return Promise.reject({ request: pick(payload, 'urlParams') });
+  return Promise.reject({ request: pick(payload, 'fetchParams') });
 }

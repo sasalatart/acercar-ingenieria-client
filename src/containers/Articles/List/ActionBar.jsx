@@ -11,11 +11,10 @@ import {
   getCategoryOptions,
 } from '../../../store/ducks/categories';
 import { resetPagination } from '../../../store/ducks/articles';
+import WithAuthorization from '../../../hoc/WithAuthorization';
 import ActionBar from '../../../components/Articles/List/ActionBar';
 
-function mapStateToProps(state, ownProps) {
-  const params = { majorId: ownProps.match.params.majorId };
-
+function mapStateToProps(state, { match: { params } }) {
   return {
     majorOptions: getMajorOptions(state),
     categoryOptions: getCategoryOptions(state),
@@ -23,13 +22,13 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { suffix, match: { params } }) {
   return {
     loadMajors: () => dispatch(loadMajors()),
     loadCategories: () => dispatch(loadCategories()),
-    resetPagination: () => dispatch(resetPagination(ownProps.majorId)),
+    resetPagination: () => dispatch(resetPagination({ baseResourceId: params.majorId, suffix })),
   };
 }
 
 const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(ActionBar);
-export default injectIntl(withRouter(connectedComponent));
+export default injectIntl(withRouter(WithAuthorization(connectedComponent)));

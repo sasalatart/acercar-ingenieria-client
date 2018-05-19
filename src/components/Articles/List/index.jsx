@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List } from 'antd';
@@ -8,11 +8,13 @@ import ActionBar from '../../../containers/Articles/List/ActionBar';
 import Title from '../../Layout/Title';
 import ListItem from './Item';
 import { paginationShape, articleShape } from '../../../shapes';
+import { suffixes } from '../../../lib/articles';
 
 export default class ArticlesList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
+    suffix: PropTypes.string.isRequired,
     pagination: paginationShape,
     articles: PropTypes.arrayOf(articleShape),
     loadArticles: PropTypes.func.isRequired,
@@ -26,6 +28,12 @@ export default class ArticlesList extends Component {
     articles: [],
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.suffix !== this.props.suffix) {
+      this.props.loadArticles({ page: 1 });
+    }
+  }
+
   renderListItem = article => (
     <ListItem
       article={article}
@@ -36,13 +44,21 @@ export default class ArticlesList extends Component {
 
   render() {
     const {
-      loading, majorId, pagination, articles, loadArticles, intl: { formatMessage: t },
+      loading,
+      majorId,
+      suffix,
+      pagination,
+      articles,
+      loadArticles,
+      intl: { formatMessage: t },
     } = this.props;
 
     return (
-      <div>
-        <ActionBar majorId={majorId} />
-        <Title>{t({ id: 'articles' })}</Title>
+      <Fragment>
+        <ActionBar majorId={majorId} suffix={suffix} />
+        <Title>
+          {suffix === suffixes.approved ? t({ id: 'articles' }) : t({ id: `articles.${suffix}` })}
+        </Title>
 
         <PaginationControls
           pagination={pagination}
@@ -58,7 +74,7 @@ export default class ArticlesList extends Component {
             />
           )}
         />
-      </div>
+      </Fragment>
     );
   }
 }

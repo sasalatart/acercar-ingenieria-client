@@ -15,7 +15,7 @@ export default async function parseResponse(body, headers, payload) {
   if (perPage) {
     const total = +headers.get('total');
     const pagination = {
-      page: +payload.urlParams.page,
+      page: +payload.fetchParams.page,
       totalPages: Math.ceil(total / perPage),
       perPage,
       totalRecords: total,

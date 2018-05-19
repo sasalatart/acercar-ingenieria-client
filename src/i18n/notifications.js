@@ -24,6 +24,8 @@ export default {
     'notifications.actions.hasPublished': '{userName} has published',
     'notifications.actions.hasCommented': '{userName} has commented',
     'notifications.actions.hasAnswered': '{userName} has answered',
+    'notifications.actions.hasApproved': '{userName} has approved',
+    'notifications.actions.hasRejected': '{userName} has rejected',
 
     'notifications.justOneMoreStep': 'Just one more step!',
     'notifications.signUpOneMoreStep.description': 'A confirmation email will be sent to you briefly. Once you confirm this email, you will be able to sign in',
@@ -31,6 +33,8 @@ export default {
 
     'notifications.on': 'Notify me',
     'notifications.off': 'Don\'t notify me',
+
+    'notifications.resourceNotApproved': 'The resource this notification references to is waiting admin approval',
   },
   'es-ES': {
     'notifications.pending': 'Notificaciones pendientes',
@@ -57,6 +61,8 @@ export default {
     'notifications.actions.hasPublished': '{userName} ha publicado',
     'notifications.actions.hasCommented': '{userName} ha comentado',
     'notifications.actions.hasAnswered': '{userName} ha respondido',
+    'notifications.actions.hasApproved': '{userName} ha aprobado',
+    'notifications.actions.hasRejected': '{userName} ha rechazado',
 
     'notifications.justOneMoreStep': '¡Sólo un paso más!',
     'notifications.signUpOneMoreStep.description': 'Un email de confirmación será enviado a tu correo en los próximos minutos. Una vez validada tu dirección, podrás ingresar a la plataforma con tu cuenta',
@@ -64,5 +70,7 @@ export default {
 
     'notifications.on': 'notificarme',
     'notifications.off': 'no notificarme',
+
+    'notifications.resourceNotApproved': 'El recurso al cual esta notificación apunta espera la aprobación de administradores',
   },
 };

@@ -3,8 +3,6 @@ import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { addQueryToCurrentUri } from '../../../store/ducks/routes';
 import {
-  collection,
-  getSuffix,
   loadDiscussions,
   resetPagination,
   getPagingFns,
@@ -12,6 +10,8 @@ import {
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import DiscussionsList from '../../../components/Discussions/List';
+import { getSuffix } from '../../../lib/discussions';
+import { discussionsCollection as collection } from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const params = { collection, suffix: getSuffix(ownProps.mine), paged: true };
@@ -30,7 +30,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   return {
     loadDiscussions: ({ page, ...query }) => dispatch(loadDiscussions(page, ownProps.mine, query)),
     onTagClick: (text) => {
-      dispatch(resetPagination(getSuffix(ownProps.mine)));
+      dispatch(resetPagination({ suffix: getSuffix(ownProps.mine) }));
       dispatch(addQueryToCurrentUri({ tagList: text }));
     },
   };

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Button, Divider } from 'antd';
@@ -50,9 +50,16 @@ class CommentItem extends Component {
   handleStopAnswering = () => this.setState({ answering: false });
 
   renderAnswerButton() {
-    const { comment, answeringDisabled, intl: { formatMessage: t } } = this.props;
+    const {
+      comment: {
+        approvedCommentable,
+        commentableType,
+      },
+      answeringDisabled,
+      intl: { formatMessage: t },
+    } = this.props;
 
-    if (answeringDisabled || comment.commentableType === 'Comment') {
+    if (answeringDisabled || !approvedCommentable || commentableType === 'Comment') {
       return null;
     }
 
@@ -85,7 +92,7 @@ class CommentItem extends Component {
     const isChild = commentableType === 'Comment';
 
     return (
-      <div>
+      <Fragment>
         <div style={(isChild && !answeringDisabled) ? styles.childWrapper : styles.parentWrapper}>
           <Hideable>
             <ProfileAvatar user={author} style={styles.avatar} />
@@ -114,7 +121,7 @@ class CommentItem extends Component {
           : this.renderAnswerButton()}
 
         {(!isChild || answeringDisabled) && <Divider />}
-      </div>
+      </Fragment>
     );
   }
 }

@@ -97,16 +97,17 @@ export const questionShape = PropTypes.shape({
 
 export const articleShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  shortDescription: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
   author: userSummaryShape.isRequired,
   majorSummary: majorSummaryShape,
   categoryList: PropTypes.arrayOf(PropTypes.string),
-  likesCount: PropTypes.number.isRequired,
-  commentsCount: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  shortDescription: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
   previewUrl: PropTypes.string,
   attachments: PropTypes.arrayOf(attachmentShape),
+  likesCount: PropTypes.number.isRequired,
+  commentsCount: PropTypes.number.isRequired,
+  approved: PropTypes.bool.isRequired,
   createdAt: PropTypes.string.isRequired,
 });
 
@@ -129,6 +130,7 @@ const sharedCommentShape = {
   author: userSummaryShape.isRequired,
   commentableType: PropTypes.string.isRequired,
   commentableId: PropTypes.number.isRequired,
+  approvedCommentable: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
   likesCount: PropTypes.number.isRequired,
   likedByCurrentUser: PropTypes.bool.isRequired,
@@ -157,7 +159,7 @@ export const notificationShape = PropTypes.shape({
   actionType: PropTypes.string.isRequired,
   notifyableId: PropTypes.number.isRequired,
   notifyableType: PropTypes.string.isRequired,
-  notifyableMeta: PropTypes.shape({}),
+  notifyableMeta: PropTypes.shape({}).isRequired,
   createdAt: PropTypes.string.isRequired,
 });
 

@@ -9,8 +9,9 @@ import pagingFnsFactory, {
   removeFromAllPages,
   resetPaginationActionFactory,
 } from './paginations';
+import { usersCollection as collection } from '../../lib/collections';
+import { getCollectionParams } from '../../lib/users';
 
-export const collection = 'users';
 const commonArgs = [collection, usersSchema];
 const platformPagingFns = pagingFnsFactory(...commonArgs);
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
@@ -29,14 +30,6 @@ export const TYPES = {
   RESET_PAGINATION: 'users/RESET_PAGINATION',
 };
 
-export function getCollectionParams(majorId, admins) {
-  return {
-    collection: admins ? 'admins' : collection,
-    baseResourceName: majorId && 'majors',
-    baseResourceId: majorId,
-  };
-}
-
 export const getPagingFns = prepareGetPagingFns(({ baseResourceId }) => (
   baseResourceId ? majorsPagingFns : platformPagingFns
 ));
@@ -48,7 +41,7 @@ export function loadUsers(page = 1, majorId, query) {
       method: 'GET',
       url: majorId ? `/majors/${majorId}/users` : '/users',
       query: { page, ...query },
-      urlParams: { ...getCollectionParams(majorId), page },
+      fetchParams: { ...getCollectionParams(majorId), page },
       responseSchema: [usersSchema],
     },
   };
@@ -60,7 +53,7 @@ export function loadUser(id) {
     payload: {
       method: 'GET',
       url: `/users/${id}`,
-      urlParams: { collection, id },
+      fetchParams: { collection, id },
       responseSchema: usersSchema,
     },
   };
@@ -72,7 +65,7 @@ export function destroyUser(id, majorId) {
     payload: {
       method: 'DELETE',
       url: majorId ? `/majors/${majorId}/users/${id}` : `/users/${id}`,
-      urlParams: { ...getCollectionParams(majorId), id },
+      fetchParams: { ...getCollectionParams(majorId), id },
     },
   };
 }
@@ -84,8 +77,8 @@ export default function usersReducer(state = INITIAL_STATE, { type, payload }) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = payload.request;
-      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], urlParams);
+      const { fetchParams } = payload.request;
+      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], fetchParams);
     }
     case TYPES.RESET_PAGINATION:
       return getPagingFns(payload).reset(state, payload.baseResourceId);

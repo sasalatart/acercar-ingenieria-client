@@ -65,7 +65,7 @@ function renderEditButton(onStartEditing) {
   return withDivider(<Icon type="edit" onClick={onStartEditing} style={styles.editButton} />);
 }
 
-function renderDestroyButton(comment) {
+function renderDestroyButton(comment, approved) {
   const { id, commentableType, commentableId } = comment;
   const destroyButton = (
     <DestroyButton
@@ -76,7 +76,7 @@ function renderDestroyButton(comment) {
       iconOnly
     />
   );
-  return withDivider(destroyButton);
+  return approved ? withDivider(destroyButton) : destroyButton;
 }
 
 function CommentActions({
@@ -85,12 +85,14 @@ function CommentActions({
   comment,
   onStartEditing,
 }) {
+  const { approvedCommentable } = comment;
+
   return (
     <div style={styles.wrapper}>
-      {renderLikeButton(comment)}
-      {comment.commentableType !== 'Comment' && renderEnrollButton(comment)}
-      {isAuthor && renderEditButton(onStartEditing)}
-      {(adminOrMajorAdmin || isAuthor) && renderDestroyButton(comment)}
+      {approvedCommentable && renderLikeButton(comment)}
+      {approvedCommentable && comment.commentableType !== 'Comment' && renderEnrollButton(comment)}
+      {approvedCommentable && isAuthor && renderEditButton(onStartEditing)}
+      {(adminOrMajorAdmin || isAuthor) && renderDestroyButton(comment, approvedCommentable)}
     </div>
   );
 }

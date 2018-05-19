@@ -10,9 +10,10 @@ import pagingFnsFactory, {
 } from './paginations';
 import { getUserId, getMajorId } from './shared';
 import { TYPES as USERS_TYPES } from './users';
+import { getCollectionParams } from '../../lib/admins';
+import { adminsCollection } from '../../lib/collections';
 
-const collection = 'admins';
-const commonArgs = [collection, usersSchema];
+const commonArgs = [adminsCollection, usersSchema];
 const platformPagingFns = pagingFnsFactory(...commonArgs);
 const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
 
@@ -34,14 +35,6 @@ const TYPES = {
   RESET_PAGINATION: 'admins/RESET_PAGINATION',
 };
 
-export function getCollectionParams(majorId) {
-  return {
-    collection,
-    baseResourceName: majorId && 'majors',
-    baseResourceId: majorId,
-  };
-}
-
 export const getPagingFns = prepareGetPagingFns(({ baseResourceId }) => (
   baseResourceId ? majorsPagingFns : platformPagingFns
 ));
@@ -53,7 +46,7 @@ export function loadAdmins(page = 1, majorId, query) {
       method: 'GET',
       url: majorId ? `/majors/${majorId}/admins` : '/admins',
       query: { page, ...query },
-      urlParams: { page, ...query, ...getCollectionParams(majorId) },
+      fetchParams: { page, ...query, ...getCollectionParams(majorId) },
       responseSchema: [usersSchema],
     },
   };
@@ -80,7 +73,7 @@ export function toggleAdmin(id, majorId, promote) {
     payload: {
       method: promote ? 'POST' : 'DELETE',
       url: majorId ? `/majors/${majorId}${suffixUrl}` : suffixUrl,
-      urlParams: { id, baseResourceId: majorId },
+      fetchParams: { id, baseResourceId: majorId },
       responseSchema: usersSchema,
     },
   };
@@ -101,21 +94,21 @@ export default function adminsReducer(state = INITIAL_STATE, { type, payload }) 
     case TYPES.UNSET_SELECTED_USER:
       return state.set('selectedUserId', undefined);
     case `${TYPES.TOGGLE}_PENDING`: {
-      const { id, baseResourceId } = payload.urlParams;
+      const { id, baseResourceId } = payload.fetchParams;
       return state
         .updateIn(getUpdatingPath(baseResourceId), ids => (ids ? ids.add(id) : new Set([id])));
     }
     case `${TYPES.TOGGLE}_FULFILLED`: {
       const pageAction = type.includes(TYPES.PROMOTE) ? 'addToPage' : 'removeFromPage';
 
-      const { urlParams } = payload.request;
-      const { baseResourceId, id } = urlParams;
-      return getPagingFns(payload)[pageAction](state, urlParams)
+      const { fetchParams } = payload.request;
+      const { baseResourceId, id } = fetchParams;
+      return getPagingFns(payload)[pageAction](state, fetchParams)
         .updateIn(getUpdatingPath(baseResourceId), ids => ids.delete(id));
     }
     case `${USERS_TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = payload.request;
-      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], urlParams);
+      const { fetchParams } = payload.request;
+      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], fetchParams);
     }
     case TYPES.RESET_PAGINATION:
       return getPagingFns(payload).reset(state, payload.baseResourceId);

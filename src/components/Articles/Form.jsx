@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { intlShape } from 'react-intl';
-import { Col, Row } from 'antd';
+import { Alert, Col, Row } from 'antd';
 import {
   TextField,
   TextArea,
@@ -30,6 +30,7 @@ const GUTTER = 8;
 
 export default class ArticleForm extends Component {
   static propTypes = {
+    adminOrMajorAdmin: PropTypes.bool.isRequired,
     validators: PropTypes.shape({}).isRequired,
     loading: PropTypes.bool.isRequired,
     noData: PropTypes.bool.isRequired,
@@ -57,6 +58,7 @@ export default class ArticleForm extends Component {
 
   render() {
     const {
+      adminOrMajorAdmin,
       validators,
       loading,
       noData,
@@ -74,9 +76,17 @@ export default class ArticleForm extends Component {
     if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
 
     return (
-      <div>
+      <Fragment>
         <ActionBar />
         <Title>{t({ id: `articles.${id ? 'edit' : 'new'}` })}</Title>
+
+        {!adminOrMajorAdmin &&
+          <Alert
+            type="warning"
+            message={t({ id: 'articles.approvalRequired.message' })}
+            showIcon
+          />
+        }
 
         <form onSubmit={handleSubmit}>
           <Field
@@ -138,7 +148,7 @@ export default class ArticleForm extends Component {
           </div>
           <SubmitButton disabled={!valid || submitting} loading={submitting} />
         </form>
-      </div>
+      </Fragment>
     );
   }
 }

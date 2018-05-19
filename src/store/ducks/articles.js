@@ -12,16 +12,25 @@ import { getMajorOptionsForCurrentUser } from './sessions';
 import { goToArticle } from './routes';
 import { getId } from './shared';
 import { articlesSchema } from '../../schemas';
+import { suffixes, getCollectionParams } from '../../lib/articles';
+import { articlesCollection } from '../../lib/collections';
 
-export const collection = 'articles';
-const commonArgs = [collection, articlesSchema];
-const platformPagingFns = pagingFnsFactory(...commonArgs);
-const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
+const commonArgs = [articlesCollection, articlesSchema];
+const platformApprovedPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.approved });
+const platformPendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.pending });
+const majorsApprovedPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.approved });
+const majorsPendingPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.pending });
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
-    platform: new Map({}),
-    majors: new Map({}),
+    platform: new Map({
+      approved: new Map({}),
+      pending: new Map({}),
+    }),
+    majors: new Map({
+      approved: new Map({}),
+      pending: new Map({}),
+    }),
   }),
 });
 
@@ -30,30 +39,30 @@ const TYPES = {
   LOAD: 'articles/LOAD',
   CREATE: 'articles/CREATE',
   UPDATE: 'articles/UPDATE',
+  APPROVAL: 'articles/UPDATE_APPROVAL',
   DESTROY: 'articles/DESTROY',
   RESET_PAGINATION: 'articles/RESET_PAGINATION',
 };
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceId }) => (
-  baseResourceId ? majorsPagingFns : platformPagingFns
-));
+export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => {
+  if (baseResourceId) {
+    return suffix === suffixes.pending ? majorsPendingPagingFns : majorsApprovedPagingFns;
+  }
 
-export function getCollectionParams(majorId) {
-  return {
-    collection,
-    baseResourceName: majorId && 'majors',
-    baseResourceId: majorId,
-  };
-}
+  return suffix === suffixes.pending ? platformPendingPagingFns : platformApprovedPagingFns;
+});
 
-export function loadArticles(page = 1, majorId, query) {
+export function loadArticles(page = 1, majorId, suffix, search) {
+  const urlSuffix = suffix !== suffixes.approved ? `/${suffix}` : '';
+  const query = { page, ...search };
+
   return {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: majorId ? `/majors/${majorId}/articles` : '/articles',
-      query: { page, ...query },
-      urlParams: { page, ...query, ...getCollectionParams(majorId) },
+      url: majorId ? `/majors/${majorId}/articles${urlSuffix}` : `/articles/${urlSuffix}`,
+      query,
+      fetchParams: { ...query, ...getCollectionParams(majorId), suffix },
       responseSchema: [articlesSchema],
     },
   };
@@ -65,7 +74,7 @@ export function loadArticle(id, majorId) {
     payload: {
       method: 'GET',
       url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-      urlParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: { id, ...getCollectionParams(majorId) },
       responseSchema: articlesSchema,
     },
   };
@@ -78,7 +87,7 @@ export function createArticle(body, majorId) {
       payload: {
         method: 'POST',
         url: majorId ? `/majors/${majorId}/articles` : '/articles',
-        urlParams: getCollectionParams(majorId),
+        fetchParams: getCollectionParams(majorId),
         body,
         responseSchema: articlesSchema,
       },
@@ -94,7 +103,7 @@ export function updateArticle(id, body, majorId) {
       payload: {
         method: 'PUT',
         url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-        urlParams: { id, ...getCollectionParams(majorId) },
+        fetchParams: { id, ...getCollectionParams(majorId) },
         body,
         responseSchema: articlesSchema,
       },
@@ -103,13 +112,26 @@ export function updateArticle(id, body, majorId) {
     });
 }
 
+export function articleApproval(id, majorId, approved) {
+  return {
+    type: TYPES.APPROVAL,
+    payload: {
+      method: 'PUT',
+      url: majorId ? `/majors/${majorId}/articles/${id}/approval` : `/articles/${id}/approval`,
+      fetchParams: { id, ...getCollectionParams(majorId) },
+      body: { approved },
+      responseSchema: articlesSchema,
+    },
+  };
+}
+
 export function destroyArticle(id, majorId) {
   return {
     type: TYPES.DESTROY,
     payload: {
       method: 'DELETE',
       url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-      urlParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: { id, ...getCollectionParams(majorId) },
     },
   };
 }
@@ -121,8 +143,14 @@ export default function articlesReducer(state = INITIAL_STATE, { type, payload }
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = payload.request;
-      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], urlParams);
+      const { fetchParams } = payload.request;
+      const allPagingFns = [
+        majorsApprovedPagingFns,
+        majorsPendingPagingFns,
+        platformApprovedPagingFns,
+        platformPendingPagingFns,
+      ];
+      return removeFromAllPages(state, allPagingFns, fetchParams);
     }
     case TYPES.RESET_PAGINATION:
       return getPagingFns(payload).reset(state, payload.baseResourceId);

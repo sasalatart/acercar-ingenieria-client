@@ -38,7 +38,7 @@ export function updateEntity(collection, id, updateFn) {
 
 export default function entitiesReducer(state = INITIAL_STATE, action) {
   if (action.type.includes('DESTROY_FULFILLED')) {
-    const { collection, id } = action.payload.request.urlParams;
+    const { collection, id } = action.payload.request.fetchParams;
     return state.deleteIn([collection, String(id)]);
   }
 

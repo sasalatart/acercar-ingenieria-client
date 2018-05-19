@@ -8,16 +8,17 @@ import { getMajorOptionsForCurrentUser } from '../../store/ducks/sessions';
 import { loadMajors } from '../../store/ducks/majors';
 import { loadCategories, getCategoryOptions } from '../../store/ducks/categories';
 import {
-  collection,
   createArticle,
   updateArticle,
   getArticleEntity,
   getMajorOptionsForArticle,
 } from '../../store/ducks/articles';
 import { getIsFetching } from '../../store/ducks/loading';
+import withAuthorization from '../../hoc/WithAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
 import articlesValidations from '../../validations/articles';
+import { articlesCollection as collection } from '../../lib/collections';
 import { processAttachableFormValues } from '../../lib/attachments';
 import articlePlaceholder from '../../images/article.png';
 
@@ -79,4 +80,4 @@ const form = reduxForm({
 })(ArticleForm);
 
 const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(form);
-export default I18nForm(connectedComponent, articlesValidations);
+export default withAuthorization(I18nForm(connectedComponent, articlesValidations));

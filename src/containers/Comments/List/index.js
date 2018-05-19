@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import {
-  collection,
-  loadComments,
-  getPagingFns,
-} from '../../../store/ducks/comments';
+import { getPage } from '../../../store/ducks/routes';
+import { loadComments, getPagingFns } from '../../../store/ducks/comments';
 import { getIsFetching } from '../../../store/ducks/loading';
 import CommentsList from '../../../components/Comments/List';
+import { commentsCollection as collection } from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const { baseResourceName, baseResourceId } = ownProps;
@@ -23,6 +21,7 @@ function mapStateToProps(state, ownProps) {
     loading: isEmpty(comments) && getIsFetching(state, params),
     pagination: pagingFns.getMeta(state, params),
     comments,
+    currentPage: getPage(state) || 1,
   };
 }
 

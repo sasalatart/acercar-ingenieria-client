@@ -6,8 +6,7 @@ import { goToMajor } from './routes';
 import { getEntities } from './entities';
 import { resourceSuccessNotification } from './notifications';
 import { getId } from './shared';
-
-export const collection = 'majors';
+import { majorsCollection as collection } from '../../lib/collections';
 
 const INITIAL_STATE = new Map({
   activeIds: new OrderedSet(),
@@ -28,7 +27,7 @@ export function loadMajors() {
     payload: {
       method: 'GET',
       url: '/majors',
-      urlParams: { collection, page: 1 },
+      fetchParams: { collection, page: 1 },
       responseSchema: [majorsSchema],
     },
   };
@@ -40,7 +39,7 @@ export function loadMajor(id) {
     payload: {
       method: 'GET',
       url: `/majors/${id}`,
-      urlParams: { collection, id },
+      fetchParams: { collection, id },
       responseSchema: majorsSchema,
     },
   };
@@ -53,7 +52,7 @@ export function createMajor(body) {
       payload: {
         method: 'POST',
         url: '/majors',
-        urlParams: { collection },
+        fetchParams: { collection },
         body,
         responseSchema: majorsSchema,
       },
@@ -69,7 +68,7 @@ export function updateMajor(id, body) {
       payload: {
         method: 'PUT',
         url: `/majors/${id}`,
-        urlParams: { collection, id },
+        fetchParams: { collection, id },
         body,
         responseSchema: majorsSchema,
       },
@@ -84,7 +83,7 @@ export function destroyMajor(id) {
     payload: {
       method: 'DELETE',
       url: `/majors/${id}`,
-      urlParams: { collection, id },
+      fetchParams: { collection, id },
     },
   };
 }
@@ -98,7 +97,7 @@ export function sendEmail(id, body, personal) {
       payload: {
         method: 'POST',
         url: `/majors/${id}/${urlSuffix}`,
-        urlParams: { collection, id },
+        fetchParams: { collection, id },
         body,
       },
     }).then(() => {
@@ -112,7 +111,7 @@ export default function majorsReducer(state = INITIAL_STATE, action) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return state.set('activeIds', new OrderedSet(action.payload.result));
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { id } = action.payload.request.urlParams;
+      const { id } = action.payload.request.fetchParams;
       return state.update('activeIds', ids => ids.delete(id));
     }
     default:

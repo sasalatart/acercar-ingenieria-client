@@ -1,14 +1,12 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
-import keyMirror from 'keymirror';
 import { questionsSchema } from '../../schemas';
 import { getEntities } from './entities';
 import pagingFnsFactory, { prepareGetPagingFns, removeFromAllPages } from './paginations';
 import { getQuestionId } from './shared';
-
-export const collection = 'questions';
-export const suffixes = keyMirror({ answered: null, pending: null });
+import { suffixes, getSuffix, getCollectionParams } from '../../lib/questions';
+import { questionsCollection as collection } from '../../lib/collections';
 
 const commonArgs = [collection, questionsSchema];
 const answeredSuffix = { suffix: suffixes.answered };
@@ -37,18 +35,6 @@ const TYPES = {
   ADD_TO_UNANSWERED_PAGINATION: 'questions/ADD_TO_UNANSWERED_PAGINATION',
 };
 
-export function getCollectionParams(baseResourceId) {
-  return {
-    collection,
-    baseResourceName: baseResourceId && 'majors',
-    baseResourceId,
-  };
-}
-
-export function getSuffix(pending) {
-  return pending ? suffixes.pending : suffixes.answered;
-}
-
 export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => {
   if (baseResourceId) {
     return suffix === suffixes.pending ? majorsPendingPagingFns : majorsAnsweredPagingFns;
@@ -66,7 +52,7 @@ export function loadQuestions(page = 1, baseResourceId, pending) {
       method: 'GET',
       url: baseResourceId ? `/majors/${baseResourceId}/questions${urlSuffix}` : `/questions${urlSuffix}`,
       query: { page },
-      urlParams: { page, ...getCollectionParams(baseResourceId), suffix: getSuffix(pending) },
+      fetchParams: { page, ...getCollectionParams(baseResourceId), suffix: getSuffix(pending) },
       responseSchema: [questionsSchema],
     },
   };
@@ -79,7 +65,7 @@ export function createQuestion(values, majorId, shouldAddToPagination) {
       payload: {
         method: 'POST',
         url: majorId ? `/majors/${majorId}/questions` : '/questions',
-        urlParams: getCollectionParams(majorId),
+        fetchParams: getCollectionParams(majorId),
         body: values,
         responseSchema: questionsSchema,
       },
@@ -102,7 +88,7 @@ export function updateQuestion(id, values, majorId) {
     payload: {
       method: 'PUT',
       url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-      urlParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: { id, ...getCollectionParams(majorId) },
       body: values,
       responseSchema: questionsSchema,
     },
@@ -115,7 +101,7 @@ export function destroyQuestion(id, majorId) {
     payload: {
       method: 'DELETE',
       url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-      urlParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: { id, ...getCollectionParams(majorId) },
     },
   };
 }
@@ -126,15 +112,15 @@ export default function questionsReducer(state = INITIAL_STATE, { type, payload 
     case `${TYPES.LOAD_UNANSWERED}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.UPDATE}_FULFILLED`: {
-      const { urlParams, body } = payload.request;
-      const pagingFns = getPagingFns({ ...urlParams, suffix: getSuffix(!!body.answer) });
-      return pagingFns.removeFromPage(state, urlParams);
+      const { fetchParams, body } = payload.request;
+      const pagingFns = getPagingFns({ ...fetchParams, suffix: getSuffix(!!body.answer) });
+      return pagingFns.removeFromPage(state, fetchParams);
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = payload.request;
+      const { fetchParams } = payload.request;
       const pendingPagingFns = getPagingFns({ ...payload, ...pendingSuffix });
       const answeredPagingFns = getPagingFns({ ...payload, ...answeredSuffix });
-      return removeFromAllPages(state, [pendingPagingFns, answeredPagingFns], urlParams);
+      return removeFromAllPages(state, [pendingPagingFns, answeredPagingFns], fetchParams);
     }
     case TYPES.ADD_TO_ANSWERED_PAGINATION:
       return getPagingFns({ ...payload, ...answeredSuffix }).addToPage(state, payload);

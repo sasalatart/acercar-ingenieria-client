@@ -37,10 +37,10 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
     return state;
   }
 
-  const { urlParams } = pending ? action.payload : action.payload.request;
+  const { fetchParams } = pending ? action.payload : action.payload.request;
   const {
     id, collection, page, baseResourceName, baseResourceId, suffix,
-  } = urlParams;
+  } = fetchParams;
 
   if (fetching && page) {
     const path = compact(['fetching', 'pages', collection, baseResourceName || 'platform', baseResourceId, suffix]);

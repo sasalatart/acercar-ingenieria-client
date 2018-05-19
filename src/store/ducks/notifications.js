@@ -5,11 +5,10 @@ import { getLocale } from './i18n';
 import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
 import messages from '../../i18n/messages';
 import { notificationsSchema } from '../../schemas';
+import { notificationsCollection as collection } from '../../lib/collections';
+import { suffixes, getSuffix } from '../../lib/notifications';
 
-export const collection = 'notifications';
-export const suffixes = keyMirror({ seen: null, pending: null });
 const commonArgs = [collection, notificationsSchema];
-
 const pendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.seen });
 const seenPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.pending });
 
@@ -33,10 +32,6 @@ export const getPagingFns = prepareGetPagingFns(({ suffix }) => (
   suffix === suffixes.seen ? seenPagingFns : pendingPagingFns
 ));
 
-export function getSuffix(seen) {
-  return seen ? suffixes.seen : suffixes.pending;
-}
-
 export function loadNotifications(page = 1, seen) {
   return {
     type: seen ? TYPES.LOAD_SEEN : TYPES.LOAD_UNSEEN,
@@ -44,7 +39,7 @@ export function loadNotifications(page = 1, seen) {
       method: 'GET',
       url: seen ? '/notifications/seen' : '/notifications',
       query: { page },
-      urlParams: { collection, page, suffix: getSuffix(seen) },
+      fetchParams: { collection, page, suffix: getSuffix(seen) },
       responseSchema: [notificationsSchema],
     },
   };
@@ -56,7 +51,7 @@ export function loadNotificationsCount() {
     payload: {
       method: 'GET',
       url: '/notifications/count',
-      urlParams: { collection, suffix: 'count' },
+      fetchParams: { collection, suffix: 'count' },
     },
   };
 }

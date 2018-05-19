@@ -1,15 +1,11 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import {
-  getSuffix,
-  getCollectionParams,
-  loadQuestions,
-  getPagingFns,
-} from '../../store/ducks/questions';
+import { loadQuestions, getPagingFns } from '../../store/ducks/questions';
 import { getIsFetching } from '../../store/ducks/loading';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import QuestionsList from '../../components/Questions/List';
+import { getSuffix, getCollectionParams } from '../../lib/questions';
 
 function mapStateToProps(state, ownProps) {
   const params = {

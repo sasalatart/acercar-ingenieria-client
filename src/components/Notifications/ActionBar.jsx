@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import ActionBar from '../../../../containers/Layout/ActionBar';
-import HideableButton from '../../../HideableButton';
-import ROUTES from '../../../../routes';
+import ActionBar from '../../containers/Layout/ActionBar';
+import HideableButton from '../HideableButton';
+import ROUTES from '../../routes';
 
 function QuestionsActionBar({ seen, intl: { formatMessage: t } }) {
   const toggleRoute = ROUTES.NOTIFICATIONS(!seen);

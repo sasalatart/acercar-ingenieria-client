@@ -6,21 +6,16 @@ import {
   getIsAdmin,
   getIsAdminOrMajorAdmin,
 } from '../store/ducks/sessions';
+import { getMajorIdFromProps } from '../store/ducks/majors';
 
 export default function HOC(WrappedComponent) {
   function mapStateToProps(state, ownProps) {
-    const { match } = ownProps;
-
-    const majorId = +(
-      match.params.majorId
-      || (match.path.includes('majors/:id') && match.params.id)
-      || ownProps.majorId
-    );
+    const params = { majorId: getMajorIdFromProps(ownProps) };
 
     return {
       loggedIn: getIsLoggedIn(state),
       admin: getIsAdmin(state),
-      adminOrMajorAdmin: getIsAdminOrMajorAdmin(state, { majorId }),
+      adminOrMajorAdmin: getIsAdminOrMajorAdmin(state, params),
     };
   }
 

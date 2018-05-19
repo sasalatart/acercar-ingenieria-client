@@ -7,7 +7,6 @@ import {
 } from '../../store/ducks/sessions';
 import { getMajorIdFromProps } from '../../store/ducks/majors';
 import {
-  collection,
   loadArticle,
   getArticleEntity,
   getArticleIdFromProps,
@@ -15,8 +14,9 @@ import {
 import { getIsFetching } from '../../store/ducks/loading';
 import DataPlaceholder from '../../components/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
+import { articlesCollection as collection } from '../../lib/collections';
 
-class ArticleAdministration extends Component {
+class ArticleEdition extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     loadArticle: PropTypes.func.isRequired,
@@ -61,4 +61,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ArticleAdministration);
+)(ArticleEdition);

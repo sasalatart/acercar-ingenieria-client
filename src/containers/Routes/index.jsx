@@ -5,7 +5,8 @@ import Admin from './Admin';
 import MajorAdmin from './MajorAdmin';
 import QuestionsAdministration from './QuestionsAdministration';
 import ArticleCreation from './ArticleCreation';
-import ArticleAdministration from './ArticleAdministration';
+import ArticleEdition from './ArticleEdition';
+import ArticlesAdministration from './ArticlesAdministration';
 import DiscussionAdministration from './DiscussionAdministration';
 
 function routeFactory(Wrapper) {
@@ -25,6 +26,8 @@ export const questionsAdministrationRoute = routeFactory(QuestionsAdministration
 
 export const articleCreationRoute = routeFactory(ArticleCreation);
 
-export const articleAdministrationRoute = routeFactory(ArticleAdministration);
+export const articleEditionRoute = routeFactory(ArticleEdition);
+
+export const articlesAdministrationRoute = routeFactory(ArticlesAdministration);
 
 export const discussionAdministrationRoute = routeFactory(DiscussionAdministration);

@@ -1,14 +1,11 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import {
-  collection,
-  pagingFns,
-  loadAnnouncements,
-} from '../../../store/ducks/announcements';
+import { pagingFns, loadAnnouncements } from '../../../store/ducks/announcements';
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithModal from '../../../hoc/WithModal';
 import Announcements from '../../../components/Announcements/List';
+import { announcementsCollection as collection } from '../../../lib/collections';
 
 function mapStateToProps(state) {
   const params = { collection, paged: true };

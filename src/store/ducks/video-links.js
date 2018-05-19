@@ -5,8 +5,7 @@ import { videoLinksSchema } from '../../schemas';
 import { getEntities } from './entities';
 import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
 import { getVideoLinkId } from './shared';
-
-export const collection = 'videoLinks';
+import { videoLinksCollection as collection } from '../../lib/collections';
 
 const majorsPagingFns = pagingFnsFactory(collection, videoLinksSchema, { baseResourceName: 'majors' });
 
@@ -38,7 +37,7 @@ export function loadVideoLinks(page = 1, baseResourceName, baseResourceId) {
       method: 'GET',
       url: `/${baseResourceName}/${baseResourceId}/video_links`,
       query: { page },
-      urlParams: {
+      fetchParams: {
         page, collection, baseResourceName, baseResourceId,
       },
       responseSchema: [videoLinksSchema],
@@ -53,7 +52,7 @@ export function createVideoLink(values, baseResourceName, baseResourceId) {
       payload: {
         method: 'POST',
         url: `/${baseResourceName}/${baseResourceId}/video_links`,
-        urlParams: { collection, baseResourceName, baseResourceId },
+        fetchParams: { collection, baseResourceName, baseResourceId },
         body: values,
         responseSchema: videoLinksSchema,
       },
@@ -69,7 +68,7 @@ export function updateVideoLink(id, values, baseResourceName, baseResourceId) {
     payload: {
       method: 'PUT',
       url: `/${baseResourceName}/${baseResourceId}/video_links/${id}`,
-      urlParams: {
+      fetchParams: {
         id, collection, baseResourceName, baseResourceId,
       },
       body: values,
@@ -84,7 +83,7 @@ export function destroyVideoLink(id, baseResourceName, baseResourceId) {
     payload: {
       method: 'DELETE',
       url: `/${baseResourceName}/${baseResourceId}/video_links/${id}`,
-      urlParams: {
+      fetchParams: {
         id, collection, baseResourceName, baseResourceId,
       },
     },
@@ -96,7 +95,7 @@ export default function videoLinksReducer(state = INITIAL_STATE, { type, payload
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`:
-      return getPagingFns(payload).removeFromPage(state, payload.request.urlParams);
+      return getPagingFns(payload).removeFromPage(state, payload.request.fetchParams);
     case TYPES.ADD_TO_PAGINATION:
       return getPagingFns(payload).addToPage(state, payload);
     default:

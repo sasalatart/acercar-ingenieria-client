@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider } from 'antd';
@@ -13,6 +13,7 @@ function CommentsSection({
   withActionBar,
   answers,
   reverseList,
+  disabled,
   intl: { formatMessage: t },
 }) {
   const commonProps = { baseResourceName, baseResourceId };
@@ -22,9 +23,13 @@ function CommentsSection({
       {withActionBar && <ActionBar />}
       <Title>{t({ id: answers ? 'answers' : 'comments' })}</Title>
 
-      <Form {...commonProps} reverseList={reverseList} />
-      <Divider />
-      <List {...commonProps} answeringDisabled={answers} />
+      {!disabled &&
+        <Fragment>
+          <Form {...commonProps} reverseList={reverseList} />
+          <Divider />
+        </Fragment>
+      }
+      <List {...commonProps} answeringDisabled={answers} disabled={disabled} />
     </div>
   );
 }
@@ -35,6 +40,7 @@ CommentsSection.propTypes = {
   withActionBar: PropTypes.bool,
   reverseList: PropTypes.bool,
   answers: PropTypes.bool,
+  disabled: PropTypes.bool,
   intl: intlShape.isRequired,
 };
 
@@ -42,6 +48,7 @@ CommentsSection.defaultProps = {
   withActionBar: false,
   reverseList: false,
   answers: false,
+  disabled: false,
 };
 
 export default injectIntl(CommentsSection);

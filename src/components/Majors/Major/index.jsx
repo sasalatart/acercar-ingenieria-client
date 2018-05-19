@@ -7,6 +7,7 @@ import {
   loggedInRoute,
   majorAdminRoute,
   questionsAdministrationRoute,
+  articlesAdministrationRoute,
 } from '../../../containers/Routes';
 import MajorInfo from './Info';
 import Edit from './Edit';
@@ -165,8 +166,8 @@ export default class Major extends Component {
             />
 
             <Route
-              path={this.majorRoutes.articles}
-              render={loggedInRoute(ArticlesList, { majorId: id })}
+              path={`${this.majorRoutes.articles}/:pending?`}
+              render={articlesAdministrationRoute(ArticlesList)}
             />
 
             <Route

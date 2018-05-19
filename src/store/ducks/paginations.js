@@ -23,8 +23,14 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
   const getData = state => state[resourceName];
   const getParamsPage = (state, params = {}) => params.page;
   const getBaseResourceId = (state, params = {}) => params.baseResourceId;
-  const getPagingPath = baseResourceId => compact([...pagingPath, baseResourceName && baseResourceId]);
-  const getMetaPath = baseResourceId => compact([...metaPath, baseResourceName && baseResourceId]);
+  const getPagingPath = baseResourceId => compact([
+    ...pagingPath,
+    baseResourceName && baseResourceId,
+  ]);
+  const getMetaPath = baseResourceId => compact([
+    ...metaPath,
+    baseResourceName && baseResourceId,
+  ]);
 
   const getPagedIds = createSelector(
     getBaseResourceId,
@@ -89,7 +95,7 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
 
   // Reducer Utils
   const setPage = (state, payload) => {
-    const { pagination, result, request: { urlParams: { baseResourceId } } } = payload;
+    const { pagination, result, request: { fetchParams: { baseResourceId } } } = payload;
 
     const ids = new OrderedSet(result);
     return state
@@ -145,7 +151,7 @@ export default function pagingFnsFactory(resourceName, schema, options = {}) {
 }
 
 function getFinalParams(params) {
-  return params.urlParams || get(params.request, 'urlParams', params);
+  return params.fetchParams || get(params.request, 'fetchParams', params);
 }
 
 export function prepareGetPagingFns(switchFn) {
@@ -155,18 +161,16 @@ export function prepareGetPagingFns(switchFn) {
   };
 }
 
-export function removeFromAllPages(state, pagingFns, urlParams) {
+export function removeFromAllPages(state, pagingFns, fetchParams) {
   return pagingFns.reduce(
-    (tempState, pagingFn) => pagingFn.reducer.removeFromPage(tempState, urlParams),
+    (tempState, pagingFn) => pagingFn.reducer.removeFromPage(tempState, fetchParams),
     state,
   );
 }
 
-export function resetPaginationActionFactory(type, withSuffix) {
-  const propertyName = withSuffix ? 'suffix' : 'baseResourceId';
-
-  return value => ({
+export function resetPaginationActionFactory(type) {
+  return payload => ({
     type,
-    payload: { [propertyName]: value },
+    payload,
   });
 }

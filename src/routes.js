@@ -19,10 +19,10 @@ const ROUTES = {
   MAJORS_NEW: '/majors/new',
   MAJOR: id => `/majors/${id}`,
   MAJOR_EDIT: id => `/majors/${id}/edit`,
-  ARTICLES: majorId => (majorId
-    ? `/majors/${majorId}/articles`
-    : '/articles'
-  ),
+  ARTICLES: (majorId, suffix) => {
+    const urlSuffix = suffix ? `/${suffix}` : '';
+    return majorId ? `/majors/${majorId}/articles${urlSuffix}` : `/articles${urlSuffix}`;
+  },
   ARTICLES_NEW: majorId => (majorId
     ? `/majors/${majorId}/articles/new`
     : '/articles/new'

@@ -1,6 +1,5 @@
 import { updateEntity } from './entities';
-
-export const collection = 'likes';
+import { likesCollection as collection } from '../../lib/collections';
 
 const TYPES = {
   CREATE_LIKE: 'likes/CREATE_LIKE',
@@ -15,7 +14,7 @@ function likingFactory(liking) {
         payload: {
           method: liking ? 'POST' : 'DELETE',
           url: `/${baseResourceName}/${baseResourceId}/likes`,
-          urlParams: { baseResourceName, baseResourceId, collection },
+          fetchParams: { baseResourceName, baseResourceId, collection },
         },
       }).then(() => {
         const updateFn = entity => ({

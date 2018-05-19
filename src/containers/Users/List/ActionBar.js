@@ -8,7 +8,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   const resetPaginationFn = ownProps.admins ? resetAdminsPagination : resetUsersPagination;
 
   return {
-    resetPagination: () => dispatch(resetPaginationFn(ownProps.majorId)),
+    resetPagination: () => dispatch(resetPaginationFn({ baseResourceId: ownProps.majorId })),
   };
 }
 

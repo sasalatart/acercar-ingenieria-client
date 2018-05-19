@@ -36,7 +36,7 @@ const styles = {
     alignItems: 'center',
     marginBottom: '8px',
   },
-  majorIcon: {
+  icon: {
     fontSize: '20px',
     marginRight: '5px',
   },
@@ -80,6 +80,7 @@ function renderExtra(previewUrl) {
 function renderMeta(article) {
   const titleTag = (
     <span>
+      {!article.approved && <Icon type="lock" style={styles.icon} />}
       <ArticleLink id={article.id} majorId={article.majorId}>{article.title}</ArticleLink>
     </span>
   );
@@ -113,7 +114,7 @@ function ArticleListItem({
       {renderMeta(article, t)}
       {displayMajor &&
         <span style={styles.majorContainer}>
-          <Icon type="pushpin" style={styles.majorIcon} />
+          <Icon type="pushpin" style={styles.icon} />
           <MajorLink id={article.majorId}>{article.majorSummary.name}</MajorLink>
         </span>
       }

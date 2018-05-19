@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { resetPagination, getSuffix } from '../../../store/ducks/discussions';
+import { resetPagination } from '../../../store/ducks/discussions';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import ActionBar from '../../../components/Discussions/List/ActionBar';
+import { getSuffix } from '../../../lib/discussions';
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    resetPagination: () => dispatch(resetPagination(getSuffix(ownProps.mine))),
+    resetPagination: () => dispatch(resetPagination({ suffix: getSuffix(ownProps.mine) })),
   };
 }
 

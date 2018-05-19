@@ -5,7 +5,6 @@ import pick from 'lodash/pick';
 import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
 import {
-  collection,
   loadDiscussion,
   createDiscussion,
   updateDiscussion,
@@ -16,6 +15,7 @@ import withAuthorization from '../../hoc/WithAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import DiscussionForm from '../../components/Discussions/Form';
 import discussionsValidations from '../../validations/discussions';
+import { discussionsCollection as collection } from '../../lib/collections';
 import { processAttachableFormValues } from '../../lib/attachments';
 
 const FIELDS = [

@@ -1,7 +1,6 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
-import keyMirror from 'keymirror';
 import { goToDiscussion } from './routes';
 import { getEntities } from './entities';
 import pagingFnsFactory, {
@@ -11,9 +10,9 @@ import pagingFnsFactory, {
 } from './paginations';
 import { getId } from './shared';
 import { discussionsSchema } from '../../schemas';
+import { suffixes, getSuffix } from '../../lib/discussions';
+import { discussionsCollection as collection } from '../../lib/collections';
 
-export const collection = 'discussions';
-export const suffixes = keyMirror({ forum: null, mine: null });
 const commonArgs = [collection, discussionsSchema];
 const forumPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.forum });
 const myPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.mine });
@@ -34,10 +33,6 @@ const TYPES = {
   RESET_PAGINATION: 'discussions/RESET_PAGINATION',
 };
 
-export function getSuffix(mine) {
-  return mine ? suffixes.mine : suffixes.forum;
-}
-
 export const getPagingFns = prepareGetPagingFns(({ suffix }) => (
   suffix === suffixes.mine ? myPagingFns : forumPagingFns
 ));
@@ -49,7 +44,7 @@ export function loadDiscussions(page = 1, mine, query) {
       method: 'GET',
       url: `/discussions${mine ? '/mine' : ''}`,
       query: { page, ...query },
-      urlParams: {
+      fetchParams: {
         collection, page, ...query, suffix: getSuffix(mine),
       },
       responseSchema: [discussionsSchema],
@@ -63,7 +58,7 @@ export function loadDiscussion(id) {
     payload: {
       method: 'GET',
       url: `/discussions/${id}`,
-      urlParams: { collection, id },
+      fetchParams: { collection, id },
       responseSchema: discussionsSchema,
     },
   };
@@ -76,7 +71,7 @@ export function createDiscussion(body) {
       payload: {
         method: 'POST',
         url: '/discussions',
-        urlParams: { collection },
+        fetchParams: { collection },
         body,
         responseSchema: discussionsSchema,
       },
@@ -92,7 +87,7 @@ export function updateDiscussion(id, body) {
       payload: {
         method: 'PUT',
         url: `/discussions/${id}`,
-        urlParams: { collection, id },
+        fetchParams: { collection, id },
         body,
         responseSchema: discussionsSchema,
       },
@@ -107,12 +102,12 @@ export function destroyDiscussion(id) {
     payload: {
       method: 'DELETE',
       url: `/discussions/${id}`,
-      urlParams: { collection, id },
+      fetchParams: { collection, id },
     },
   };
 }
 
-export const resetPagination = resetPaginationActionFactory(TYPES.RESET_PAGINATION, true);
+export const resetPagination = resetPaginationActionFactory(TYPES.RESET_PAGINATION);
 
 export default function discussionsReducer(state = INITIAL_STATE, { type, payload }) {
   switch (type) {
@@ -120,8 +115,8 @@ export default function discussionsReducer(state = INITIAL_STATE, { type, payloa
     case `${TYPES.LOAD_MINE}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = payload.request;
-      return removeFromAllPages(state, [forumPagingFns, myPagingFns], urlParams);
+      const { fetchParams } = payload.request;
+      return removeFromAllPages(state, [forumPagingFns, myPagingFns], fetchParams);
     }
     case TYPES.RESET_PAGINATION:
       return getPagingFns(payload).reset(state);

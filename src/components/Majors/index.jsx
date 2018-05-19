@@ -4,7 +4,7 @@ import {
   loggedInRoute,
   adminRoute,
   articleCreationRoute,
-  articleAdministrationRoute,
+  articleEditionRoute,
 } from '../../containers/Routes';
 import List from '../../containers/Majors/List';
 import Major from '../../containers/Majors/Major';
@@ -16,7 +16,7 @@ export default function Majors() {
   return (
     <Switch>
       <Route path="/majors/:majorId/comments/:id" component={loggedInRoute(Comment)} />
-      <Route path="/majors/:majorId/articles/:id/edit" render={articleAdministrationRoute(ArticleForm)} />
+      <Route path="/majors/:majorId/articles/:id/edit" render={articleEditionRoute(ArticleForm)} />
       <Route path="/majors/:majorId/articles/new" render={articleCreationRoute(ArticleForm)} />
       <Route path="/majors/:majorId/articles/:id" render={loggedInRoute(Article)} />
       <Route path="/majors/new" render={adminRoute(New)} />

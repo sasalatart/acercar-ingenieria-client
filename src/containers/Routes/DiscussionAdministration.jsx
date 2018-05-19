@@ -5,14 +5,11 @@ import {
   getIsAdmin,
   getCurrentUserEntity,
 } from '../../store/ducks/sessions';
-import {
-  collection,
-  loadDiscussion,
-  getDiscussionEntity,
-} from '../../store/ducks/discussions';
+import { loadDiscussion, getDiscussionEntity } from '../../store/ducks/discussions';
 import { getIsFetching } from '../../store/ducks/loading';
 import DataPlaceholder from '../../components/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
+import { discussionsCollection as collection } from '../../lib/collections';
 
 class DiscussionAdministration extends Component {
   static propTypes = {

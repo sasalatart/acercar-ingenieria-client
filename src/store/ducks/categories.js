@@ -3,8 +3,7 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
 import { categoriesSchema } from '../../schemas';
-
-const collection = 'categories';
+import { categoriesCollection as collection } from '../../lib/collections';
 
 const INITIAL_STATE = Map({
   activeCategoryIds: [],
@@ -20,7 +19,7 @@ export function loadCategories() {
     payload: {
       method: 'GET',
       url: '/categories',
-      urlParams: { collection },
+      fetchParams: { collection },
       responseSchema: [categoriesSchema],
     },
   };

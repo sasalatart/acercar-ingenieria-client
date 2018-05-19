@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import {
-  getCollectionParams,
-  loadUsers,
-  getPagingFns as getUsersPagingFns,
-} from '../../../store/ducks/users';
+import { loadUsers, getPagingFns as getUsersPagingFns } from '../../../store/ducks/users';
 import {
   loadAdmins,
   unsetSelectedUser,
@@ -14,6 +10,7 @@ import {
 } from '../../../store/ducks/admins';
 import { getIsFetching } from '../../../store/ducks/loading';
 import UsersList from '../../../components/Users/List';
+import { getCollectionParams } from '../../../lib/users';
 
 function mapStateToProps(state, ownProps) {
   const { majorId, admins } = ownProps;

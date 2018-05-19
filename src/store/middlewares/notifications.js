@@ -18,7 +18,7 @@ const notificationsMiddleware = store => next => (action) => {
   const destroyed = action.type.includes('DESTROY_FULFILLED');
 
   if (created || updated || destroyed) {
-    const { collection } = action.payload.request.urlParams;
+    const { collection } = action.payload.request.fetchParams;
     store.dispatch(resourceSuccessNotification(
       collection.slice(0, -1),
       getCategory(created, updated, destroyed),

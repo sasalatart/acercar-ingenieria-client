@@ -4,8 +4,8 @@ import { denormalize } from 'normalizr';
 import pagingFnsFactory from './paginations';
 import { announcementsSchema } from '../../schemas';
 import { getEntities } from './entities';
+import { announcementsCollection as collection } from '../../lib/collections';
 
-export const collection = 'announcements';
 export const pagingFns = pagingFnsFactory(collection, announcementsSchema);
 
 const INITIAL_STATE = new Map({
@@ -31,7 +31,7 @@ export function loadAnnouncements(page = 1) {
       method: 'GET',
       url: '/announcements',
       query: { page },
-      urlParams: { collection, page },
+      fetchParams: { collection, page },
       responseSchema: [announcementsSchema],
     },
   };
@@ -43,7 +43,7 @@ export function loadPinnedAnnouncements() {
     payload: {
       method: 'GET',
       url: '/announcements/pinned',
-      urlParams: { collection, suffix: 'pinned' },
+      fetchParams: { collection, suffix: 'pinned' },
       responseSchema: [announcementsSchema],
     },
   };
@@ -56,7 +56,7 @@ export function createAnnouncement(body) {
       payload: {
         method: 'POST',
         url: '/announcements',
-        urlParams: { collection },
+        fetchParams: { collection },
         body,
         responseSchema: announcementsSchema,
       },
@@ -71,7 +71,7 @@ export function updatePinned(id, pinned) {
     payload: {
       method: 'PUT',
       url: `/announcements/${id}`,
-      urlParams: { collection, id },
+      fetchParams: { collection, id },
       body: { pinned },
       responseSchema: announcementsSchema,
     },
@@ -84,7 +84,7 @@ export function destroyAnnouncement(id) {
     payload: {
       method: 'DELETE',
       url: `/announcements/${id}`,
-      urlParams: { collection, id },
+      fetchParams: { collection, id },
     },
   };
 }
@@ -98,11 +98,11 @@ export default function announcementsReducer(state = INITIAL_STATE, { type, payl
     case TYPES.ADD_TO_PAGINATION:
       return pagingFns.reducer.addToPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`: {
-      const { urlParams } = payload.request;
+      const { fetchParams } = payload.request;
       return pagingFns
         .reducer
-        .removeFromPage(state, urlParams)
-        .update('pinned', ids => ids.delete(urlParams.id));
+        .removeFromPage(state, fetchParams)
+        .update('pinned', ids => ids.delete(fetchParams.id));
     }
     default:
       return state;
