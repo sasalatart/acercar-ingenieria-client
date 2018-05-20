@@ -16,6 +16,7 @@ function Articles() {
       <Route path="/articles/:articleId/comments/:id" component={Comment} />
       <Route path="/articles/:id/edit" render={articleEditionRoute(Form)} />
       <Route path="/articles/new" render={articleCreationRoute(Form)} />
+      <Route path="/articles/mine" render={props => <List {...props} mine />} />
       <Route path="/articles/pending" render={articlesAdministrationRoute(List, { pending: true })} />
       <Route path="/articles/:id" component={Article} />
       <Route path="/articles" component={List} />

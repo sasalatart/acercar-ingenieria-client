@@ -16,19 +16,29 @@ import { suffixes, getCollectionParams } from '../../lib/articles';
 import { articlesCollection } from '../../lib/collections';
 
 const commonArgs = [articlesCollection, articlesSchema];
-const platformApprovedPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.approved });
-const platformPendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.pending });
-const majorsApprovedPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.approved });
-const majorsPendingPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.pending });
+
+const majorsPagingFns = {
+  pending: pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.pending }),
+  mine: pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.mine }),
+  approved: pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.approved }),
+};
+
+const platformPagingFns = {
+  pending: pagingFnsFactory(...commonArgs, { suffix: suffixes.pending }),
+  mine: pagingFnsFactory(...commonArgs, { suffix: suffixes.mine }),
+  approved: pagingFnsFactory(...commonArgs, { suffix: suffixes.approved }),
+};
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({
       approved: new Map({}),
+      mine: new Map({}),
       pending: new Map({}),
     }),
     majors: new Map({
       approved: new Map({}),
+      mine: new Map({}),
       pending: new Map({}),
     }),
   }),
@@ -44,13 +54,9 @@ const TYPES = {
   RESET_PAGINATION: 'articles/RESET_PAGINATION',
 };
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => {
-  if (baseResourceId) {
-    return suffix === suffixes.pending ? majorsPendingPagingFns : majorsApprovedPagingFns;
-  }
-
-  return suffix === suffixes.pending ? platformPendingPagingFns : platformApprovedPagingFns;
-});
+export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => (
+  baseResourceId ? majorsPagingFns[suffix] : platformPagingFns[suffix]
+));
 
 export function loadArticles(page = 1, majorId, suffix, search) {
   const urlSuffix = suffix !== suffixes.approved ? `/${suffix}` : '';
@@ -60,7 +66,7 @@ export function loadArticles(page = 1, majorId, suffix, search) {
     type: TYPES.LOAD_INDEX,
     payload: {
       method: 'GET',
-      url: majorId ? `/majors/${majorId}/articles${urlSuffix}` : `/articles/${urlSuffix}`,
+      url: majorId ? `/majors/${majorId}/articles${urlSuffix}` : `/articles${urlSuffix}`,
       query,
       fetchParams: { ...query, ...getCollectionParams(majorId), suffix },
       responseSchema: [articlesSchema],
@@ -142,16 +148,12 @@ export default function articlesReducer(state = INITIAL_STATE, { type, payload }
   switch (type) {
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { fetchParams } = payload.request;
-      const allPagingFns = [
-        majorsApprovedPagingFns,
-        majorsPendingPagingFns,
-        platformApprovedPagingFns,
-        platformPendingPagingFns,
-      ];
-      return removeFromAllPages(state, allPagingFns, fetchParams);
-    }
+    case `${TYPES.DESTROY}_FULFILLED`:
+      return removeFromAllPages(
+        state,
+        Object.values(majorsPagingFns).concat(Object.values(platformPagingFns)),
+        payload.request.fetchParams,
+      );
     case TYPES.RESET_PAGINATION:
       return getPagingFns(payload).reset(state, payload.baseResourceId);
     default:

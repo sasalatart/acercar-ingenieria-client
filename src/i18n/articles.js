@@ -2,7 +2,7 @@ export default {
   'en-US': {
     articles: 'Articles',
     article: 'Article',
-    'articles.approved': 'Approved Articles',
+    'articles.mine': 'My Articles',
     'articles.pending': 'Pending Articles',
     'articles.new': 'New Article',
     'articles.edit': 'Edit Article',
@@ -14,7 +14,7 @@ export default {
   'es-ES': {
     articles: 'Artículos',
     article: 'Artículo',
-    'articles.approved': 'Artículos aprobados',
+    'articles.mine': 'Mis artículos',
     'articles.pending': 'Artículos pendientes',
     'articles.new': 'Crear artículo',
     'articles.edit': 'Editar artículo',

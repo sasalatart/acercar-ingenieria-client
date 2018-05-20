@@ -4,6 +4,7 @@ import { Field } from 'redux-form';
 import { intlShape } from 'react-intl';
 import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
+import ButtonLink from '../../../containers/ButtonLink';
 import HideableButton from '../../HideableButton';
 import {
   SelectField,
@@ -85,19 +86,30 @@ export default class ArticlesActionBar extends Component {
       />,
     ];
 
-    if (adminOrMajorAdmin) {
-      const buttonLink = suffix !== suffixes.approved
-        ? (
-          <HideableButton key="goToApproved" to={ROUTES.ARTICLES(majorId)} icon="unlock">
-            {t({ id: 'articles.approved' })}
-          </HideableButton>
-        )
-        : (
-          <HideableButton key="goToPending" to={ROUTES.ARTICLES(majorId, suffixes.pending)} icon="lock">
-            {t({ id: 'articles.pending' })}
-          </HideableButton>
-        );
+    if (suffix !== suffixes.approved) {
+      const buttonLink = (
+        <HideableButton key="goToApproved" to={ROUTES.ARTICLES(majorId)} icon="file-text">
+          {t({ id: 'articles' })}
+        </HideableButton>
+      );
+      actions.push(buttonLink);
+    }
 
+    if (suffix !== suffixes.mine) {
+      const buttonLink = (
+        <ButtonLink key="goToMine" to={ROUTES.ARTICLES(majorId, suffixes.mine)}>
+          {t({ id: 'articles.mine' })}
+        </ButtonLink>
+      );
+      actions.push(buttonLink);
+    }
+
+    if (adminOrMajorAdmin && suffix !== suffixes.pending) {
+      const buttonLink = (
+        <HideableButton key="goToPending" to={ROUTES.ARTICLES(majorId, suffixes.pending)} icon="lock">
+          {t({ id: 'articles.pending' })}
+        </HideableButton>
+      );
       actions.push(buttonLink);
     }
 

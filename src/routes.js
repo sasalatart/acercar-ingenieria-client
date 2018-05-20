@@ -81,6 +81,11 @@ export const getMajorPaths = (majorId) => {
     users: '/users',
     questions: '/questions',
     articles: '/articles',
+    articlesMine: '/articles/mine',
+    articlesPending: '/articles/pending',
+    article: '/articles/:id',
+    articlesNew: '/articles/new',
+    articleEdit: '/articles/:id/edit',
     comments: '/comments',
     email: '/email',
   };

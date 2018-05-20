@@ -8,12 +8,16 @@ import {
   majorAdminRoute,
   questionsAdministrationRoute,
   articlesAdministrationRoute,
+  articleCreationRoute,
+  articleEditionRoute,
 } from '../../../containers/Routes';
 import MajorInfo from './Info';
 import Edit from './Edit';
 import MajorAdmins from '../../../containers/Majors/Major/Admins';
 import UsersList from '../../../containers/Users/List';
 import ArticlesList from '../../../containers/Articles/List';
+import ArticleForm from '../../../containers/Articles/Form';
+import Article from '../../../containers/Articles/Article';
 import Questions from '../../Questions';
 import CommentsSection from '../../Comments/Section';
 import VideoLinks from '../../VideoLinks';
@@ -23,6 +27,7 @@ import { getMajorPaths } from '../../../routes';
 import { themeStyles } from '../../../theme';
 
 const { Sider, Content } = Layout;
+const { Item } = Menu;
 
 const styles = {
   layout: themeStyles.innerLayout,
@@ -97,10 +102,10 @@ export default class Major extends Component {
   majorRoutes = getMajorPaths(this.props.id).routes;
 
   renderMenuItem = ({ key, icon, text }) => (
-    <Menu.Item key={key}>
+    <Item key={key}>
       <Icon type={icon} />
       <span>{text}</span>
-    </Menu.Item>
+    </Item>
   )
 
   render() {
@@ -140,7 +145,6 @@ export default class Major extends Component {
             />
 
             <Route
-              exact
               path={this.majorRoutes.videoLinks}
               component={VideoLinks}
             />
@@ -166,7 +170,32 @@ export default class Major extends Component {
             />
 
             <Route
-              path={`${this.majorRoutes.articles}/:pending?`}
+              path={this.majorRoutes.articleEdit}
+              render={articleEditionRoute(ArticleForm)}
+            />
+
+            <Route
+              path={this.majorRoutes.articlesNew}
+              render={articleCreationRoute(ArticleForm)}
+            />
+
+            <Route
+              path={this.majorRoutes.articlesMine}
+              render={articlesAdministrationRoute(ArticlesList, { mine: true })}
+            />
+
+            <Route
+              path={this.majorRoutes.articlesPending}
+              render={articlesAdministrationRoute(ArticlesList, { pending: true })}
+            />
+
+            <Route
+              path={this.majorRoutes.article}
+              render={loggedInRoute(Article)}
+            />
+
+            <Route
+              path={this.majorRoutes.articles}
               render={articlesAdministrationRoute(ArticlesList)}
             />
 

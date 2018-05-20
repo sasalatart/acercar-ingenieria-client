@@ -16,7 +16,7 @@ function processOwnProps(ownProps) {
 
   return {
     majorId: majorId && +majorId,
-    suffix: getSuffix(ownProps.pending),
+    suffix: getSuffix(ownProps.mine, ownProps.pending),
   };
 }
 
