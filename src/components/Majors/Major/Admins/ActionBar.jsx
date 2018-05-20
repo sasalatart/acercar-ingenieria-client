@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Alert } from 'antd';
@@ -15,7 +15,7 @@ const styles = {
 
 function renderModalContents(majorId, t) {
   return (
-    <div>
+    <Fragment>
       <Alert
         type="info"
         message={t({ id: 'forms.beforeContactingAdmins.message' })}
@@ -25,7 +25,7 @@ function renderModalContents(majorId, t) {
       />
 
       <EmailForm majorId={majorId} personal />
-    </div>
+    </Fragment>
   );
 }
 
@@ -49,11 +49,11 @@ function MajorAdminsActionBar({
   }
 
   return (
-    <div>
+    <Fragment>
       <ActionBar actions={actions} />
 
       {renderModal(t({ id: 'majors.email.personal' }), renderModalContents(majorId, t))}
-    </div>
+    </Fragment>
   );
 }
 

@@ -15,7 +15,7 @@ function processOwnProps(ownProps) {
   const { majorId } = ownProps.match.params;
 
   return {
-    majorId: !!majorId && +majorId,
+    majorId: majorId && +majorId,
     suffix: getSuffix(ownProps.pending),
   };
 }

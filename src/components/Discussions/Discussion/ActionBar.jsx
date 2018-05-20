@@ -4,6 +4,7 @@ import { intlShape } from 'react-intl';
 import DestroyButton from '../../../containers/DestroyButton';
 import LikeButton from '../../../containers/LikeButton';
 import EnrollButton from '../../../containers/EnrollButton';
+import ReportButton from '../../Reports/Button';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
 import { discussionShape } from '../../../shapes';
@@ -21,20 +22,22 @@ function DiscussionActionBar({
   onDestroy,
   intl: { formatMessage: t },
 }) {
+  const discussionsBaseResourceParams = { baseResourceName: 'discussions', baseResourceId: id };
+  const discussionsCollectionParams = { collection: 'discussions', id };
+
   const actions = [
     <LikeButton
       key="like"
-      baseResourceName="discussions"
-      baseResourceId={id}
+      {...discussionsBaseResourceParams}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
     <EnrollButton
       key="enroll"
-      baseResourceName="discussions"
-      baseResourceId={id}
+      {...discussionsBaseResourceParams}
       enrolledByCurrentUser={enrolledByCurrentUser}
     />,
+    <ReportButton key="report" {...discussionsCollectionParams} />,
   ];
 
   if (admin || isAuthor) {
@@ -45,7 +48,7 @@ function DiscussionActionBar({
     );
 
     const destroyButton = (
-      <DestroyButton key="destroy" collection="discussions" id={id} callback={onDestroy} />
+      <DestroyButton key="destroy" {...discussionsCollectionParams} callback={onDestroy} />
     );
 
     actions.push(editButton);

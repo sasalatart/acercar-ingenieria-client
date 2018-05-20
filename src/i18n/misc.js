@@ -7,6 +7,7 @@ export default {
     submittedBy: 'Submitted by: ',
     approve: 'Approve',
     reject: 'Reject',
+    instructions: 'Instructions',
   },
   'es-ES': {
     goBack: 'Volver',
@@ -16,5 +17,6 @@ export default {
     submittedBy: 'Subido por: ',
     approve: 'Aprobar',
     reject: 'Rechazar',
+    instructions: 'Instrucciones',
   },
 };
