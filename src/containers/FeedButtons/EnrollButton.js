@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { enroll, unenroll } from '../store/ducks/enrollments';
+import { enroll, unenroll } from '../../store/ducks/enrollments';
 import {
   getIsCreating,
   getIsDestroying,
-} from '../store/ducks/loading';
-import WithAuthorization from '../hoc/WithAuthorization';
-import EnrollButton from '../components/EnrollButton';
-import { enrollmentsCollection as collection } from '../lib/collections';
+} from '../../store/ducks/loading';
+import WithAuthorization from '../../hoc/WithAuthorization';
+import EnrollButton from '../../components/FeedButtons/EnrollButton';
+import { enrollmentsCollection as collection } from '../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps, collection };

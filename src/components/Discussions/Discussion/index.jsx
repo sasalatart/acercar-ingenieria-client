@@ -5,6 +5,7 @@ import ActionBar from '../../../containers/Discussions/Discussion/ActionBar';
 import Title from '../../Layout/Title';
 import Author from '../../Author';
 import TagList from '../../TagList';
+import FeedButtons from '../../FeedButtons';
 import DateWithFormat from '../../DateWithFormat';
 import RichText from '../../RichText';
 import Attachments from '../../Attachments';
@@ -22,34 +23,45 @@ const styles = {
 };
 
 function Discussion({ discussion }) {
+  const {
+    id,
+    title,
+    tagList,
+    author,
+    description,
+    attachments,
+    createdAt,
+  } = discussion;
+
   return (
     <Fragment>
-      <ActionBar discussion={discussion} />
-      <Title>{discussion.title}</Title>
+      <ActionBar id={id} />
+      <Title>{title}</Title>
 
-      {discussion.tagList.length > 0 &&
+      {tagList.length > 0 &&
         <div style={styles.tagsContainer}>
-          <TagList tags={discussion.tagList} />
+          <TagList tags={tagList} />
         </div>
       }
 
-      <Divider />
-
-      <Author author={discussion.author} />
-      <DateWithFormat dateString={discussion.createdAt} style={styles.date} />
+      <FeedButtons resource={discussion} baseResourceName="discussions" />
 
       <Divider />
-      <RichText content={discussion.description} />
+      <Author author={author} />
+      <DateWithFormat dateString={createdAt} style={styles.date} />
 
-      {!isEmpty(discussion.attachments) &&
+      <Divider />
+      <RichText content={description} />
+
+      {!isEmpty(attachments) &&
         <Fragment>
           <Divider />
-          <Attachments attachments={discussion.attachments} />
+          <Attachments attachments={attachments} />
         </Fragment>
       }
 
       <Divider />
-      <CommentsSection baseResourceName="discussions" baseResourceId={discussion.id} />
+      <CommentsSection baseResourceName="discussions" baseResourceId={id} />
     </Fragment>
   );
 }

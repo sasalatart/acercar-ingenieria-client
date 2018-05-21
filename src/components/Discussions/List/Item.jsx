@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Icon } from 'antd';
 import WithAuthorization from '../../../hoc/WithAuthorization';
-import LikeButton from '../../../containers/LikeButton';
+import LikeButton from '../../../containers/FeedButtons/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import DateWithFormat from '../../DateWithFormat';

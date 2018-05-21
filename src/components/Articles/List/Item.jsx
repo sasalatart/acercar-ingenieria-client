@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import Linkify from 'react-linkify';
 import WithAuthorization from '../../../hoc/WithAuthorization';
-import LikeButton from '../../../containers/LikeButton';
+import LikeButton from '../../../containers/FeedButtons/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import Author from '../../Author';
 import TagList from '../../TagList';

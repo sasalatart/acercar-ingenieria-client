@@ -12,11 +12,13 @@ function ToggleLoadingButton({
   inactiveIcon,
   onClick,
   iconOnly,
+  size,
+  style,
 }) {
   if (loading) {
     return iconOnly
       ? <IconText type="loading" text={content} hideable />
-      : <HideableButton type="primary" icon="loading">{content}</HideableButton>;
+      : <HideableButton type="primary" icon="loading" size={size} style={style}>{content}</HideableButton>;
   }
 
   const icon = active ? activeIcon : inactiveIcon;
@@ -35,7 +37,14 @@ function ToggleLoadingButton({
 
   const type = active ? 'primary' : 'secondary';
   return (
-    <HideableButton type={type} icon={icon} disabled={!enabled} onClick={onClick}>
+    <HideableButton
+      type={type}
+      icon={icon}
+      disabled={!enabled}
+      onClick={onClick}
+      size={size}
+      style={style}
+    >
       {content}
     </HideableButton>
   );
@@ -52,6 +61,8 @@ ToggleLoadingButton.propTypes = {
     PropTypes.number,
   ]).isRequired,
   iconOnly: PropTypes.bool,
+  size: PropTypes.string,
+  style: PropTypes.shape({}),
   onClick: PropTypes.func.isRequired,
 };
 
@@ -59,6 +70,8 @@ ToggleLoadingButton.defaultProps = {
   enabled: true,
   active: false,
   iconOnly: false,
+  size: 'default',
+  style: undefined,
 };
 
 export default ToggleLoadingButton;

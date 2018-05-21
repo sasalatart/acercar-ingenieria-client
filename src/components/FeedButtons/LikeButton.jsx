@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ToggleLoadingButton from './ToggleLoadingButton';
+import ToggleLoadingButton from '../ToggleLoadingButton';
 
 function LikeButton({
   loggedIn,

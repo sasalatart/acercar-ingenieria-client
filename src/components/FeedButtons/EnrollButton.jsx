@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
-import ToggleLoadingButton from './ToggleLoadingButton';
+import ToggleLoadingButton from '../ToggleLoadingButton';
 
 function EnrollButton({ enrolledByCurrentUser, intl: { formatMessage: t }, ...rest }) {
   const contentState = enrolledByCurrentUser ? 'off' : 'on';

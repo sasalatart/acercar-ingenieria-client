@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import DestroyButton from '../../../containers/DestroyButton';
-import LikeButton from '../../../containers/LikeButton';
-import EnrollButton from '../../../containers/EnrollButton';
 import ReportButton from '../../Reports/Button';
 import ApprovalButton from '../../../containers/ApprovalButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
@@ -17,32 +15,14 @@ function ArticleActionBar({
   article: {
     id,
     majorId,
-    likedByCurrentUser,
-    likesCount,
-    enrolledByCurrentUser,
     approved,
   },
   onDestroy,
   intl: { formatMessage: t },
 }) {
-  const articlesBaseResourceParams = { baseResourceName: 'articles', baseResourceId: id };
-  const majorsBaseResourceParams = { collection: 'articles', id, baseResourceId: majorId };
+  const commonProps = { collection: 'articles', id, baseResourceId: majorId };
 
-  const approvedActions = [
-    <LikeButton
-      key="like"
-      {...articlesBaseResourceParams}
-      likedByCurrentUser={likedByCurrentUser}
-      likesCount={likesCount}
-    />,
-    <EnrollButton
-      key="enroll"
-      {...articlesBaseResourceParams}
-      enrolledByCurrentUser={enrolledByCurrentUser}
-    />,
-    <ReportButton key="report" {...majorsBaseResourceParams} />,
-  ];
-  const actions = approved ? approvedActions : [];
+  const actions = approved ? [<ReportButton key="report" {...commonProps} />] : [];
 
   if (adminOrMajorAdmin || isAuthor) {
     const editButton = (
@@ -57,11 +37,11 @@ function ArticleActionBar({
     );
 
     const approvalButton = (
-      <ApprovalButton key="approval" {...majorsBaseResourceParams} approved={approved} />
+      <ApprovalButton key="approval" {...commonProps} approved={approved} />
     );
 
     const destroyButton = (
-      <DestroyButton key="destroy" {...majorsBaseResourceParams} callback={onDestroy} />
+      <DestroyButton key="destroy" {...commonProps} callback={onDestroy} />
     );
 
     actions.push(editButton);

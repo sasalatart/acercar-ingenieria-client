@@ -9,6 +9,7 @@ import {
 import Linkify from 'react-linkify';
 import isEmpty from 'lodash/isEmpty';
 import ActionBar from '../../../containers/Articles/Article/ActionBar';
+import FeedButtons from '../../FeedButtons';
 import Title from '../../Layout/Title';
 import SubTitle from '../../Layout/SubTitle';
 import DateWithFormat from '../../DateWithFormat';
@@ -83,12 +84,12 @@ function renderContent(article) {
 }
 
 function Article({ article, intl: { formatMessage: t } }) {
-  const { majorSummary } = article;
+  const { title, majorSummary, categoryList } = article;
 
   return (
     <Fragment>
       <ActionBar article={article} />
-      <Title>{article.title}</Title>
+      <Title>{title}</Title>
 
       {majorSummary &&
         <SubTitle>
@@ -96,11 +97,13 @@ function Article({ article, intl: { formatMessage: t } }) {
         </SubTitle>
       }
 
-      {article.categoryList.length > 0 &&
+      {categoryList.length > 0 &&
         <div style={styles.tagsContainer}>
-          <TagList tags={article.categoryList} />
+          <TagList tags={categoryList} />
         </div>
       }
+
+      <FeedButtons resource={article} baseResourceName="articles" />
 
       {!article.approved &&
         <Alert

@@ -1,13 +1,10 @@
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
-import { like, unlike } from '../store/ducks/likes';
-import {
-  getIsCreating,
-  getIsDestroying,
-} from '../store/ducks/loading';
-import WithAuthorization from '../hoc/WithAuthorization';
-import LikeButton from '../components/LikeButton';
-import { likesCollection as collection } from '../lib/collections';
+import { like, unlike } from '../../store/ducks/likes';
+import { getIsCreating, getIsDestroying } from '../../store/ducks/loading';
+import WithAuthorization from '../../hoc/WithAuthorization';
+import LikeButton from '../../components/FeedButtons/LikeButton';
+import { likesCollection as collection } from '../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps, collection };

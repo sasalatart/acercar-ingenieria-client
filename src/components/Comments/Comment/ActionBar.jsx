@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LikeButton from '../../../containers/LikeButton';
-import EnrollButton from '../../../containers/EnrollButton';
+import LikeButton from '../../../containers/FeedButtons/LikeButton';
+import EnrollButton from '../../../containers/FeedButtons/EnrollButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import { commentShape } from '../../../shapes';
