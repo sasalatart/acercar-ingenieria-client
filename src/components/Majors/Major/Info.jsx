@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
@@ -6,6 +6,7 @@ import get from 'lodash/get';
 import RichText from '../../RichText';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import Title from '../../Layout/Title';
+import Image from '../../Image';
 import { majorShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
 import majorPlaceholder from '../../../images/major.png';
@@ -13,12 +14,11 @@ import majorPlaceholder from '../../../images/major.png';
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
   shortDescription: themeStyles.justifiedTextContainer,
-  logo: themeStyles.mediumImage,
 };
 
 function MajorInfo({ major, intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       <ActionBar />
       <Title>{major.name}</Title>
 
@@ -26,11 +26,7 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
       <Row type="flex" align="middle" gutter={24}>
         <Col sm={6}>
           <div style={styles.mediaContainer}>
-            <img
-              src={get(major.logo, 'medium', majorPlaceholder)}
-              alt="major-logo"
-              style={styles.logo}
-            />
+            <Image src={get(major.logo, 'medium', majorPlaceholder)} />
           </div>
         </Col>
         <Col sm={18}>
@@ -46,7 +42,7 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
 
       <Divider>{t({ id: 'majors.moreInfo' })}</Divider>
       <RichText content={major.description} />
-    </div>
+    </Fragment>
   );
 }
 

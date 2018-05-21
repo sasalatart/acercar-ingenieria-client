@@ -57,10 +57,6 @@ export const themeStyles = {
   error: {
     color: colors.error,
   },
-  mediumImage: {
-    maxWidth: '200px',
-    maxHeight: '200px',
-  },
   label: {
     color: 'rgba(0, 0, 0, .85)',
     cursor: 'default',

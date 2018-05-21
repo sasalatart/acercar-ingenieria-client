@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Card } from 'antd';
 import get from 'lodash/get';
 import noop from 'lodash/noop';
+import Image from '../../Image';
 import { userShape } from '../../../shapes';
 import avatarPlaceholder from '../../../images/user.png';
 
@@ -15,7 +16,7 @@ const styles = {
 };
 
 function ProfileCard({ user, hoverable, onClick }) {
-  const cover = <img alt="profilePicture" src={get(user.avatar, 'medium') || avatarPlaceholder} />;
+  const cover = <Image src={get(user.avatar, 'medium') || avatarPlaceholder} />;
 
   return (
     <Card cover={cover} onClick={onClick} style={styles.card} hoverable={hoverable}>

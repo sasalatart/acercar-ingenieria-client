@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
-import { List, Avatar, Icon } from 'antd';
+import { List, Icon } from 'antd';
 import get from 'lodash/get';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
 import MajorLink from '../Major/Link';
+import Image, { sizes } from '../../Image';
 import { majorShape } from '../../../shapes';
 import ROUTES from '../../../routes';
 import { themeStyles } from '../../../theme';
@@ -29,12 +30,7 @@ function MajorItem({
   },
   intl: { formatMessage: t },
 }) {
-  const avatar = <Avatar src={get(logo, 'thumb') || majorPlaceholder} shape="square" />;
-
-  const title = <MajorLink id={id}>{name}</MajorLink>;
-  const actions = [
-    <MajorLink id={id}><Icon type="info-circle" /></MajorLink>,
-  ];
+  const actions = [];
 
   if (admin) {
     const majorEditHref = ROUTES.MAJOR_EDIT(id);
@@ -54,7 +50,14 @@ function MajorItem({
     actions.push(destroyButton);
   }
 
+  const avatar = <Image src={get(logo, 'thumb') || majorPlaceholder} size={sizes.thumb} />;
+  const title = (
+    <span>
+      <MajorLink id={id}>{name}</MajorLink>
+    </span>
+  );
   const description = <p style={styles.shortDescription}>{shortDescription}</p>;
+
   return (
     <Item actions={actions}>
       <Meta avatar={avatar} title={title} description={description} />

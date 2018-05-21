@@ -96,7 +96,7 @@ export default class ArticleForm extends Component {
             validate={[validators.required]}
           />
           <Row gutter={GUTTER}>
-            <Col sm={24} md={8}>
+            <Col sm={24} md={9}>
               <div style={styles.fileInputWrapper}>
                 <Field
                   name="preview"
@@ -107,7 +107,7 @@ export default class ArticleForm extends Component {
                 />
               </div>
             </Col>
-            <Col sm={24} md={16}>
+            <Col sm={24} md={15}>
               {majorOptions.length > 0 &&
                 <Field
                   name="majorId"

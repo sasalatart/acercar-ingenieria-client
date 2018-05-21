@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
 import PinButton from '../../../containers/Announcements/List/PinButton';
 import DestroyButton from '../../../containers/DestroyButton';
+import Image from '../../Image';
 import { announcementShape } from '../../../shapes';
 
 const { Item } = List;
@@ -11,15 +12,11 @@ const styles = {
   item: {
     margin: '10px',
   },
-  image: {
-    maxHeight: '200px',
-  },
 };
 
 function AnnouncementItem({ announcement, onClick }) {
   const cover = (
-    <img
-      alt="announcement"
+    <Image
       src={announcement.picture.medium}
       onClick={() => onClick(announcement.id)}
       style={styles.image}

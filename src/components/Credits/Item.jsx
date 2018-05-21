@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { List, Card, Icon } from 'antd';
+import { Card, Icon } from 'antd';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import DestroyButton from '../../containers/DestroyButton';
+import Image from '../Image';
 import { creditShape } from '../../shapes';
 
-const { Item } = List;
 const { Meta } = Card;
 
 const styles = {
   card: {
     margin: '16px',
+    width: '200px',
   },
 };
 
@@ -36,14 +37,12 @@ function CreditItem({
     actions.push(destroyButton);
   }
 
-  const imageTag = <img alt={`credit-${id}`} src={resource.medium} />;
+  const imageTag = <Image src={resource.medium} />;
   const title = <a href={resourceUrl} target="_blank">{resourceName}</a>;
   return (
-    <Item>
-      <Card cover={imageTag} actions={actions} style={styles.card}>
-        <Meta title={title} description={t({ id: 'credits.by' }, { authorName })} />
-      </Card>
-    </Item>
+    <Card cover={imageTag} actions={actions} style={styles.card}>
+      <Meta title={title} description={t({ id: 'credits.by' }, { authorName })} />
+    </Card>
   );
 }
 

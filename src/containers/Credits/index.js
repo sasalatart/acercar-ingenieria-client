@@ -3,6 +3,7 @@ import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { loadCredits, getCreditsEntities } from '../../store/ducks/credits';
 import { getIsFetching } from '../../store/ducks/loading';
+import WithLoadableResource from '../../hoc/WithLoadableResource';
 import Credits from '../../components/Credits';
 import { creditsCollection as collection } from '../../lib/collections';
 
@@ -20,5 +21,8 @@ const mapDispatchToProps = {
   loadCredits,
 };
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Credits);
+const connectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WithLoadableResource('loadCredits', 'credits')(Credits));
 export default injectIntl(connectedComponent);

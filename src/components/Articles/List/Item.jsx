@@ -12,6 +12,7 @@ import IconText from '../../IconText';
 import Hideable from '../../Layout/Hideable';
 import ArticleLink from '../Article/Link';
 import MajorLink from '../../Majors/Major/Link';
+import Image from '../../Image';
 import { articleShape } from '../../../shapes';
 import { themeStyles, breakpointsKeys } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
@@ -27,9 +28,6 @@ const styles = {
     alignItems: 'center',
     height: '100%',
     width: '200px',
-  },
-  image: {
-    height: '150px',
   },
   majorContainer: {
     display: 'flex',
@@ -72,7 +70,7 @@ function renderActions(adminOrMajorAdmin, article) {
 function renderExtra(previewUrl) {
   return (
     <Hideable breakpoint={breakpointsKeys.xs} style={styles.imageWrapper}>
-      <img alt="summary-logo" src={previewUrl || articlePlaceholder} style={styles.image} />
+      <Image src={previewUrl || articlePlaceholder} />
     </Hideable>
   );
 }

@@ -18,6 +18,7 @@ import CommentsSection from '../../Comments/Section';
 import TagList from '../../TagList';
 import Author from '../../Author';
 import MajorLink from '../../Majors/Major/Link';
+import Image from '../../Image';
 import { articleShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
@@ -35,7 +36,9 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
   },
-  picture: themeStyles.mediumImage,
+  picture: {
+    overflow: 'hidden',
+  },
 };
 
 function renderContent(article) {
@@ -44,16 +47,12 @@ function renderContent(article) {
       <Divider />
 
       <Row gutter={24}>
-        <Col sm={6}>
+        <Col sm={9}>
           <div style={styles.mediaContainer}>
-            <img
-              src={article.previewUrl || articlePlaceholder}
-              alt="article-logo"
-              style={styles.picture}
-            />
+            <Image src={article.previewUrl || articlePlaceholder} style={styles.picture} />
           </div>
         </Col>
-        <Col sm={18}>
+        <Col sm={15}>
           <Author author={article.author} />
           <DateWithFormat dateString={article.createdAt} style={styles.date} withTime />
 

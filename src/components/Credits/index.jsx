@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape, FormattedMessage } from 'react-intl';
-import { List } from 'antd';
 import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/Credits/Form';
 import ActionBar from './ActionBar';
@@ -12,23 +11,25 @@ import { creditShape } from '../../shapes';
 const OBTAINED_FROM_LINK = <a href="https://thenounproject.com" taget="_blank">The Noun Project</a>;
 
 const styles = {
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
   obtainedFromWrapper: {
     marginBottom: '20px',
   },
 };
 
-const listGridSettings = { xs: 1, sm: 2, md: 4 };
-
 class Credits extends Component {
   static propTypes = {
-    loading: PropTypes.bool.isRequired,
     credits: PropTypes.arrayOf(creditShape).isRequired,
     editingId: PropTypes.number,
     onNewClicked: PropTypes.func.isRequired,
     onEditClicked: PropTypes.func.isRequired,
     onFormClose: PropTypes.func.isRequired,
     renderModal: PropTypes.func.isRequired,
-    loadCredits: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -36,24 +37,29 @@ class Credits extends Component {
     editingId: undefined,
   }
 
-  componentDidMount() {
-    this.props.loadCredits();
+  renderCredits() {
+    const { credits, onEditClicked } = this.props;
+
+    return (
+      <div style={styles.wrapper}>
+        {credits.map(credit =>
+          <CreditItem key={credit.id} credit={credit} onEditClicked={onEditClicked} />)}
+      </div>
+    );
   }
 
   render() {
     const {
-      loading,
-      credits,
       editingId,
       onNewClicked,
-      onEditClicked,
       onFormClose,
       renderModal,
       intl: { formatMessage: t },
     } = this.props;
 
+    const modalTitle = editingId ? t({ id: 'credits.edit' }) : t({ id: 'credits.new' });
     return (
-      <div>
+      <Fragment>
         <ActionBar onNewClicked={onNewClicked} />
         <Title>{t({ id: 'credits' })}</Title>
 
@@ -61,18 +67,10 @@ class Credits extends Component {
           <FormattedMessage id="credits.obtainedFrom" values={{ link: OBTAINED_FROM_LINK }} />
         </div>
 
-        <List
-          grid={listGridSettings}
-          loading={loading}
-          dataSource={credits}
-          renderItem={credit => <CreditItem credit={credit} onEditClicked={onEditClicked} />}
-        />
+        {this.renderCredits()}
 
-        {renderModal(
-          editingId ? t({ id: 'credits.edit' }) : t({ id: 'credits.new' }),
-          <Form id={editingId} onSubmitSuccess={onFormClose} />,
-        )}
-      </div>
+        {renderModal(modalTitle, <Form id={editingId} onSubmitSuccess={onFormClose} />)}
+      </Fragment>
     );
   }
 }

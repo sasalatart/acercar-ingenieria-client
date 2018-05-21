@@ -54,7 +54,7 @@ function mapStateToProps(state, ownProps) {
     initialValues: getInitialValues(id, majorId, article),
     majorOptions,
     categoryOptions,
-    currentPreviewURL: get(article, 'previewUrl', articlePlaceholder),
+    currentPreviewURL: get(article, 'previewUrl') || articlePlaceholder,
     previousAttachments: get(article, 'attachments', []),
   };
 }
