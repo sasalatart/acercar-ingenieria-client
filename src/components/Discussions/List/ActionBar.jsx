@@ -22,12 +22,7 @@ function renderExtraFields(t) {
   );
 }
 
-function DiscussionsActionBar({
-  loggedIn,
-  mine,
-  resetPagination,
-  intl: { formatMessage: t },
-}) {
+function DiscussionsActionBar({ mine, resetPagination, intl: { formatMessage: t } }) {
   const actions = [
     <SearchButtons
       key="search"
@@ -38,16 +33,7 @@ function DiscussionsActionBar({
     />,
   ];
 
-  if (loggedIn) {
-    const buttonLink = (
-      <HideableButton to={ROUTES.DISCUSSIONS_NEW} icon="plus">
-        {t({ id: 'discussions.new' })}
-      </HideableButton>
-    );
-    actions.push(buttonLink);
-  }
-
-  const buttonLink = mine
+  const goToLink = mine
     ? (
       <ButtonLink key="goToAllDiscussions" to={ROUTES.DISCUSSIONS}>
         {t({ id: 'discussions' })}
@@ -55,17 +41,23 @@ function DiscussionsActionBar({
     )
     : (
       <ButtonLink key="goToMyDiscussions" to={ROUTES.MY_DISCUSSIONS}>
-        {t({ id: 'discussions.mine' })}
+        {t({ id: 'mine' })}
       </ButtonLink>
     );
 
-  actions.push(buttonLink);
+  const creationLink = (
+    <HideableButton to={ROUTES.DISCUSSIONS_NEW} icon="plus">
+      {t({ id: 'discussions.new' })}
+    </HideableButton>
+  );
+
+  actions.push(goToLink);
+  actions.push(creationLink);
 
   return <ActionBar actions={actions} />;
 }
 
 DiscussionsActionBar.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
   mine: PropTypes.bool,
   resetPagination: PropTypes.func.isRequired,
   intl: intlShape.isRequired,

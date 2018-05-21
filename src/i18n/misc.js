@@ -8,6 +8,7 @@ export default {
     approve: 'Approve',
     reject: 'Reject',
     instructions: 'Instructions',
+    mine: 'Mine',
   },
   'es-ES': {
     goBack: 'Volver',
@@ -18,5 +19,6 @@ export default {
     approve: 'Aprobar',
     reject: 'Rechazar',
     instructions: 'Instrucciones',
+    mine: 'Míos',
   },
 };

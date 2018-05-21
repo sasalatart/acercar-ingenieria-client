@@ -116,6 +116,11 @@ function renderLowerHeader(currentUser, t) {
         text="Majors"
         icon="pushpin"
       />
+      <HeaderLink
+        to={ROUTES.QUESTIONS()}
+        text="FAQs"
+        icon="question-circle"
+      />
       {currentUser &&
         <HeaderLink
           to={ROUTES.ARTICLES()}
@@ -123,11 +128,6 @@ function renderLowerHeader(currentUser, t) {
           icon="file-text"
         />
       }
-      <HeaderLink
-        to={ROUTES.QUESTIONS()}
-        text="FAQs"
-        icon="question-circle"
-      />
       {currentUser &&
         <HeaderLink
           to={ROUTES.DISCUSSIONS}

@@ -16,16 +16,6 @@ function QuestionsActionBar({
 }) {
   const actions = [];
 
-  if (loggedIn) {
-    const proposeOneButton = (
-      <HideableButton type="primary" icon="form" onClick={onProposeClicked}>
-        {t({ id: 'forms.proposeOne' })}
-      </HideableButton>
-    );
-
-    actions.push(proposeOneButton);
-  }
-
   if (adminOrMajorAdmin) {
     const route = pending ? ROUTES.QUESTIONS(majorId) : ROUTES.PENDING_QUESTIONS(majorId);
 
@@ -42,6 +32,16 @@ function QuestionsActionBar({
       );
 
     actions.push(buttonLink);
+  }
+
+  if (loggedIn) {
+    const proposeOneButton = (
+      <HideableButton type="primary" icon="plus" onClick={onProposeClicked}>
+        {t({ id: 'forms.proposeOne' })}
+      </HideableButton>
+    );
+
+    actions.push(proposeOneButton);
   }
 
   return <ActionBar actions={actions} />;

@@ -96,17 +96,6 @@ export default class ArticleForm extends Component {
             validate={[validators.required]}
           />
           <Row gutter={GUTTER}>
-            <Col sm={24} md={9}>
-              <div style={styles.fileInputWrapper}>
-                <Field
-                  name="preview"
-                  component={ImageField}
-                  label={t({ id: 'forms.optionalPicture' })}
-                  imagePlaceholder={currentPreviewURL}
-                  validate={[validators.image, validators.maxPreviewSize]}
-                />
-              </div>
-            </Col>
             <Col sm={24} md={15}>
               {majorOptions.length > 0 &&
                 <Field
@@ -128,6 +117,17 @@ export default class ArticleForm extends Component {
                 label={t({ id: 'forms.shortDescription' })}
                 validate={[validators.required, validators.maxShortDescriptionLength]}
               />
+            </Col>
+            <Col sm={24} md={9}>
+              <div style={styles.fileInputWrapper}>
+                <Field
+                  name="preview"
+                  component={ImageField}
+                  label={t({ id: 'forms.optionalPicture' })}
+                  imagePlaceholder={currentPreviewURL}
+                  validate={[validators.image, validators.maxPreviewSize]}
+                />
+              </div>
             </Col>
           </Row>
           <Field

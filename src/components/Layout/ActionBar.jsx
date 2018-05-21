@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
+import Radium from 'radium';
 import HideableButton from '../HideableButton';
+import { breakpoints } from '../../theme';
 
 const styles = {
   actionBar: hasActions => ({
@@ -11,6 +13,9 @@ const styles = {
   }),
   actionButton: {
     margin: '0 5px',
+    [breakpoints.sm]: {
+      margin: '0 1px',
+    },
   },
 };
 
@@ -45,4 +50,4 @@ ActionBar.defaultProps = {
   actions: [],
 };
 
-export default ActionBar;
+export default Radium(ActionBar);

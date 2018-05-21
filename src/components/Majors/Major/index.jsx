@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { intlShape } from 'react-intl';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout } from 'antd';
 import {
   loggedInRoute,
   majorAdminRoute,
@@ -19,19 +19,16 @@ import ArticlesList from '../../../containers/Articles/List';
 import ArticleForm from '../../../containers/Articles/Form';
 import Article from '../../../containers/Articles/Article';
 import Questions from '../../Questions';
-import CommentsSection from '../../Comments/Section';
 import VideoLinks from '../../VideoLinks';
-import Hideable from '../../Layout/Hideable';
+import Menu from '../../../containers/Menu';
 import { majorShape } from '../../../shapes';
 import { getMajorPaths } from '../../../routes';
-import { themeStyles, breakpointsKeys } from '../../../theme';
+import { themeStyles } from '../../../theme';
 
-const { Sider, Content } = Layout;
-const { Item } = Menu;
+const { Content } = Layout;
 
 const styles = {
   layout: themeStyles.innerLayout,
-  sider: themeStyles.innerSider,
   content: themeStyles.innerContent,
 };
 
@@ -40,87 +37,51 @@ export default class Major extends Component {
     loggedIn: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     major: majorShape.isRequired,
-    activeMenuKey: PropTypes.string.isRequired,
-    replaceRoute: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
-  getMenus() {
-    const { major: { name }, intl: { formatMessage: t } } = this.props;
+  getMenuItems = () => {
+    const { loggedIn, major, intl: { formatMessage: t } } = this.props;
 
-    return {
-      info: {
-        key: this.majorKeys.info,
-        icon: 'info-circle',
-        text: name,
-      },
-      videoLinks: {
-        icon: 'video-camera',
-        key: this.majorKeys.videoLinks,
-        text: 'Videos',
-      },
-      admins: {
-        key: this.majorKeys.admins,
-        icon: 'star-o',
-        text: 'Admins',
-      },
-      users: {
-        key: this.majorKeys.users,
-        icon: 'team',
-        text: t({ id: 'majors.interestedUsers' }),
-      },
-      questions: {
-        key: this.majorKeys.questions,
-        icon: 'question-circle',
-        text: 'FAQs',
-      },
-      articles: {
-        key: this.majorKeys.articles,
-        icon: 'file-text',
-        text: t({ id: 'majors.articles' }),
-      },
-      comments: {
-        key: this.majorKeys.comments,
-        icon: 'message',
-        text: t({ id: 'majors.comments' }),
-      },
-    };
+    return [{
+      key: this.majorKeys.info,
+      icon: 'info-circle',
+      text: major.name,
+    }, {
+      icon: 'video-camera',
+      key: this.majorKeys.videoLinks,
+      text: 'Videos',
+    }, {
+      key: this.majorKeys.admins,
+      icon: 'star-o',
+      text: 'Admins',
+      noRender: !loggedIn,
+    }, {
+      key: this.majorKeys.users,
+      icon: 'team',
+      text: t({ id: 'majors.interestedUsers' }),
+      noRender: !loggedIn,
+    }, {
+      key: this.majorKeys.questions,
+      icon: 'question-circle',
+      text: 'FAQs',
+    }, {
+      key: this.majorKeys.articles,
+      icon: 'file-text',
+      text: t({ id: 'majors.articles' }),
+      noRender: !loggedIn,
+    }];
   }
 
   majorKeys = getMajorPaths(this.props.id).keys;
   majorRoutes = getMajorPaths(this.props.id).routes;
 
-  renderMenuItem = ({ key, icon, text }) => (
-    <Item key={key}>
-      <Icon type={icon} />
-      <Hideable breakpoint={breakpointsKeys.xs}>{text}</Hideable>
-    </Item>
-  )
-
   render() {
-    const {
-      loggedIn,
-      id,
-      major,
-      activeMenuKey,
-      replaceRoute,
-    } = this.props;
-
-    const menus = this.getMenus();
+    const { id, major } = this.props;
 
     return (
       <Layout style={styles.layout}>
-        <Sider breakpoint="sm" collapsedWidth="45" style={styles.sider}>
-          <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)} mode="vertical">
-            {this.renderMenuItem(menus.info)}
-            {this.renderMenuItem(menus.videoLinks)}
-            {loggedIn && this.renderMenuItem(menus.admins)}
-            {loggedIn && this.renderMenuItem(menus.users)}
-            {this.renderMenuItem(menus.questions)}
-            {loggedIn && this.renderMenuItem(menus.articles)}
-            {loggedIn && this.renderMenuItem(menus.comments)}
-          </Menu>
-        </Sider>
+        <Menu items={this.getMenuItems()} />
 
         <Content style={styles.content}>
           <Switch>
@@ -183,11 +144,6 @@ export default class Major extends Component {
             <Route
               path={this.majorRoutes.articles}
               render={articlesAdministrationRoute(ArticlesList)}
-            />
-
-            <Route
-              path={this.majorRoutes.comments}
-              render={loggedInRoute(CommentsSection, { baseResourceName: 'majors', baseResourceId: id, withActionBar: true })}
             />
           </Switch>
         </Content>

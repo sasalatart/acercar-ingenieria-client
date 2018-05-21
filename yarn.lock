@@ -4407,7 +4407,7 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "~3.0.0"
 
-lodash.throttle@^4.0.0:
+lodash.throttle@^4.0.0, lodash.throttle@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
 
@@ -6157,6 +6157,13 @@ react-scrolllock@^2.0.1:
   resolved "https://registry.yarnpkg.com/react-scrolllock/-/react-scrolllock-2.0.1.tgz#dd323f5da9de75f0bb64b997ee5967dd47f0a3ff"
   dependencies:
     exenv "^1.2.2"
+
+react-sizes@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-sizes/-/react-sizes-1.0.3.tgz#4f5c6f05c5e2417f710d699f26931dd6e765a223"
+  dependencies:
+    lodash.throttle "^4.1.1"
+    prop-types "^15.6.0"
 
 react-slick@~0.17.0:
   version "0.17.1"

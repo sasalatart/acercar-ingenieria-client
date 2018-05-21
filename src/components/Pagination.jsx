@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 import { Pagination } from 'antd';
 import URI from 'urijs';
 import DataPlaceholder from './DataPlaceholder';
@@ -13,7 +14,7 @@ const styles = {
   },
 };
 
-export default class PaginationControls extends Component {
+class PaginationControls extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     noData: PropTypes.bool.isRequired,
@@ -84,3 +85,5 @@ export default class PaginationControls extends Component {
     );
   }
 }
+
+export default Radium(PaginationControls);

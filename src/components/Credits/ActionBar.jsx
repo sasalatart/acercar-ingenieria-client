@@ -14,7 +14,7 @@ function CreditsActionBar({
 
   if (admin) {
     const createButton = (
-      <HideableButton type="primary" icon="form" onClick={onNewClicked}>
+      <HideableButton type="primary" icon="plus" onClick={onNewClicked}>
         {t({ id: 'credits.new' })}
       </HideableButton>
     );

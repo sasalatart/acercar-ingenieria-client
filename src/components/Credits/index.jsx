@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape, FormattedMessage } from 'react-intl';
+import Radium from 'radium';
 import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/Credits/Form';
 import ActionBar from './ActionBar';
 import Title from '../Layout/Title';
 import CreditItem from './Item';
 import { creditShape } from '../../shapes';
+import { breakpoints } from '../../theme';
 
 const OBTAINED_FROM_LINK = <a href="https://thenounproject.com" taget="_blank">The Noun Project</a>;
 
@@ -16,6 +18,9 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
+    [breakpoints.sm]: {
+      justifyContent: 'center',
+    },
   },
   obtainedFromWrapper: {
     marginBottom: '20px',
@@ -75,4 +80,4 @@ class Credits extends Component {
   }
 }
 
-export default WithModalForm(Credits);
+export default WithModalForm(Radium(Credits));

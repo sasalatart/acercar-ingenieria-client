@@ -2,31 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { intlShape } from 'react-intl';
-import {
-  Layout,
-  Menu,
-  Icon,
-  Badge,
-} from 'antd';
-import { userShape } from '../../../shapes';
+import { Layout, Badge } from 'antd';
+import Menu from '../../../containers/Menu';
 import ProfileInfo from './Info';
 import Notifications from '../../Notifications';
 import ProfileEdit from './Edit';
 import ChangePassword from './ChangePassword';
 import DataPlaceholder from '../../DataPlaceholder';
 import Hideable from '../../Layout/Hideable';
+import { userShape } from '../../../shapes';
 import { getProfilePaths } from '../../../routes';
 import { themeStyles } from '../../../theme';
 
-const { Sider, Content } = Layout;
-
-const { Item } = Menu;
+const { Content } = Layout;
 
 const styles = {
   layout: themeStyles.innerLayout,
-  sider: themeStyles.innerSider,
   content: themeStyles.innerContent,
-  menuItemExtra: {
+  extra: {
     marginLeft: '10px',
   },
 };
@@ -39,9 +32,7 @@ class Profile extends Component {
     user: userShape,
     mine: PropTypes.bool,
     notificationsCount: PropTypes.number.isRequired,
-    activeMenuKey: PropTypes.string.isRequired,
     loadUser: PropTypes.func.isRequired,
-    replaceRoute: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
@@ -60,42 +51,34 @@ class Profile extends Component {
     }
   }
 
-  getMenus() {
-    const { intl: { formatMessage: t } } = this.props;
+  getMenuItems = () => {
+    const { notificationsCount, intl: { formatMessage: t } } = this.props;
 
-    return {
-      info: {
-        key: this.profileKeys.info,
-        icon: 'user',
-        text: t({ id: 'profile.info' }),
-      },
-      notifications: {
-        key: this.profileKeys.notifications,
-        icon: 'notification',
-        text: t({ id: 'profile.notifications' }),
-      },
-      edit: {
-        key: this.profileKeys.edit,
-        icon: 'edit',
-        text: t({ id: 'profile.edit' }),
-      },
-      password: {
-        key: this.profileKeys.password,
-        icon: 'lock',
-        text: t({ id: 'profile.changePassword' }),
-      },
-    };
+    return [{
+      key: this.profileKeys.info,
+      icon: 'user',
+      text: t({ id: 'profile.info' }),
+    }, {
+      key: this.profileKeys.notifications,
+      icon: 'notification',
+      text: t({ id: 'profile.notifications' }),
+      extra: (
+        <Hideable style={styles.extra}>
+          <Badge count={notificationsCount} />
+        </Hideable>
+      ),
+    }, {
+      key: this.profileKeys.edit,
+      icon: 'edit',
+      text: t({ id: 'profile.edit' }),
+    }, {
+      key: this.profileKeys.password,
+      icon: 'lock',
+      text: t({ id: 'profile.changePassword' }),
+    }];
   }
 
   profileKeys = getProfilePaths().keys;
-
-  renderMenuItem = ({ key, icon, text }, extra) => (
-    <Item key={key}>
-      <Icon type={icon} />
-      <span>{text}</span>
-      {extra && <Hideable style={styles.menuItemExtra}>{extra}</Hideable>}
-    </Item>
-  )
 
   render() {
     const {
@@ -103,9 +86,6 @@ class Profile extends Component {
       noData,
       user,
       mine,
-      notificationsCount,
-      activeMenuKey,
-      replaceRoute,
     } = this.props;
 
     if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
@@ -114,18 +94,9 @@ class Profile extends Component {
       return <ProfileInfo user={user} />;
     }
 
-    const menus = this.getMenus();
-
     return (
       <Layout style={styles.layout}>
-        <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
-          <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)}>
-            {this.renderMenuItem(menus.info)}
-            {this.renderMenuItem(menus.notifications, <Badge count={notificationsCount} />)}
-            {this.renderMenuItem(menus.edit)}
-            {this.renderMenuItem(menus.password)}
-          </Menu>
-        </Sider>
+        <Menu items={this.getMenuItems()} />
 
         <Content style={styles.content}>
           <Switch>

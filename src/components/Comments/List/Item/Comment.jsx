@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
+import Radium from 'radium';
 import { Button, Divider } from 'antd';
 import Actions from '../../../../containers/Comments/List/Item/Actions';
 import MainContent from '../../Comment/MainContent';
@@ -9,6 +10,7 @@ import ProfileAvatar from '../../../Users/Profile/Avatar';
 import ChildComments from './Children';
 import Hideable from '../../../Layout/Hideable';
 import { commentShape } from '../../../../shapes';
+import { breakpoints } from '../../../../theme';
 
 const styles = {
   parentWrapper: {
@@ -19,6 +21,9 @@ const styles = {
     display: 'flex',
     marginTop: '25px',
     marginLeft: '66px',
+    [breakpoints.sm]: {
+      marginLeft: '33px',
+    },
   },
   avatar: {
     marginRight: '10px',
@@ -126,4 +131,4 @@ class CommentItem extends Component {
   }
 }
 
-export default injectIntl(CommentItem);
+export default injectIntl(Radium(CommentItem));

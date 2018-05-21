@@ -5,12 +5,6 @@ import WithModal from '../../hoc/WithModal';
 import HideableButton from '../HideableButton';
 import Form from '../../containers/Search/Form';
 
-const styles = {
-  button: {
-    margin: '0 5px',
-  },
-};
-
 function SearchButton({
   filtersActive,
   removeFilter,
@@ -24,12 +18,12 @@ function SearchButton({
 
   return (
     <span>
-      <HideableButton type="primary" icon="search" onClick={onModalOpen} style={styles.button}>
+      <HideableButton type="primary" icon="search" onClick={onModalOpen}>
         {title}
       </HideableButton>
 
       {filtersActive &&
-        <HideableButton icon="close" onClick={removeFilter} style={styles.button}>
+        <HideableButton icon="close" onClick={removeFilter}>
           {t({ id: 'search.reset' })}
         </HideableButton>
       }

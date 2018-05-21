@@ -1,7 +1,5 @@
 import { connect } from 'react-redux';
-import { replace as replaceRoute } from 'react-router-redux';
 import { injectIntl } from 'react-intl';
-import { getPathname } from '../../../store/ducks/routes';
 import { loadUser, getUserEntity } from '../../../store/ducks/users';
 import { getCurrentUserEntity } from '../../../store/ducks/sessions';
 import { getNotificationsCount } from '../../../store/ducks/notifications';
@@ -22,13 +20,11 @@ function mapStateToProps(state, ownProps) {
     user,
     id,
     notificationsCount: getNotificationsCount(state),
-    activeMenuKey: getPathname(state),
   };
 }
 
 const mapDispatchToProps = {
   loadUser,
-  replaceRoute,
 };
 
 function mergeProps(stateProps, dispatchProps, ownProps) {

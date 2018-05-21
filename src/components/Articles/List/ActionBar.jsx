@@ -98,7 +98,7 @@ export default class ArticlesActionBar extends Component {
     if (suffix !== suffixes.mine) {
       const buttonLink = (
         <ButtonLink key="goToMine" to={ROUTES.ARTICLES(majorId, suffixes.mine)}>
-          {t({ id: 'articles.mine' })}
+          {t({ id: 'mine' })}
         </ButtonLink>
       );
       actions.push(buttonLink);

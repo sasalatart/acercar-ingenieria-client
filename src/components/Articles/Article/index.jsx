@@ -48,11 +48,6 @@ function renderContent(article) {
       <Divider />
 
       <Row gutter={24}>
-        <Col sm={9}>
-          <div style={styles.mediaContainer}>
-            <Image src={article.previewUrl || articlePlaceholder} style={styles.picture} />
-          </div>
-        </Col>
         <Col sm={15}>
           <Author author={article.author} />
           <DateWithFormat dateString={article.createdAt} style={styles.date} withTime />
@@ -60,6 +55,11 @@ function renderContent(article) {
           <Linkify>
             <p style={styles.shortDescription}>{article.shortDescription}</p>
           </Linkify>
+        </Col>
+        <Col sm={9}>
+          <div style={styles.mediaContainer}>
+            <Image src={article.previewUrl || articlePlaceholder} style={styles.picture} />
+          </div>
         </Col>
       </Row>
 

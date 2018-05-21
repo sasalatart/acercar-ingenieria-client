@@ -8,11 +8,8 @@ const styles = {
     const property = padded ? 'padding' : 'margin';
     return {
       [property]: '0 75px',
-      [breakpoints.sm]: {
+      [breakpoints.md]: {
         [property]: '0 15px',
-      },
-      [breakpoints.bg]: {
-        [property]: '0 33px',
       },
     };
   },

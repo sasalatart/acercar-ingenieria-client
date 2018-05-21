@@ -6,7 +6,7 @@ import ActionBar from '../../../containers/Layout/ActionBar';
 
 function AnnouncementsActionBar({ onCreateClicked, intl: { formatMessage: t } }) {
   const actions = [
-    <HideableButton type="primary" icon="form" onClick={onCreateClicked}>
+    <HideableButton type="primary" icon="plus" onClick={onCreateClicked}>
       {t({ id: 'forms.create' })}
     </HideableButton>,
   ];

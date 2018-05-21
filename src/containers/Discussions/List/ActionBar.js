@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { resetPagination } from '../../../store/ducks/discussions';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import ActionBar from '../../../components/Discussions/List/ActionBar';
 import { getSuffix } from '../../../lib/discussions';
 
@@ -12,4 +11,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 const connectedComponent = connect(null, mapDispatchToProps)(ActionBar);
-export default injectIntl(WithAuthorization(connectedComponent));
+export default injectIntl(connectedComponent);

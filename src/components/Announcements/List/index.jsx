@@ -9,6 +9,7 @@ import Lightbox from '../../Lightbox';
 import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
 import { paginationShape, announcementShape } from '../../../shapes';
+import { breakpoints } from '../../../theme';
 
 const styles = {
   container: {
@@ -16,6 +17,9 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
+    [breakpoints.xs]: {
+      justifyContent: 'center',
+    },
   },
 };
 
