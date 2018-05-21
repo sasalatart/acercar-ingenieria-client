@@ -20,36 +20,34 @@ function CreditsForm({
   if (!currentResourceURL) resourceValidators.push(validators.required);
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Field
-          name="resourceName"
-          component={TextField}
-          label={t({ id: 'forms.resourceName' })}
-          validate={validators.required}
-        />
-        <Field
-          name="resourceUrl"
-          component={TextField}
-          label={t({ id: 'forms.resourceUrl' })}
-          validate={[validators.required, validators.resourceUrl]}
-        />
-        <Field
-          name="authorName"
-          component={TextField}
-          label={t({ id: 'forms.authorName' })}
-          validate={validators.required}
-        />
-        <Field
-          name="resource"
-          component={ImageField}
-          imagePlaceholder={currentResourceURL}
-          label={t({ id: 'forms.picture' })}
-          validate={resourceValidators}
-        />
-        <SubmitButton disabled={!valid || submitting} loading={submitting} />
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <Field
+        name="resourceName"
+        component={TextField}
+        label={t({ id: 'forms.resourceName' })}
+        validate={validators.required}
+      />
+      <Field
+        name="resourceUrl"
+        component={TextField}
+        label={t({ id: 'forms.resourceUrl' })}
+        validate={[validators.required, validators.resourceUrl]}
+      />
+      <Field
+        name="authorName"
+        component={TextField}
+        label={t({ id: 'forms.authorName' })}
+        validate={validators.required}
+      />
+      <Field
+        name="resource"
+        component={ImageField}
+        imagePlaceholder={currentResourceURL}
+        label={t({ id: 'forms.picture' })}
+        validate={resourceValidators}
+      />
+      <SubmitButton disabled={!valid || submitting} loading={submitting} />
+    </form>
   );
 }
 

@@ -19,7 +19,7 @@ function CommentsSection({
   const commonProps = { baseResourceName, baseResourceId };
 
   return (
-    <div>
+    <Fragment>
       {withActionBar && <ActionBar />}
       <Title>{t({ id: answers ? 'answers' : 'comments' })}</Title>
 
@@ -30,7 +30,7 @@ function CommentsSection({
         </Fragment>
       }
       <List {...commonProps} answeringDisabled={answers} disabled={disabled} />
-    </div>
+    </Fragment>
   );
 }
 

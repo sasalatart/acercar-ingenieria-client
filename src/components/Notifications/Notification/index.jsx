@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 import DateWithFormat from '../../DateWithFormat';
@@ -31,7 +31,7 @@ function Notification({
   seeDisabled,
 }) {
   return (
-    <div>
+    <Fragment>
       <Icon type={ICON_TYPES[notifyableType]} style={styles.icon} />
       <DateWithFormat dateString={createdAt} withTime />
       <p>
@@ -43,7 +43,7 @@ function Notification({
           seeDisabled={seeDisabled}
         />
       </p>
-    </div>
+    </Fragment>
   );
 }
 

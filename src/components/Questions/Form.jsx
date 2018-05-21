@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
@@ -30,7 +30,7 @@ function QuestionForm({
   intl: { formatMessage: t },
 }) {
   return (
-    <div>
+    <Fragment>
       {!id &&
         <Alert
           type="info"
@@ -62,7 +62,7 @@ function QuestionForm({
         }
         <SubmitButton disabled={!valid || submitting} loading={submitting} />
       </form>
-    </div>
+    </Fragment>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Select } from 'antd';
@@ -89,13 +89,13 @@ export default class SearchUsers extends Component {
     const { searchFilter } = this.state;
 
     return (
-      <div>
+      <Fragment>
         <ActionBar {...searchFilter} />
         <Title>{t({ id: 'users' })}</Title>
 
         {this.renderSelect()}
         <UsersList {...searchFilter} />
-      </div>
+      </Fragment>
     );
   }
 }

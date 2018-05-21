@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import map from 'lodash/map';
 import AdminStatusSwitch from '../../../containers/Users/AdminStatus/Switch';
@@ -16,7 +16,7 @@ function AdminStatusPanel({
   const adminOfMajorsIds = map(adminOfMajors, 'id');
 
   return (
-    <div>
+    <Fragment>
       <AdminStatusSwitch userId={id} label={`Admin (${t({ id: 'platform' })})`} active={admin} />
       {majorsOfInterest.map(majorOfInterest => (
         <AdminStatusSwitch
@@ -27,7 +27,7 @@ function AdminStatusPanel({
           active={adminOfMajorsIds.includes(majorOfInterest.majorId)}
         />
       ))}
-    </div>
+    </Fragment>
   );
 }
 

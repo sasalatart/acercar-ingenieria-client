@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
@@ -91,10 +91,10 @@ function renderUpperHeader(currentUser, signOut, t) {
       <Link to={ROUTES.LANDING} href={ROUTES.LANDING} style={styles.innerUpperHeader}>
         <img src={logo} alt="logo" style={styles.logo} />
         <Hideable>
-          <div>
+          <Fragment>
             <h1 style={styles.titleText}>Acercar</h1>
             <h1 style={styles.titleText}>Ingeniería</h1>
-          </div>
+          </Fragment>
         </Hideable>
       </Link>
       <div style={styles.innerUpperHeader}>
@@ -153,11 +153,11 @@ function renderLowerHeader(currentUser, t) {
 
 function Header({ currentUser, signOut, intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       {renderUpperHeader(currentUser, signOut, t)}
       {renderLowerHeader(currentUser, t)}
       <LoadingBar style={styles.loadingBar} />
-    </div>
+    </Fragment>
   );
 }
 

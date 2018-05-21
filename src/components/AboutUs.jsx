@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
 import Linkify from 'react-linkify';
@@ -22,7 +22,7 @@ function renderParagraph(text) {
 
 function AboutUs({ intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       <ActionBar />
       <Title>{t({ id: 'aboutUs' })}</Title>
 
@@ -43,7 +43,7 @@ function AboutUs({ intl: { formatMessage: t } }) {
           {renderParagraph(t({ id: 'aboutUs.vision.content' }))}
         </Col>
       </Row>
-    </div>
+    </Fragment>
   );
 }
 

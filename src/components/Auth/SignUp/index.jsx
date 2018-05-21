@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
@@ -15,7 +15,7 @@ const styles = {
 
 function SignUp({ intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       <Title>{t({ id: 'sessions.signUp' })}</Title>
 
       <Row type="flex" justify="center">
@@ -29,7 +29,7 @@ function SignUp({ intl: { formatMessage: t } }) {
           </p>
         </Col>
       </Row>
-    </div>
+    </Fragment>
   );
 }
 

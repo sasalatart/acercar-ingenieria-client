@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
@@ -98,7 +98,7 @@ export default class ProfileEditForm extends Component {
     }
 
     return (
-      <div>
+      <Fragment>
         {this.renderEmailChangedAlert()}
 
         <form onSubmit={handleSubmit}>
@@ -164,7 +164,7 @@ export default class ProfileEditForm extends Component {
           </div>
           <SubmitButton disabled={!valid || submitting} loading={submitting} />
         </form>
-      </div>
+      </Fragment>
     );
   }
 }

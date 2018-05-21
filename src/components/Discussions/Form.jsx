@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { intlShape } from 'react-intl';
@@ -112,7 +112,7 @@ export default class DiscussionForm extends Component {
     const defaultTag = t({ id: 'discussions.defaultTag' });
 
     return (
-      <div>
+      <Fragment>
         <ActionBar />
         <Title>{t({ id: `discussions.${id ? 'edit' : 'new'}` })}</Title>
 
@@ -145,7 +145,7 @@ export default class DiscussionForm extends Component {
           </div>
           <SubmitButton disabled={!valid || submitting} loading={submitting} />
         </form>
-      </div>
+      </Fragment>
     );
   }
 }

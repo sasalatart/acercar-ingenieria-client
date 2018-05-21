@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
@@ -84,7 +84,7 @@ export default class Announcements extends Component {
     const { lightboxOpen, clickedIndex } = this.state;
 
     return (
-      <div>
+      <Fragment>
         <ActionBar onCreateClicked={onModalOpen} />
         <Title>{t({ id: 'announcements' })}</Title>
 
@@ -105,7 +105,7 @@ export default class Announcements extends Component {
           />}
 
         {renderModal(t({ id: 'announcements.new' }), <Form onSubmitSuccess={onModalClose} />)}
-      </div>
+      </Fragment>
     );
   }
 }

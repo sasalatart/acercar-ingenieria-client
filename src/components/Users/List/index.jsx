@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List, Modal } from 'antd';
@@ -65,7 +65,7 @@ export default class UsersList extends Component {
     } = this.props;
 
     return (
-      <div>
+      <Fragment>
         {withTitle && <ActionBar majorId={majorId} admins={admins} />}
         {withTitle && <Title>{t({ id: 'users' })}</Title>}
 
@@ -83,7 +83,7 @@ export default class UsersList extends Component {
           )}
         />
         {selectedUser && this.renderAdminStatusPanelModal()}
-      </div>
+      </Fragment>
     );
   }
 }

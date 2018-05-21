@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import ActionBar from '../../../../containers/Layout/ActionBar';
@@ -7,12 +7,12 @@ import Form from '../../../../containers/Majors/Major/Email/Form';
 
 function Email({ majorId, intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       <ActionBar />
       <Title>{t({ id: 'emails.send' })}</Title>
 
       <Form majorId={majorId} />
-    </div>
+    </Fragment>
   );
 }
 

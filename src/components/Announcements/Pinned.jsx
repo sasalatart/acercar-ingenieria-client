@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Carousel } from 'antd';
 import { announcementShape } from '../../shapes';
@@ -35,7 +35,7 @@ function PinnedAnnouncements({ admin, announcements }) {
   const mappedAnnouncements = mapAnnouncements(announcements);
 
   return (
-    <div>
+    <Fragment>
       {admin &&
         <ButtonLink
           to={ROUTES.ANNOUNCEMENTS}
@@ -49,7 +49,7 @@ function PinnedAnnouncements({ admin, announcements }) {
         ? mappedAnnouncements
         : <Carousel autoplay>{mappedAnnouncements}</Carousel>
       }
-    </div>
+    </Fragment>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Alert, Input, Button } from 'antd';
@@ -45,7 +45,7 @@ class ImportantDestroyButton extends Component {
     const { warningMessage, textToFill, intl: { formatMessage: t } } = this.props;
 
     return (
-      <div>
+      <Fragment>
         <Alert
           type="warning"
           message={t({ id: 'forms.warning' })}
@@ -57,7 +57,7 @@ class ImportantDestroyButton extends Component {
           placeholder={t({ id: 'forms.confirm.textToFill' }, { textToFill })}
           onChange={this.handleTextChange}
         />
-      </div>
+      </Fragment>
     );
   }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Divider } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import ActionBar from '../../../containers/Discussions/Discussion/ActionBar';
@@ -23,7 +23,7 @@ const styles = {
 
 function Discussion({ discussion }) {
   return (
-    <div>
+    <Fragment>
       <ActionBar discussion={discussion} />
       <Title>{discussion.title}</Title>
 
@@ -42,15 +42,15 @@ function Discussion({ discussion }) {
       <RichText content={discussion.description} />
 
       {!isEmpty(discussion.attachments) &&
-        <div>
+        <Fragment>
           <Divider />
           <Attachments attachments={discussion.attachments} />
-        </div>
+        </Fragment>
       }
 
       <Divider />
       <CommentsSection baseResourceName="discussions" baseResourceId={discussion.id} />
-    </div>
+    </Fragment>
   );
 }
 

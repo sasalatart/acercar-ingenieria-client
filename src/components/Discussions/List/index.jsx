@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List } from 'antd';
@@ -42,7 +42,7 @@ export default class DiscussionsList extends Component {
     } = this.props;
 
     return (
-      <div>
+      <Fragment>
         <ActionBar mine={mine} />
         <Title>{t({ id: mine ? 'discussions.mine' : 'discussions' })}</Title>
 
@@ -60,7 +60,7 @@ export default class DiscussionsList extends Component {
             />
           )}
         />
-      </div>
+      </Fragment>
     );
   }
 }

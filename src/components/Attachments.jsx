@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
@@ -26,7 +26,7 @@ function renderItem(attachment) {
 
 function Attachments({ attachments, intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       <h1>{t({ id: 'attachments' })}</h1>
       <List
         dataSource={attachments}
@@ -34,7 +34,7 @@ function Attachments({ attachments, intl: { formatMessage: t } }) {
         size="small"
         bordered
       />
-    </div>
+    </Fragment>
   );
 }
 

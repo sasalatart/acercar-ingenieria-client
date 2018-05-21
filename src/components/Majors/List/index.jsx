@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Tabs, List } from 'antd';
@@ -49,7 +49,7 @@ export default class MajorsList extends Component {
     const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
 
     return (
-      <div>
+      <Fragment>
         <ActionBar />
         <Title>Majors</Title>
 
@@ -62,7 +62,7 @@ export default class MajorsList extends Component {
             {this.renderMajors(interdisciplinaryMajors)}
           </TabPane>
         </Tabs>
-      </div>
+      </Fragment>
     );
   }
 }

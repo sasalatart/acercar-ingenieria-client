@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { fieldInputPropTypes } from 'redux-form';
 import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
@@ -56,7 +56,7 @@ class RichTextInput extends Component {
     const { label, editorProps, meta: { error } } = this.props;
 
     return (
-      <div>
+      <Fragment>
         {label && <p style={themeStyles.label}>{label}:</p>}
         <div style={styles.editorWrapper}>
           <Editor
@@ -67,7 +67,7 @@ class RichTextInput extends Component {
           />
         </div>
         {error && <p style={styles.error}>{error}</p>}
-      </div>
+      </Fragment>
     );
   }
 }

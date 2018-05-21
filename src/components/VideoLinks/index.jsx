@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import WithModalForm from '../../hoc/WithModalForm';
@@ -21,7 +21,7 @@ function VideoLinks({
   const videoLinkableProps = parseBaseResource(match.params);
 
   return (
-    <div>
+    <Fragment>
       <ActionBar {...videoLinkableProps} onNewClicked={onNewClicked} />
       <Title>Videos</Title>
 
@@ -31,7 +31,7 @@ function VideoLinks({
         editingId ? t({ id: 'videoLinks.edit' }) : t({ id: 'videoLinks.new' }),
         <Form id={editingId} {...videoLinkableProps} onSubmitSuccess={onFormClose} />,
       )}
-    </div>
+    </Fragment>
   );
 }
 

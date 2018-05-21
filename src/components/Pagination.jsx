@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Pagination } from 'antd';
 import URI from 'urijs';
@@ -76,11 +76,11 @@ export default class PaginationControls extends Component {
     }
 
     return (
-      <div>
+      <Fragment>
         {this.renderPaginationTag()}
         {this.renderContent()}
         {this.renderPaginationTag()}
-      </div>
+      </Fragment>
     );
   }
 }

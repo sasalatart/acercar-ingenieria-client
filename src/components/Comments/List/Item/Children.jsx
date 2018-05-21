@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider } from 'antd';
@@ -26,7 +26,7 @@ function ChildComments({
   intl: { formatMessage: t },
 }) {
   return (
-    <div>
+    <Fragment>
       {extraComments > 0 &&
         <div style={styles.dividerWrapper}>
           <Divider style={styles.divider} dashed>
@@ -43,7 +43,7 @@ function ChildComments({
       {comments
         .sort((commentA, commentB) => new Date(commentA.createdAt) - new Date(commentB.createdAt))
         .map(comment => <Comment key={comment.id} comment={comment} />)}
-    </div>
+    </Fragment>
   );
 }
 

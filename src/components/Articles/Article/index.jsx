@@ -66,10 +66,10 @@ function renderContent(article) {
       <RichText content={article.content} />
 
       {!isEmpty(article.attachments) &&
-        <div>
+        <Fragment>
           <Divider />
           <Attachments attachments={article.attachments} />
-        </div>
+        </Fragment>
       }
 
       <Divider />

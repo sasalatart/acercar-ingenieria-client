@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import List from '../../containers/Notifications/List';
@@ -10,12 +10,12 @@ function Notifications({ match, intl: { formatMessage: t } }) {
   const seen = !!match.params.seen;
 
   return (
-    <div>
+    <Fragment>
       <ActionBar seen={seen} />
       <Title>{t({ id: `notifications.${seen ? 'seen' : 'pending'}` })}</Title>
 
       <List seen={seen} />
-    </div>
+    </Fragment>
   );
 }
 

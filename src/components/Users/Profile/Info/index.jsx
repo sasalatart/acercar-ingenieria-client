@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
@@ -34,7 +34,7 @@ function renderSubTitle(user, admin, t) {
 
 function ProfileInfo({ admin, user, intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       <ActionBar user={user} />
       <Row type="flex" justify="center" gutter={8}>
         <Col md={6}>
@@ -53,7 +53,7 @@ function ProfileInfo({ admin, user, intl: { formatMessage: t } }) {
           <MajorsList majorsOfInterest={user.majorsOfInterest} />
         </Col>
       </Row>
-    </div>
+    </Fragment>
   );
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import WithModalForm from '../../hoc/WithModalForm';
@@ -21,7 +21,7 @@ function Questions({
   const pending = !!match.params.pending;
 
   return (
-    <div>
+    <Fragment>
       <QuestionsActionBar majorId={majorId} pending={pending} onProposeClicked={onNewClicked} />
       <Title>{pending ? t({ id: 'questions.pending' }) : 'FAQs'}</Title>
 
@@ -31,7 +31,7 @@ function Questions({
         editingId ? t({ id: 'questions.edit' }) : t({ id: 'questions.new' }),
         <Form id={editingId} majorId={majorId} onSubmitSuccess={onFormClose} />,
       )}
-    </div>
+    </Fragment>
   );
 }
 

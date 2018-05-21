@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { intlShape } from 'react-intl';
@@ -47,7 +47,7 @@ export default class ArticlesActionBar extends Component {
     } = this.props;
 
     return (
-      <div>
+      <Fragment>
         {!majorId &&
           <Field
             name="majorId"
@@ -62,7 +62,7 @@ export default class ArticlesActionBar extends Component {
           label={t({ id: 'categories' })}
           options={categoryOptions}
         />
-      </div>
+      </Fragment>
     );
   }
 

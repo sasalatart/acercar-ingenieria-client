@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
@@ -45,7 +45,7 @@ function MajorAdmins({
   intl: { formatMessage: t },
 }) {
   return (
-    <div>
+    <Fragment>
       <ActionBar majorId={majorId} hasAdmins={majorAdmins.length > 0} />
       <Title>{t({ id: 'majors.admins' })}</Title>
 
@@ -56,7 +56,7 @@ function MajorAdmins({
         loadFn={loadAdmins}
         render={() => renderProfileCards(majorAdmins, goToUser)}
       />
-    </div>
+    </Fragment>
   );
 }
 

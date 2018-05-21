@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
 import RecoverPasswordForm from '../../../containers/Auth/RecoverPassword/Form';
@@ -6,7 +6,7 @@ import Title from '../../Layout/Title';
 
 function RecoverPassword({ intl: { formatMessage: t } }) {
   return (
-    <div>
+    <Fragment>
       <Title>{t({ id: 'sessions.recoverPassword' })}</Title>
 
       <Row type="flex" justify="center">
@@ -14,7 +14,7 @@ function RecoverPassword({ intl: { formatMessage: t } }) {
           <RecoverPasswordForm />
         </Col>
       </Row>
-    </div>
+    </Fragment>
   );
 }
 
