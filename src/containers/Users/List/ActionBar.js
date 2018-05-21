@@ -2,6 +2,8 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { resetPagination as resetUsersPagination } from '../../../store/ducks/users';
 import { resetPagination as resetAdminsPagination } from '../../../store/ducks/admins';
+import WithAuthorization from '../../../hoc/WithAuthorization';
+import WithModal from '../../../hoc/WithModal';
 import ActionBar from '../../../components/Users/List/ActionBar';
 
 function mapDispatchToProps(dispatch, ownProps) {
@@ -13,4 +15,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 }
 
 const connectedComponent = connect(null, mapDispatchToProps)(ActionBar);
-export default injectIntl(connectedComponent);
+export default injectIntl(WithAuthorization(WithModal(connectedComponent)));

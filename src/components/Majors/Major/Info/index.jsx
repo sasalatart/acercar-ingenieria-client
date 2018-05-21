@@ -3,13 +3,14 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
 import get from 'lodash/get';
-import RichText from '../../RichText';
-import ActionBar from '../../../containers/Layout/ActionBar';
-import Title from '../../Layout/Title';
-import Image from '../../Image';
-import { majorShape } from '../../../shapes';
-import { themeStyles } from '../../../theme';
-import majorPlaceholder from '../../../images/major.png';
+import RichText from '../../../RichText';
+import ActionBar from './ActionBar';
+import Title from '../../../Layout/Title';
+import SubTitle from '../../../Layout/SubTitle';
+import Image from '../../../Image';
+import { majorShape } from '../../../../shapes';
+import { themeStyles } from '../../../../theme';
+import majorPlaceholder from '../../../../images/major.png';
 
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
@@ -19,8 +20,9 @@ const styles = {
 function MajorInfo({ major, intl: { formatMessage: t } }) {
   return (
     <Fragment>
-      <ActionBar />
+      <ActionBar id={major.id} />
       <Title>{major.name}</Title>
+      <SubTitle>{t({ id: `majors.${major.category}` })}</SubTitle>
 
       <Divider>{t({ id: 'majors.review' })}</Divider>
       <Row type="flex" align="middle" gutter={24}>
@@ -30,7 +32,6 @@ function MajorInfo({ major, intl: { formatMessage: t } }) {
           </div>
         </Col>
         <Col sm={18}>
-          <p>{t({ id: 'majors.ofType' }, { type: t({ id: `majors.${major.category}` }) })}</p>
           <p style={styles.shortDescription}>{major.shortDescription}</p>
         </Col>
       </Row>

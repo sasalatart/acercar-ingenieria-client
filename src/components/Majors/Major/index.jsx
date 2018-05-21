@@ -21,10 +21,10 @@ import Article from '../../../containers/Articles/Article';
 import Questions from '../../Questions';
 import CommentsSection from '../../Comments/Section';
 import VideoLinks from '../../VideoLinks';
-import Email from './Email';
+import Hideable from '../../Layout/Hideable';
 import { majorShape } from '../../../shapes';
 import { getMajorPaths } from '../../../routes';
-import { themeStyles } from '../../../theme';
+import { themeStyles, breakpointsKeys } from '../../../theme';
 
 const { Sider, Content } = Layout;
 const { Item } = Menu;
@@ -38,7 +38,6 @@ const styles = {
 export default class Major extends Component {
   static propTypes = {
     loggedIn: PropTypes.bool.isRequired,
-    adminOrMajorAdmin: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     major: majorShape.isRequired,
     activeMenuKey: PropTypes.string.isRequired,
@@ -59,11 +58,6 @@ export default class Major extends Component {
         icon: 'video-camera',
         key: this.majorKeys.videoLinks,
         text: 'Videos',
-      },
-      edit: {
-        key: this.majorKeys.edit,
-        icon: 'edit',
-        text: t({ id: 'majors.edit' }),
       },
       admins: {
         key: this.majorKeys.admins,
@@ -90,11 +84,6 @@ export default class Major extends Component {
         icon: 'message',
         text: t({ id: 'majors.comments' }),
       },
-      email: {
-        key: this.majorKeys.email,
-        icon: 'mail',
-        text: t({ id: 'majors.email' }),
-      },
     };
   }
 
@@ -104,14 +93,13 @@ export default class Major extends Component {
   renderMenuItem = ({ key, icon, text }) => (
     <Item key={key}>
       <Icon type={icon} />
-      <span>{text}</span>
+      <Hideable breakpoint={breakpointsKeys.xs}>{text}</Hideable>
     </Item>
   )
 
   render() {
     const {
       loggedIn,
-      adminOrMajorAdmin,
       id,
       major,
       activeMenuKey,
@@ -122,17 +110,15 @@ export default class Major extends Component {
 
     return (
       <Layout style={styles.layout}>
-        <Sider breakpoint="sm" collapsedWidth="50" style={styles.sider}>
-          <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)}>
+        <Sider breakpoint="sm" collapsedWidth="45" style={styles.sider}>
+          <Menu selectedKeys={[activeMenuKey]} onClick={({ key }) => replaceRoute(key)} mode="vertical">
             {this.renderMenuItem(menus.info)}
             {this.renderMenuItem(menus.videoLinks)}
-            {adminOrMajorAdmin && this.renderMenuItem(menus.edit)}
             {loggedIn && this.renderMenuItem(menus.admins)}
             {loggedIn && this.renderMenuItem(menus.users)}
             {this.renderMenuItem(menus.questions)}
             {loggedIn && this.renderMenuItem(menus.articles)}
             {loggedIn && this.renderMenuItem(menus.comments)}
-            {adminOrMajorAdmin && this.renderMenuItem(menus.email)}
           </Menu>
         </Sider>
 
@@ -202,11 +188,6 @@ export default class Major extends Component {
             <Route
               path={this.majorRoutes.comments}
               render={loggedInRoute(CommentsSection, { baseResourceName: 'majors', baseResourceId: id, withActionBar: true })}
-            />
-
-            <Route
-              path={this.majorRoutes.email}
-              render={majorAdminRoute(Email, { majorId: id })}
             />
           </Switch>
         </Content>

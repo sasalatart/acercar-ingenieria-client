@@ -75,8 +75,8 @@ export const getProfilePaths = () => {
 export const getMajorPaths = (majorId) => {
   const subPaths = {
     info: '',
-    videoLinks: '/video-links',
     edit: '/edit',
+    videoLinks: '/video-links',
     admins: '/admins',
     users: '/users',
     questions: '/questions',
@@ -87,7 +87,6 @@ export const getMajorPaths = (majorId) => {
     articlesNew: '/articles/new',
     articleEdit: '/articles/:id/edit',
     comments: '/comments',
-    email: '/email',
   };
 
   return {
