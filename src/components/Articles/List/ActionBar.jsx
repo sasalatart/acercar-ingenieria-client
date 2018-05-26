@@ -11,7 +11,7 @@ import {
   TagsField,
 } from '../../Forms';
 import { optionShape } from '../../../shapes';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 import { suffixes } from '../../../lib/articles';
 
 export default class ArticlesActionBar extends Component {
@@ -88,7 +88,7 @@ export default class ArticlesActionBar extends Component {
 
     if (suffix !== suffixes.approved) {
       const buttonLink = (
-        <HideableButton key="goToApproved" to={ROUTES.ARTICLES(majorId)} icon="file-text">
+        <HideableButton key="goToApproved" to={routes.articles(majorId)} icon="file-text">
           {t({ id: 'articles' })}
         </HideableButton>
       );
@@ -97,7 +97,7 @@ export default class ArticlesActionBar extends Component {
 
     if (suffix !== suffixes.mine) {
       const buttonLink = (
-        <ButtonLink key="goToMine" to={ROUTES.ARTICLES(majorId, suffixes.mine)}>
+        <ButtonLink key="goToMine" to={routes.articles(majorId, suffixes.mine)}>
           {t({ id: 'mine' })}
         </ButtonLink>
       );
@@ -106,7 +106,7 @@ export default class ArticlesActionBar extends Component {
 
     if (adminOrMajorAdmin && suffix !== suffixes.pending) {
       const buttonLink = (
-        <HideableButton key="goToPending" to={ROUTES.ARTICLES(majorId, suffixes.pending)} icon="lock">
+        <HideableButton key="goToPending" to={routes.articles(majorId, suffixes.pending)} icon="lock">
           {t({ id: 'articles.pending' })}
         </HideableButton>
       );
@@ -115,7 +115,7 @@ export default class ArticlesActionBar extends Component {
 
     if (canCreateArticles) {
       const newArticleButtonLink = (
-        <HideableButton key="new" to={ROUTES.ARTICLES_NEW(majorId)} icon="plus">
+        <HideableButton key="new" to={routes.articlesNew(majorId)} icon="plus">
           {t({ id: 'articles.new' })}
         </HideableButton>
       );

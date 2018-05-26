@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 function CommentLink({
   id,
@@ -9,7 +9,7 @@ function CommentLink({
   baseResourceId,
   children,
 }) {
-  const href = ROUTES.COMMENT(id, baseResourceName, baseResourceId);
+  const href = routes.comment(id, baseResourceName, baseResourceId);
   return <Link to={href} href={href}>{children}</Link>;
 }
 

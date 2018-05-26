@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Badge } from 'antd';
 import UserAvatar from './Avatar';
 import { userShape } from '../../../shapes';
-import ROUTES from '../../../routes';
 import PusherService, { CHANNELS, EVENTS } from '../../../services/pusher';
+import routes from '../../../lib/routes';
 
 export default class AvatarWithNotifications extends Component {
   static propTypes = {
@@ -39,7 +39,7 @@ export default class AvatarWithNotifications extends Component {
     const { currentUser, notificationsCount, style } = this.props;
 
     return (
-      <Link to={ROUTES.PROFILE} href={ROUTES.PROFILE} style={style}>
+      <Link to={routes.profile} href={routes.profile} style={style}>
         <Badge count={notificationsCount}>
           <UserAvatar user={currentUser} />
         </Badge>

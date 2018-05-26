@@ -8,14 +8,13 @@ import {
   recoverPasswordEmailSentNotification,
   resourceSuccessNotification,
 } from './notifications';
-import ROUTES, {
+import {
   goToLanding,
   goToSignIn,
   goToProfile,
 } from './routes';
 import { getMajorOptions } from './majors';
-
-const BASE_CLIENT_URL = process.env.REACT_APP_CLIENT_URL || 'http://localhost:3000';
+import routes, { BASE_CLIENT_URL } from '../../lib/routes';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
@@ -64,7 +63,7 @@ export function signUp(credentials) {
         url: '/auth',
         body: {
           ...credentials,
-          confirmSuccessUrl: `${BASE_CLIENT_URL}${ROUTES.SIGN_IN}`,
+          confirmSuccessUrl: `${BASE_CLIENT_URL}${routes.signIn}`,
         },
       },
     }).then(() => {
@@ -82,7 +81,7 @@ export function recoverPassword(body) {
         url: '/auth/password',
         body: {
           ...body,
-          redirectUrl: `${BASE_CLIENT_URL}${ROUTES.EDIT_PASSWORD}`,
+          redirectUrl: `${BASE_CLIENT_URL}${routes.passwordEdit}`,
         },
       },
     }).then(() => {

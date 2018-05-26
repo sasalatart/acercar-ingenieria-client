@@ -5,7 +5,7 @@ import DestroyButton from '../../../containers/DestroyButton';
 import ReportButton from '../../Reports/Button';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 function DiscussionActionBar({
   id,
@@ -20,7 +20,7 @@ function DiscussionActionBar({
 
   if (admin || isAuthor) {
     const editButton = (
-      <ButtonLink key="edit" to={ROUTES.DISCUSSION_EDIT(id)} icon="edit">
+      <ButtonLink key="edit" to={routes.discussionEdit(id)} icon="edit">
         {t({ id: 'forms.edit' })}
       </ButtonLink>
     );

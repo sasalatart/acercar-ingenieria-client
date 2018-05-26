@@ -6,8 +6,7 @@ import refreshTokens from './tokens';
 import buildParams from './params';
 import parseResponse from './response';
 import parseError from './errors';
-
-const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+import { BASE_API_URL } from '../../../lib/routes';
 
 const fetchMiddleware = store => next => (action) => {
   if (!action.payload || !(action.payload.url && action.payload.method) || action.type.includes('REJECTED')) {

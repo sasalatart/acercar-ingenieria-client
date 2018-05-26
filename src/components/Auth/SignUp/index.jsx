@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
 import SignUpForm from '../../../containers/Auth/SignUp/Form';
 import Title from '../../Layout/Title';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 const styles = {
   extra: {
@@ -23,7 +23,7 @@ function SignUp({ intl: { formatMessage: t } }) {
           <SignUpForm />
 
           <p style={styles.extra}>
-            <Link to={ROUTES.SIGN_IN} href={ROUTES.SIGN_IN}>
+            <Link to={routes.signIn} href={routes.signIn}>
               {t({ id: 'sessions.orSignIn' })}
             </Link>
           </p>

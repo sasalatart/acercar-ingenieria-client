@@ -22,8 +22,8 @@ import Questions from '../../Questions';
 import VideoLinks from '../../VideoLinks';
 import Menu from '../../../containers/Menu';
 import { majorShape } from '../../../shapes';
-import { getMajorPaths } from '../../../routes';
 import { themeStyles } from '../../../theme';
+import { getMajorPaths } from '../../../lib/routes';
 
 const { Content } = Layout;
 

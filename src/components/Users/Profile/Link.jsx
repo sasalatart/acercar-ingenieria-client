@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 function ProfileLink({ id, children }) {
-  const href = ROUTES.USER(id);
+  const href = routes.user(id);
   return <Link to={href} href={href}>{children}</Link>;
 }
 

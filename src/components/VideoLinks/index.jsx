@@ -6,8 +6,8 @@ import Form from '../../containers/VideoLinks/Form';
 import VideosList from '../../containers/VideoLinks/List';
 import ActionBar from './ActionBar';
 import Title from '../Layout/Title';
-import { parseBaseResource } from '../../routes';
 import { matchShape } from '../../shapes';
+import { parseBaseResource } from '../../lib/collections';
 
 function VideoLinks({
   match,

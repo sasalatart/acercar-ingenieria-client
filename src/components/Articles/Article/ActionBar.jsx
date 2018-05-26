@@ -7,7 +7,7 @@ import ApprovalButton from '../../../containers/ApprovalButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import HideableButton from '../../HideableButton';
 import { articleShape } from '../../../shapes';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 function ArticleActionBar({
   adminOrMajorAdmin,
@@ -30,7 +30,7 @@ function ArticleActionBar({
         key="edit"
         type="primary"
         icon="edit"
-        to={ROUTES.ARTICLE_EDIT(id, majorId)}
+        to={routes.articleEdit(id, majorId)}
       >
         {t({ id: 'forms.edit' })}
       </HideableButton>

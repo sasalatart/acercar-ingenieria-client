@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 function ArticleLink({ id, majorId, children }) {
-  const href = ROUTES.ARTICLE(id, majorId);
+  const href = routes.article(id, majorId);
   return <Link to={href} href={href}>{children}</Link>;
 }
 

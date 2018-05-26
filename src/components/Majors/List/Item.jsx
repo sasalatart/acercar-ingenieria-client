@@ -9,8 +9,8 @@ import DestroyButton from '../../../containers/DestroyButton';
 import MajorLink from '../Major/Link';
 import Image, { sizes } from '../../Image';
 import { majorShape } from '../../../shapes';
-import ROUTES from '../../../routes';
 import { themeStyles } from '../../../theme';
+import routes from '../../../lib/routes';
 import majorPlaceholder from '../../../images/major.png';
 
 const { Item } = List;
@@ -33,7 +33,7 @@ function MajorItem({
   const actions = [];
 
   if (admin) {
-    const majorEditHref = ROUTES.MAJOR_EDIT(id);
+    const majorEditHref = routes.majorEdit(id);
     actions.push(<Link to={majorEditHref} href={majorEditHref}><Icon type="edit" /></Link>);
 
     const destroyButton = (

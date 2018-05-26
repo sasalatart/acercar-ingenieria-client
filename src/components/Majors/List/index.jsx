@@ -6,7 +6,7 @@ import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
 import MajorItem from './Item';
 import { majorShape } from '../../../shapes';
-import { MAJORS_TAB_NAMES as TAB_NAMES } from '../../../routes';
+import { MAJORS_TAB_NAMES as TAB_NAMES } from '../../../lib/routes';
 
 const { TabPane } = Tabs;
 

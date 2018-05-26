@@ -3,42 +3,42 @@ import { createSelector } from 'reselect';
 import URI from 'urijs';
 import humps from 'humps';
 import pick from 'lodash/pick';
-import ROUTES from '../../routes';
+import routes from '../../lib/routes';
 
 export function goToLanding() {
-  return push(ROUTES.LANDING);
+  return push(routes.landing);
 }
 
 export function goToSignIn() {
-  return push(ROUTES.SIGN_IN);
+  return push(routes.signIn);
 }
 
 export function goToProfile() {
-  return push(ROUTES.PROFILE);
+  return push(routes.profile);
 }
 
 export function goToUser(userId) {
-  return push(ROUTES.USER(userId));
+  return push(routes.user(userId));
 }
 
 export function goToMajor(majorId) {
-  return push(ROUTES.MAJOR(majorId));
+  return push(routes.major(majorId));
 }
 
 export function goToArticles(majorId) {
-  return push(ROUTES.ARTICLES(majorId));
+  return push(routes.articles(majorId));
 }
 
 export function goToArticle(id, majorId) {
-  return push(ROUTES.ARTICLE(id, majorId));
+  return push(routes.article(id, majorId));
 }
 
 export function goToDiscussions() {
-  return push(ROUTES.DISCUSSIONS);
+  return push(routes.discussions);
 }
 
 export function goToDiscussion(id) {
-  return push(ROUTES.DISCUSSION(id));
+  return push(routes.discussion(id));
 }
 
 /* eslint-disable no-use-before-define */
@@ -125,5 +125,3 @@ export const getPage = createSelector(
     return query.page && +query.page;
   },
 );
-
-export default ROUTES;

@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Row, Col } from 'antd';
 import SignInForm from '../../../containers/Auth/SignIn/Form';
 import Title from '../../Layout/Title';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 const styles = {
   extra: {
@@ -23,12 +23,12 @@ function SignIn({ intl: { formatMessage: t } }) {
           <SignInForm />
 
           <p style={styles.extra}>
-            <Link to={ROUTES.SIGN_UP} href={ROUTES.SIGN_UP}>
+            <Link to={routes.signUp} href={routes.signUp}>
               {t({ id: 'sessions.orSignUp' })}
             </Link>
           </p>
           <p style={styles.extra}>
-            <Link to={ROUTES.RECOVER_PASSWORD} href={ROUTES.RECOVER_PASSWORD}>
+            <Link to={routes.passwordRecovery} href={routes.passwordRecovery}>
               {t({ id: 'sessions.forgotPassword' })}
             </Link>
           </p>

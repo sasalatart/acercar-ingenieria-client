@@ -4,14 +4,14 @@ import { injectIntl, intlShape } from 'react-intl';
 import WithAuthorization from '../../../../hoc/WithAuthorization';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import HideableButton from '../../../HideableButton';
-import ROUTES from '../../../../routes';
+import routes from '../../../../lib/routes';
 
 function MajorInfoActionBar({ id, adminOrMajorAdmin, intl: { formatMessage: t } }) {
   const actions = [];
 
   if (adminOrMajorAdmin) {
     const contactButton = (
-      <HideableButton to={ROUTES.MAJOR_EDIT(id)} icon="edit">
+      <HideableButton to={routes.majorEdit(id)} icon="edit">
         {t({ id: 'majors.edit' })}
       </HideableButton>
     );

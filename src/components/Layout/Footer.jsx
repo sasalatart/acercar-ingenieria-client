@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import IconText from '../IconText';
 import { colors } from '../../theme';
-import ROUTES from '../../routes';
+import routes from '../../lib/routes';
 
 const CONTACT_EMAIL = 'contacto@cai.cl';
 
@@ -33,7 +33,7 @@ function Footer({ intl: { formatMessage: t } }) {
         <p style={styles.text}>Acercar Ingeniería</p>
         <p style={styles.text}>2014-2018</p>
       </div>
-      <Link to={ROUTES.CREDITS} href={ROUTES.CREDITS}>
+      <Link to={routes.credits} href={routes.credits}>
         <IconText type="heart" text={t({ id: 'credits' })} withPointer />
       </Link>
     </div>

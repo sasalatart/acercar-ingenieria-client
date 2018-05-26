@@ -7,7 +7,7 @@ import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
 import { TagsField } from '../../Forms';
 import HideableButton from '../../HideableButton';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 function renderExtraFields(t) {
   const defaultTag = t({ id: 'discussions.defaultTag' });
@@ -35,18 +35,18 @@ function DiscussionsActionBar({ mine, resetPagination, intl: { formatMessage: t 
 
   const goToLink = mine
     ? (
-      <ButtonLink key="goToAllDiscussions" to={ROUTES.DISCUSSIONS}>
+      <ButtonLink key="goToAllDiscussions" to={routes.discussions}>
         {t({ id: 'discussions' })}
       </ButtonLink>
     )
     : (
-      <ButtonLink key="goToMyDiscussions" to={ROUTES.MY_DISCUSSIONS}>
+      <ButtonLink key="goToMyDiscussions" to={routes.discussionsMine}>
         {t({ id: 'mine' })}
       </ButtonLink>
     );
 
   const creationLink = (
-    <HideableButton to={ROUTES.DISCUSSIONS_NEW} icon="plus">
+    <HideableButton to={routes.discussionsNew} icon="plus">
       {t({ id: 'discussions.new' })}
     </HideableButton>
   );

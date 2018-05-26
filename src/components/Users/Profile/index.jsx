@@ -11,8 +11,8 @@ import ChangePassword from './ChangePassword';
 import DataPlaceholder from '../../DataPlaceholder';
 import Hideable from '../../Layout/Hideable';
 import { userShape } from '../../../shapes';
-import { getProfilePaths } from '../../../routes';
 import { themeStyles } from '../../../theme';
+import routes from '../../../lib/routes';
 
 const { Content } = Layout;
 
@@ -55,11 +55,11 @@ class Profile extends Component {
     const { notificationsCount, intl: { formatMessage: t } } = this.props;
 
     return [{
-      key: this.profileKeys.info,
+      key: routes.profile,
       icon: 'user',
       text: t({ id: 'profile.info' }),
     }, {
-      key: this.profileKeys.notifications,
+      key: routes.profileNotifications(),
       icon: 'notification',
       text: t({ id: 'profile.notifications' }),
       extra: (
@@ -68,17 +68,15 @@ class Profile extends Component {
         </Hideable>
       ),
     }, {
-      key: this.profileKeys.edit,
+      key: routes.profileEdit,
       icon: 'edit',
       text: t({ id: 'profile.edit' }),
     }, {
-      key: this.profileKeys.password,
+      key: routes.profilePassword,
       icon: 'lock',
       text: t({ id: 'profile.changePassword' }),
     }];
   }
-
-  profileKeys = getProfilePaths().keys;
 
   render() {
     const {
@@ -100,10 +98,10 @@ class Profile extends Component {
 
         <Content style={styles.content}>
           <Switch>
-            <Route path={this.profileKeys.password} component={ChangePassword} />
-            <Route path={this.profileKeys.edit} component={ProfileEdit} />
-            <Route path={`${this.profileKeys.notifications}/:seen?`} component={Notifications} />
-            <Route path={this.profileKeys.info} render={() => <ProfileInfo user={user} />} />
+            <Route exact path={routes.profile} render={() => <ProfileInfo user={user} />} />
+            <Route path={`${routes.profileNotifications()}/:seen?`} component={Notifications} />
+            <Route path={routes.profileEdit} component={ProfileEdit} />
+            <Route path={routes.profilePassword} component={ChangePassword} />
           </Switch>
         </Content>
       </Layout>

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 
 function MajorLink({ id, children }) {
-  const href = ROUTES.MAJOR(id);
+  const href = routes.major(id);
   return <Link to={href} href={href}>{children}</Link>;
 }
 

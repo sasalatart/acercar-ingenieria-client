@@ -4,7 +4,7 @@ import { Carousel } from 'antd';
 import { announcementShape } from '../../shapes';
 import ButtonLink from '../../containers/ButtonLink';
 import Image, { sizes } from '../Image';
-import ROUTES from '../../routes';
+import routes from '../../lib/routes';
 
 const styles = {
   announcement: {
@@ -38,7 +38,7 @@ function PinnedAnnouncements({ admin, announcements }) {
     <Fragment>
       {admin &&
         <ButtonLink
-          to={ROUTES.ANNOUNCEMENTS}
+          to={routes.announcements}
           icon="plus"
           shape="circle"
           style={styles.addButton}

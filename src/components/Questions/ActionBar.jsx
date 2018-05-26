@@ -4,7 +4,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
 import HideableButton from '../HideableButton';
-import ROUTES from '../../routes';
+import routes from '../../lib/routes';
+import { suffixes } from '../../lib/questions';
 
 function QuestionsActionBar({
   loggedIn,
@@ -17,7 +18,7 @@ function QuestionsActionBar({
   const actions = [];
 
   if (adminOrMajorAdmin) {
-    const route = pending ? ROUTES.QUESTIONS(majorId) : ROUTES.PENDING_QUESTIONS(majorId);
+    const route = routes.questions(majorId, pending ? undefined : suffixes.pending);
 
     const buttonLink = pending
       ? (

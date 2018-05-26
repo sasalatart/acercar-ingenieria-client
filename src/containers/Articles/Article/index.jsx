@@ -6,15 +6,15 @@ import { loadArticle, getArticleEntity } from '../../../store/ducks/articles';
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Article from '../../../components/Articles/Article';
-import ROUTES from '../../../routes';
 import { articleShape, matchShape } from '../../../shapes';
+import routes from '../../../lib/routes';
 import { articlesCollection as collection } from '../../../lib/collections';
 
 function ArticleWrapper(props) {
   const { article, match: { params } } = props;
 
   return article && article.majorId && !params.majorId
-    ? <Redirect to={ROUTES.ARTICLE(article.id, article.majorId)} />
+    ? <Redirect to={routes.article(article.id, article.majorId)} />
     : <Article {...props} />;
 }
 

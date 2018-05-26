@@ -25,3 +25,14 @@ export const questionsCollection = 'questions';
 export const usersCollection = 'users';
 
 export const videoLinksCollection = 'videoLinks';
+
+export function parseBaseResource(params) {
+  const baseResourceKey = Object.keys(params).find(key => /Id/.test(key));
+
+  if (!baseResourceKey) return undefined;
+
+  return {
+    baseResourceName: baseResourceKey.replace('Id', 's'),
+    baseResourceId: +params[baseResourceKey],
+  };
+}

@@ -11,7 +11,7 @@ import Hideable from '../Hideable';
 import HideableButton from '../../HideableButton';
 import Spaced from '../Spaced';
 import { userShape } from '../../../shapes';
-import ROUTES from '../../../routes';
+import routes from '../../../lib/routes';
 import { colors } from '../../../theme';
 import logo from '../../../images/logo.png';
 
@@ -75,10 +75,10 @@ function renderLoggedInButtons(signOut, t) {
 function renderLoggedOutButtons(t) {
   return (
     <div>
-      <HideableButton type="primary" icon="login" to={ROUTES.SIGN_IN} style={styles.button}>
+      <HideableButton type="primary" icon="login" to={routes.signIn} style={styles.button}>
         {t({ id: 'sessions.signIn' })}
       </HideableButton>
-      <HideableButton type="default" icon="rocket" to={ROUTES.SIGN_UP} style={styles.button} ghost>
+      <HideableButton type="default" icon="rocket" to={routes.signUp} style={styles.button} ghost>
         {t({ id: 'sessions.signUp' })}
       </HideableButton>
     </div>
@@ -88,7 +88,7 @@ function renderLoggedOutButtons(t) {
 function renderUpperHeader(currentUser, signOut, t) {
   return (
     <Spaced style={styles.upperHeader} padded>
-      <Link to={ROUTES.LANDING} href={ROUTES.LANDING} style={styles.innerUpperHeader}>
+      <Link to={routes.landing} href={routes.landing} style={styles.innerUpperHeader}>
         <img src={logo} alt="logo" style={styles.logo} />
         <Hideable>
           <Fragment>
@@ -112,38 +112,38 @@ function renderLowerHeader(currentUser, t) {
   return (
     <Spaced style={styles.lowerHeader} padded>
       <HeaderLink
-        to={ROUTES.MAJORS}
+        to={routes.majors}
         text="Majors"
         icon="pushpin"
       />
       <HeaderLink
-        to={ROUTES.QUESTIONS()}
+        to={routes.questions()}
         text="FAQs"
         icon="question-circle"
       />
       {currentUser &&
         <HeaderLink
-          to={ROUTES.ARTICLES()}
+          to={routes.articles()}
           text={t({ id: 'articles' })}
           icon="file-text"
         />
       }
       {currentUser &&
         <HeaderLink
-          to={ROUTES.DISCUSSIONS}
+          to={routes.discussions}
           text={t({ id: 'discussions' })}
           icon="message"
         />
       }
       {currentUser && currentUser.admin &&
         <HeaderLink
-          to={ROUTES.USERS}
+          to={routes.users}
           text={t({ id: 'users' })}
           icon="team"
         />
       }
       <HeaderLink
-        to={ROUTES.ABOUT_US}
+        to={routes.aboutUs}
         text={t({ id: 'aboutUs' })}
         icon="smile"
       />
