@@ -1,5 +1,6 @@
 import {
   required,
+  numeric,
   pucEmail,
   image,
   minLength,
@@ -18,6 +19,7 @@ const MAX_AVATAR_SIZE_IN_MB = 1;
 
 export default t => ({
   required: required(t({ id: 'validations.required' })),
+  numeric: numeric(t({ id: 'validations.numeric' })),
   pucEmail: pucEmail(t({ id: 'validations.pucEmail' })),
   image: image(t({ id: 'validations.image' })),
 

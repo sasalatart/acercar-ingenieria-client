@@ -8,6 +8,10 @@ export const required = message => value => (
   value ? undefined : message
 );
 
+export const numeric = message => value => (
+  Number.isNaN(+value) ? message : undefined
+);
+
 export const requiredRichText = message => (value) => {
   if (!value) return message;
 

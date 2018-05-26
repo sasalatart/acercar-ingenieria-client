@@ -2,6 +2,7 @@ export default {
   'en-US': {
     'forms.submit': 'Submit',
     'validations.required': 'Required',
+    'validations.numeric': 'Must be a number',
     'validations.pucEmail': 'Must be a @uc/@caiuc/@ing.puc email',
     'validations.url': 'Must be a valid URL',
     'validations.image': 'Must be an image',
@@ -55,6 +56,7 @@ export default {
   'es-ES': {
     'forms.submit': 'Ingresar',
     'validations.required': 'Requerido',
+    'validations.numeric': 'Debe ser un número',
     'validations.pucEmail': 'Debe ser un email @uc/@caiuc/@ing.puc',
     'validations.url': 'Debe ser una URL válida',
     'validations.image': 'Debe ser una imagen',

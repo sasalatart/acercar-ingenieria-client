@@ -51,7 +51,7 @@ function SignUpForm({
             name="generation"
             component={NumberField}
             placeholder={t({ id: 'forms.generation' })}
-            validate={[validators.required, validators.isBetweenYears]}
+            validate={[validators.required, validators.numeric, validators.isBetweenYears]}
             style={styles.generationInput}
           />
         </Col>
