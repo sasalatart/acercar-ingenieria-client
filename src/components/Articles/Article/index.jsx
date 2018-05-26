@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import {
   Alert,
@@ -20,7 +21,7 @@ import TagList from '../../TagList';
 import Author from '../../Author';
 import MajorLink from '../../Majors/Major/Link';
 import Image from '../../Image';
-import { articleShape } from '../../../shapes';
+import { articleShape, articleSummaryShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
 
@@ -103,7 +104,7 @@ function Article({ article, intl: { formatMessage: t } }) {
         </div>
       }
 
-      <FeedButtons resource={article} baseResourceName="articles" />
+      <FeedButtons resource={article} baseResourceName="articles" disabled={!article.approved} />
 
       {!article.approved &&
         <Alert
@@ -120,7 +121,10 @@ function Article({ article, intl: { formatMessage: t } }) {
 }
 
 Article.propTypes = {
-  article: articleShape.isRequired,
+  article: PropTypes.oneOfType([
+    articleShape,
+    articleSummaryShape,
+  ]).isRequired,
   intl: intlShape.isRequired,
 };
 

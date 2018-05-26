@@ -15,9 +15,9 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { article: { majorSummary } }) {
   return {
-    onDestroy: () => dispatch(goToArticles(ownProps.article.majorId)),
+    onDestroy: () => dispatch(goToArticles(majorSummary && majorSummary.id)),
   };
 }
 

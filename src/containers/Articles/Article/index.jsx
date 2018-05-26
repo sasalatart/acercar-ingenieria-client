@@ -1,25 +1,33 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
-import { loadArticle, getArticleEntity } from '../../../store/ducks/articles';
+import {
+  loadArticle,
+  getArticleEntity,
+  getArticleSummaryEntity,
+} from '../../../store/ducks/articles';
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Article from '../../../components/Articles/Article';
-import { articleShape, matchShape } from '../../../shapes';
+import { articleShape, articleSummaryShape, matchShape } from '../../../shapes';
 import routes from '../../../lib/routes';
 import { articlesCollection as collection } from '../../../lib/collections';
 
 function ArticleWrapper(props) {
   const { article, match: { params } } = props;
 
-  return article && article.majorId && !params.majorId
-    ? <Redirect to={routes.article(article.id, article.majorId)} />
+  return article && article.majorSummary && !params.majorId
+    ? <Redirect to={routes.article(article.id, article.majorSummary.id)} />
     : <Article {...props} />;
 }
 
 ArticleWrapper.propTypes = {
-  article: articleShape,
+  article: PropTypes.oneOfType([
+    articleShape,
+    articleSummaryShape,
+  ]),
   match: matchShape.isRequired,
 };
 
@@ -29,7 +37,7 @@ ArticleWrapper.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps.match.params, collection };
-  const article = getArticleEntity(state, params);
+  const article = getArticleEntity(state, params) || getArticleSummaryEntity(state, params);
 
   return {
     loading: !article && getIsFetching(state, params),

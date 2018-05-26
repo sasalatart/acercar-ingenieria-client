@@ -13,7 +13,7 @@ import Hideable from '../../Layout/Hideable';
 import ArticleLink from '../Article/Link';
 import MajorLink from '../../Majors/Major/Link';
 import Image from '../../Image';
-import { articleShape } from '../../../shapes';
+import { articleSummaryShape } from '../../../shapes';
 import { themeStyles, breakpointsKeys } from '../../../theme';
 import articlePlaceholder from '../../../images/article.png';
 
@@ -40,23 +40,11 @@ const styles = {
   },
 };
 
-function renderActions(adminOrMajorAdmin, article) {
-  const {
-    id,
-    majorId,
-    commentsCount,
-    likesCount,
-    likedByCurrentUser,
-  } = article;
+function renderActions(adminOrMajorAdmin, article, majorId) {
+  const { id, commentsCount, likesCount } = article;
 
   const actions = [
-    <LikeButton
-      baseResourceName="articles"
-      baseResourceId={id}
-      likedByCurrentUser={likedByCurrentUser}
-      likesCount={likesCount}
-      iconOnly
-    />,
+    <LikeButton likesCount={likesCount} iconOnly disabled />,
     <IconText type="message" text={commentsCount} />,
   ];
 
@@ -75,11 +63,11 @@ function renderExtra(previewUrl) {
   );
 }
 
-function renderMeta(article) {
+function renderMeta(article, majorId) {
   const titleTag = (
     <span>
       {!article.approved && <Icon type="lock" style={styles.icon} />}
-      <ArticleLink id={article.id} majorId={article.majorId}>{article.title}</ArticleLink>
+      <ArticleLink id={article.id} majorId={majorId}>{article.title}</ArticleLink>
     </span>
   );
 
@@ -104,16 +92,17 @@ function ArticleListItem({
   onTagClick,
   intl: { formatMessage: t },
 }) {
-  const actions = renderActions(adminOrMajorAdmin, article);
+  const majorId = article.majorSummary && article.majorSummary.id;
+  const actions = renderActions(adminOrMajorAdmin, article, majorId);
   const extra = renderExtra(article.previewUrl);
 
   return (
     <Item actions={actions} extra={extra}>
-      {renderMeta(article, t)}
+      {renderMeta(article, majorId)}
       {displayMajor &&
         <span style={styles.majorContainer}>
           <Icon type="pushpin" style={styles.icon} />
-          <MajorLink id={article.majorId}>{article.majorSummary.name}</MajorLink>
+          <MajorLink id={majorId}>{article.majorSummary.name}</MajorLink>
         </span>
       }
       {article.categoryList.length > 0 &&
@@ -126,7 +115,7 @@ function ArticleListItem({
 
 ArticleListItem.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
-  article: articleShape.isRequired,
+  article: articleSummaryShape.isRequired,
   displayMajor: PropTypes.bool.isRequired,
   onTagClick: PropTypes.func.isRequired,
   intl: intlShape.isRequired,

@@ -4,7 +4,6 @@ import IconText from './IconText';
 import HideableButton from './HideableButton';
 
 function ToggleLoadingButton({
-  enabled,
   loading,
   active,
   content,
@@ -13,6 +12,7 @@ function ToggleLoadingButton({
   onClick,
   iconOnly,
   size,
+  disabled,
   style,
 }) {
   if (loading) {
@@ -29,7 +29,7 @@ function ToggleLoadingButton({
         type={icon}
         text={content}
         onClick={onClick}
-        withPointer={enabled}
+        withPointer={!disabled}
         hideable
       />
     );
@@ -40,8 +40,8 @@ function ToggleLoadingButton({
     <HideableButton
       type={type}
       icon={icon}
-      disabled={!enabled}
       onClick={onClick}
+      disabled={disabled}
       size={size}
       style={style}
     >
@@ -51,7 +51,7 @@ function ToggleLoadingButton({
 }
 
 ToggleLoadingButton.propTypes = {
-  enabled: PropTypes.bool,
+  disabled: PropTypes.bool,
   loading: PropTypes.bool.isRequired,
   active: PropTypes.bool,
   activeIcon: PropTypes.string.isRequired,
@@ -67,7 +67,7 @@ ToggleLoadingButton.propTypes = {
 };
 
 ToggleLoadingButton.defaultProps = {
-  enabled: true,
+  disabled: false,
   active: false,
   iconOnly: false,
   size: 'default',

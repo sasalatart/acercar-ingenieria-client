@@ -5,8 +5,7 @@ import { getCurrentUserEntity } from '../../../store/ducks/sessions';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import ActionBar from '../../../components/Discussions/Discussion/ActionBar';
 
-function mapStateToProps(state, ownProps) {
-  const { discussion } = ownProps;
+function mapStateToProps(state, { discussion }) {
   const currentUser = getCurrentUserEntity(state);
 
   return {

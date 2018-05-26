@@ -7,7 +7,7 @@ import PaginationControls from '../../../containers/Pagination';
 import ActionBar from '../../../containers/Articles/List/ActionBar';
 import Title from '../../Layout/Title';
 import ListItem from './Item';
-import { paginationShape, articleShape } from '../../../shapes';
+import { paginationShape, articleSummaryShape } from '../../../shapes';
 import { suffixes } from '../../../lib/articles';
 
 export default class ArticlesList extends Component {
@@ -16,7 +16,7 @@ export default class ArticlesList extends Component {
     majorId: PropTypes.number,
     suffix: PropTypes.string.isRequired,
     pagination: paginationShape,
-    articles: PropTypes.arrayOf(articleShape),
+    articleSummaries: PropTypes.arrayOf(articleSummaryShape),
     loadArticles: PropTypes.func.isRequired,
     onTagClick: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
@@ -25,7 +25,7 @@ export default class ArticlesList extends Component {
   static defaultProps = {
     majorId: undefined,
     pagination: undefined,
-    articles: [],
+    articleSummaries: [],
   }
 
   componentDidUpdate(prevProps) {
@@ -48,7 +48,7 @@ export default class ArticlesList extends Component {
       majorId,
       suffix,
       pagination,
-      articles,
+      articleSummaries,
       loadArticles,
       intl: { formatMessage: t },
     } = this.props;
@@ -63,13 +63,13 @@ export default class ArticlesList extends Component {
         <PaginationControls
           pagination={pagination}
           loading={loading}
-          noData={!loading && isEmpty(articles)}
+          noData={!loading && isEmpty(articleSummaries)}
           loadFn={loadArticles}
           render={() => (
             <List
               itemLayout="vertical"
               size="large"
-              dataSource={articles}
+              dataSource={articleSummaries}
               renderItem={this.renderListItem}
             />
           )}

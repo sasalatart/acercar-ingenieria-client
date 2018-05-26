@@ -6,7 +6,7 @@ import ReportButton from '../../Reports/Button';
 import ApprovalButton from '../../../containers/ApprovalButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import HideableButton from '../../HideableButton';
-import { articleShape } from '../../../shapes';
+import { articleShape, articleSummaryShape } from '../../../shapes';
 import routes from '../../../lib/routes';
 
 function ArticleActionBar({
@@ -14,12 +14,13 @@ function ArticleActionBar({
   isAuthor,
   article: {
     id,
-    majorId,
+    majorSummary,
     approved,
   },
   onDestroy,
   intl: { formatMessage: t },
 }) {
+  const majorId = majorSummary && majorSummary.id;
   const commonProps = { collection: 'articles', id, baseResourceId: majorId };
 
   const actions = approved ? [<ReportButton key="report" {...commonProps} />] : [];
@@ -55,7 +56,10 @@ function ArticleActionBar({
 ArticleActionBar.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   isAuthor: PropTypes.bool.isRequired,
-  article: articleShape.isRequired,
+  article: PropTypes.oneOfType([
+    articleShape,
+    articleSummaryShape,
+  ]).isRequired,
   onDestroy: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };

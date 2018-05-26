@@ -10,7 +10,7 @@ import TagList from '../../TagList';
 import Author from '../../Author';
 import DiscussionLink from '../../Discussions/Discussion/Link';
 import { colors } from '../../../theme';
-import { discussionShape } from '../../../shapes';
+import { discussionSummaryShape } from '../../../shapes';
 
 const { Item } = List;
 const { Meta } = Item;
@@ -30,18 +30,11 @@ function renderActions(admin, discussion) {
     impressionsCount,
     commentsCount,
     likesCount,
-    likedByCurrentUser,
   } = discussion;
 
   const actions = [
     <IconText type="eye" text={impressionsCount} />,
-    <LikeButton
-      baseResourceName="discussions"
-      baseResourceId={id}
-      likedByCurrentUser={likedByCurrentUser}
-      likesCount={likesCount}
-      iconOnly
-    />,
+    <LikeButton likesCount={likesCount} iconOnly disabled />,
     <IconText type="message" text={commentsCount} />,
   ];
 
@@ -91,7 +84,7 @@ function DiscussionListItem({ admin, discussion, onTagClick }) {
 
 DiscussionListItem.propTypes = {
   admin: PropTypes.bool.isRequired,
-  discussion: discussionShape.isRequired,
+  discussion: discussionSummaryShape.isRequired,
   onTagClick: PropTypes.func.isRequired,
 };
 

@@ -8,7 +8,7 @@ import EnrollButton from '../../../../containers/FeedButtons/EnrollButton';
 import DestroyButton from '../../../../containers/DestroyButton';
 import Hideable from '../../../../components/Layout/Hideable';
 import { breakpoints } from '../../../../theme';
-import { commentShape } from '../../../../shapes';
+import { commentShape, childCommentShape } from '../../../../shapes';
 
 const styles = {
   wrapper: {
@@ -100,7 +100,10 @@ function CommentActions({
 CommentActions.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   isAuthor: PropTypes.bool.isRequired,
-  comment: commentShape.isRequired,
+  comment: PropTypes.oneOfType([
+    commentShape,
+    childCommentShape,
+  ]).isRequired,
   onStartEditing: PropTypes.func.isRequired,
 };
 

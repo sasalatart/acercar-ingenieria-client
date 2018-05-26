@@ -26,14 +26,14 @@ function mapStateToProps(state, ownProps) {
   const params = { ...getCollectionParams(majorId), suffix, paged: true };
   const pagingFns = getPagingFns(params, true).selectors;
 
-  const articles = pagingFns.getPagedEntities(state, params);
+  const articleSummaries = pagingFns.getPagedEntities(state, params);
 
   return {
     majorId,
     suffix,
-    loading: isEmpty(articles) && getIsFetching(state, params),
+    loading: isEmpty(articleSummaries) && getIsFetching(state, params),
     pagination: pagingFns.getMeta(state, params),
-    articles,
+    articleSummaries,
   };
 }
 

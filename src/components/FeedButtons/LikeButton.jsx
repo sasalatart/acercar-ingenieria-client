@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import ToggleLoadingButton from '../ToggleLoadingButton';
 
 function LikeButton({
-  loggedIn,
   likedByCurrentUser,
   likesCount,
   ...rest
 }) {
   return (
     <ToggleLoadingButton
-      enabled={loggedIn}
       active={likedByCurrentUser}
       content={likesCount}
       activeIcon="like"
@@ -21,7 +19,6 @@ function LikeButton({
 }
 
 LikeButton.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
   likedByCurrentUser: PropTypes.bool,
   likesCount: PropTypes.number.isRequired,
 };

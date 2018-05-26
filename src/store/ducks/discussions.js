@@ -1,25 +1,23 @@
 import { Map } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
 import { goToDiscussion } from './routes';
-import { getEntities } from './entities';
+import { getEntityFactory } from './entities';
 import pagingFnsFactory, {
   prepareGetPagingFns,
   removeFromAllPages,
   resetPaginationActionFactory,
 } from './paginations';
-import { getId } from './shared';
-import { discussionsSchema } from '../../schemas';
+import { discussionsSchema, discussionSummariesSchema } from '../../schemas';
 import { suffixes, getSuffix } from '../../lib/discussions';
 import { discussionsCollection as collection } from '../../lib/collections';
 
-const commonArgs = [collection, discussionsSchema];
+const commonArgs = [collection, discussionSummariesSchema];
 const forumPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.forum });
 const myPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.mine });
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({}),
+    mine: new Map({}),
   }),
 });
 
@@ -47,7 +45,7 @@ export function loadDiscussions(page = 1, mine, query) {
       fetchParams: {
         collection, page, ...query, suffix: getSuffix(mine),
       },
-      responseSchema: [discussionsSchema],
+      responseSchema: [discussionSummariesSchema],
     },
   };
 }
@@ -125,8 +123,6 @@ export default function discussionsReducer(state = INITIAL_STATE, { type, payloa
   }
 }
 
-export const getDiscussionEntity = createSelector(
-  getId,
-  getEntities,
-  (discussionId, entities) => denormalize(discussionId, discussionsSchema, entities),
-);
+export const getDiscussionEntity = getEntityFactory(discussionsSchema);
+
+export const getDiscussionSummaryEntity = getEntityFactory(discussionSummariesSchema);

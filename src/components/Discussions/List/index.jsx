@@ -7,13 +7,13 @@ import PaginationControls from '../../../containers/Pagination';
 import ActionBar from '../../../containers/Discussions/List/ActionBar';
 import Title from '../../Layout/Title';
 import DiscussionListItem from './Item';
-import { paginationShape, discussionShape } from '../../../shapes';
+import { paginationShape, discussionSummaryShape } from '../../../shapes';
 
 export default class DiscussionsList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
-    discussions: PropTypes.arrayOf(discussionShape),
+    discussionSummaries: PropTypes.arrayOf(discussionSummaryShape),
     mine: PropTypes.bool,
     loadDiscussions: PropTypes.func.isRequired,
     onTagClick: PropTypes.func.isRequired,
@@ -22,7 +22,7 @@ export default class DiscussionsList extends Component {
 
   static defaultProps = {
     pagination: undefined,
-    discussions: [],
+    discussionSummaries: [],
     mine: false,
   }
 
@@ -38,7 +38,12 @@ export default class DiscussionsList extends Component {
 
   render() {
     const {
-      loading, pagination, discussions, mine, loadDiscussions, intl: { formatMessage: t },
+      loading,
+      pagination,
+      discussionSummaries,
+      mine,
+      loadDiscussions,
+      intl: { formatMessage: t },
     } = this.props;
 
     return (
@@ -49,13 +54,13 @@ export default class DiscussionsList extends Component {
         <PaginationControls
           pagination={pagination}
           loading={loading}
-          noData={!loading && isEmpty(discussions)}
+          noData={!loading && isEmpty(discussionSummaries)}
           loadFn={loadDiscussions}
           render={() => (
             <List
               itemLayout="vertical"
               size="large"
-              dataSource={discussions}
+              dataSource={discussionSummaries}
               renderItem={this.renderListItem}
             />
           )}

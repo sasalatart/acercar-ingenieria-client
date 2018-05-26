@@ -23,9 +23,14 @@ function FeedButtons({
     enrolledByCurrentUser,
   },
   baseResourceName,
+  disabled,
 }) {
   const common = {
-    baseResourceName, baseResourceId: id, size: 'small', style: styles.button,
+    baseResourceName,
+    baseResourceId: id,
+    size: 'small',
+    disabled: disabled || likedByCurrentUser === undefined || enrolledByCurrentUser === undefined,
+    style: styles.button,
   };
 
   return (
@@ -39,11 +44,17 @@ function FeedButtons({
 FeedButtons.propTypes = {
   resource: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    likedByCurrentUser: PropTypes.bool.isRequired,
     likesCount: PropTypes.number.isRequired,
-    enrolledByCurrentUser: PropTypes.bool.isRequired,
+    likedByCurrentUser: PropTypes.bool,
+    enrolledByCurrentUser: PropTypes.bool,
+    approved: PropTypes.bool,
   }).isRequired,
   baseResourceName: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+};
+
+FeedButtons.defaultProps = {
+  disabled: false,
 };
 
 export default FeedButtons;

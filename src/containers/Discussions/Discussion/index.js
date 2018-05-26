@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { loadDiscussion, getDiscussionEntity } from '../../../store/ducks/discussions';
+import {
+  loadDiscussion,
+  getDiscussionEntity,
+  getDiscussionSummaryEntity,
+} from '../../../store/ducks/discussions';
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Discussion from '../../../components/Discussions/Discussion';
@@ -7,7 +11,8 @@ import { discussionsCollection as collection } from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps.match.params, collection };
-  const discussion = getDiscussionEntity(state, params);
+  const discussion = getDiscussionEntity(state, params)
+    || getDiscussionSummaryEntity(state, params);
 
   return {
     loading: !discussion && getIsFetching(state, params),

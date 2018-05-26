@@ -90,26 +90,34 @@ export const questionShape = PropTypes.shape({
   question: PropTypes.string.isRequired,
   answer: PropTypes.string,
   author: userSummaryShape.isRequired,
-  major: majorSummaryShape,
+  majorSummary: majorSummaryShape,
   pinned: PropTypes.bool.isRequired,
   createdAt: PropTypes.string.isRequired,
 });
 
-export const articleShape = PropTypes.shape({
+const sharedArticleShape = {
   id: PropTypes.number.isRequired,
   author: userSummaryShape.isRequired,
   majorSummary: majorSummaryShape,
   categoryList: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string.isRequired,
   shortDescription: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
   previewUrl: PropTypes.string,
-  attachments: PropTypes.arrayOf(attachmentShape),
   likesCount: PropTypes.number.isRequired,
   commentsCount: PropTypes.number.isRequired,
   approved: PropTypes.bool.isRequired,
   createdAt: PropTypes.string.isRequired,
+};
+
+export const articleShape = PropTypes.shape({
+  ...sharedArticleShape,
+  content: PropTypes.string.isRequired,
+  attachments: PropTypes.arrayOf(attachmentShape),
+  likedByCurrentUser: PropTypes.bool.isRequired,
+  enrolledByCurrentUser: PropTypes.bool.isRequired,
 });
+
+export const articleSummaryShape = PropTypes.shape(sharedArticleShape);
 
 export const categoryShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
@@ -143,6 +151,7 @@ export const commentShape = PropTypes.shape({
   ...sharedCommentShape,
   childComments: PropTypes.arrayOf(childCommentShape),
   extraComments: PropTypes.number,
+  enrolledByCurrentUser: PropTypes.bool.isRequired,
 });
 
 export const videoLinkShape = PropTypes.shape({
@@ -168,20 +177,27 @@ export const lightboxImageShape = PropTypes.shape({
   thumbnail: PropTypes.string,
 });
 
-export const discussionShape = PropTypes.shape({
+const sharedDiscussionShape = {
   id: PropTypes.number.isRequired,
   author: userSummaryShape.isRequired,
   title: PropTypes.string.isRequired,
   pinned: PropTypes.bool.isRequired,
-  description: PropTypes.string.isRequired,
   tagList: PropTypes.arrayOf(PropTypes.string).isRequired,
   impressionsCount: PropTypes.number.isRequired,
   commentsCount: PropTypes.number.isRequired,
   likesCount: PropTypes.number.isRequired,
-  likedByCurrentUser: PropTypes.bool.isRequired,
-  attachments: PropTypes.arrayOf(attachmentShape),
   createdAt: PropTypes.string.isRequired,
+};
+
+export const discussionShape = PropTypes.shape({
+  ...sharedDiscussionShape,
+  description: PropTypes.string.isRequired,
+  likedByCurrentUser: PropTypes.bool.isRequired,
+  enrolledByCurrentUser: PropTypes.bool.isRequired,
+  attachments: PropTypes.arrayOf(attachmentShape),
 });
+
+export const discussionSummaryShape = PropTypes.shape(sharedDiscussionShape);
 
 export const creditShape = PropTypes.shape({
   id: PropTypes.number.isRequired,

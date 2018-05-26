@@ -1,8 +1,7 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
 import find from 'lodash/find';
-import { getEntities } from './entities';
+import { getEntityFactory } from './entities';
 import pagingFnsFactory, {
   prepareGetPagingFns,
   removeFromAllPages,
@@ -10,12 +9,11 @@ import pagingFnsFactory, {
 } from './paginations';
 import { getMajorOptionsForCurrentUser } from './sessions';
 import { goToArticle } from './routes';
-import { getId } from './shared';
-import { articlesSchema } from '../../schemas';
+import { articlesSchema, articleSummariesSchema } from '../../schemas';
 import { suffixes, getCollectionParams } from '../../lib/articles';
 import { articlesCollection } from '../../lib/collections';
 
-const commonArgs = [articlesCollection, articlesSchema];
+const commonArgs = [articlesCollection, articleSummariesSchema];
 
 const majorsPagingFns = {
   pending: pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.pending }),
@@ -69,7 +67,7 @@ export function loadArticles(page = 1, majorId, suffix, search) {
       url: majorId ? `/majors/${majorId}/articles${urlSuffix}` : `/articles${urlSuffix}`,
       query,
       fetchParams: { ...query, ...getCollectionParams(majorId), suffix },
-      responseSchema: [articlesSchema],
+      responseSchema: [articleSummariesSchema],
     },
   };
 }
@@ -161,11 +159,9 @@ export default function articlesReducer(state = INITIAL_STATE, { type, payload }
   }
 }
 
-export const getArticleEntity = createSelector(
-  getId,
-  getEntities,
-  (articleId, entities) => denormalize(articleId, articlesSchema, entities),
-);
+export const getArticleEntity = getEntityFactory(articlesSchema);
+
+export const getArticleSummaryEntity = getEntityFactory(articleSummariesSchema);
 
 export const getMajorOptionsForArticle = createSelector(
   getMajorOptionsForCurrentUser,

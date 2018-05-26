@@ -17,12 +17,12 @@ function mapStateToProps(state, ownProps) {
   const params = { collection, suffix: getSuffix(ownProps.mine), paged: true };
   const pagingFns = getPagingFns(params, true).selectors;
 
-  const discussions = pagingFns.getPagedEntities(state);
+  const discussionSummaries = pagingFns.getPagedEntities(state);
 
   return {
-    loading: isEmpty(discussions) && getIsFetching(state, params),
+    loading: isEmpty(discussionSummaries) && getIsFetching(state, params),
     pagination: pagingFns.getMeta(state),
-    discussions,
+    discussionSummaries,
   };
 }
 

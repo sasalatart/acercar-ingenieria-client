@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Divider } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import ActionBar from '../../../containers/Discussions/Discussion/ActionBar';
@@ -10,7 +11,7 @@ import DateWithFormat from '../../DateWithFormat';
 import RichText from '../../RichText';
 import Attachments from '../../Attachments';
 import CommentsSection from '../../Comments/Section';
-import { discussionShape } from '../../../shapes';
+import { discussionShape, discussionSummaryShape } from '../../../shapes';
 
 const styles = {
   date: {
@@ -67,7 +68,10 @@ function Discussion({ discussion }) {
 }
 
 Discussion.propTypes = {
-  discussion: discussionShape.isRequired,
+  discussion: PropTypes.oneOfType([
+    discussionSummaryShape,
+    discussionShape,
+  ]).isRequired,
 };
 
 export default Discussion;

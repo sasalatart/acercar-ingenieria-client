@@ -10,16 +10,20 @@ function mapStateToProps(state, ownProps) {
   const params = { ...ownProps, collection };
 
   return {
-    loading: getIsCreating(state, params) || getIsDestroying(state, params),
+    loading: !ownProps.disabled && (getIsCreating(state, params) || getIsDestroying(state, params)),
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { baseResourceName, baseResourceId, likedByCurrentUser } = ownProps;
+  const {
+    baseResourceName, baseResourceId, likedByCurrentUser, disabled,
+  } = ownProps;
+
+  if (disabled) return { onClick: noop };
 
   const onClickFn = likedByCurrentUser ? unlike : like;
   return {
-    onClick: ownProps.loggedIn ? () => dispatch(onClickFn(baseResourceName, baseResourceId)) : noop,
+    onClick: () => dispatch(onClickFn(baseResourceName, baseResourceId)),
   };
 }
 

@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 import { REHYDRATE } from 'redux-persist/lib/constants';
 import { createSelector } from 'reselect';
+import { denormalize } from 'normalizr';
 import { getId } from './shared';
 
 export const INITIAL_STATE = new Map({
@@ -63,6 +64,14 @@ export default function entitiesReducer(state = INITIAL_STATE, action) {
 export const getEntities = state => state.entities;
 
 const getCollection = (state, params) => params.collection;
+
+export function getEntityFactory(schema) {
+  return createSelector(
+    getId,
+    getEntities,
+    (id, entities) => denormalize(id, schema, entities),
+  );
+}
 
 export const getEntity = createSelector(
   getEntities,

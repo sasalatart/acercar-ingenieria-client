@@ -23,7 +23,7 @@ import { processAttachableFormValues } from '../../lib/attachments';
 import articlePlaceholder from '../../images/article.png';
 
 const FIELDS = [
-  'title', 'shortDescription', 'content', 'categoryList', 'majorId',
+  'title', 'shortDescription', 'content', 'categoryList',
 ];
 
 function getInitialValues(id, majorId, article) {
@@ -31,7 +31,8 @@ function getInitialValues(id, majorId, article) {
 
   return {
     ...omitBy(pick(article, FIELDS), isNil),
-    categoryList: article.categoryList && article.categoryList.join(', '),
+    majorId,
+    categoryList: article && article.categoryList && article.categoryList.join(', '),
   };
 }
 
