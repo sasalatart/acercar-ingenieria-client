@@ -58,8 +58,7 @@ export default class Comment extends Component {
           baseResourceName="comments"
           baseResourceId={comment.id}
           disabled={!comment.approvedCommentable}
-          reverseList
-          answers
+          answersList
         />
       </Fragment>
     );

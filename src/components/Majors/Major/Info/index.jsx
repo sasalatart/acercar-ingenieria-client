@@ -50,7 +50,7 @@ function MajorInfo({ loggedIn, major, intl: { formatMessage: t } }) {
       {loggedIn &&
         <Fragment>
           <Divider />
-          <CommentsSection baseResourceName="majors" baseResourceId={major.id} />
+          <CommentsSection baseResourceName="majors" baseResourceId={major.id} toggable />
         </Fragment>
       }
     </Fragment>
