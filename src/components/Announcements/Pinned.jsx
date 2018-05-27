@@ -9,6 +9,7 @@ import routes from '../../lib/routes';
 const styles = {
   announcement: {
     width: '100%',
+    height: 'auto',
   },
   addButton: {
     position: 'absolute',
