@@ -27,7 +27,7 @@ function MajorInfo({ loggedIn, major, intl: { formatMessage: t } }) {
       <Title>{major.name}</Title>
       <SubTitle>{t({ id: `majors.${major.category}` })}</SubTitle>
 
-      <Divider>{t({ id: 'majors.review' })}</Divider>
+      <Divider />
       <Row type="flex" justify="center" align="middle" gutter={24}>
         <Col sm={6}>
           <div style={styles.mediaContainer}>
@@ -39,12 +39,12 @@ function MajorInfo({ loggedIn, major, intl: { formatMessage: t } }) {
         </Col>
       </Row>
 
-      <Divider>Video</Divider>
+      <Divider />
       <div style={styles.mediaContainer}>
         <ReactPlayer url={major.videoUrl} controls />
       </div>
 
-      <Divider>{t({ id: 'majors.moreInfo' })}</Divider>
+      <Divider />
       <RichText content={major.description} />
 
       {loggedIn &&

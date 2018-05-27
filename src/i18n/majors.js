@@ -13,8 +13,6 @@ export default {
     'majors.comments': 'Comments',
     'majors.email': 'Send Email',
     'majors.email.personal': 'Contact the Admins',
-    'majors.review': 'Short Description',
-    'majors.moreInfo': 'More Information',
     'majors.destroyWarning': 'Deleting this Major will also delete its articles and comments.',
   },
   'es-ES': {
@@ -31,8 +29,6 @@ export default {
     'majors.comments': 'Comentarios',
     'majors.email': 'Enviar email',
     'majors.email.personal': 'Contactar a los admins',
-    'majors.review': 'Reseña',
-    'majors.moreInfo': 'Más información',
     'majors.destroyWarning': 'Al eliminar este Major también se eliminarán sus artículos y comentarios.',
   },
 };
