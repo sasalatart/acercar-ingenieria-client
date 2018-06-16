@@ -147,12 +147,17 @@ const sharedCommentShape = {
 
 export const childCommentShape = PropTypes.shape(sharedCommentShape);
 
-export const commentShape = PropTypes.shape({
+export const parentCommentShape = PropTypes.shape({
   ...sharedCommentShape,
   childComments: PropTypes.arrayOf(childCommentShape),
   extraComments: PropTypes.number,
   enrolledByCurrentUser: PropTypes.bool.isRequired,
 });
+
+export const commentShape = PropTypes.oneOfType([
+  parentCommentShape,
+  childCommentShape,
+]);
 
 export const videoLinkShape = PropTypes.shape({
   id: PropTypes.number.isRequired,

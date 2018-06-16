@@ -9,7 +9,7 @@ import AnswerForm from './AnswerForm';
 import ProfileAvatar from '../../../Users/Profile/Avatar';
 import ChildComments from './Children';
 import Hideable from '../../../Layout/Hideable';
-import { commentShape, childCommentShape } from '../../../../shapes';
+import { commentShape } from '../../../../shapes';
 import { breakpoints } from '../../../../theme';
 
 const styles = {
@@ -35,10 +35,7 @@ const styles = {
 
 class CommentItem extends Component {
   static propTypes = {
-    comment: PropTypes.oneOfType([
-      commentShape,
-      childCommentShape,
-    ]).isRequired,
+    comment: commentShape.isRequired,
     answeringDisabled: PropTypes.bool,
     intl: intlShape.isRequired,
   };

@@ -4,7 +4,7 @@ import Linkify from 'react-linkify';
 import EditForm from './EditForm';
 import DateWithFormat from '../../DateWithFormat';
 import ProfileLink from '../../Users/Profile/Link';
-import { commentShape, childCommentShape } from '../../../shapes';
+import { commentShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
 
 const styles = {
@@ -45,10 +45,7 @@ function MainContent({
 }
 
 MainContent.propTypes = {
-  comment: PropTypes.oneOfType([
-    commentShape,
-    childCommentShape,
-  ]).isRequired,
+  comment: commentShape.isRequired,
   editing: PropTypes.bool,
   onStopEditing: PropTypes.func.isRequired,
 };
