@@ -5,8 +5,8 @@ import Comment from '../../containers/Comments/Comment';
 export default function Comments() {
   return (
     <Switch>
-      <Route path="/comments/:id" render={Comment} />
-      <Route path="/comments/:commentId/comments/:id" render={Comment} />
+      <Route path="/comments/:commentId/comments/:id" component={Comment} />
+      <Route path="/comments/:id" component={Comment} />
     </Switch>
   );
 }
