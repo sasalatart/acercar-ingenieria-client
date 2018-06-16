@@ -11,20 +11,20 @@ import commentsValidations from '../../validations/comments';
 
 const FIELDS = ['content'];
 
-function getFormName(comment) {
-  if (comment && comment.commentableType === 'Comment') {
-    return `commentAnswer${comment.commentableId}`;
+function getFormName(baseResourceName, baseResourceId, comment) {
+  if (comment) {
+    return `commentEdit${comment.id}`;
   }
 
-  return comment ? `commentEdit${comment.id}` : 'commentNew';
+  return baseResourceName === 'comments'
+    ? `commentAnswer${baseResourceId}`
+    : 'commentNew';
 }
 
-function mapStateToProps(state, { comment }) {
+function mapStateToProps(state, { baseResourceName, baseResourceId, comment }) {
   return {
-    form: getFormName(comment),
-    initialValues: comment
-      ? pick(comment, FIELDS)
-      : {},
+    form: getFormName(baseResourceName, baseResourceId, comment),
+    initialValues: comment ? pick(comment, FIELDS) : {},
   };
 }
 
