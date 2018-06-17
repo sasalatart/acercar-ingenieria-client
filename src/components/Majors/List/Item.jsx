@@ -3,64 +3,37 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
-import get from 'lodash/get';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
-import MajorLink from '../Major/Link';
-import Image, { sizes } from '../../Image';
+import MajorMeta from './Meta';
 import { majorShape } from '../../../shapes';
-import { themeStyles } from '../../../theme';
 import routes from '../../../lib/routes';
-import majorPlaceholder from '../../../images/major.png';
 
 const { Item } = List;
-const { Meta } = Item;
 
-const styles = {
-  shortDescription: themeStyles.justifiedTextContainer,
-};
-
-function MajorItem({
-  admin,
-  major: {
-    id,
-    logo,
-    name,
-    shortDescription,
-  },
-  intl: { formatMessage: t },
-}) {
+function MajorItem({ admin, major, intl: { formatMessage: t } }) {
   const actions = [];
 
   if (admin) {
-    const majorEditHref = routes.majorEdit(id);
+    const majorEditHref = routes.majorEdit(major.id);
     actions.push(<Link to={majorEditHref} href={majorEditHref}><Icon type="edit" /></Link>);
 
     const destroyButton = (
       <DestroyButton
         collection="majors"
-        id={id}
+        id={major.id}
         warningMessage={t({ id: 'majors.destroyWarning' })}
-        textToFill={name}
+        textToFill={major.name}
         important
         iconOnly
       />
     );
-
     actions.push(destroyButton);
   }
 
-  const avatar = <Image src={get(logo, 'thumb') || majorPlaceholder} size={sizes.thumb} />;
-  const title = (
-    <span>
-      <MajorLink id={id}>{name}</MajorLink>
-    </span>
-  );
-  const description = <p style={styles.shortDescription}>{shortDescription}</p>;
-
   return (
     <Item actions={actions}>
-      <Meta avatar={avatar} title={title} description={description} />
+      <MajorMeta major={major} />
     </Item>
   );
 }
