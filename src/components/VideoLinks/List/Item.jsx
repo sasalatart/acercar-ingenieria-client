@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 import { Card, Icon } from 'antd';
 import ReactPlayer from 'react-player';
 import lowerFirst from 'lodash/lowerFirst';
@@ -7,25 +8,27 @@ import WithAuthorization from '../../../hoc/WithAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import { videoLinkShape } from '../../../shapes';
-import { themeStyles } from '../../../theme';
+import { breakpoints } from '../../../theme';
+
+const RadiumCard = Radium(Card);
 
 const styles = {
   card: {
-    width: '225px',
+    width: '550px',
     margin: '5px',
+    [breakpoints.sm]: {
+      width: '275px',
+    },
   },
-  video: {
-    maxWidth: '205px',
-    maxHeight: '115px',
+  cardBody: {
+    height: '310px',
+    [breakpoints.sm]: {
+      height: '155px',
+    },
   },
-  videoWrapper: themeStyles.mediaContainer,
 };
 
-function VideoItem({
-  adminOrMajorAdmin,
-  video,
-  onEditClicked,
-}) {
+function VideoItem({ adminOrMajorAdmin, video, onEditClicked }) {
   const actions = [];
 
   if (adminOrMajorAdmin) {
@@ -46,11 +49,9 @@ function VideoItem({
 
   const title = video.pinned ? <IconText type="star" text={video.title} /> : video.title;
   return (
-    <Card title={title} actions={actions} style={styles.card}>
-      <div style={styles.videoWrapper}>
-        <ReactPlayer url={video.url} style={styles.video} controls />
-      </div>
-    </Card>
+    <RadiumCard title={title} actions={actions} style={styles.card} bodyStyle={styles.cardBody}>
+      <ReactPlayer url={video.url} width="100%" height="100%" controls />
+    </RadiumCard>
   );
 }
 
