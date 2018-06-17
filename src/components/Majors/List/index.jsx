@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
-import { Tabs, List } from 'antd';
+import { Tabs, Alert, List } from 'antd';
 import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
 import MajorItem from './Item';
@@ -9,6 +9,12 @@ import { majorShape } from '../../../shapes';
 import { MAJORS_TAB_NAMES as TAB_NAMES } from '../../../lib/routes';
 
 const { TabPane } = Tabs;
+
+const styles = {
+  typeDefinition: {
+    marginBottom: '25px',
+  },
+};
 
 export default class MajorsList extends Component {
   static propTypes = {
@@ -31,14 +37,25 @@ export default class MajorsList extends Component {
     this.setState({ activeTab: key });
   }
 
-  renderMajors(majors) {
-    const { loading } = this.props;
+  renderTypeDefinition(type) {
+    const { formatMessage: t } = this.props.intl;
 
+    return (
+      <Alert
+        description={t({ id: `majors.${type}.description` })}
+        type="info"
+        style={styles.typeDefinition}
+        showIcon
+      />
+    );
+  }
+
+  renderMajors(majors) {
     return (
       <List
         itemLayout="horizontal"
         size="large"
-        loading={loading}
+        loading={this.props.loading}
         dataSource={majors}
         renderItem={major => <MajorItem major={major} />}
       />
@@ -55,10 +72,12 @@ export default class MajorsList extends Component {
 
         <Tabs activeKey={this.state.activeTab} size="large" onChange={this.handleTabChange}>
           <TabPane key={TAB_NAMES.disciplinaries} tab={t({ id: 'majors.disciplinaries' })}>
+            {this.renderTypeDefinition(TAB_NAMES.disciplinaries)}
             {this.renderMajors(disciplinaryMajors)}
           </TabPane>
 
           <TabPane key={TAB_NAMES.interdisciplinaries} tab={t({ id: 'majors.interdisciplinaries' })}>
+            {this.renderTypeDefinition(TAB_NAMES.interdisciplinaries)}
             {this.renderMajors(interdisciplinaryMajors)}
           </TabPane>
         </Tabs>
