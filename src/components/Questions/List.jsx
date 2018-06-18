@@ -9,6 +9,7 @@ import DestroyButton from '../../containers/DestroyButton';
 import PaginationControls from '../../containers/Pagination';
 import IconText from '../IconText';
 import { paginationShape, questionShape } from '../../shapes';
+import { themeStyles } from '../../theme';
 
 const { Panel } = Collapse;
 
@@ -17,9 +18,7 @@ const styles = {
     marginBottom: '16px',
     borderRadius: '4px',
   },
-  justified: {
-    textAlign: 'justify',
-  },
+  answer: themeStyles.justifiedTextContainer,
   actions: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -62,7 +61,7 @@ export default class QuestionsList extends Component {
     return (
       <Panel key={id} header={header} style={styles.panel}>
         <Linkify>
-          <p style={styles.justified}>{answer}</p>
+          <p style={styles.answer}>{answer}</p>
         </Linkify>
 
         {adminOrMajorAdmin &&
@@ -90,7 +89,9 @@ export default class QuestionsList extends Component {
         loadFn={loadQuestions}
         render={() => (
           <Collapse bordered={false}>
-            {questions.map(this.renderItem)}
+            {questions
+              .sort((qA, qB) => new Date(qA.createdAt) - new Date(qB.createdAt))
+              .map(this.renderItem)}
           </Collapse>
         )}
       />
