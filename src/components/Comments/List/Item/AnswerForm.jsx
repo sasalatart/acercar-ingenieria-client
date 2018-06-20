@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../../../../containers/Comments/Form';
 import { CancelButton } from '../../../Forms';
+import collections from '../../../../lib/collections';
 
 const styles = {
   wrapper: {
@@ -23,7 +24,7 @@ function AnswerForm({ parentCommentId, onStopAnswering }) {
     <div style={styles.wrapper}>
       <div style={styles.mainContent}>
         <Form
-          baseResourceName="comments"
+          baseResourceName={collections.comments}
           baseResourceId={parentCommentId}
           onSubmitSuccess={onStopAnswering}
           autoFocus

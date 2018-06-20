@@ -6,20 +6,27 @@ import { updateEntity, getEntities } from './entities';
 import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
 import { getId } from './shared';
 import { commentsSchema } from '../../schemas';
-import { commentsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
-const commonArgs = [collection, commentsSchema];
-const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
-const articlesPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'articles' });
-const discussionsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'discussions' });
-const commentsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'comments' });
+const collection = collections.comments;
+
+function createPagingFns(baseResourceName) {
+  return pagingFnsFactory(collection, commentsSchema, { baseResourceName });
+}
+
+const pagingFns = {
+  comments: createPagingFns(collection),
+  majors: createPagingFns(collections.majors),
+  articles: createPagingFns(collections.articles),
+  discussions: createPagingFns(collections.discussions),
+};
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
+    comments: new Map({}),
     majors: new Map({}),
     articles: new Map({}),
     discussions: new Map({}),
-    comments: new Map({}),
   }),
 });
 
@@ -32,15 +39,8 @@ const TYPES = {
   ADD_TO_PAGINATION: 'comments/ADD_TO_PAGINATION',
 };
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceName }) => {
-  switch (baseResourceName) {
-    case 'majors': return majorsPagingFns;
-    case 'articles': return articlesPagingFns;
-    case 'discussions': return discussionsPagingFns;
-    case 'comments': return commentsPagingFns;
-    default: return undefined;
-  }
-});
+export const getPagingFns = prepareGetPagingFns(({ baseResourceName }) =>
+  pagingFns[baseResourceName]);
 
 export function loadComments(baseResourceName, baseResourceId, page = 1) {
   return {
@@ -97,9 +97,8 @@ export function createComment(body, baseResourceName, baseResourceId, reverseLis
         if (!reverseList) return;
       }
 
-      const pagingFns = getPagingFns({ baseResourceName }, true);
-      const type = TYPES.ADD_TO_PAGINATION;
-      dispatch(pagingFns.actions.addToPagination(type, result, baseResourceId, reverseList));
+      const actionCreator = getPagingFns({ baseResourceName }, true).actions.addToPagination;
+      dispatch(actionCreator(TYPES.ADD_TO_PAGINATION, result, baseResourceId, reverseList));
     });
 }
 

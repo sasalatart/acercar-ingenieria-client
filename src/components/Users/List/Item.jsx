@@ -6,6 +6,7 @@ import DestroyButton from '../../../containers/DestroyButton';
 import ProfileAvatar from '../../Users/Profile/Avatar';
 import ProfileLink from '../../Users/Profile/Link';
 import { userShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 
 const { Item } = List;
 const { Meta } = Item;
@@ -41,12 +42,15 @@ function UserListItem({
   }
 
   if (adminOrMajorAdmin) {
-    const baseResourceProps = majorId && { baseResourceId: majorId, baseResourceName: 'majors' };
+    const baseResourceProps = majorId && {
+      baseResourceId: majorId,
+      baseResourceName: collections.majors,
+    };
 
     const destroyButton = (
       <DestroyButton
         {...baseResourceProps}
-        collection="users"
+        collection={collections.users}
         id={user.id}
         warningMessage={t({ id: 'users.destroyWarning' })}
         textToFill={`${user.firstName} ${user.lastName}`}

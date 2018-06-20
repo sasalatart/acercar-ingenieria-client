@@ -11,11 +11,11 @@ import pagingFnsFactory, {
 import { getUserId, getMajorId } from './shared';
 import { TYPES as USERS_TYPES } from './users';
 import { getCollectionParams } from '../../lib/admins';
-import { adminsCollection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
-const commonArgs = [adminsCollection, usersSchema];
+const commonArgs = [collections.admins, usersSchema];
 const platformPagingFns = pagingFnsFactory(...commonArgs);
-const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
+const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: collections.majors });
 
 const INITIAL_STATE = Map({
   pagination: new Map({

@@ -4,8 +4,10 @@ import { denormalize } from 'normalizr';
 import pagingFnsFactory from './paginations';
 import { announcementsSchema } from '../../schemas';
 import { getEntities } from './entities';
-import { announcementsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+import { suffixes } from '../../lib/announcements';
 
+const collection = collections.announcements;
 export const pagingFns = pagingFnsFactory(collection, announcementsSchema);
 
 const INITIAL_STATE = new Map({
@@ -43,7 +45,7 @@ export function loadPinnedAnnouncements() {
     payload: {
       method: 'GET',
       url: '/announcements/pinned',
-      fetchParams: { collection, suffix: 'pinned' },
+      fetchParams: { collection, suffix: suffixes.pinned },
       responseSchema: [announcementsSchema],
     },
   };

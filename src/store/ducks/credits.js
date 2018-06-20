@@ -4,7 +4,9 @@ import { denormalize } from 'normalizr';
 import { creditsSchema } from '../../schemas';
 import { getEntities } from './entities';
 import { getCreditId } from './shared';
-import { creditsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+
+const collection = collections.credits;
 
 const INITIAL_STATE = new Map({
   activeIds: new OrderedSet(),

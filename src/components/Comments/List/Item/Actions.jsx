@@ -9,6 +9,7 @@ import DestroyButton from '../../../../containers/DestroyButton';
 import Hideable from '../../../../components/Layout/Hideable';
 import { breakpoints } from '../../../../theme';
 import { commentShape } from '../../../../shapes';
+import collections from '../../../../lib/collections';
 
 const styles = {
   wrapper: {
@@ -39,7 +40,7 @@ function renderLikeButton(comment) {
 
   return (
     <LikeButton
-      baseResourceName="comments"
+      baseResourceName={collections.comments}
       baseResourceId={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
@@ -52,7 +53,7 @@ function renderEnrollButton(comment) {
   const { id, enrolledByCurrentUser } = comment;
   const enrollButton = (
     <EnrollButton
-      baseResourceName="comments"
+      baseResourceName={collections.comments}
       baseResourceId={id}
       enrolledByCurrentUser={enrolledByCurrentUser}
       iconOnly
@@ -69,7 +70,7 @@ function renderDestroyButton(comment, approved) {
   const { id, commentableType, commentableId } = comment;
   const destroyButton = (
     <DestroyButton
-      collection="comments"
+      collection={collections.comments}
       id={id}
       baseResourceName={`${lowerFirst(commentableType)}s`}
       baseResourceId={commentableId}

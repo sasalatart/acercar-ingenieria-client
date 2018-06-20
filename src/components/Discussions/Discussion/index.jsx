@@ -12,6 +12,7 @@ import RichText from '../../RichText';
 import Attachments from '../../Attachments';
 import CommentsSection from '../../Comments/Section';
 import { discussionShape, discussionSummaryShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 
 const styles = {
   date: {
@@ -45,7 +46,7 @@ function Discussion({ discussion }) {
         </div>
       }
 
-      <FeedButtons resource={discussion} baseResourceName="discussions" />
+      <FeedButtons resource={discussion} baseResourceName={collections.discussions} />
 
       <Divider />
       <Author author={author} />
@@ -62,7 +63,7 @@ function Discussion({ discussion }) {
       }
 
       <Divider />
-      <CommentsSection baseResourceName="discussions" baseResourceId={id} />
+      <CommentsSection baseResourceName={collections.discussions} baseResourceId={id} />
     </Fragment>
   );
 }

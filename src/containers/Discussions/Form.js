@@ -15,7 +15,7 @@ import withAuthorization from '../../hoc/WithAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import DiscussionForm from '../../components/Discussions/Form';
 import discussionsValidations from '../../validations/discussions';
-import { discussionsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 import { processAttachableFormValues } from '../../lib/attachments';
 
 const FIELDS = [
@@ -32,7 +32,7 @@ function getInitialValues(id, discussion) {
 }
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection };
+  const params = { ...ownProps.match.params, collection: collections.discussions };
   const id = params.id && +params.id;
 
   const discussion = getDiscussionEntity(state, params);

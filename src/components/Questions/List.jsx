@@ -8,8 +8,9 @@ import isEmpty from 'lodash/isEmpty';
 import DestroyButton from '../../containers/DestroyButton';
 import PaginationControls from '../../containers/Pagination';
 import IconText from '../IconText';
-import { paginationShape, questionShape } from '../../shapes';
 import { themeStyles } from '../../theme';
+import { paginationShape, questionShape } from '../../shapes';
+import collections from '../../lib/collections';
 
 const { Panel } = Collapse;
 
@@ -69,7 +70,11 @@ export default class QuestionsList extends Component {
             <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
               {t({ id: 'forms.edit' })}
             </Button>
-            <DestroyButton collection="questions" id={id} baseResourceId={get(majorSummary, 'id')} />
+            <DestroyButton
+              collection={collections.questions}
+              id={id}
+              baseResourceId={get(majorSummary, 'id')}
+            />
           </div>
         }
       </Panel>

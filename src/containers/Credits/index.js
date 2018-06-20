@@ -5,10 +5,10 @@ import { loadCredits, getCreditsEntities } from '../../store/ducks/credits';
 import { getIsFetching } from '../../store/ducks/loading';
 import WithLoadableResource from '../../hoc/WithLoadableResource';
 import Credits from '../../components/Credits';
-import { creditsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
 function mapStateToProps(state) {
-  const params = { collection, paged: true };
+  const params = { collection: collections.credits, paged: true };
   const credits = getCreditsEntities(state);
 
   return {

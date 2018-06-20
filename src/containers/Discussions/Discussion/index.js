@@ -7,10 +7,10 @@ import {
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Discussion from '../../../components/Discussions/Discussion';
-import { discussionsCollection as collection } from '../../../lib/collections';
+import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection };
+  const params = { ...ownProps.match.params, collection: collections.discussions };
   const discussion = getDiscussionEntity(state, params)
     || getDiscussionSummaryEntity(state, params);
 

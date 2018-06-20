@@ -5,13 +5,13 @@ import { getPage } from '../../../store/ducks/routes';
 import { loadComments, getPagingFns } from '../../../store/ducks/comments';
 import { getIsFetching } from '../../../store/ducks/loading';
 import CommentsList from '../../../components/Comments/List';
-import { commentsCollection as collection } from '../../../lib/collections';
+import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const { baseResourceName, baseResourceId } = ownProps;
 
   const params = {
-    collection, baseResourceName, baseResourceId, paged: true,
+    collection: collections.comments, baseResourceName, baseResourceId, paged: true,
   };
 
   const pagingFns = getPagingFns(params, true).selectors;

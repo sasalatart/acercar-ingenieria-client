@@ -6,17 +6,23 @@ import { getEntities } from './entities';
 import pagingFnsFactory, { prepareGetPagingFns, removeFromAllPages } from './paginations';
 import { getQuestionId } from './shared';
 import { suffixes, getSuffix, getCollectionParams } from '../../lib/questions';
-import { questionsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
-const commonArgs = [collection, questionsSchema];
-const answeredSuffix = { suffix: suffixes.answered };
-const pendingSuffix = { suffix: suffixes.pending };
+const collection = collections.questions;
 
-const majorsAnsweredPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', ...answeredSuffix });
-const majorsPendingPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', ...pendingSuffix });
+function createPagingFns(suffix, baseResourceName) {
+  return pagingFnsFactory(collection, questionsSchema, { suffix, baseResourceName });
+}
 
-const platformAnsweredPagingFns = pagingFnsFactory(...commonArgs, answeredSuffix);
-const platformPendingPagingFns = pagingFnsFactory(...commonArgs, pendingSuffix);
+const majorsPagingFns = {
+  [suffixes.pending]: createPagingFns(suffixes.pending, collections.majors),
+  [suffixes.answered]: createPagingFns(suffixes.answered, collections.majors),
+};
+
+const platformPagingFns = {
+  [suffixes.pending]: createPagingFns(suffixes.pending),
+  [suffixes.answered]: createPagingFns(suffixes.answered),
+};
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
@@ -35,13 +41,9 @@ const TYPES = {
   ADD_TO_UNANSWERED_PAGINATION: 'questions/ADD_TO_UNANSWERED_PAGINATION',
 };
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => {
-  if (baseResourceId) {
-    return suffix === suffixes.pending ? majorsPendingPagingFns : majorsAnsweredPagingFns;
-  }
-
-  return suffix === suffixes.pending ? platformPendingPagingFns : platformAnsweredPagingFns;
-});
+export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => (
+  baseResourceId ? majorsPagingFns[suffix] : platformPagingFns[suffix]
+));
 
 export function loadQuestions(page = 1, baseResourceId, pending) {
   const urlSuffix = pending ? '/pending' : '';
@@ -118,14 +120,16 @@ export default function questionsReducer(state = INITIAL_STATE, { type, payload 
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { fetchParams } = payload.request;
-      const pendingPagingFns = getPagingFns({ ...payload, ...pendingSuffix });
-      const answeredPagingFns = getPagingFns({ ...payload, ...answeredSuffix });
+      const pendingPagingFns = getPagingFns({ ...payload, ...{ suffix: suffixes.pending } });
+      const answeredPagingFns = getPagingFns({ ...payload, ...{ suffix: suffixes.answered } });
       return removeFromAllPages(state, [pendingPagingFns, answeredPagingFns], fetchParams);
     }
     case TYPES.ADD_TO_ANSWERED_PAGINATION:
-      return getPagingFns({ ...payload, ...answeredSuffix }).addToPage(state, payload);
+      return getPagingFns({ ...payload, ...{ suffix: suffixes.answered } })
+        .addToPage(state, payload);
     case TYPES.ADD_TO_UNANSWERED_PAGINATION:
-      return getPagingFns({ ...payload, ...pendingSuffix }).addToPage(state, payload);
+      return getPagingFns({ ...payload, ...{ suffix: suffixes.pending } })
+        .addToPage(state, payload);
     default:
       return state;
   }

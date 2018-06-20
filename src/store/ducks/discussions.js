@@ -8,7 +8,9 @@ import pagingFnsFactory, {
 } from './paginations';
 import { discussionsSchema, discussionSummariesSchema } from '../../schemas';
 import { suffixes, getSuffix } from '../../lib/discussions';
-import { discussionsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+
+const collection = collections.discussions;
 
 const commonArgs = [collection, discussionSummariesSchema];
 const forumPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.forum });

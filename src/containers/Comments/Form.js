@@ -8,6 +8,7 @@ import {
 import I18nForm from '../../hoc/I18nForm';
 import CommentForm from '../../components/Comments/Form';
 import commentsValidations from '../../validations/comments';
+import collections from '../../lib/collections';
 
 const FIELDS = ['content'];
 
@@ -16,7 +17,7 @@ function getFormName(baseResourceName, baseResourceId, comment) {
     return `commentEdit${comment.id}`;
   }
 
-  return baseResourceName === 'comments'
+  return baseResourceName === collections.comments
     ? `commentAnswer${baseResourceId}`
     : 'commentNew';
 }

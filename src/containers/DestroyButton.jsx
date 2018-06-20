@@ -15,6 +15,7 @@ import { destroyCredit } from '../store/ducks/credits';
 import { getIsDestroying } from '../store/ducks/loading';
 import ImportantDestroyButton from '../components/DestroyButton/Important';
 import DestroyButton from '../components/DestroyButton';
+import collections from '../lib/collections';
 
 function DestroyButtonWrapper(props) {
   return props.important
@@ -38,23 +39,23 @@ function getDestroyAction(ownProps) {
   switch (collection) {
     case 'auth':
       return destroyAccount();
-    case 'users':
+    case collections.users:
       return destroyUser(id, baseResourceId);
-    case 'announcements':
+    case collections.announcements:
       return destroyAnnouncement(id);
-    case 'majors':
+    case collections.majors:
       return destroyMajor(id);
-    case 'questions':
+    case collections.questions:
       return destroyQuestion(id, baseResourceId);
-    case 'articles':
+    case collections.articles:
       return destroyArticle(id, baseResourceId);
-    case 'discussions':
+    case collections.discussions:
       return destroyDiscussion(id);
-    case 'comments':
+    case collections.comments:
       return destroyComment(id, baseResourceName, baseResourceId);
-    case 'videoLinks':
+    case collections.videoLinks:
       return destroyVideoLink(id, baseResourceName, baseResourceId);
-    case 'credits':
+    case collections.credits:
       return destroyCredit(id);
     default:
       return undefined;

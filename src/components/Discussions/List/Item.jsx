@@ -11,6 +11,7 @@ import Author from '../../Author';
 import DiscussionLink from '../../Discussions/Discussion/Link';
 import { colors } from '../../../theme';
 import { discussionSummaryShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 
 const { Item } = List;
 const { Meta } = Item;
@@ -39,7 +40,7 @@ function renderActions(admin, discussion) {
   ];
 
   if (admin) {
-    actions.push(<DestroyButton collection="discussions" id={id} iconOnly />);
+    actions.push(<DestroyButton collection={collections.discussions} id={id} iconOnly />);
   }
 
   return actions;

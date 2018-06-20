@@ -7,10 +7,10 @@ import {
 } from '../../store/ducks/loading';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import EnrollButton from '../../components/FeedButtons/EnrollButton';
-import { enrollmentsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps, collection };
+  const params = { ...ownProps, collection: collections.enrollments };
 
   return {
     loading: getIsCreating(state, params) || getIsDestroying(state, params),

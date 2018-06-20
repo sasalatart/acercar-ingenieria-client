@@ -13,8 +13,9 @@ import Hideable from '../../Layout/Hideable';
 import ArticleLink from '../Article/Link';
 import MajorLink from '../../Majors/Major/Link';
 import Image from '../../Image';
-import { articleSummaryShape } from '../../../shapes';
 import { themeStyles, breakpointsKeys } from '../../../theme';
+import { articleSummaryShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 import articlePlaceholder from '../../../images/article.png';
 
 const { Item } = List;
@@ -49,7 +50,11 @@ function renderActions(adminOrMajorAdmin, article, majorId) {
   ];
 
   if (adminOrMajorAdmin) {
-    actions.push(<DestroyButton collection="articles" id={id} baseResourceId={majorId} iconOnly />);
+    const destroyButton = (
+      <DestroyButton collection={collections.articles} id={id} baseResourceId={majorId} iconOnly />
+    );
+
+    actions.push(destroyButton);
   }
 
   return actions;

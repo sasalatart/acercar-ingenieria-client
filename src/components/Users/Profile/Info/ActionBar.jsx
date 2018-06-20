@@ -4,6 +4,7 @@ import { intlShape } from 'react-intl';
 import DestroyButton from '../../../../containers/DestroyButton';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import { userShape } from '../../../../shapes';
+import collections from '../../../../lib/collections';
 
 function ProfileActionBar({
   admin,
@@ -32,7 +33,7 @@ function ProfileActionBar({
       : (
         <DestroyButton
           {...commonProps}
-          collection="users"
+          collection={collections.users}
           id={user.id}
           callback={goToLanding}
         />

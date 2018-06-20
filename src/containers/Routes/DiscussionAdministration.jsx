@@ -9,7 +9,7 @@ import { loadDiscussion, getDiscussionEntity } from '../../store/ducks/discussio
 import { getIsFetching } from '../../store/ducks/loading';
 import DataPlaceholder from '../../components/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
-import { discussionsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
 class DiscussionAdministration extends Component {
   static propTypes = {
@@ -29,7 +29,7 @@ class DiscussionAdministration extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection };
+  const params = { ...ownProps.match.params, collection: collections.discussions };
 
   const currentUser = getCurrentUserEntity(state);
   const discussion = getDiscussionEntity(state, params);

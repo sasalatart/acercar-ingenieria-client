@@ -1,30 +1,4 @@
-export const adminsCollection = 'admins';
-
-export const announcementsCollection = 'announcements';
-
-export const articlesCollection = 'articles';
-
-export const categoriesCollection = 'categories';
-
-export const commentsCollection = 'comments';
-
-export const creditsCollection = 'credits';
-
-export const discussionsCollection = 'discussions';
-
-export const enrollmentsCollection = 'enrollments';
-
-export const likesCollection = 'likes';
-
-export const majorsCollection = 'majors';
-
-export const notificationsCollection = 'notifications';
-
-export const questionsCollection = 'questions';
-
-export const usersCollection = 'users';
-
-export const videoLinksCollection = 'videoLinks';
+import keyMirror from 'keymirror';
 
 export function parseBaseResource(params) {
   const baseResourceKey = Object.keys(params).find(key => /Id/.test(key));
@@ -36,3 +10,20 @@ export function parseBaseResource(params) {
     baseResourceId: +params[baseResourceKey],
   };
 }
+
+export default keyMirror({
+  admins: null,
+  announcements: null,
+  articles: null,
+  categories: null,
+  comments: null,
+  credits: null,
+  discussions: null,
+  enrollments: null,
+  likes: null,
+  majors: null,
+  notifications: null,
+  questions: null,
+  users: null,
+  videoLinks: null,
+});

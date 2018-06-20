@@ -1,5 +1,7 @@
 import { updateEntity } from './entities';
-import { likesCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+
+const collection = collections.likes;
 
 const TYPES = {
   CREATE_LIKE: 'likes/CREATE_LIKE',

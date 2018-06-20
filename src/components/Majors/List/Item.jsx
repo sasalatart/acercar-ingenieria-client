@@ -8,6 +8,7 @@ import DestroyButton from '../../../containers/DestroyButton';
 import MajorMeta from './Meta';
 import { majorShape } from '../../../shapes';
 import routes from '../../../lib/routes';
+import collections from '../../../lib/collections';
 
 const { Item } = List;
 
@@ -20,7 +21,7 @@ function MajorItem({ admin, major, intl: { formatMessage: t } }) {
 
     const destroyButton = (
       <DestroyButton
-        collection="majors"
+        collection={collections.majors}
         id={major.id}
         warningMessage={t({ id: 'majors.destroyWarning' })}
         textToFill={major.name}

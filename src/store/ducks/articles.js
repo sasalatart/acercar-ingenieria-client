@@ -11,20 +11,24 @@ import { getMajorOptionsForCurrentUser } from './sessions';
 import { goToArticle } from './routes';
 import { articlesSchema, articleSummariesSchema } from '../../schemas';
 import { suffixes, getCollectionParams } from '../../lib/articles';
-import { articlesCollection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
-const commonArgs = [articlesCollection, articleSummariesSchema];
+const collection = collections.articles;
+
+function createPagingFns(suffix, baseResourceName) {
+  return pagingFnsFactory(collection, articleSummariesSchema, { suffix, baseResourceName });
+}
 
 const majorsPagingFns = {
-  pending: pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.pending }),
-  mine: pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.mine }),
-  approved: pagingFnsFactory(...commonArgs, { baseResourceName: 'majors', suffix: suffixes.approved }),
+  pending: createPagingFns(suffixes.pending, collections.majors),
+  mine: createPagingFns(suffixes.mine, collections.majors),
+  approved: createPagingFns(suffixes.approved, collections.majors),
 };
 
 const platformPagingFns = {
-  pending: pagingFnsFactory(...commonArgs, { suffix: suffixes.pending }),
-  mine: pagingFnsFactory(...commonArgs, { suffix: suffixes.mine }),
-  approved: pagingFnsFactory(...commonArgs, { suffix: suffixes.approved }),
+  pending: createPagingFns(suffixes.pending),
+  mine: createPagingFns(suffixes.mine),
+  approved: createPagingFns(suffixes.approved),
 };
 
 const INITIAL_STATE = new Map({

@@ -18,7 +18,7 @@ import withAuthorization from '../../hoc/WithAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
 import articlesValidations from '../../validations/articles';
-import { articlesCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 import { processAttachableFormValues } from '../../lib/attachments';
 import articlePlaceholder from '../../images/article.png';
 
@@ -37,7 +37,7 @@ function getInitialValues(id, majorId, article) {
 }
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection };
+  const params = { ...ownProps.match.params, collection: collections.articles };
   const id = params.id && +params.id;
   const majorId = params.majorId && +params.majorId;
 

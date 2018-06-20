@@ -5,9 +5,17 @@ import { videoLinksSchema } from '../../schemas';
 import { getEntities } from './entities';
 import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
 import { getVideoLinkId } from './shared';
-import { videoLinksCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
-const majorsPagingFns = pagingFnsFactory(collection, videoLinksSchema, { baseResourceName: 'majors' });
+const collection = collections.videoLinks;
+
+const pagingFns = {
+  [collections.majors]: pagingFnsFactory(
+    collection,
+    videoLinksSchema,
+    { baseResourceName: collections.majors },
+  ),
+};
 
 const INITIAL_STATE = new Map({
   pagination: new Map({
@@ -23,12 +31,8 @@ const TYPES = {
   ADD_TO_PAGINATION: 'videos/ADD_TO_PAGINATION',
 };
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceName }) => {
-  switch (baseResourceName) {
-    case 'majors': return majorsPagingFns;
-    default: return undefined;
-  }
-});
+export const getPagingFns = prepareGetPagingFns(({ baseResourceName }) =>
+  pagingFns[baseResourceName]);
 
 export function loadVideoLinks(page = 1, baseResourceName, baseResourceId) {
   return {
@@ -57,8 +61,8 @@ export function createVideoLink(values, baseResourceName, baseResourceId) {
         responseSchema: videoLinksSchema,
       },
     }).then(({ value: { result } }) => {
-      const pagingFns = getPagingFns({ baseResourceName }, true);
-      dispatch(pagingFns.actions.addToPagination(TYPES.ADD_TO_PAGINATION, result, baseResourceId));
+      const actionCreator = getPagingFns({ baseResourceName }, true).actions.addToPagination;
+      dispatch(actionCreator(TYPES.ADD_TO_PAGINATION, result, baseResourceId));
     });
 }
 

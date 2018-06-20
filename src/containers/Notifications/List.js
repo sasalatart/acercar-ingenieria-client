@@ -4,11 +4,11 @@ import isEmpty from 'lodash/isEmpty';
 import { loadNotifications, getPagingFns } from '../../store/ducks/notifications';
 import { getIsFetching } from '../../store/ducks/loading';
 import NotificationsList from '../../components/Notifications/List';
-import { notificationsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 import { getSuffix } from '../../lib/notifications';
 
 function mapStateToProps(state, { seen }) {
-  const params = { collection, suffix: getSuffix(seen), paged: true };
+  const params = { collection: collections.notifications, suffix: getSuffix(seen), paged: true };
 
   const pagingFns = getPagingFns(params, true).selectors;
   const notifications = pagingFns.getPagedEntities(state, params);

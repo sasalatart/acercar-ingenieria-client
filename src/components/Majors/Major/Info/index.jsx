@@ -13,6 +13,7 @@ import Image from '../../../Image';
 import CommentsSection from '../../../Comments/Section';
 import { majorShape } from '../../../../shapes';
 import { themeStyles } from '../../../../theme';
+import collections from '../../../../lib/collections';
 import majorPlaceholder from '../../../../images/major.png';
 
 const styles = {
@@ -50,7 +51,11 @@ function MajorInfo({ loggedIn, major, intl: { formatMessage: t } }) {
       {loggedIn &&
         <Fragment>
           <Divider />
-          <CommentsSection baseResourceName="majors" baseResourceId={major.id} toggable />
+          <CommentsSection
+            baseResourceName={collections.majors}
+            baseResourceId={major.id}
+            toggable
+          />
         </Fragment>
       }
     </Fragment>

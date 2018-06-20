@@ -9,12 +9,13 @@ import pagingFnsFactory, {
   removeFromAllPages,
   resetPaginationActionFactory,
 } from './paginations';
-import { usersCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 import { getCollectionParams } from '../../lib/users';
 
+const collection = collections.users;
 const commonArgs = [collection, usersSchema];
 const platformPagingFns = pagingFnsFactory(...commonArgs);
-const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: 'majors' });
+const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: collections.majors });
 
 const INITIAL_STATE = Map({
   pagination: new Map({

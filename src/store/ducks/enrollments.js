@@ -1,5 +1,7 @@
 import { updateEntity } from './entities';
-import { enrollmentsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+
+const collection = collections.enrollments;
 
 const TYPES = {
   CREATE_ENROLLMENT: 'enrollments/CREATE_ENROLLMENT',

@@ -15,6 +15,7 @@ import {
 } from './routes';
 import { getMajorOptions } from './majors';
 import routes, { BASE_CLIENT_URL } from '../../lib/routes';
+import collections from '../../lib/collections';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
@@ -110,7 +111,7 @@ export function updateProfile(id, body) {
       payload: {
         method: 'PUT',
         url: `/users/${id}`,
-        fetchParams: { collection: 'users', id },
+        fetchParams: { collection: collections.users, id },
         body,
         responseSchema: usersSchema,
       },

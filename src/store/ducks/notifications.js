@@ -5,9 +5,10 @@ import { getLocale } from './i18n';
 import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
 import messages from '../../i18n/messages';
 import { notificationsSchema } from '../../schemas';
-import { notificationsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 import { suffixes, getSuffix } from '../../lib/notifications';
 
+const collection = collections.notifications;
 const commonArgs = [collection, notificationsSchema];
 const pendingPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.seen });
 const seenPagingFns = pagingFnsFactory(...commonArgs, { suffix: suffixes.pending });

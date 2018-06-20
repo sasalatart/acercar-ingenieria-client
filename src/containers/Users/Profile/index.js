@@ -5,12 +5,12 @@ import { getCurrentUserEntity } from '../../../store/ducks/sessions';
 import { getNotificationsCount } from '../../../store/ducks/notifications';
 import { getIsFetching } from '../../../store/ducks/loading';
 import Profile from '../../../components/Users/Profile';
-import { usersCollection as collection } from '../../../lib/collections';
+import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
   const currentUser = getCurrentUserEntity(state);
   const id = +ownProps.match.params.id || currentUser.id;
-  const params = { collection, id };
+  const params = { collection: collections.users, id };
   const user = getUserEntity(state, params);
   const loading = !!id && !user && getIsFetching(state, params);
 

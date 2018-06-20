@@ -21,8 +21,9 @@ import TagList from '../../TagList';
 import Author from '../../Author';
 import MajorLink from '../../Majors/Major/Link';
 import Image from '../../Image';
-import { articleShape, articleSummaryShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
+import { articleShape, articleSummaryShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 import articlePlaceholder from '../../../images/article.png';
 
 const styles = {
@@ -76,7 +77,7 @@ function renderContent(article) {
 
       <Divider />
       <CommentsSection
-        baseResourceName="articles"
+        baseResourceName={collections.articles}
         baseResourceId={article.id}
         disabled={!article.approved}
       />
@@ -104,7 +105,11 @@ function Article({ article, intl: { formatMessage: t } }) {
         </div>
       }
 
-      <FeedButtons resource={article} baseResourceName="articles" disabled={!article.approved} />
+      <FeedButtons
+        resource={article}
+        baseResourceName={collections.articles}
+        disabled={!article.approved}
+      />
 
       {!article.approved &&
         <Alert

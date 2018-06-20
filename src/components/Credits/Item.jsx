@@ -6,6 +6,7 @@ import WithAuthorization from '../../hoc/WithAuthorization';
 import DestroyButton from '../../containers/DestroyButton';
 import Image from '../Image';
 import { creditShape } from '../../shapes';
+import collections from '../../lib/collections';
 
 const { Meta } = Card;
 
@@ -33,7 +34,7 @@ function CreditItem({
     const editButton = <Icon type="edit" onClick={() => onEditClicked(id)} />;
     actions.push(editButton);
 
-    const destroyButton = <DestroyButton collection="credits" id={id} iconOnly />;
+    const destroyButton = <DestroyButton collection={collections.credits} id={id} iconOnly />;
     actions.push(destroyButton);
   }
 

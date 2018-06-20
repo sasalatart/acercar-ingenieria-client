@@ -4,10 +4,12 @@ import isEmpty from 'lodash/isEmpty';
 import { loadVideoLinks, getPagingFns } from '../../../store/ducks/video-links';
 import { getIsFetching } from '../../../store/ducks/loading';
 import VideoLinksList from '../../../components/VideoLinks/List';
-import { videoLinksCollection as collection, parseBaseResource } from '../../../lib/collections';
+import collections, { parseBaseResource } from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...parseBaseResource(ownProps.match.params), collection, paged: true };
+  const params = {
+    ...parseBaseResource(ownProps.match.params), collection: collections.videoLinks, paged: true,
+  };
 
   const pagingFns = getPagingFns(params, true).selectors;
   const videos = pagingFns.getPagedEntities(state, params);

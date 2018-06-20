@@ -6,6 +6,7 @@ import ReportButton from '../../Reports/Button';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
 import routes from '../../../lib/routes';
+import collections from '../../../lib/collections';
 
 function DiscussionActionBar({
   id,
@@ -14,7 +15,7 @@ function DiscussionActionBar({
   onDestroy,
   intl: { formatMessage: t },
 }) {
-  const commonProps = { collection: 'discussions', id };
+  const commonProps = { collection: collections.discussions, id };
 
   const actions = [<ReportButton key="report" {...commonProps} />];
 

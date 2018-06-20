@@ -5,10 +5,10 @@ import { getIsFetching } from '../../../store/ducks/loading';
 import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import Major from '../../../components/Majors/Major';
-import { majorsCollection as collection } from '../../../lib/collections';
+import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection };
+  const params = { ...ownProps.match.params, collection: collections.majors };
   const major = getMajorEntity(state, params);
 
   return {

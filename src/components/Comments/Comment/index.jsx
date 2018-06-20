@@ -2,11 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { intlShape } from 'react-intl';
 import { Icon, Divider } from 'antd';
 import MainContent from './MainContent';
-import { commentShape } from '../../../shapes';
 import ActionBar from '../../../containers/Comments/Comment/ActionBar';
 import CommentsSection from '../Section';
 import Title from '../../Layout/Title';
 import ProfileAvatar from '../../Users/Profile/Avatar';
+import { commentShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 
 const styles = {
   wrapper: {
@@ -55,7 +56,7 @@ export default class Comment extends Component {
 
         <Divider />
         <CommentsSection
-          baseResourceName="comments"
+          baseResourceName={collections.comments}
           baseResourceId={comment.id}
           disabled={!comment.approvedCommentable}
           answersList

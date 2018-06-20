@@ -4,10 +4,10 @@ import { loadComment, getCommentEntity } from '../../../store/ducks/comments';
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Comment from '../../../components/Comments/Comment';
-import { commentsCollection as collection, parseBaseResource } from '../../../lib/collections';
+import collections, { parseBaseResource } from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection };
+  const params = { ...ownProps.match.params, collection: collections.comments };
   const comment = getCommentEntity(state, params);
 
   return {

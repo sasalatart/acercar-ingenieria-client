@@ -7,8 +7,9 @@ import lowerFirst from 'lodash/lowerFirst';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
-import { videoLinkShape } from '../../../shapes';
 import { breakpoints } from '../../../theme';
+import { videoLinkShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 
 const RadiumCard = Radium(Card);
 
@@ -39,7 +40,7 @@ function VideoItem({ adminOrMajorAdmin, video, onEditClicked }) {
       <DestroyButton
         baseResourceName={`${lowerFirst(video.videoLinkableType)}s`}
         baseResourceId={video.videoLinkableId}
-        collection="videoLinks"
+        collection={collections.videoLinks}
         id={video.id}
         iconOnly
       />

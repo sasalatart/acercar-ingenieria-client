@@ -11,10 +11,12 @@ import { getIsFetching } from '../../../store/ducks/loading';
 import WithAuthorization from '../../../hoc/WithAuthorization';
 import DiscussionsList from '../../../components/Discussions/List';
 import { getSuffix } from '../../../lib/discussions';
-import { discussionsCollection as collection } from '../../../lib/collections';
+import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { collection, suffix: getSuffix(ownProps.mine), paged: true };
+  const params = {
+    collection: collections.discussions, suffix: getSuffix(ownProps.mine), paged: true,
+  };
   const pagingFns = getPagingFns(params, true).selectors;
 
   const discussionSummaries = pagingFns.getPagedEntities(state);

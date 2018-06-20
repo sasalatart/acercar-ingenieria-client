@@ -5,10 +5,10 @@ import { pagingFns, loadAnnouncements } from '../../../store/ducks/announcements
 import { getIsFetching } from '../../../store/ducks/loading';
 import WithModal from '../../../hoc/WithModal';
 import Announcements from '../../../components/Announcements/List';
-import { announcementsCollection as collection } from '../../../lib/collections';
+import collections from '../../../lib/collections';
 
 function mapStateToProps(state) {
-  const params = { collection, paged: true };
+  const params = { collection: collections.announcements, paged: true };
   const announcements = pagingFns.selectors.getPagedEntities(state);
 
   return {

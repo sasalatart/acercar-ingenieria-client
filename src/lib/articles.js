@@ -1,6 +1,5 @@
 import keyMirror from 'keymirror';
-
-import { articlesCollection as collection } from './collections';
+import collections from './collections';
 
 export const suffixes = keyMirror({ approved: null, mine: null, pending: null });
 
@@ -11,8 +10,8 @@ export function getSuffix(mine, pending) {
 
 export function getCollectionParams(majorId) {
   return {
-    collection,
-    baseResourceName: majorId && 'majors',
+    collection: collections.articles,
+    baseResourceName: majorId && collections.majors,
     baseResourceId: majorId,
   };
 }

@@ -8,10 +8,11 @@ import { getIsFetching } from '../../store/ducks/loading';
 import WithLoadableResource from '../../hoc/WithLoadableResource';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import PinnedAnnouncements from '../../components/Announcements/Pinned';
-import { announcementsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+import { suffixes } from '../../lib/announcements';
 
 function mapStateToProps(state) {
-  const params = { collection, suffix: 'pinned' };
+  const params = { collection: collections.announcements, suffix: suffixes.pinned };
   const announcements = getPinnedAnnouncementsEntities(state);
 
   return {

@@ -5,6 +5,7 @@ import PinButton from '../../../containers/Announcements/List/PinButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import Image from '../../Image';
 import { announcementShape } from '../../../shapes';
+import collections from '../../../lib/collections';
 
 const { Item } = List;
 
@@ -26,7 +27,7 @@ function AnnouncementItem({ announcement, onClick }) {
 
   const actions = [
     <PinButton id={announcement.id} pinned={announcement.pinned} />,
-    <DestroyButton collection="announcements" id={announcement.id} iconOnly />,
+    <DestroyButton collection={collections.announcements} id={announcement.id} iconOnly />,
   ];
 
   return (

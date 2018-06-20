@@ -4,10 +4,10 @@ import { like, unlike } from '../../store/ducks/likes';
 import { getIsCreating, getIsDestroying } from '../../store/ducks/loading';
 import WithAuthorization from '../../hoc/WithAuthorization';
 import LikeButton from '../../components/FeedButtons/LikeButton';
-import { likesCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps, collection };
+  const params = { ...ownProps, collection: collections.likes };
 
   return {
     loading: !ownProps.disabled && (getIsCreating(state, params) || getIsDestroying(state, params)),

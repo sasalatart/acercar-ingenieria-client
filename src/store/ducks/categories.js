@@ -3,7 +3,9 @@ import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import { getEntities } from './entities';
 import { categoriesSchema } from '../../schemas';
-import { categoriesCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+
+const collection = collections.categories;
 
 const INITIAL_STATE = Map({
   activeCategoryIds: [],

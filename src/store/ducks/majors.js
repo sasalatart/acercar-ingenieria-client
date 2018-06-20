@@ -6,7 +6,9 @@ import { goToMajor } from './routes';
 import { getEntities } from './entities';
 import { resourceSuccessNotification } from './notifications';
 import { getId } from './shared';
-import { majorsCollection as collection } from '../../lib/collections';
+import collections from '../../lib/collections';
+
+const collection = collections.majors;
 
 const INITIAL_STATE = new Map({
   activeIds: new OrderedSet(),
