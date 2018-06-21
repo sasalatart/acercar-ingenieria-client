@@ -87,15 +87,16 @@ export function createComment(body, baseResourceName, baseResourceId, reverseLis
     }).then(({ value: { result } }) => {
       const isChild = baseResourceName === collection;
 
-      if (isChild) {
-        const updateFn = parentComment => ({
-          ...parentComment,
-          childComments: [...parentComment.childComments, result],
-        });
-        dispatch(updateEntity(collection, baseResourceId, updateFn));
+      const updateFn = commentable => ({
+        ...commentable,
+        enrolledByCurrentUser: true,
+        childComments: isChild
+          ? [...commentable.childComments, result]
+          : undefined,
+      });
+      dispatch(updateEntity(baseResourceName, baseResourceId, updateFn));
 
-        if (!reverseList) return;
-      }
+      if (isChild && !reverseList) return;
 
       const actionCreator = getPagingFns({ baseResourceName }, true).actions.addToPagination;
       dispatch(actionCreator(TYPES.ADD_TO_PAGINATION, result, baseResourceId, reverseList));
