@@ -1,10 +1,11 @@
 import collections from './collections';
 
 /* eslint-disable import/prefer-default-export */
-export function getCollectionParams(majorId, admins) {
+export function getCollectionParams(majorId, extraParams) {
   return {
-    collection: admins ? collections.admins : collections.users,
+    collection: collections.users,
     baseResourceName: majorId && collections.majors,
     baseResourceId: majorId,
+    ...extraParams,
   };
 }

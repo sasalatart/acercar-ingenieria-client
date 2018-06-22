@@ -8,7 +8,7 @@ import ActionBar from '../../../containers/Layout/ActionBar';
 import HideableButton from '../../HideableButton';
 import { articleShape, articleSummaryShape } from '../../../shapes';
 import routes from '../../../lib/routes';
-import collections from '../../../lib/collections';
+import { getCollectionParams } from '../../../lib/articles';
 
 function ArticleActionBar({
   adminOrMajorAdmin,
@@ -22,7 +22,7 @@ function ArticleActionBar({
   intl: { formatMessage: t },
 }) {
   const majorId = majorSummary && majorSummary.id;
-  const commonProps = { collection: collections.articles, id, baseResourceId: majorId };
+  const commonProps = getCollectionParams(majorId, { id });
 
   const actions = approved ? [<ReportButton key="report" {...commonProps} />] : [];
 

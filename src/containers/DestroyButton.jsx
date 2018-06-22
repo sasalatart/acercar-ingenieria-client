@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import pick from 'lodash/pick';
 import { destroyAccount } from '../store/ducks/sessions';
 import { destroyUser } from '../store/ducks/users';
 import { destroyAnnouncement } from '../store/ducks/announcements';
@@ -64,7 +63,7 @@ function getDestroyAction(ownProps) {
 
 function mapStateToProps(state, ownProps) {
   return {
-    loading: getIsDestroying(state, pick(ownProps, 'collection', 'id')),
+    loading: getIsDestroying(state, ownProps),
   };
 }
 

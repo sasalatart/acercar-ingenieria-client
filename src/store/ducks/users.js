@@ -66,7 +66,7 @@ export function destroyUser(id, majorId) {
     payload: {
       method: 'DELETE',
       url: majorId ? `/majors/${majorId}/users/${id}` : `/users/${id}`,
-      fetchParams: { ...getCollectionParams(majorId), id },
+      fetchParams: getCollectionParams(majorId, { id }),
     },
   };
 }

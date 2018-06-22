@@ -14,7 +14,7 @@ import {
 import { getIsFetching } from '../../store/ducks/loading';
 import DataPlaceholder from '../../components/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
-import collections from '../../lib/collections';
+import { getCollectionParams } from '../../lib/articles';
 
 class ArticleEdition extends Component {
   static propTypes = {
@@ -36,7 +36,7 @@ class ArticleEdition extends Component {
 function mapStateToProps(state, ownProps) {
   const majorId = getMajorIdFromProps(ownProps);
   const articleId = getArticleIdFromProps(ownProps);
-  const params = { majorId, collection: collections.articles, id: articleId };
+  const params = getCollectionParams(majorId, { id: articleId });
 
   const currentUser = getCurrentUserEntity(state);
   const article = getArticleEntity(state, params);
@@ -50,9 +50,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { id, majorId } = ownProps.match.params;
-
+function mapDispatchToProps(dispatch, { match: { params: { id, majorId } } }) {
   return {
     loadArticle: () => dispatch(loadArticle(id, majorId)),
   };

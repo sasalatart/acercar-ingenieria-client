@@ -18,7 +18,7 @@ import withAuthorization from '../../hoc/WithAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
 import articlesValidations from '../../validations/articles';
-import collections from '../../lib/collections';
+import { getCollectionParams } from '../../lib/articles';
 import { processAttachableFormValues } from '../../lib/attachments';
 import articlePlaceholder from '../../images/article.png';
 
@@ -36,10 +36,10 @@ function getInitialValues(id, majorId, article) {
   };
 }
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection: collections.articles };
-  const id = params.id && +params.id;
-  const majorId = params.majorId && +params.majorId;
+function mapStateToProps(state, { match: { params: { majorId, id } } }) {
+  const params = getCollectionParams(majorId, { id });
+  const intId = params.id && +params.id;
+  const intMajorId = params.majorId && +params.majorId;
 
   const article = getArticleEntity(state, params);
   const majorOptions = article
@@ -49,10 +49,10 @@ function mapStateToProps(state, ownProps) {
   const loading = (id && getIsFetching(state, params)) || !categoryOptions.length;
 
   return {
-    id,
+    id: intId,
     loading,
     noData: !loading && !!params.id && !article,
-    initialValues: getInitialValues(id, majorId, article),
+    initialValues: getInitialValues(intId, intMajorId, article),
     majorOptions,
     categoryOptions,
     currentPreviewURL: get(article, 'previewUrl') || articlePlaceholder,

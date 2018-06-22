@@ -3,11 +3,12 @@ import collections from './collections';
 
 export const suffixes = keyMirror({ answered: null, pending: null });
 
-export function getCollectionParams(baseResourceId) {
+export function getCollectionParams(baseResourceId, extraParams) {
   return {
     collection: collections.questions,
     baseResourceName: baseResourceId && collections.majors,
     baseResourceId,
+    ...extraParams,
   };
 }
 

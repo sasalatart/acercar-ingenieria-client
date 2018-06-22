@@ -28,11 +28,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { mine }) {
   return {
-    loadDiscussions: ({ page, ...query }) => dispatch(loadDiscussions(page, ownProps.mine, query)),
+    loadDiscussions: ({ page, ...query }) => dispatch(loadDiscussions(page, mine, query)),
     onTagClick: (text) => {
-      dispatch(resetPagination({ suffix: getSuffix(ownProps.mine) }));
+      dispatch(resetPagination({ suffix: getSuffix(mine) }));
       dispatch(addQueryToCurrentUri({ tagList: text }));
     },
   };

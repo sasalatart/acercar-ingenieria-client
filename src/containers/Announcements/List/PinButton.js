@@ -4,17 +4,17 @@ import { getIsUpdating } from '../../../store/ducks/loading';
 import PinButton from '../../../components/Announcements/List/PinButton';
 import collections from '../../../lib/collections';
 
-function mapStateToProps(state, ownProps) {
-  const params = { collection: collections.announcements, id: ownProps.id };
+function mapStateToProps(state, { id }) {
+  const params = { collection: collections.announcements, id };
 
   return {
     loading: getIsUpdating(state, params),
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { id, pinned }) {
   return {
-    onUpdate: () => dispatch(updatePinned(ownProps.id, !ownProps.pinned)),
+    onUpdate: () => dispatch(updatePinned(id, !pinned)),
   };
 }
 

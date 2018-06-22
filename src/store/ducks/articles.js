@@ -70,7 +70,7 @@ export function loadArticles(page = 1, majorId, suffix, search) {
       method: 'GET',
       url: majorId ? `/majors/${majorId}/articles${urlSuffix}` : `/articles${urlSuffix}`,
       query,
-      fetchParams: { ...query, ...getCollectionParams(majorId), suffix },
+      fetchParams: { ...query, ...getCollectionParams(majorId, { suffix }) },
       responseSchema: [articleSummariesSchema],
     },
   };
@@ -82,7 +82,7 @@ export function loadArticle(id, majorId) {
     payload: {
       method: 'GET',
       url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-      fetchParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: getCollectionParams(majorId, { id }),
       responseSchema: articlesSchema,
     },
   };
@@ -111,7 +111,7 @@ export function updateArticle(id, body, majorId) {
       payload: {
         method: 'PUT',
         url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-        fetchParams: { id, ...getCollectionParams(majorId) },
+        fetchParams: getCollectionParams(majorId, { id }),
         body,
         responseSchema: articlesSchema,
       },
@@ -126,7 +126,7 @@ export function articleApproval(id, majorId, approved) {
     payload: {
       method: 'PUT',
       url: majorId ? `/majors/${majorId}/articles/${id}/approval` : `/articles/${id}/approval`,
-      fetchParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: getCollectionParams(majorId, { id }),
       body: { approved },
       responseSchema: articlesSchema,
     },
@@ -139,7 +139,7 @@ export function destroyArticle(id, majorId) {
     payload: {
       method: 'DELETE',
       url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-      fetchParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: getCollectionParams(majorId, { id }),
     },
   };
 }

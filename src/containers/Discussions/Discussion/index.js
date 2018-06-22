@@ -20,9 +20,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { id } = ownProps.match.params;
-
+function mapDispatchToProps(dispatch, { match: { params: { id } } }) {
   return {
     loadDiscussion: () => dispatch(loadDiscussion(id)),
   };

@@ -8,11 +8,7 @@ import CommentsList from '../../../components/Comments/List';
 import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const { baseResourceName, baseResourceId } = ownProps;
-
-  const params = {
-    collection: collections.comments, baseResourceName, baseResourceId, paged: true,
-  };
+  const params = { ...ownProps, collection: collections.comments, paged: true };
 
   const pagingFns = getPagingFns(params, true).selectors;
   const comments = pagingFns.getPagedEntities(state, params);
@@ -25,9 +21,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { baseResourceName, baseResourceId } = ownProps;
-
+function mapDispatchToProps(dispatch, { baseResourceName, baseResourceId }) {
   return {
     loadComments: ({ page }) =>
       dispatch(loadComments(baseResourceName, baseResourceId, page)),

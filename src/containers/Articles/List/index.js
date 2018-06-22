@@ -23,7 +23,7 @@ function processOwnProps(ownProps) {
 function mapStateToProps(state, ownProps) {
   const { majorId, suffix } = processOwnProps(ownProps);
 
-  const params = { ...getCollectionParams(majorId), suffix, paged: true };
+  const params = { ...getCollectionParams(majorId, { suffix }), paged: true };
   const pagingFns = getPagingFns(params, true).selectors;
 
   const articleSummaries = pagingFns.getPagedEntities(state, params);

@@ -10,11 +10,12 @@ import {
 } from '../../../store/ducks/admins';
 import { getIsFetching } from '../../../store/ducks/loading';
 import UsersList from '../../../components/Users/List';
-import { getCollectionParams } from '../../../lib/users';
+import { getCollectionParams as getAdminsCollectionParams } from '../../../lib/admins';
+import { getCollectionParams as getUsersCollectionParams } from '../../../lib/users';
 
-function mapStateToProps(state, ownProps) {
-  const { majorId, admins } = ownProps;
-  const params = { ...getCollectionParams(majorId, admins), paged: true };
+function mapStateToProps(state, { majorId, admins }) {
+  const paramsFn = admins ? getAdminsCollectionParams : getUsersCollectionParams;
+  const params = { ...paramsFn(majorId), paged: true };
 
   const pagingFnsGetter = admins ? getAdminsPagingFns : getUsersPagingFns;
   const pagingFns = pagingFnsGetter(params, true).selectors;

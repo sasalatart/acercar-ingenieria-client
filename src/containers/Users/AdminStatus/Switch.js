@@ -3,10 +3,8 @@ import { toggleAdmin, getIsAdminUpdating } from '../../../store/ducks/admins';
 import Switch from '../../../components/Users/AdminStatus/Switch';
 
 function mapStateToProps(state, ownProps) {
-  const params = { userId: ownProps.userId, majorId: ownProps.majorId };
-
   return {
-    updating: getIsAdminUpdating(state, params),
+    updating: getIsAdminUpdating(state, ownProps),
   };
 }
 

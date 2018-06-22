@@ -8,10 +8,11 @@ export function getSuffix(mine, pending) {
   return pending ? suffixes.pending : suffixes.mine;
 }
 
-export function getCollectionParams(majorId) {
+export function getCollectionParams(majorId, extraParams) {
   return {
     collection: collections.articles,
     baseResourceName: majorId && collections.majors,
     baseResourceId: majorId,
+    ...extraParams,
   };
 }

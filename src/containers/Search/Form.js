@@ -11,6 +11,7 @@ import SearchForm from '../../components/Search/Form';
 
 function mapStateToProps(state, { extraFilters }) {
   const params = { filters: ['search'].concat(extraFilters) };
+
   return {
     initialValues: mapValues(
       getActiveFilters(state, params),

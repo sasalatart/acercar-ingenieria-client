@@ -7,13 +7,8 @@ import WithAuthorization from '../../hoc/WithAuthorization';
 import QuestionsList from '../../components/Questions/List';
 import { getSuffix, getCollectionParams } from '../../lib/questions';
 
-function mapStateToProps(state, ownProps) {
-  const params = {
-    ...getCollectionParams(ownProps.majorId),
-    suffix: getSuffix(ownProps.pending),
-    paged: true,
-  };
-
+function mapStateToProps(state, { majorId, pending }) {
+  const params = { ...getCollectionParams(majorId, { suffix: getSuffix(pending) }), paged: true };
   const pagingFns = getPagingFns(params, true).selectors;
   const questions = pagingFns.getPagedEntities(state, params);
 

@@ -7,8 +7,8 @@ import { getIsFetching } from '../../../../store/ducks/loading';
 import MajorAdmins from '../../../../components/Majors/Major/Admins';
 import { getCollectionParams } from '../../../../lib/admins';
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...getCollectionParams(ownProps.majorId), paged: true };
+function mapStateToProps(state, { majorId }) {
+  const params = { ...getCollectionParams(majorId), paged: true };
   const pagingFns = getPagingFns(params, true).selectors;
 
   const majorAdmins = pagingFns.getPagedEntities(state, params);

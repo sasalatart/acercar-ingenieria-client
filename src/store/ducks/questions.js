@@ -54,7 +54,7 @@ export function loadQuestions(page = 1, baseResourceId, pending) {
       method: 'GET',
       url: baseResourceId ? `/majors/${baseResourceId}/questions${urlSuffix}` : `/questions${urlSuffix}`,
       query: { page },
-      fetchParams: { page, ...getCollectionParams(baseResourceId), suffix: getSuffix(pending) },
+      fetchParams: { page, ...getCollectionParams(baseResourceId, { suffix: getSuffix(pending) }) },
       responseSchema: [questionsSchema],
     },
   };
@@ -90,7 +90,7 @@ export function updateQuestion(id, values, majorId) {
     payload: {
       method: 'PUT',
       url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-      fetchParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: getCollectionParams(majorId, { id }),
       body: values,
       responseSchema: questionsSchema,
     },
@@ -103,7 +103,7 @@ export function destroyQuestion(id, majorId) {
     payload: {
       method: 'DELETE',
       url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-      fetchParams: { id, ...getCollectionParams(majorId) },
+      fetchParams: getCollectionParams(majorId, { id }),
     },
   };
 }

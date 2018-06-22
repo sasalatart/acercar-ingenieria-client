@@ -13,7 +13,7 @@ import WithLoadableResource from '../../../hoc/WithLoadableResource';
 import Article from '../../../components/Articles/Article';
 import { articleShape, articleSummaryShape, matchShape } from '../../../shapes';
 import routes from '../../../lib/routes';
-import collections from '../../../lib/collections';
+import { getCollectionParams } from '../../../lib/articles';
 
 function ArticleWrapper(props) {
   const { article, match: { params } } = props;
@@ -35,8 +35,8 @@ ArticleWrapper.defaultProps = {
   article: undefined,
 };
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection: collections.articles };
+function mapStateToProps(state, { match: { params: { id, majorId } } }) {
+  const params = getCollectionParams(majorId, { id });
   const article = getArticleEntity(state, params) || getArticleSummaryEntity(state, params);
 
   return {
