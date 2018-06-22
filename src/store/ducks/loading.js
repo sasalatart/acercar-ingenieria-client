@@ -1,7 +1,9 @@
 import { Map, Set } from 'immutable';
 import { createSelector } from 'reselect';
 import compact from 'lodash/compact';
+import keyMirror from 'keymirror';
 import { getPage } from './routes';
+import { BASE_RESOURCE_NAME_FALLBACK } from './paginations';
 
 const INITIAL_STATE = new Map({
   fetching: new Map({}),
@@ -10,12 +12,24 @@ const INITIAL_STATE = new Map({
   destroying: new Map({}),
 });
 
+const CATEGORIES = keyMirror({
+  fetching: null,
+  creating: null,
+  updating: null,
+  destroying: null,
+});
+
 function getCategory(fetching, creating, updating, destroying) {
-  if (fetching) return 'fetching';
-  if (creating) return 'creating';
-  if (updating) return 'updating';
-  if (destroying) return 'destroying';
+  if (fetching) return CATEGORIES.fetching;
+  if (creating) return CATEGORIES.creating;
+  if (updating) return CATEGORIES.updating;
+  if (destroying) return CATEGORIES.destroying;
   return undefined;
+}
+
+function getPath(category, paged, collection, brn = BASE_RESOURCE_NAME_FALLBACK, brId, suffix) {
+  const pagedPortion = paged ? 'pages' : undefined;
+  return compact([category, pagedPortion, collection, brn, brId, suffix]);
 }
 
 export default function loadingReducer(state = INITIAL_STATE, action) {
@@ -42,15 +56,16 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
     id, collection, page, baseResourceName, baseResourceId, suffix,
   } = fetchParams;
 
+  const category = getCategory(fetching, creating, updating, destroying);
+  const paged = fetching && page;
+  const path = getPath(category, paged, collection, baseResourceName, baseResourceId, suffix);
+
   if (fetching && page) {
-    const path = compact(['fetching', 'pages', collection, baseResourceName || 'platform', baseResourceId, suffix]);
     return pending
       ? state.updateIn(path, pages => (pages ? pages.add(+page) : new Set([+page])))
       : state.updateIn(path, pages => pages && pages.delete(+page));
   }
 
-  const category = getCategory(fetching, creating, updating, destroying);
-  const path = compact([category, collection, suffix]);
   if (id || (creating && baseResourceId) || (destroying && baseResourceId)) {
     const effectiveId = id || baseResourceId;
     return pending
@@ -82,11 +97,8 @@ export const getIsFetching = createSelector(
   getPage,
   getId,
   (loadingData, collection, baseResourceName, baseResourceId, suffix, paged, page, id) => {
-    const suffixPath = paged
-      ? ['pages', collection, baseResourceName || 'platform', baseResourceId, suffix]
-      : [collection, suffix];
-
-    const path = compact(['fetching'].concat(suffixPath));
+    const category = CATEGORIES.fetching;
+    const path = getPath(category, paged, collection, baseResourceName, baseResourceId, suffix);
 
     if (id || paged) {
       const idOrPage = +id || +page || 1;
@@ -101,12 +113,13 @@ export const getIsFetching = createSelector(
 function getIsChangingFactory(category) {
   return createSelector(
     getLoadingData,
+    getBaseResourceName,
     getBaseResourceId,
     getCollection,
     getId,
     getSuffix,
-    (loadingData, baseResourceId, collection, id, suffix) => {
-      const path = compact([category, collection, suffix]);
+    (loadingData, baseResourceName, baseResourceId, collection, id, suffix) => {
+      const path = getPath(category, false, collection, baseResourceName, baseResourceId, suffix);
       const effectiveId = id || baseResourceId;
       if (!effectiveId) return !!loadingData.getIn(path);
       return (loadingData.getIn(path) || new Set([])).has(effectiveId);
@@ -114,8 +127,8 @@ function getIsChangingFactory(category) {
   );
 }
 
-export const getIsCreating = getIsChangingFactory('creating');
+export const getIsCreating = getIsChangingFactory(CATEGORIES.creating);
 
-export const getIsUpdating = getIsChangingFactory('updating');
+export const getIsUpdating = getIsChangingFactory(CATEGORIES.updating);
 
-export const getIsDestroying = getIsChangingFactory('destroying');
+export const getIsDestroying = getIsChangingFactory(CATEGORIES.destroying);

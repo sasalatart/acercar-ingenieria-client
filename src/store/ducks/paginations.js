@@ -10,14 +10,16 @@ import {
 } from './routes';
 import { getEntities } from './entities';
 
+export const BASE_RESOURCE_NAME_FALLBACK = 'platform';
+
 export default function pagingFnsFactory(resourceName, schema, options = {}) {
   const { baseResourceName, suffix } = options;
 
-  const basePagingPath = ['pagination', baseResourceName || 'platform'];
+  const basePagingPath = ['pagination', baseResourceName || BASE_RESOURCE_NAME_FALLBACK];
   const pagingPath = basePagingPath.concat(suffix ? [suffix] : []);
   const metaPath = suffix
     ? basePagingPath.concat([`${suffix}Meta`])
-    : ['pagination', `${baseResourceName || 'platform'}Meta`];
+    : ['pagination', `${baseResourceName || BASE_RESOURCE_NAME_FALLBACK}Meta`];
 
   // Selectors
   const getData = state => state[resourceName];
