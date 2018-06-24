@@ -158,7 +158,7 @@ function getFinalParams(params) {
 
 export function prepareGetPagingFns(switchFn) {
   return (params, raw) => {
-    const pagingFns = switchFn(getFinalParams(params));
+    const pagingFns = switchFn({ ...params, ...getFinalParams(params) });
     return raw ? pagingFns : pagingFns.reducer;
   };
 }

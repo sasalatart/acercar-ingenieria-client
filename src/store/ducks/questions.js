@@ -120,15 +120,15 @@ export default function questionsReducer(state = INITIAL_STATE, { type, payload 
     }
     case `${TYPES.DESTROY}_FULFILLED`: {
       const { fetchParams } = payload.request;
-      const pendingPagingFns = getPagingFns({ ...payload, ...{ suffix: suffixes.pending } });
-      const answeredPagingFns = getPagingFns({ ...payload, ...{ suffix: suffixes.answered } });
+      const pendingPagingFns = getPagingFns({ ...payload, suffix: suffixes.pending }, true);
+      const answeredPagingFns = getPagingFns({ ...payload, suffix: suffixes.answered }, true);
       return removeFromAllPages(state, [pendingPagingFns, answeredPagingFns], fetchParams);
     }
     case TYPES.ADD_TO_ANSWERED_PAGINATION:
-      return getPagingFns({ ...payload, ...{ suffix: suffixes.answered } })
+      return getPagingFns({ ...payload, suffix: suffixes.answered })
         .addToPage(state, payload);
     case TYPES.ADD_TO_UNANSWERED_PAGINATION:
-      return getPagingFns({ ...payload, ...{ suffix: suffixes.pending } })
+      return getPagingFns({ ...payload, suffix: suffixes.pending })
         .addToPage(state, payload);
     default:
       return state;
