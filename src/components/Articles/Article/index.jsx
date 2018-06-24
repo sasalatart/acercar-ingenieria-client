@@ -8,14 +8,12 @@ import {
   Divider,
 } from 'antd';
 import Linkify from 'react-linkify';
-import isEmpty from 'lodash/isEmpty';
 import ActionBar from './ActionBar';
 import FeedButtons from '../../FeedButtons';
 import Title from '../../Layout/Title';
 import SubTitle from '../../Layout/SubTitle';
+import MediaContent from '../../Layout/MediaContent';
 import DateWithFormat from '../../DateWithFormat';
-import RichText from '../../RichText';
-import Attachments from '../../Attachments';
 import CommentsSection from '../../Comments/Section';
 import TagList from '../../TagList';
 import Author from '../../Author';
@@ -66,14 +64,7 @@ function renderContent(article) {
       </Row>
 
       <Divider />
-      <RichText content={article.content} />
-
-      {!isEmpty(article.attachments) &&
-        <Fragment>
-          <Divider />
-          <Attachments attachments={article.attachments} />
-        </Fragment>
-      }
+      <MediaContent richText={article.content} attachments={article.attachments} />
 
       <Divider />
       <CommentsSection

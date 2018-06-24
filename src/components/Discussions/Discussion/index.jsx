@@ -1,15 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Divider } from 'antd';
-import isEmpty from 'lodash/isEmpty';
 import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
+import MediaContent from '../../Layout/MediaContent';
 import Author from '../../Author';
 import TagList from '../../TagList';
 import FeedButtons from '../../FeedButtons';
 import DateWithFormat from '../../DateWithFormat';
-import RichText from '../../RichText';
-import Attachments from '../../Attachments';
 import CommentsSection from '../../Comments/Section';
 import { discussionShape, discussionSummaryShape } from '../../../shapes';
 import collections from '../../../lib/collections';
@@ -55,14 +53,7 @@ function Discussion({
       <DateWithFormat dateString={createdAt} style={styles.date} />
 
       <Divider />
-      <RichText content={description} />
-
-      {!isEmpty(attachments) &&
-        <Fragment>
-          <Divider />
-          <Attachments attachments={attachments} />
-        </Fragment>
-      }
+      <MediaContent richText={description} attachments={attachments} />
 
       <Divider />
       <CommentsSection baseResourceName={collections.discussions} baseResourceId={id} />
