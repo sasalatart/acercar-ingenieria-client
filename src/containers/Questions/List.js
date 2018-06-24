@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { loadQuestions, getPagingFns } from '../../store/ducks/questions';
 import { getIsFetching } from '../../store/ducks/loading';
-import WithAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import QuestionsList from '../../components/Questions/List';
 import { getSuffix, getCollectionParams } from '../../lib/questions';
 
@@ -27,5 +27,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(QuestionsList);
-export default injectIntl(WithAuthorization(connectedComponent));
+const component = connect(mapStateToProps, mapDispatchToProps)(QuestionsList);
+export default injectIntl(withAuthorization(component));

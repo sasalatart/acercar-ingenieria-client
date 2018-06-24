@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
+import withAuthorization from '../../../hoc/withAuthorization';
+import withModal from '../../../hoc/withModal';
 import SearchButtons from '../../../containers/Search/Buttons';
 import EmailForm from '../../../containers/Majors/Major/Email/Form';
 import ActionBar from '../../../containers/Layout/ActionBar';
@@ -56,4 +58,4 @@ UsersActionBar.defaultProps = {
   majorId: undefined,
 };
 
-export default UsersActionBar;
+export default injectIntl(withAuthorization(withModal(UsersActionBar)));

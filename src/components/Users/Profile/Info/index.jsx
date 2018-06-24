@@ -6,8 +6,8 @@ import { userShape } from '../../../../shapes';
 import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
-import WithAuthorization from '../../../../hoc/WithAuthorization';
-import ActionBar from '../../../../containers/Users/Profile/Info/ActionBar';
+import withAuthorization from '../../../../hoc/withAuthorization';
+import ActionBar from './ActionBar';
 import Title from '../../../Layout/Title';
 import SubTitle from '../../../Layout/SubTitle';
 
@@ -32,10 +32,15 @@ function renderSubTitle(user, admin, t) {
   return <p>{textPrefix}, {emailTag}</p>;
 }
 
-function ProfileInfo({ admin, user, intl: { formatMessage: t } }) {
+function ProfileInfo({
+  admin,
+  user,
+  intl: { formatMessage: t },
+  ...restProps
+}) {
   return (
     <Fragment>
-      <ActionBar user={user} />
+      <ActionBar admin={admin} user={user} {...restProps} />
       <Row type="flex" justify="center" gutter={8}>
         <Col md={6}>
           <div style={styles.cardWrapper}>
@@ -67,4 +72,4 @@ ProfileInfo.defaultProps = {
   user: undefined,
 };
 
-export default injectIntl(WithAuthorization(ProfileInfo));
+export default injectIntl(withAuthorization(ProfileInfo));

@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import Linkify from 'react-linkify';
 import isEmpty from 'lodash/isEmpty';
-import ActionBar from '../../../containers/Articles/Article/ActionBar';
+import ActionBar from './ActionBar';
 import FeedButtons from '../../FeedButtons';
 import Title from '../../Layout/Title';
 import SubTitle from '../../Layout/SubTitle';
@@ -85,12 +85,19 @@ function renderContent(article) {
   );
 }
 
-function Article({ article, intl: { formatMessage: t } }) {
-  const { title, majorSummary, categoryList } = article;
-
+function Article({
+  article,
+  article: {
+    title,
+    majorSummary,
+    categoryList,
+  },
+  intl: { formatMessage: t },
+  ...restProps
+}) {
   return (
     <Fragment>
-      <ActionBar article={article} />
+      <ActionBar article={article} {...restProps} />
       <Title>{title}</Title>
 
       {majorSummary &&

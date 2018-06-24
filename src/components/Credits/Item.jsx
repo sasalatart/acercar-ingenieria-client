@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Card, Icon } from 'antd';
-import WithAuthorization from '../../hoc/WithAuthorization';
 import DestroyButton from '../../containers/DestroyButton';
 import Image from '../Image';
 import { creditShape } from '../../shapes';
@@ -54,4 +53,4 @@ CreditItem.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithAuthorization(CreditItem));
+export default injectIntl(CreditItem);

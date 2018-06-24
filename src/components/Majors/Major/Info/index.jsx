@@ -4,7 +4,6 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
 import get from 'lodash/get';
-import WithAuthorization from '../../../../hoc/WithAuthorization';
 import RichText from '../../../RichText';
 import ActionBar from './ActionBar';
 import Title from '../../../Layout/Title';
@@ -68,4 +67,4 @@ MajorInfo.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithAuthorization(MajorInfo));
+export default injectIntl(MajorInfo);

@@ -7,6 +7,7 @@ import {
   getInterdisciplinaryMajors,
 } from '../../../store/ducks/majors';
 import { getIsFetching } from '../../../store/ducks/loading';
+import withAuthorization from '../../../hoc/withAuthorization';
 import List from '../../../components/Majors/List';
 import collections from '../../../lib/collections';
 
@@ -27,7 +28,5 @@ const mapDispatchToProps = {
   loadMajors,
 };
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(List));
+const component = connect(mapStateToProps, mapDispatchToProps)(List);
+export default injectIntl(withAuthorization(component));

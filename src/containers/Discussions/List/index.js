@@ -8,7 +8,7 @@ import {
   getPagingFns,
 } from '../../../store/ducks/discussions';
 import { getIsFetching } from '../../../store/ducks/loading';
-import WithAuthorization from '../../../hoc/WithAuthorization';
+import withAuthorization from '../../../hoc/withAuthorization';
 import DiscussionsList from '../../../components/Discussions/List';
 import { getSuffix } from '../../../lib/discussions';
 import collections from '../../../lib/collections';
@@ -29,14 +29,17 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, { mine }) {
+  const suffix = getSuffix(mine);
+
   return {
     loadDiscussions: ({ page, ...query }) => dispatch(loadDiscussions(page, mine, query)),
+    resetPagination: () => dispatch(resetPagination({ suffix })),
     onTagClick: (text) => {
-      dispatch(resetPagination({ suffix: getSuffix(mine) }));
+      dispatch(resetPagination({ suffix }));
       dispatch(addQueryToCurrentUri({ tagList: text }));
     },
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(DiscussionsList);
-export default injectIntl(WithAuthorization(connectedComponent));
+const component = connect(mapStateToProps, mapDispatchToProps)(DiscussionsList);
+export default injectIntl(withAuthorization(component));

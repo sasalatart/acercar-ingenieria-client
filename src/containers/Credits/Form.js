@@ -33,5 +33,5 @@ const form = reduxForm({
   },
 })(CreditsForm);
 
-const connectedComponent = connect(mapStateToProps)(form);
-export default I18nForm(connectedComponent, creditsValidations);
+const component = connect(mapStateToProps)(form);
+export default I18nForm(component, creditsValidations);

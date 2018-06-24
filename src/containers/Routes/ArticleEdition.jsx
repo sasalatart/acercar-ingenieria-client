@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   getIsAdminOrMajorAdmin,
-  getCurrentUserEntity,
+  getCurrentUserId,
 } from '../../store/ducks/sessions';
 import { getMajorIdFromProps } from '../../store/ducks/majors';
 import {
@@ -37,12 +37,10 @@ function mapStateToProps(state, ownProps) {
   const majorId = getMajorIdFromProps(ownProps);
   const articleId = getArticleIdFromProps(ownProps);
   const params = getCollectionParams(majorId, { id: articleId });
-
-  const currentUser = getCurrentUserEntity(state);
   const article = getArticleEntity(state, params);
 
   const adminOrMajorAdmin = getIsAdminOrMajorAdmin(state, params);
-  const isAuthor = currentUser && article && currentUser.id === article.author.id;
+  const isAuthor = article && getCurrentUserId(state) === article.author.id;
 
   return {
     loading: !article && getIsFetching(state, params),

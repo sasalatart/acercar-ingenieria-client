@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { getCurrentUserEntity } from '../../store/ducks/sessions';
+import { getIsLoggedIn } from '../../store/ducks/sessions';
 import Restricted from '../../components/Routes/Restricted';
 
 function mapStateToProps(state) {
   return {
-    restrictedCondition: !!getCurrentUserEntity(state),
+    restrictedCondition: getIsLoggedIn(state),
   };
 }
 

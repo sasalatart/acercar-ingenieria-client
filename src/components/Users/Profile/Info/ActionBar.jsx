@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import DestroyButton from '../../../../containers/DestroyButton';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import { userShape } from '../../../../shapes';
@@ -57,4 +57,4 @@ ProfileActionBar.defaultProps = {
   user: undefined,
 };
 
-export default ProfileActionBar;
+export default injectIntl(ProfileActionBar);

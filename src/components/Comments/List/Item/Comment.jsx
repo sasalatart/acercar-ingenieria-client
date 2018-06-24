@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Radium from 'radium';
 import { Button, Divider } from 'antd';
-import Actions from '../../../../containers/Comments/List/Item/Actions';
+import Actions from './Actions';
 import MainContent from '../../Comment/MainContent';
 import AnswerForm from './AnswerForm';
 import ProfileAvatar from '../../../Users/Profile/Avatar';
@@ -35,6 +35,8 @@ const styles = {
 
 class CommentItem extends Component {
   static propTypes = {
+    adminOrMajorAdmin: PropTypes.bool.isRequired,
+    currentUserId: PropTypes.number.isRequired,
     comment: commentShape.isRequired,
     answeringDisabled: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -83,15 +85,20 @@ class CommentItem extends Component {
   }
 
   render() {
-    const { comment, answeringDisabled } = this.props;
     const {
-      id,
-      author,
-      commentableType,
-      commentableId,
-      childComments,
-      extraComments,
-    } = comment;
+      adminOrMajorAdmin,
+      currentUserId,
+      comment,
+      comment: {
+        id,
+        author,
+        commentableType,
+        commentableId,
+        childComments,
+        extraComments,
+      },
+      answeringDisabled,
+    } = this.props;
 
     const { editing, answering } = this.state;
     const isChild = commentableType === 'Comment';
@@ -108,11 +115,20 @@ class CommentItem extends Component {
             editing={editing}
             onStopEditing={this.handleStopEditing}
           />
-          {!editing && <Actions comment={comment} onStartEditing={this.handleStartEditing} />}
+          {!editing &&
+            <Actions
+              adminOrMajorAdmin={adminOrMajorAdmin}
+              currentUserId={currentUserId}
+              comment={comment}
+              onStartEditing={this.handleStartEditing}
+            />
+          }
         </div>
 
         {childComments &&
           <ChildComments
+            adminOrMajorAdmin={adminOrMajorAdmin}
+            currentUserId={currentUserId}
             parentCommentId={id}
             parentCommentCommentableType={commentableType}
             parentCommentCommentableId={commentableId}

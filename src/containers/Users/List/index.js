@@ -1,14 +1,21 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import { loadUsers, getPagingFns as getUsersPagingFns } from '../../../store/ducks/users';
+import {
+  loadUsers,
+  resetPagination as resetUsersPagination,
+  getPagingFns as getUsersPagingFns,
+} from '../../../store/ducks/users';
 import {
   loadAdmins,
+  setSelectedUser,
   unsetSelectedUser,
+  resetPagination as resetAdminsPagination,
   getPagingFns as getAdminsPagingFns,
   getSelectedUserEntity,
 } from '../../../store/ducks/admins';
 import { getIsFetching } from '../../../store/ducks/loading';
+import withAuthorization from '../../../hoc/withAuthorization';
 import UsersList from '../../../components/Users/List';
 import { getCollectionParams as getAdminsCollectionParams } from '../../../lib/admins';
 import { getCollectionParams as getUsersCollectionParams } from '../../../lib/users';
@@ -30,17 +37,17 @@ function mapStateToProps(state, { majorId, admins }) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { majorId, admins } = ownProps;
+function mapDispatchToProps(dispatch, { majorId, admins }) {
   const loadFn = admins ? loadAdmins : loadUsers;
+  const resetPaginationFn = admins ? resetAdminsPagination : resetUsersPagination;
 
   return {
     loadUsers: ({ page, ...query }) => dispatch(loadFn(page, majorId, query)),
+    setSelectedUser: userId => dispatch(setSelectedUser(userId)),
     unsetSelectedUser: () => dispatch(unsetSelectedUser()),
+    resetPagination: () => dispatch(resetPaginationFn({ baseResourceId: majorId })),
   };
 }
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(UsersList));
+const component = connect(mapStateToProps, mapDispatchToProps)(UsersList);
+export default injectIntl(withAuthorization(component));

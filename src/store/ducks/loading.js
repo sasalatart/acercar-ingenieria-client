@@ -27,9 +27,15 @@ function getCategory(fetching, creating, updating, destroying) {
   return undefined;
 }
 
-function getPath(category, paged, collection, brn = BASE_RESOURCE_NAME_FALLBACK, brId, suffix) {
-  const pagedPortion = paged ? 'pages' : undefined;
-  return compact([category, pagedPortion, collection, brn, brId, suffix]);
+function getPath(category, paged, collection, baseResourceName, baseResourceId, suffix) {
+  return compact([
+    category,
+    paged ? 'pages' : undefined,
+    collection,
+    baseResourceId ? baseResourceName : BASE_RESOURCE_NAME_FALLBACK,
+    baseResourceId,
+    suffix,
+  ]);
 }
 
 export default function loadingReducer(state = INITIAL_STATE, action) {
@@ -66,7 +72,7 @@ export default function loadingReducer(state = INITIAL_STATE, action) {
       : state.updateIn(path, pages => pages && pages.delete(+page));
   }
 
-  if (id || (creating && baseResourceId) || (destroying && baseResourceId)) {
+  if (id || baseResourceId) {
     const effectiveId = id || baseResourceId;
     return pending
       ? state.updateIn(path, ids => (ids ? ids.add(+effectiveId) : new Set([+effectiveId])))

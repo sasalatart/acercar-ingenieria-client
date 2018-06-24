@@ -10,7 +10,7 @@ import PaginationControls from '../../containers/Pagination';
 import IconText from '../IconText';
 import { themeStyles } from '../../theme';
 import { paginationShape, questionShape } from '../../shapes';
-import collections from '../../lib/collections';
+import { getCollectionParams } from '../../lib/questions';
 
 const { Panel } = Collapse;
 
@@ -70,11 +70,7 @@ export default class QuestionsList extends Component {
             <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
               {t({ id: 'forms.edit' })}
             </Button>
-            <DestroyButton
-              collection={collections.questions}
-              id={id}
-              baseResourceId={get(majorSummary, 'id')}
-            />
+            <DestroyButton {...getCollectionParams(get(majorSummary, 'id'), { id })} />
           </div>
         }
       </Panel>

@@ -14,7 +14,7 @@ import {
   getMajorOptionsForArticle,
 } from '../../store/ducks/articles';
 import { getIsFetching } from '../../store/ducks/loading';
-import withAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
 import articlesValidations from '../../validations/articles';
@@ -80,5 +80,5 @@ const form = reduxForm({
   },
 })(ArticleForm);
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(form);
-export default withAuthorization(I18nForm(connectedComponent, articlesValidations));
+const component = connect(mapStateToProps, mapDispatchToProps)(form);
+export default withAuthorization(I18nForm(component, articlesValidations));

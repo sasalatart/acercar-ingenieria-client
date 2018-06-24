@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
@@ -67,4 +67,4 @@ DiscussionsActionBar.defaultProps = {
   mine: false,
 };
 
-export default DiscussionsActionBar;
+export default injectIntl(DiscussionsActionBar);

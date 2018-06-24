@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Alert } from 'antd';
-import WithModal from '../../../../hoc/WithModal';
+import withModal from '../../../../hoc/withModal';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import EmailForm from '../../../../containers/Majors/Major/Email/Form';
 import HideableButton from '../../../HideableButton';
@@ -65,4 +65,4 @@ MajorAdminsActionBar.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithModal(MajorAdminsActionBar));
+export default injectIntl(withModal(MajorAdminsActionBar));

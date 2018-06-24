@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Alert } from 'antd';
-import WithModal from '../../hoc/WithModal';
+import withModal from '../../hoc/withModal';
 import ReportForm from '../../containers/Reports/Form';
 import HideableButton from '../HideableButton';
 
@@ -54,4 +54,4 @@ ReportButton.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithModal(ReportButton));
+export default injectIntl(withModal(ReportButton));

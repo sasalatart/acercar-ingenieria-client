@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
+import withAuthorization from '../../../hoc/withAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
-import ReportButton from '../../Reports/Button';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
+import ReportButton from '../../Reports/Button';
 import routes from '../../../lib/routes';
 import collections from '../../../lib/collections';
 
@@ -45,4 +46,4 @@ DiscussionActionBar.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default DiscussionActionBar;
+export default injectIntl(withAuthorization(DiscussionActionBar));

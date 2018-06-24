@@ -77,7 +77,7 @@ export default class Major extends Component {
   majorRoutes = getMajorPaths(this.props.id).routes;
 
   render() {
-    const { id, major } = this.props;
+    const { loggedIn, id, major } = this.props;
 
     return (
       <Layout style={styles.layout}>
@@ -88,7 +88,7 @@ export default class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.info}
-              render={() => <MajorInfo major={major} />}
+              render={() => <MajorInfo loggedIn={loggedIn} major={major} />}
             />
 
             <Route

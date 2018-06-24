@@ -2,8 +2,10 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { getPage } from '../../../store/ducks/routes';
+import { getCurrentUserId } from '../../../store/ducks/sessions';
 import { loadComments, getPagingFns } from '../../../store/ducks/comments';
 import { getIsFetching } from '../../../store/ducks/loading';
+import withAuthorization from '../../../hoc/withAuthorization';
 import CommentsList from '../../../components/Comments/List';
 import collections from '../../../lib/collections';
 
@@ -14,6 +16,7 @@ function mapStateToProps(state, ownProps) {
   const comments = pagingFns.getPagedEntities(state, params);
 
   return {
+    currentUserId: getCurrentUserId(state),
     loading: isEmpty(comments) && getIsFetching(state, params),
     pagination: pagingFns.getMeta(state, params),
     comments,
@@ -28,5 +31,5 @@ function mapDispatchToProps(dispatch, { baseResourceName, baseResourceId }) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(CommentsList);
-export default injectIntl(connectedComponent);
+const component = connect(mapStateToProps, mapDispatchToProps)(CommentsList);
+export default injectIntl(withAuthorization(component));

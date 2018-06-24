@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import WithModal from '../../hoc/WithModal';
+import withModal from '../../hoc/withModal';
 import HideableButton from '../HideableButton';
 import Form from '../../containers/Search/Form';
 
@@ -42,4 +42,4 @@ SearchButton.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithModal(SearchButton));
+export default injectIntl(withModal(SearchButton));

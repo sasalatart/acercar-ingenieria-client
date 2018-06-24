@@ -3,7 +3,7 @@ import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { pagingFns, loadAnnouncements } from '../../../store/ducks/announcements';
 import { getIsFetching } from '../../../store/ducks/loading';
-import WithModal from '../../../hoc/WithModal';
+import withModal from '../../../hoc/withModal';
 import Announcements from '../../../components/Announcements/List';
 import collections from '../../../lib/collections';
 
@@ -24,6 +24,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(Announcements);
-
-export default injectIntl(WithModal(connectedComponent));
+const component = connect(mapStateToProps, mapDispatchToProps)(Announcements);
+export default injectIntl(withModal(component));

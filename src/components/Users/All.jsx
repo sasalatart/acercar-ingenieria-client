@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Select } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import ActionBar from '../../containers/Users/List/ActionBar';
+import ActionBar from './List/ActionBar';
 import Title from '../Layout/Title';
 import UsersList from '../../containers/Users/List';
 import DataPlaceholder from '../DataPlaceholder';
@@ -28,6 +28,8 @@ export default class SearchUsers extends Component {
     interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     loadMajors: PropTypes.func.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
+    resetUsersPagination: PropTypes.func.isRequired,
+    resetAdminsPagination: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   }
 
@@ -37,6 +39,13 @@ export default class SearchUsers extends Component {
 
   componentDidMount() {
     this.props.loadMajors();
+  }
+
+  handleResetPagination = () => {
+    const { resetAdminsPagination, resetUsersPagination } = this.props;
+    const { admins, majorId } = this.state.searchFilter;
+    const resetPaginationFn = admins ? resetAdminsPagination : resetUsersPagination;
+    return resetPaginationFn({ baseResourceId: majorId });
   }
 
   handleChange = (value) => {
@@ -90,7 +99,7 @@ export default class SearchUsers extends Component {
 
     return (
       <Fragment>
-        <ActionBar {...searchFilter} />
+        <ActionBar {...searchFilter} resetPagination={this.handleResetPagination} />
         <Title>{t({ id: 'users' })}</Title>
 
         {this.renderSelect()}

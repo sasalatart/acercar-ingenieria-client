@@ -31,6 +31,6 @@ const form = reduxForm({
     : dispatch(createMajor(values))),
 })(Form);
 
-const connectedComponent = connect(mapStateToProps)(form);
-export default I18nForm(connectedComponent, majorsValidations);
+const component = connect(mapStateToProps)(form);
+export default I18nForm(component, majorsValidations);
 

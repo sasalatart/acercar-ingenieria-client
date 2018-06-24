@@ -3,7 +3,9 @@ import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { loadCredits, getCreditsEntities } from '../../store/ducks/credits';
 import { getIsFetching } from '../../store/ducks/loading';
-import WithLoadableResource from '../../hoc/WithLoadableResource';
+import withAuthorization from '../../hoc/withAuthorization';
+import withLoadableResource from '../../hoc/withLoadableResource';
+import withModalForm from '../../hoc/withModalForm';
 import Credits from '../../components/Credits';
 import collections from '../../lib/collections';
 
@@ -21,8 +23,9 @@ const mapDispatchToProps = {
   loadCredits,
 };
 
-const connectedComponent = connect(
+const component = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(WithLoadableResource('loadCredits', 'credits')(Credits));
-export default injectIntl(connectedComponent);
+)(withLoadableResource('loadCredits', 'credits')(Credits));
+
+export default injectIntl(withAuthorization(withModalForm(component)));

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import Linkify from 'react-linkify';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/FeedButtons/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import Author from '../../Author';
@@ -15,7 +14,7 @@ import MajorLink from '../../Majors/Major/Link';
 import Image from '../../Image';
 import { themeStyles, breakpointsKeys } from '../../../theme';
 import { articleSummaryShape } from '../../../shapes';
-import collections from '../../../lib/collections';
+import { getCollectionParams } from '../../../lib/articles';
 import articlePlaceholder from '../../../images/article.png';
 
 const { Item } = List;
@@ -50,10 +49,7 @@ function renderActions(adminOrMajorAdmin, article, majorId) {
   ];
 
   if (adminOrMajorAdmin) {
-    const destroyButton = (
-      <DestroyButton collection={collections.articles} id={id} baseResourceId={majorId} iconOnly />
-    );
-
+    const destroyButton = <DestroyButton {...getCollectionParams(majorId, { id })} iconOnly />;
     actions.push(destroyButton);
   }
 
@@ -126,4 +122,4 @@ ArticleListItem.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithAuthorization(ArticleListItem));
+export default injectIntl(ArticleListItem);

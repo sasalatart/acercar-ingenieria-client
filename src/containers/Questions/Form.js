@@ -6,7 +6,7 @@ import {
   updateQuestion,
   getQuestionEntity,
 } from '../../store/ducks/questions';
-import WithAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import QuestionsForm from '../../components/Questions/Form';
 import questionsValidations from '../../validations/questions';
@@ -36,5 +36,5 @@ const form = reduxForm({
   },
 })(QuestionsForm);
 
-const connectedComponent = connect(mapStateToProps)(form);
-export default WithAuthorization(I18nForm(connectedComponent, questionsValidations));
+const component = connect(mapStateToProps)(form);
+export default withAuthorization(I18nForm(component, questionsValidations));

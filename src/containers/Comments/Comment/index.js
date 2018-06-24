@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import { goToLanding } from '../../../store/ducks/routes';
+import { getCurrentUserId } from '../../../store/ducks/sessions';
 import { loadComment, getCommentEntity } from '../../../store/ducks/comments';
 import { getIsFetching } from '../../../store/ducks/loading';
-import WithLoadableResource from '../../../hoc/WithLoadableResource';
+import withLoadableResource from '../../../hoc/withLoadableResource';
 import Comment from '../../../components/Comments/Comment';
 import collections, { parseBaseResource } from '../../../lib/collections';
 
@@ -11,6 +13,7 @@ function mapStateToProps(state, ownProps) {
   const comment = getCommentEntity(state, params);
 
   return {
+    isAuthor: !!(comment && getCurrentUserId(state) === comment.author.id),
     loading: !comment && getIsFetching(state, params),
     comment,
   };
@@ -22,11 +25,13 @@ function mapDispatchToProps(dispatch, ownProps) {
 
   return {
     loadComment: () => dispatch(loadComment(params.id, baseResourceName, baseResourceId)),
+    onDestroy: () => dispatch(goToLanding()),
   };
 }
 
-const connectedComponent = connect(
+const component = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(WithLoadableResource('loadComment', 'comment')(Comment));
-export default injectIntl(connectedComponent);
+)(withLoadableResource('loadComment', 'comment')(Comment));
+
+export default injectIntl(component);

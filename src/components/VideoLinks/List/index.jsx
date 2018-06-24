@@ -13,16 +13,23 @@ const styles = {
   },
 };
 
-function renderVideos(videos, onEditClicked) {
+function renderVideos(adminOrMajorAdmin, videos, onEditClicked) {
   return (
     <div style={styles.itemsContainer}>
-      {videos.map(video =>
-        <VideoItem key={video.id} video={video} onEditClicked={onEditClicked} />)}
+      {videos.map(video => (
+        <VideoItem
+          key={video.id}
+          adminOrMajorAdmin={adminOrMajorAdmin}
+          video={video}
+          onEditClicked={onEditClicked}
+        />
+      ))}
     </div>
   );
 }
 
 function VideosList({
+  adminOrMajorAdmin,
   loading,
   videos,
   pagination,
@@ -35,12 +42,13 @@ function VideosList({
       loading={loading}
       noData={!loading && isEmpty(videos)}
       loadFn={loadVideoLinks}
-      render={() => renderVideos(videos, onEditClicked)}
+      render={() => renderVideos(adminOrMajorAdmin, videos, onEditClicked)}
     />
   );
 }
 
 VideosList.propTypes = {
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   videos: PropTypes.arrayOf(videoLinkShape),
   pagination: paginationShape,

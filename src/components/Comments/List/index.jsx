@@ -7,6 +7,8 @@ import { paginationShape, commentShape } from '../../../shapes';
 
 export default class CommentsList extends Component {
   static propTypes = {
+    adminOrMajorAdmin: PropTypes.bool.isRequired,
+    currentUserId: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
     comments: PropTypes.arrayOf(commentShape),
@@ -30,14 +32,27 @@ export default class CommentsList extends Component {
   }
 
   renderComments() {
-    const { comments, answeringDisabled } = this.props;
-    return comments.map(comment =>
-      <Comment key={comment.id} comment={comment} answeringDisabled={answeringDisabled} />);
+    const {
+      adminOrMajorAdmin, currentUserId, comments, answeringDisabled,
+    } = this.props;
+
+    return comments.map(comment => (
+      <Comment
+        key={comment.id}
+        adminOrMajorAdmin={adminOrMajorAdmin}
+        currentUserId={currentUserId}
+        comment={comment}
+        answeringDisabled={answeringDisabled}
+      />
+    ));
   }
 
   render() {
     const {
-      loading, comments, pagination, loadComments,
+      loading,
+      comments,
+      pagination,
+      loadComments,
     } = this.props;
 
     return (

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Divider } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import ActionBar from '../../../containers/Discussions/Discussion/ActionBar';
+import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
 import Author from '../../Author';
 import TagList from '../../TagList';
@@ -24,8 +24,9 @@ const styles = {
   },
 };
 
-function Discussion({ discussion }) {
-  const {
+function Discussion({
+  discussion,
+  discussion: {
     id,
     title,
     tagList,
@@ -33,11 +34,12 @@ function Discussion({ discussion }) {
     description,
     attachments,
     createdAt,
-  } = discussion;
-
+  },
+  ...restProps
+}) {
   return (
     <Fragment>
-      <ActionBar id={id} />
+      <ActionBar id={id} {...restProps} />
       <Title>{title}</Title>
 
       {tagList.length > 0 &&

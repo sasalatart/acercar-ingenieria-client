@@ -18,6 +18,8 @@ const styles = {
 };
 
 function ChildComments({
+  adminOrMajorAdmin,
+  currentUserId,
   parentCommentId,
   parentCommentCommentableType,
   parentCommentCommentableId,
@@ -42,12 +44,21 @@ function ChildComments({
       }
       {comments
         .sort((commentA, commentB) => new Date(commentA.createdAt) - new Date(commentB.createdAt))
-        .map(comment => <Comment key={comment.id} comment={comment} />)}
+        .map(comment => (
+          <Comment
+            key={comment.id}
+            adminOrMajorAdmin={adminOrMajorAdmin}
+            currentUserId={currentUserId}
+            comment={comment}
+          />
+        ))}
     </Fragment>
   );
 }
 
 ChildComments.propTypes = {
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
+  currentUserId: PropTypes.number.isRequired,
   parentCommentId: PropTypes.number.isRequired,
   parentCommentCommentableType: PropTypes.string.isRequired,
   parentCommentCommentableId: PropTypes.number.isRequired,

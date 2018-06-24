@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
 import MajorMeta from './Meta';
 import { majorShape } from '../../../shapes';
@@ -45,4 +44,4 @@ MajorItem.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithAuthorization(MajorItem));
+export default injectIntl(MajorItem);

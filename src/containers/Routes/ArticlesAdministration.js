@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import WithAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import Restricted from '../../components/Routes/Restricted';
 
 function mapStateToProps(state, { loggedIn, adminOrMajorAdmin, match: { params } }) {
@@ -9,5 +9,5 @@ function mapStateToProps(state, { loggedIn, adminOrMajorAdmin, match: { params }
   };
 }
 
-const connectedComponent = connect(mapStateToProps)(Restricted);
-export default withRouter(WithAuthorization(connectedComponent));
+const component = connect(mapStateToProps)(Restricted);
+export default withRouter(withAuthorization(component));

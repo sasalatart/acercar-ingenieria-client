@@ -17,5 +17,5 @@ const form = reduxForm({
   onSubmit: (values, dispatch, ownProps) => dispatch(changePassword(values, ownProps.tokens)),
 })(Form);
 
-const connectedComponent = connect(mapStateToProps)(form);
-export default I18nForm(connectedComponent, usersValidations);
+const component = connect(mapStateToProps)(form);
+export default I18nForm(component, usersValidations);

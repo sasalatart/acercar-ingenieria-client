@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import WithModalForm from '../../hoc/WithModalForm';
+import withModalForm from '../../hoc/withModalForm';
 import Form from '../../containers/VideoLinks/Form';
 import VideosList from '../../containers/VideoLinks/List';
 import ActionBar from './ActionBar';
@@ -50,4 +50,4 @@ VideoLinks.defaultProps = {
   editingId: undefined,
 };
 
-export default injectIntl(WithModalForm(VideoLinks));
+export default injectIntl(withModalForm(VideoLinks));

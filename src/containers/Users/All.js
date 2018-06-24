@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { addQueryToCurrentUri } from '../../store/ducks/routes';
+import { resetPagination as resetUsersPagination } from '../../store/ducks/users';
+import { resetPagination as resetAdminsPagination } from '../../store/ducks/admins';
 import {
   loadMajors,
   getDisciplinaryMajors,
@@ -21,7 +23,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   loadMajors,
   addQueryToCurrentUri,
+  resetUsersPagination,
+  resetAdminsPagination,
 };
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(AllUsers);
-export default injectIntl(connectedComponent);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(AllUsers));

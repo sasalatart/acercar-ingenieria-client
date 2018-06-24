@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { intlShape } from 'react-intl';
 import Radium from 'radium';
 import LoadingBar from 'react-redux-loading-bar';
-import AvatarWithNotifications from '../../../containers/Users/Profile/AvatarWithNotifications';
-import LocaleSelect from '../../../containers/Layout/Header/LocaleSelect';
+import AvatarWithNotifications from '../../Users/Profile/AvatarWithNotifications';
+import LocaleSelect from './LocaleSelect';
 import HeaderLink from './Link';
 import Hideable from '../Hideable';
 import HideableButton from '../../HideableButton';
@@ -61,10 +61,10 @@ const styles = {
   },
 };
 
-function renderLoggedInButtons(signOut, t) {
+function renderLoggedInButtons(currentUser, avatarProps, signOut, t) {
   return (
     <div>
-      <AvatarWithNotifications style={styles.avatar} />
+      <AvatarWithNotifications currentUser={currentUser} {...avatarProps} style={styles.avatar} />
       <HideableButton type="danger" icon="logout" onClick={signOut} style={styles.button} size="small">
         {t({ id: 'sessions.signOut' })}
       </HideableButton>
@@ -85,7 +85,7 @@ function renderLoggedOutButtons(t) {
   );
 }
 
-function renderUpperHeader(currentUser, signOut, t) {
+function renderUpperHeader(currentUser, avatarProps, localeProps, signOut, t) {
   return (
     <Spaced style={styles.upperHeader} padded>
       <Link to={routes.landing} href={routes.landing} style={styles.innerUpperHeader}>
@@ -99,10 +99,10 @@ function renderUpperHeader(currentUser, signOut, t) {
       </Link>
       <div style={styles.innerUpperHeader}>
         {currentUser
-          ? renderLoggedInButtons(signOut, t)
+          ? renderLoggedInButtons(currentUser, avatarProps, signOut, t)
           : renderLoggedOutButtons(t)
         }
-        <LocaleSelect style={styles.localeSelect} />
+        <LocaleSelect {...localeProps} style={styles.localeSelect} />
       </div>
     </Spaced>
   );
@@ -151,10 +151,22 @@ function renderLowerHeader(currentUser, t) {
   );
 }
 
-function Header({ currentUser, signOut, intl: { formatMessage: t } }) {
+function Header({
+  currentUser,
+  locale,
+  notificationsCount,
+  setLocale,
+  loadNotificationsCount,
+  setNotificationsCount,
+  signOut,
+  intl: { formatMessage: t },
+}) {
+  const localeProps = { locale, setLocale };
+  const avatarProps = { notificationsCount, loadNotificationsCount, setNotificationsCount };
+
   return (
     <Fragment>
-      {renderUpperHeader(currentUser, signOut, t)}
+      {renderUpperHeader(currentUser, avatarProps, localeProps, signOut, t)}
       {renderLowerHeader(currentUser, t)}
       <LoadingBar style={styles.loadingBar} />
     </Fragment>
@@ -163,6 +175,11 @@ function Header({ currentUser, signOut, intl: { formatMessage: t } }) {
 
 Header.propTypes = {
   currentUser: userShape,
+  locale: PropTypes.string.isRequired,
+  notificationsCount: PropTypes.number.isRequired,
+  setLocale: PropTypes.func.isRequired,
+  loadNotificationsCount: PropTypes.func.isRequired,
+  setNotificationsCount: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 };

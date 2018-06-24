@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import { List, Icon } from 'antd';
 import DestroyButton from '../../../containers/DestroyButton';
 import ProfileAvatar from '../../Users/Profile/Avatar';
 import ProfileLink from '../../Users/Profile/Link';
 import { userShape } from '../../../shapes';
-import collections from '../../../lib/collections';
+import { getCollectionParams } from '../../../lib/users';
 
 const { Item } = List;
 const { Meta } = Item;
@@ -42,16 +42,9 @@ function UserListItem({
   }
 
   if (adminOrMajorAdmin) {
-    const baseResourceProps = majorId && {
-      baseResourceId: majorId,
-      baseResourceName: collections.majors,
-    };
-
     const destroyButton = (
       <DestroyButton
-        {...baseResourceProps}
-        collection={collections.users}
-        id={user.id}
+        {...getCollectionParams(majorId, { id: user.id })}
         warningMessage={t({ id: 'users.destroyWarning' })}
         textToFill={`${user.firstName} ${user.lastName}`}
         important
@@ -85,4 +78,4 @@ UserListItem.defaultProps = {
   majorId: undefined,
 };
 
-export default UserListItem;
+export default injectIntl(UserListItem);

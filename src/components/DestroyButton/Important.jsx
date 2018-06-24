@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Alert, Input, Button } from 'antd';
-import WithModal from '../../hoc/WithModal';
+import withModal from '../../hoc/withModal';
 import DestroyIconOrButton from './IconOrButton';
 
 const styles = {
@@ -106,4 +106,4 @@ class ImportantDestroyButton extends Component {
   }
 }
 
-export default injectIntl(WithModal(ImportantDestroyButton));
+export default injectIntl(withModal(ImportantDestroyButton));

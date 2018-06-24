@@ -9,8 +9,7 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { id, baseResourceId, approved } = ownProps;
+function mapDispatchToProps(dispatch, { id, baseResourceId, approved }) {
   return {
     onClick: () => dispatch(articleApproval(id, baseResourceId, !approved)),
   };

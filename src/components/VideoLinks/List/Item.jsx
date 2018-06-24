@@ -4,7 +4,6 @@ import Radium from 'radium';
 import { Card, Icon } from 'antd';
 import ReactPlayer from 'react-player';
 import lowerFirst from 'lodash/lowerFirst';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
 import { breakpoints } from '../../../theme';
@@ -62,4 +61,4 @@ VideoItem.propTypes = {
   onEditClicked: PropTypes.func.isRequired,
 };
 
-export default WithAuthorization(VideoItem);
+export default VideoItem;

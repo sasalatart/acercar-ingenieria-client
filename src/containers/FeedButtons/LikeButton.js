@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import noop from 'lodash/noop';
 import { like, unlike } from '../../store/ducks/likes';
 import { getIsCreating, getIsDestroying } from '../../store/ducks/loading';
-import WithAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import LikeButton from '../../components/FeedButtons/LikeButton';
 import collections from '../../lib/collections';
 
@@ -27,5 +27,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(LikeButton);
-export default WithAuthorization(connectedComponent);
+const component = connect(mapStateToProps, mapDispatchToProps)(LikeButton);
+export default withAuthorization(component);

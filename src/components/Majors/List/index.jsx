@@ -18,6 +18,7 @@ const styles = {
 
 export default class MajorsList extends Component {
   static propTypes = {
+    admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     disciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
@@ -57,7 +58,7 @@ export default class MajorsList extends Component {
         size="large"
         loading={this.props.loading}
         dataSource={majors}
-        renderItem={major => <MajorItem major={major} />}
+        renderItem={major => <MajorItem admin={this.props.admin} major={major} />}
       />
     );
   }

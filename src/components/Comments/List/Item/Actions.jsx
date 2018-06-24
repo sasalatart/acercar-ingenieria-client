@@ -81,17 +81,22 @@ function renderDestroyButton(comment, approved) {
 }
 
 function CommentActions({
+  currentUserId,
   adminOrMajorAdmin,
-  isAuthor,
   comment,
+  comment: {
+    author,
+    approvedCommentable,
+    commentableType,
+  },
   onStartEditing,
 }) {
-  const { approvedCommentable } = comment;
+  const isAuthor = currentUserId === author.id;
 
   return (
     <div style={styles.wrapper}>
       {approvedCommentable && renderLikeButton(comment)}
-      {approvedCommentable && comment.commentableType !== 'Comment' && renderEnrollButton(comment)}
+      {approvedCommentable && commentableType !== 'Comment' && renderEnrollButton(comment)}
       {approvedCommentable && isAuthor && renderEditButton(onStartEditing)}
       {(adminOrMajorAdmin || isAuthor) && renderDestroyButton(comment, approvedCommentable)}
     </div>
@@ -99,8 +104,8 @@ function CommentActions({
 }
 
 CommentActions.propTypes = {
+  currentUserId: PropTypes.number.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
-  isAuthor: PropTypes.bool.isRequired,
   comment: commentShape.isRequired,
   onStartEditing: PropTypes.func.isRequired,
 };

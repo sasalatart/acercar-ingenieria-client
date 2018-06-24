@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { intlShape } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
@@ -14,7 +14,7 @@ import { optionShape } from '../../../shapes';
 import routes from '../../../lib/routes';
 import { suffixes } from '../../../lib/articles';
 
-export default class ArticlesActionBar extends Component {
+class ArticlesActionBar extends Component {
   static propTypes = {
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     canCreateArticles: PropTypes.bool.isRequired,
@@ -125,3 +125,5 @@ export default class ArticlesActionBar extends Component {
     return <ActionBar actions={actions} />;
   }
 }
+
+export default injectIntl(ArticlesActionBar);

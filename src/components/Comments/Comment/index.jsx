@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { intlShape } from 'react-intl';
 import { Icon, Divider } from 'antd';
-import MainContent from './MainContent';
-import ActionBar from '../../../containers/Comments/Comment/ActionBar';
-import CommentsSection from '../Section';
+import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
+import MainContent from './MainContent';
+import CommentsSection from '../Section';
 import ProfileAvatar from '../../Users/Profile/Avatar';
 import { commentShape } from '../../../shapes';
 import collections from '../../../lib/collections';
@@ -34,13 +34,12 @@ export default class Comment extends Component {
   handleStopEditing = () => this.setState({ editing: false });
 
   render() {
-    const { comment, intl: { formatMessage: t } } = this.props;
-
+    const { comment, intl: { formatMessage: t }, ...restProps } = this.props;
     const { editing } = this.state;
 
     return (
       <Fragment>
-        <ActionBar comment={comment} />
+        <ActionBar comment={comment} {...restProps} />
         <Title>{t({ id: 'comment' })}</Title>
 
         <div style={styles.wrapper}>

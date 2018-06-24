@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import { loadVideoLinks, getPagingFns } from '../../../store/ducks/video-links';
 import { getIsFetching } from '../../../store/ducks/loading';
+import withAuthorization from '../../../hoc/withAuthorization';
 import VideoLinksList from '../../../components/VideoLinks/List';
 import collections, { parseBaseResource } from '../../../lib/collections';
 
@@ -29,5 +30,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(VideoLinksList);
-export default withRouter(connectedComponent);
+const component = connect(mapStateToProps, mapDispatchToProps)(VideoLinksList);
+export default withRouter(withAuthorization(component));

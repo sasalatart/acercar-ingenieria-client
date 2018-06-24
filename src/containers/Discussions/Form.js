@@ -11,7 +11,7 @@ import {
   getDiscussionEntity,
 } from '../../store/ducks/discussions';
 import { getIsFetching } from '../../store/ducks/loading';
-import withAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import DiscussionForm from '../../components/Discussions/Form';
 import discussionsValidations from '../../validations/discussions';
@@ -67,5 +67,5 @@ const form = reduxForm({
   },
 })(DiscussionForm);
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(form);
-export default withAuthorization(I18nForm(connectedComponent, discussionsValidations));
+const component = connect(mapStateToProps, mapDispatchToProps)(form);
+export default withAuthorization(I18nForm(component, discussionsValidations));

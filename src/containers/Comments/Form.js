@@ -46,5 +46,5 @@ const form = reduxForm({
   },
 })(CommentForm);
 
-const connectedComponent = connect(mapStateToProps)(form);
-export default I18nForm(connectedComponent, commentsValidations);
+const component = connect(mapStateToProps)(form);
+export default I18nForm(component, commentsValidations);

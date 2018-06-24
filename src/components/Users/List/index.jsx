@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List, Modal } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import ActionBar from '../../../containers/Users/List/ActionBar';
+import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
 import PaginationControls from '../../../containers/Pagination';
-import UserListItem from '../../../containers/Users/List/Item';
+import UserListItem from './Item';
 import AdminStatusPanel from '../AdminStatus/Panel';
 import { paginationShape, userShape } from '../../../shapes';
 
 export default class UsersList extends Component {
   static propTypes = {
+    admin: PropTypes.bool.isRequired,
+    adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
     admins: PropTypes.bool,
@@ -19,6 +21,7 @@ export default class UsersList extends Component {
     users: PropTypes.arrayOf(userShape),
     selectedUser: userShape,
     loadUsers: PropTypes.func.isRequired,
+    setSelectedUser: PropTypes.func.isRequired,
     unsetSelectedUser: PropTypes.func.isRequired,
     withTitle: PropTypes.bool,
     intl: intlShape.isRequired,
@@ -33,7 +36,16 @@ export default class UsersList extends Component {
     withTitle: false,
   }
 
-  renderUser = user => <UserListItem user={user} majorId={this.props.majorId} />;
+  renderUser = user => (
+    <UserListItem
+      admin={this.props.admin}
+      adminOrMajorAdmin={this.props.adminOrMajorAdmin}
+      user={user}
+      majorId={this.props.majorId}
+      setSelectedUser={() => this.props.setSelectedUser(user.id)}
+      unsetSelectedUser={this.props.unsetSelectedUser}
+    />
+  );
 
   renderAdminStatusPanelModal() {
     const { selectedUser, unsetSelectedUser, intl: { formatMessage: t } } = this.props;
@@ -54,19 +66,18 @@ export default class UsersList extends Component {
   render() {
     const {
       loading,
-      majorId,
-      admins,
       pagination,
       users,
       selectedUser,
       withTitle,
       loadUsers,
       intl: { formatMessage: t },
+      ...restProps
     } = this.props;
 
     return (
       <Fragment>
-        {withTitle && <ActionBar majorId={majorId} admins={admins} />}
+        {withTitle && <ActionBar {...restProps} />}
         {withTitle && <Title>{t({ id: 'users' })}</Title>}
 
         <PaginationControls

@@ -26,5 +26,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(NotificationsList);
-export default injectIntl(connectedComponent);
+const component = connect(mapStateToProps, mapDispatchToProps)(NotificationsList);
+export default injectIntl(component);

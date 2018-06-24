@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape, FormattedMessage } from 'react-intl';
 import Radium from 'radium';
-import WithModalForm from '../../hoc/WithModalForm';
 import Form from '../../containers/Credits/Form';
 import ActionBar from './ActionBar';
 import Title from '../Layout/Title';
@@ -29,6 +28,7 @@ const styles = {
 
 class Credits extends Component {
   static propTypes = {
+    admin: PropTypes.bool.isRequired,
     credits: PropTypes.arrayOf(creditShape).isRequired,
     editingId: PropTypes.number,
     onNewClicked: PropTypes.func.isRequired,
@@ -43,12 +43,18 @@ class Credits extends Component {
   }
 
   renderCredits() {
-    const { credits, onEditClicked } = this.props;
+    const { admin, credits, onEditClicked } = this.props;
 
     return (
       <div style={styles.wrapper}>
-        {credits.map(credit =>
-          <CreditItem key={credit.id} credit={credit} onEditClicked={onEditClicked} />)}
+        {credits.map(credit => (
+          <CreditItem
+            key={credit.id}
+            admin={admin}
+            credit={credit}
+            onEditClicked={onEditClicked}
+          />
+        ))}
       </div>
     );
   }
@@ -80,4 +86,4 @@ class Credits extends Component {
   }
 }
 
-export default WithModalForm(Radium(Credits));
+export default Radium(Credits);

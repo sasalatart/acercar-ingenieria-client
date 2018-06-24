@@ -59,5 +59,5 @@ const form = reduxForm({
   )),
 })(EditForm);
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(form);
-export default I18nForm(connectedComponent, usersValidations);
+const component = connect(mapStateToProps, mapDispatchToProps)(form);
+export default I18nForm(component, usersValidations);

@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-class Profile extends Component {
+export default class Profile extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     noData: PropTypes.bool.isRequired,
@@ -33,6 +33,7 @@ class Profile extends Component {
     mine: PropTypes.bool,
     notificationsCount: PropTypes.number.isRequired,
     loadUser: PropTypes.func.isRequired,
+    goToLanding: PropTypes.func.isRequired,
     intl: intlShape.isRequired,
   };
 
@@ -78,18 +79,18 @@ class Profile extends Component {
     }];
   }
 
+  renderProfileInfo = () => {
+    const { user, mine, goToLanding } = this.props;
+    return <ProfileInfo user={user} isOwner={mine} goToLanding={goToLanding} />;
+  }
+
   render() {
-    const {
-      loading,
-      noData,
-      user,
-      mine,
-    } = this.props;
+    const { loading, noData, mine } = this.props;
 
     if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
 
     if (!mine) {
-      return <ProfileInfo user={user} />;
+      return this.renderProfileInfo();
     }
 
     return (
@@ -98,7 +99,7 @@ class Profile extends Component {
 
         <Content style={styles.content}>
           <Switch>
-            <Route exact path={routes.profile} render={() => <ProfileInfo user={user} />} />
+            <Route exact path={routes.profile} render={this.renderProfileInfo} />
             <Route path={`${routes.profileNotifications()}/:seen?`} component={Notifications} />
             <Route path={routes.profileEdit} component={ProfileEdit} />
             <Route path={routes.profilePassword} component={ChangePassword} />
@@ -108,5 +109,3 @@ class Profile extends Component {
     );
   }
 }
-
-export default Profile;

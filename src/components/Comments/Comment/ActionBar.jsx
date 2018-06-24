@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import lowerFirst from 'lodash/lowerFirst';
+import withAuthorization from '../../../hoc/withAuthorization';
 import LikeButton from '../../../containers/FeedButtons/LikeButton';
 import EnrollButton from '../../../containers/FeedButtons/EnrollButton';
 import DestroyButton from '../../../containers/DestroyButton';
@@ -9,11 +11,14 @@ import collections from '../../../lib/collections';
 
 function CommentActionBar({
   admin,
+  isAuthor,
   comment: {
     id,
     likedByCurrentUser,
     likesCount,
     enrolledByCurrentUser,
+    commentableType,
+    commentableId,
   },
   onDestroy,
 }) {
@@ -33,9 +38,16 @@ function CommentActionBar({
     />,
   ];
 
-  if (admin) {
+  if (isAuthor || admin) {
     const destroyButton = (
-      <DestroyButton key="destroy" collection={collections.comments} id={id} callback={onDestroy} />
+      <DestroyButton
+        key="destroy"
+        collection={collections.comments}
+        id={id}
+        baseResourceName={`${lowerFirst(commentableType)}s`}
+        baseResourceId={commentableId}
+        callback={onDestroy}
+      />
     );
 
     actions.push(destroyButton);
@@ -46,8 +58,9 @@ function CommentActionBar({
 
 CommentActionBar.propTypes = {
   admin: PropTypes.bool.isRequired,
+  isAuthor: PropTypes.bool.isRequired,
   comment: commentShape.isRequired,
   onDestroy: PropTypes.func.isRequired,
 };
 
-export default CommentActionBar;
+export default withAuthorization(CommentActionBar);

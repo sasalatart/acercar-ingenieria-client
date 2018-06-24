@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import WithAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
 import HideableButton from '../HideableButton';
 
@@ -31,4 +31,4 @@ VideosActionBar.propTypes = {
   intl: intlShape.isRequired,
 };
 
-export default injectIntl(WithAuthorization(VideosActionBar));
+export default injectIntl(withAuthorization(VideosActionBar));

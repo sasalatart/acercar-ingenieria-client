@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Icon } from 'antd';
-import WithAuthorization from '../../../hoc/WithAuthorization';
 import LikeButton from '../../../containers/FeedButtons/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../IconText';
@@ -89,4 +88,4 @@ DiscussionListItem.propTypes = {
   onTagClick: PropTypes.func.isRequired,
 };
 
-export default WithAuthorization(DiscussionListItem);
+export default DiscussionListItem;

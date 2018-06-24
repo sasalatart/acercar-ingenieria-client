@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   getIsAdmin,
-  getCurrentUserEntity,
+  getCurrentUserId,
 } from '../../store/ducks/sessions';
 import { loadDiscussion, getDiscussionEntity } from '../../store/ducks/discussions';
 import { getIsFetching } from '../../store/ducks/loading';
@@ -30,11 +30,9 @@ class DiscussionAdministration extends Component {
 
 function mapStateToProps(state, ownProps) {
   const params = { ...ownProps.match.params, collection: collections.discussions };
-
-  const currentUser = getCurrentUserEntity(state);
   const discussion = getDiscussionEntity(state, params);
 
-  const isAuthor = currentUser && discussion && currentUser.id === discussion.author.id;
+  const isAuthor = discussion && getCurrentUserId(state) === discussion.author.id;
 
   return {
     loading: !discussion && getIsFetching(state, params),

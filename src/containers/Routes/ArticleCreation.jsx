@@ -9,5 +9,4 @@ function mapStateToProps(state, { match: { params } }) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps)(Restricted);
-export default withRouter(connectedComponent);
+export default withRouter(connect(mapStateToProps)(Restricted));

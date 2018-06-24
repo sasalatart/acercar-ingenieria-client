@@ -5,7 +5,7 @@ import {
   getIsCreating,
   getIsDestroying,
 } from '../../store/ducks/loading';
-import WithAuthorization from '../../hoc/WithAuthorization';
+import withAuthorization from '../../hoc/withAuthorization';
 import EnrollButton from '../../components/FeedButtons/EnrollButton';
 import collections from '../../lib/collections';
 
@@ -26,5 +26,5 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(EnrollButton);
-export default injectIntl(WithAuthorization(connectedComponent));
+const component = connect(mapStateToProps, mapDispatchToProps)(EnrollButton);
+export default injectIntl(withAuthorization(component));

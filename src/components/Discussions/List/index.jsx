@@ -4,13 +4,14 @@ import { intlShape } from 'react-intl';
 import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Pagination';
-import ActionBar from '../../../containers/Discussions/List/ActionBar';
+import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
 import DiscussionListItem from './Item';
 import { paginationShape, discussionSummaryShape } from '../../../shapes';
 
 export default class DiscussionsList extends Component {
   static propTypes = {
+    admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
     discussionSummaries: PropTypes.arrayOf(discussionSummaryShape),
@@ -33,7 +34,11 @@ export default class DiscussionsList extends Component {
   }
 
   renderListItem = discussion => (
-    <DiscussionListItem discussion={discussion} onTagClick={this.props.onTagClick} />
+    <DiscussionListItem
+      admin={this.props.admin}
+      discussion={discussion}
+      onTagClick={this.props.onTagClick}
+    />
   )
 
   render() {
@@ -44,11 +49,12 @@ export default class DiscussionsList extends Component {
       mine,
       loadDiscussions,
       intl: { formatMessage: t },
+      ...restProps
     } = this.props;
 
     return (
       <Fragment>
-        <ActionBar mine={mine} />
+        <ActionBar mine={mine} {...restProps} />
         <Title>{t({ id: mine ? 'discussions.mine' : 'discussions' })}</Title>
 
         <PaginationControls
