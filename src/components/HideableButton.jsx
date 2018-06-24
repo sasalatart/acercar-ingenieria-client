@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 import { Button } from 'antd';
 import ButtonLink from '../containers/ButtonLink';
 import Hideable from './Layout/Hideable';
@@ -13,7 +14,7 @@ function HideableButton({
   children,
   ...rest
 }) {
-  const Component = to ? ButtonLink : Button;
+  const Component = to ? Radium(ButtonLink) : Radium(Button);
 
   return (
     <Component icon={icon} to={to} style={style} {...rest}>
