@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Icon } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextField, SubmitButton } from '../../Forms';
 import { colors } from '../../../theme';
 
@@ -13,8 +13,8 @@ const styles = {
 };
 
 const fieldIcons = {
-  email: <Icon type="user" style={styles.fieldPrefix} />,
-  password: <Icon type="lock" style={styles.fieldPrefix} />,
+  email: <FontAwesomeIcon icon="user" style={styles.fieldPrefix} />,
+  password: <FontAwesomeIcon icon="lock" style={styles.fieldPrefix} />,
 };
 
 function SignInForm({

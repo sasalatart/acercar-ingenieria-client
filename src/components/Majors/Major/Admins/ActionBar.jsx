@@ -5,7 +5,7 @@ import { Alert } from 'antd';
 import withModal from '../../../../hoc/withModal';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import EmailForm from '../../../../containers/Majors/Major/Email/Form';
-import HideableButton from '../../../HideableButton';
+import HideableButton from '../../../Icons/HideableButton';
 
 const styles = {
   alert: {
@@ -40,7 +40,7 @@ function MajorAdminsActionBar({
 
   if (hasAdmins) {
     const contactButton = (
-      <HideableButton onClick={onModalOpen} icon="mail">
+      <HideableButton onClick={onModalOpen} icon="envelope">
         {t({ id: 'majors.email.personal' })}
       </HideableButton>
     );

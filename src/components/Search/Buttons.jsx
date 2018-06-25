@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import withModal from '../../hoc/withModal';
-import HideableButton from '../HideableButton';
+import HideableButton from '../Icons/HideableButton';
 import Form from '../../containers/Search/Form';
 import { breakpoints } from '../../theme';
 
@@ -33,7 +33,7 @@ function SearchButton({
       </HideableButton>
 
       {filtersActive &&
-        <HideableButton icon="close" onClick={removeFilter} style={styles.button}>
+        <HideableButton icon="times" onClick={removeFilter} style={styles.button}>
           {t({ id: 'search.reset' })}
         </HideableButton>
       }

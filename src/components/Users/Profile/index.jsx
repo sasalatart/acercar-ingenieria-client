@@ -61,7 +61,7 @@ export default class Profile extends Component {
       text: t({ id: 'profile.info' }),
     }, {
       key: routes.profileNotifications(),
-      icon: 'notification',
+      icon: 'bullhorn',
       text: t({ id: 'profile.notifications' }),
       extra: (
         <Hideable style={styles.extra}>

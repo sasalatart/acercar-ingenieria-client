@@ -7,8 +7,10 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import configureStore from './store/configure-store';
 import IntlProvider from './containers/IntlProvider';
 import Router from './Router';
+import configureIcons from './lib/icons';
 
 const { store, persistor } = configureStore();
+configureIcons();
 
 export default function App() {
   return (

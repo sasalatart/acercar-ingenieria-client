@@ -10,8 +10,8 @@ function EnrollButton({ enrolledByCurrentUser, intl: { formatMessage: t }, ...re
     <ToggleLoadingButton
       active={enrolledByCurrentUser}
       content={t({ id: `notifications.${contentState}` })}
-      activeIcon="pause-circle"
-      inactiveIcon="play-circle"
+      icon={enrolledByCurrentUser ? ['fas', 'bell'] : ['far', 'bell-slash']}
+      toolTipped
       {...rest}
     />
   );

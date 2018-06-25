@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import {
   loadPinnedAnnouncements,
@@ -30,4 +31,4 @@ const component = connect(
   mapDispatchToProps,
 )(withLoadableResource('loadPinnedAnnouncements', 'announcements')(PinnedAnnouncements));
 
-export default withAuthorization(component);
+export default injectIntl(withAuthorization(component));

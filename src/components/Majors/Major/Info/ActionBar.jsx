@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import withAuthorization from '../../../../hoc/withAuthorization';
 import ActionBar from '../../../../containers/Layout/ActionBar';
-import HideableButton from '../../../HideableButton';
+import HideableButton from '../../../Icons/HideableButton';
 import routes from '../../../../lib/routes';
 
 function MajorInfoActionBar({ id, adminOrMajorAdmin, intl: { formatMessage: t } }) {

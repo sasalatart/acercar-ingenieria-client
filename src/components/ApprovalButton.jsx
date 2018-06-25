@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import ToggleLoadingButton from './ToggleLoadingButton';
 
-function ApprovalButton({
-  approved,
-  intl: { formatMessage: t },
-  ...rest
-}) {
+function ApprovalButton({ approved, intl: { formatMessage: t }, ...rest }) {
   return (
     <ToggleLoadingButton
       active={approved}
       content={approved ? t({ id: 'reject' }) : t({ id: 'approve' })}
-      activeIcon="lock"
-      inactiveIcon="unlock"
+      icon={approved ? 'lock' : 'unlock'}
       {...rest}
     />
   );

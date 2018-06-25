@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Icon, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   TextField,
   NumberField,
@@ -20,8 +21,7 @@ const styles = {
 };
 
 const fieldIcons = {
-  email: <Icon type="user" style={styles.fieldPrefix} />,
-  password: <Icon type="lock" style={styles.fieldPrefix} />,
+  password: <FontAwesomeIcon icon="lock" style={styles.fieldPrefix} />,
 };
 
 const GUTTER = 8;
@@ -42,7 +42,6 @@ function SignUpForm({
             name="email"
             component={TextField}
             placeholder="e-mail"
-            prefix={fieldIcons.email}
             validate={[validators.required, validators.pucEmail]}
           />
         </Col>

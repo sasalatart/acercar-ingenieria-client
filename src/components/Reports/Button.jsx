@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Alert } from 'antd';
 import withModal from '../../hoc/withModal';
 import ReportForm from '../../containers/Reports/Form';
-import HideableButton from '../HideableButton';
+import HideableButton from '../Icons/HideableButton';
 
 const styles = {
   alert: {

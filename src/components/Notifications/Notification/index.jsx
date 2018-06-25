@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DateWithFormat from '../../DateWithFormat';
 import ActionText from './ActionText';
 import NotifyableText from './NotifyableText';
@@ -9,8 +9,8 @@ import { NOTIFYABLE_TYPES } from '../../../lib/notifications';
 
 const ICON_TYPES = {
   [NOTIFYABLE_TYPES.discussion]: 'star',
-  [NOTIFYABLE_TYPES.article]: 'file-text',
-  [NOTIFYABLE_TYPES.comment]: 'message',
+  [NOTIFYABLE_TYPES.article]: 'file-alt',
+  [NOTIFYABLE_TYPES.comment]: 'comment',
 };
 
 const styles = {
@@ -32,7 +32,7 @@ function Notification({
 }) {
   return (
     <Fragment>
-      <Icon type={ICON_TYPES[notifyableType]} style={styles.icon} />
+      <FontAwesomeIcon icon={ICON_TYPES[notifyableType]} style={styles.icon} />
       <DateWithFormat dateString={createdAt} withTime />
       <p>
         <ActionText user={notificator} actionType={actionType} />{' '}

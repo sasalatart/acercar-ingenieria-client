@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { List, Icon } from 'antd';
+import { List } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DestroyButton from '../../../containers/DestroyButton';
 import ProfileAvatar from '../../Users/Profile/Avatar';
 import ProfileLink from '../../Users/Profile/Link';
@@ -34,11 +35,8 @@ function UserListItem({
 }) {
   const actions = [];
   if (admin) {
-    const iconType = user.admin || user.adminOfMajors.length
-      ? 'star'
-      : 'star-o';
-
-    actions.push(<Icon type={iconType} onClick={setSelectedUser} />);
+    const iconType = user.admin || user.adminOfMajors.length ? 'fas' : 'far';
+    actions.push(<FontAwesomeIcon icon={[iconType, 'star']} onClick={setSelectedUser} />);
   }
 
   if (adminOrMajorAdmin) {

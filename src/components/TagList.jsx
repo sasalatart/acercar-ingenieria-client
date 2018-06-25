@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Tag } from 'antd';
+import { Tag } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import noop from 'lodash/noop';
 import { colors } from '../theme';
 
@@ -11,7 +12,7 @@ const styles = {
     marginBottom: '16px',
   },
   icon: {
-    fontSize: '20px',
+    fontSize: '18px',
     marginRight: '5px',
   },
 };
@@ -19,7 +20,7 @@ const styles = {
 function TagList({ tags, onTagClick, withIcon }) {
   return (
     <span style={styles.container}>
-      {withIcon && <Icon type="tags" style={styles.icon} />}
+      {withIcon && <FontAwesomeIcon icon="tags" style={styles.icon} />}
       {tags.map(tag => (
         <Tag key={tag} color={colors.primaryDark} onClick={() => onTagClick(tag)}>
           {tag}

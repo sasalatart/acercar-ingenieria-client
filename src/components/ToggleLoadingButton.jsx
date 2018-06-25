@@ -1,44 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconText from './IconText';
-import HideableButton from './HideableButton';
+import IconText from './Icons/IconText';
+import ToolTipIcon from './Icons/ToolTipIcon';
+import HideableButton from './Icons/HideableButton';
+
+function renderIconOnly(toolTipped, commonProps, content) {
+  return toolTipped
+    ? <ToolTipIcon {...commonProps} toolTip={content} />
+    : <IconText {...commonProps} text={content} hideable />;
+}
 
 function ToggleLoadingButton({
-  loading,
-  active,
+  icon,
   content,
-  activeIcon,
-  inactiveIcon,
-  onClick,
+  loading,
   iconOnly,
-  size,
+  toolTipped,
+  active,
   disabled,
+  size,
+  onClick,
   style,
 }) {
-  if (loading) {
-    return iconOnly
-      ? <IconText type="loading" text={content} hideable />
-      : <HideableButton type="primary" icon="loading" size={size} style={style}>{content}</HideableButton>;
-  }
-
-  const icon = active ? activeIcon : inactiveIcon;
-
-  if (iconOnly) {
+  if (loading && iconOnly) {
+    const commonProps = { icon: 'spinner', loading: true };
+    return renderIconOnly(toolTipped, commonProps, content);
+  } else if (loading) {
     return (
-      <IconText
-        type={icon}
-        text={content}
-        onClick={onClick}
-        withPointer={!disabled}
-        hideable
-      />
+      <HideableButton
+        type="primary"
+        icon="spinner"
+        size={size}
+        style={style}
+        disabled
+        loading
+      >
+        {content}
+      </HideableButton>
     );
   }
 
-  const type = active ? 'primary' : 'secondary';
+  if (iconOnly) {
+    const commonProps = { icon, onClick, withPointer: !disabled };
+    return renderIconOnly(toolTipped, commonProps, content);
+  }
+
   return (
     <HideableButton
-      type={type}
+      type={active ? 'primary' : 'secondary'}
       icon={icon}
       onClick={onClick}
       disabled={disabled}
@@ -51,25 +60,29 @@ function ToggleLoadingButton({
 }
 
 ToggleLoadingButton.propTypes = {
-  disabled: PropTypes.bool,
-  loading: PropTypes.bool.isRequired,
-  active: PropTypes.bool,
-  activeIcon: PropTypes.string.isRequired,
-  inactiveIcon: PropTypes.string.isRequired,
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
   content: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
   ]).isRequired,
+  loading: PropTypes.bool.isRequired,
   iconOnly: PropTypes.bool,
+  toolTipped: PropTypes.bool,
+  active: PropTypes.bool,
+  disabled: PropTypes.bool,
   size: PropTypes.string,
-  style: PropTypes.shape({}),
   onClick: PropTypes.func.isRequired,
+  style: PropTypes.shape({}),
 };
 
 ToggleLoadingButton.defaultProps = {
-  disabled: false,
-  active: false,
   iconOnly: false,
+  toolTipped: false,
+  active: false,
+  disabled: false,
   size: 'default',
   style: undefined,
 };

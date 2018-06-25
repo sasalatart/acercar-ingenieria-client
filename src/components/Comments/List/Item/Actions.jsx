@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Divider } from 'antd';
+import { Divider } from 'antd';
 import Radium from 'radium';
 import lowerFirst from 'lodash/lowerFirst';
 import LikeButton from '../../../../containers/FeedButtons/LikeButton';
 import EnrollButton from '../../../../containers/FeedButtons/EnrollButton';
 import DestroyButton from '../../../../containers/DestroyButton';
 import Hideable from '../../../../components/Layout/Hideable';
+import EditIcon from '../../../../components/Icons/Edit';
 import { breakpoints } from '../../../../theme';
 import { commentShape } from '../../../../shapes';
 import collections from '../../../../lib/collections';
@@ -18,9 +19,6 @@ const styles = {
       flexDirection: 'column',
       alignItems: 'center',
     },
-  },
-  editButton: {
-    cursor: 'pointer',
   },
 };
 
@@ -63,7 +61,8 @@ function renderEnrollButton(comment) {
 }
 
 function renderEditButton(onStartEditing) {
-  return withDivider(<Icon type="edit" onClick={onStartEditing} style={styles.editButton} />);
+  const editButton = <EditIcon onClick={onStartEditing} />;
+  return withDivider(editButton);
 }
 
 function renderDestroyButton(comment, approved) {

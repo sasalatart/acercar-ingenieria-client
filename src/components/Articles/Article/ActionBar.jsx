@@ -5,7 +5,7 @@ import DestroyButton from '../../../containers/DestroyButton';
 import ReportButton from '../../Reports/Button';
 import ApprovalButton from '../../../containers/ApprovalButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
-import HideableButton from '../../HideableButton';
+import HideableButton from '../../Icons/HideableButton';
 import { articleShape, articleSummaryShape } from '../../../shapes';
 import routes from '../../../lib/routes';
 import { getCollectionParams } from '../../../lib/articles';

@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { List, Icon } from 'antd';
+import { List } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Linkify from 'react-linkify';
 import LikeButton from '../../../containers/FeedButtons/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
 import Author from '../../Author';
 import TagList from '../../TagList';
-import IconText from '../../IconText';
+import IconText from '../../Icons/IconText';
 import Hideable from '../../Layout/Hideable';
 import ArticleLink from '../Article/Link';
 import MajorLink from '../../Majors/Major/Link';
@@ -45,7 +46,7 @@ function renderActions(adminOrMajorAdmin, article, majorId) {
 
   const actions = [
     <LikeButton likesCount={likesCount} iconOnly disabled />,
-    <IconText type="message" text={commentsCount} />,
+    <IconText icon={['far', 'comment']} text={commentsCount} />,
   ];
 
   if (adminOrMajorAdmin) {
@@ -67,7 +68,7 @@ function renderExtra(previewUrl) {
 function renderMeta(article, majorId) {
   const titleTag = (
     <span>
-      {!article.approved && <Icon type="lock" style={styles.icon} />}
+      {!article.approved && <FontAwesomeIcon icon="lock" style={styles.icon} />}
       <ArticleLink id={article.id} majorId={majorId}>{article.title}</ArticleLink>
     </span>
   );
@@ -102,8 +103,10 @@ function ArticleListItem({
       {renderMeta(article, majorId)}
       {displayMajor &&
         <span style={styles.majorContainer}>
-          <Icon type="pushpin" style={styles.icon} />
-          <MajorLink id={majorId}>{article.majorSummary.name}</MajorLink>
+          <MajorLink id={majorId}>
+            <FontAwesomeIcon icon="university" style={styles.icon} />
+            {article.majorSummary.name}
+          </MajorLink>
         </span>
       }
       {article.categoryList.length > 0 &&

@@ -11,8 +11,7 @@ function LikeButton({
     <ToggleLoadingButton
       active={likedByCurrentUser}
       content={likesCount}
-      activeIcon="like"
-      inactiveIcon="like-o"
+      icon={likedByCurrentUser ? ['fas', 'heart'] : ['far', 'heart']}
       {...rest}
     />
   );

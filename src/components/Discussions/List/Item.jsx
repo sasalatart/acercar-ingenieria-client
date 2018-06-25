@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Icon } from 'antd';
+import { List } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LikeButton from '../../../containers/FeedButtons/LikeButton';
 import DestroyButton from '../../../containers/DestroyButton';
-import IconText from '../../IconText';
+import IconText from '../../Icons/IconText';
 import DateWithFormat from '../../DateWithFormat';
 import TagList from '../../TagList';
 import Author from '../../Author';
@@ -33,9 +34,9 @@ function renderActions(admin, discussion) {
   } = discussion;
 
   const actions = [
-    <IconText type="eye" text={impressionsCount} />,
+    <IconText icon={['far', 'eye']} text={impressionsCount} />,
     <LikeButton likesCount={likesCount} iconOnly disabled />,
-    <IconText type="message" text={commentsCount} />,
+    <IconText icon="comment" text={commentsCount} />,
   ];
 
   if (admin) {
@@ -56,7 +57,7 @@ function renderMeta(discussion) {
 
   const titleTag = (
     <span>
-      {pinned && <Icon type="star" style={styles.star} />}
+      {pinned && <FontAwesomeIcon icon="star" style={styles.star} />}
       <DiscussionLink id={id}>{title}</DiscussionLink>
     </span>
   );

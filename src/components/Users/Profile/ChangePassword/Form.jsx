@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
-import { Icon } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   TextField,
   SubmitButton,
@@ -16,7 +16,7 @@ const styles = {
 };
 
 const fieldIcons = {
-  password: <Icon type="lock" style={styles.fieldPrefix} />,
+  password: <FontAwesomeIcon icon="lock" style={styles.fieldPrefix} />,
 };
 
 function ChangePasswordForm({

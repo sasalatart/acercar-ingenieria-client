@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { Icon } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   TextField,
   SubmitButton,
@@ -15,7 +15,7 @@ const styles = {
 };
 
 const fieldIcons = {
-  email: <Icon type="user" style={styles.fieldPrefix} />,
+  email: <FontAwesomeIcon icon="user" style={styles.fieldPrefix} />,
 };
 
 function RecoverPasswordForm({

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import Radium from 'radium';
-import HideableButton from '../HideableButton';
+import HideableButton from '../Icons/HideableButton';
 import { breakpoints } from '../../theme';
 
 const styles = {
@@ -32,7 +32,7 @@ function renderActions(actions) {
 function ActionBar({ actions, goBack, intl: { formatMessage: t } }) {
   return (
     <div style={styles.actionBar(actions.length)}>
-      <HideableButton type="primary" icon="left" onClick={goBack}>
+      <HideableButton type="primary" icon="chevron-left" onClick={goBack}>
         {t({ id: 'goBack' })}
       </HideableButton>
       {renderActions(actions)}

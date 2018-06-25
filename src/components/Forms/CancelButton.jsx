@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import HideableButton from '../HideableButton';
+import HideableButton from '../Icons/HideableButton';
 
 function CancelButton({
   onClick,
@@ -10,7 +10,7 @@ function CancelButton({
 }) {
   return (
     <div style={style}>
-      <HideableButton icon="close" onClick={onClick}>
+      <HideableButton icon="times" onClick={onClick}>
         {t({ id: 'forms.confirm.cancel' })}
       </HideableButton>
     </div>

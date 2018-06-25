@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import noop from 'lodash/noop';
-import Hideable from './Layout/Hideable';
+import Hideable from '../Layout/Hideable';
 
 const styles = {
   text: {
@@ -14,13 +14,18 @@ const styles = {
 };
 
 function IconText({
-  type, text, withPointer, hideable, onClick, style,
+  icon,
+  text,
+  withPointer,
+  hideable,
+  loading,
+  onClick,
+  style,
 }) {
   const textTag = <span style={styles.text}>{text}</span>;
-
   return (
     <span style={{ ...style, ...styles.cursor(withPointer) }}>
-      <Icon type={type} onClick={onClick} />
+      <FontAwesomeIcon icon={icon} onClick={onClick} spin={loading} />
       {hideable
         ? <Hideable>{textTag}</Hideable>
         : <span>{textTag}</span>
@@ -30,13 +35,17 @@ function IconText({
 }
 
 IconText.propTypes = {
-  type: PropTypes.string.isRequired,
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
   text: PropTypes.oneOfType([
     PropTypes.string.isRequired,
     PropTypes.number.isRequired,
   ]).isRequired,
   withPointer: PropTypes.bool,
   hideable: PropTypes.bool,
+  loading: PropTypes.bool,
   onClick: PropTypes.func,
   style: PropTypes.shape({}),
 };
@@ -44,6 +53,7 @@ IconText.propTypes = {
 IconText.defaultProps = {
   withPointer: false,
   hideable: false,
+  loading: false,
   onClick: noop,
   style: undefined,
 };

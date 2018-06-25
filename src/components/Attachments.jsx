@@ -1,14 +1,16 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { List, Icon } from 'antd';
+import { List } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { attachmentShape } from '../shapes';
 
 const { Item } = List;
 
 const styles = {
   icon: {
-    fontSize: '21px',
+    fontSize: '20px',
+    marginRight: '5px',
   },
   item: {
     overflow: 'hidden',
@@ -18,7 +20,7 @@ const styles = {
 function renderItem(attachment) {
   return (
     <Item style={styles.item}>
-      <Icon type="paper-clip" style={styles.icon} />
+      <FontAwesomeIcon icon="paperclip" style={styles.icon} />
       <a href={attachment.url} target="_blank">{attachment.filename}</a>
     </Item>
   );

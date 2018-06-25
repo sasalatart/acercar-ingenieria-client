@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import HideableButton from '../../HideableButton';
+import HideableButton from '../../Icons/HideableButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
 
 function AnnouncementsActionBar({ onCreateClicked, intl: { formatMessage: t } }) {

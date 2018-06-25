@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
-import { List, Icon } from 'antd';
+import { List } from 'antd';
 import DestroyButton from '../../../containers/DestroyButton';
 import MajorMeta from './Meta';
+import EditIcon from '../../Icons/Edit';
 import { majorShape } from '../../../shapes';
 import routes from '../../../lib/routes';
 import collections from '../../../lib/collections';
@@ -16,7 +16,8 @@ function MajorItem({ admin, major, intl: { formatMessage: t } }) {
 
   if (admin) {
     const majorEditHref = routes.majorEdit(major.id);
-    actions.push(<Link to={majorEditHref} href={majorEditHref}><Icon type="edit" /></Link>);
+    const editLink = <EditIcon to={majorEditHref} />;
+    actions.push(editLink);
 
     const destroyButton = (
       <DestroyButton

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Card, Icon } from 'antd';
+import { Card } from 'antd';
 import DestroyButton from '../../containers/DestroyButton';
 import Image from '../Image';
+import EditIcon from '../Icons/Edit';
 import { creditShape } from '../../shapes';
 import collections from '../../lib/collections';
 
@@ -30,7 +31,7 @@ function CreditItem({
 }) {
   const actions = [];
   if (admin) {
-    const editButton = <Icon type="edit" onClick={() => onEditClicked(id)} />;
+    const editButton = <EditIcon onClick={() => onEditClicked(id)} />;
     actions.push(editButton);
 
     const destroyButton = <DestroyButton collection={collections.credits} id={id} iconOnly />;

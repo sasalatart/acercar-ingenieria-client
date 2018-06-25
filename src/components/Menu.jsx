@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Icon, Layout } from 'antd';
+import { Menu, Layout } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Hideable from './Layout/Hideable';
 import { themeStyles, breakpointsKeys } from '../theme';
 
@@ -12,15 +13,18 @@ const styles = {
   menu: {
     marginBottom: '15px',
   },
+  icon: {
+    marginRight: '5px',
+  },
   smIcon: {
-    margin: 0,
+    marginRight: '1px',
   },
 };
 
 function renderMenuItem(item, smScreen) {
   return (
     <Item key={item.key}>
-      <Icon type={item.icon} style={smScreen ? styles.smIcon : undefined} />
+      <FontAwesomeIcon icon={item.icon} style={smScreen ? styles.smIcon : styles.icon} />
       <Hideable breakpoint={breakpointsKeys.xs}>{item.text}</Hideable>
       {item.extra}
     </Item>

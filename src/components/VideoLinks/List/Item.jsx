@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
-import { Card, Icon } from 'antd';
+import { Card } from 'antd';
 import ReactPlayer from 'react-player';
 import lowerFirst from 'lodash/lowerFirst';
 import DestroyButton from '../../../containers/DestroyButton';
-import IconText from '../../IconText';
+import IconText from '../../Icons/IconText';
+import EditIcon from '../../Icons/Edit';
 import { breakpoints } from '../../../theme';
 import { videoLinkShape } from '../../../shapes';
 import collections from '../../../lib/collections';
@@ -32,7 +33,7 @@ function VideoItem({ adminOrMajorAdmin, video, onEditClicked }) {
   const actions = [];
 
   if (adminOrMajorAdmin) {
-    const editButton = <Icon type="edit" onClick={() => onEditClicked(video.id)} />;
+    const editButton = <EditIcon onClick={() => onEditClicked(video.id)} />;
     actions.push(editButton);
 
     const destroyButton = (
@@ -47,7 +48,7 @@ function VideoItem({ adminOrMajorAdmin, video, onEditClicked }) {
     actions.push(destroyButton);
   }
 
-  const title = video.pinned ? <IconText type="star" text={video.title} /> : video.title;
+  const title = video.pinned ? <IconText icon="star" text={video.title} /> : video.title;
   return (
     <RadiumCard title={title} actions={actions} style={styles.card} bodyStyle={styles.cardBody}>
       <ReactPlayer url={video.url} width="100%" height="100%" controls />

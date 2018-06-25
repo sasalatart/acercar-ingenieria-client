@@ -7,7 +7,7 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import DestroyButton from '../../containers/DestroyButton';
 import PaginationControls from '../../containers/Pagination';
-import IconText from '../IconText';
+import IconText from '../Icons/IconText';
 import { themeStyles } from '../../theme';
 import { paginationShape, questionShape } from '../../shapes';
 import { getCollectionParams } from '../../lib/questions';
@@ -57,7 +57,7 @@ export default class QuestionsList extends Component {
   }) => {
     const { adminOrMajorAdmin, onEditClicked, intl: { formatMessage: t } } = this.props;
 
-    const header = pinned ? <IconText type="star" text={question} /> : question;
+    const header = pinned ? <IconText icon="star" text={question} /> : question;
 
     return (
       <Panel key={id} header={header} style={styles.panel}>

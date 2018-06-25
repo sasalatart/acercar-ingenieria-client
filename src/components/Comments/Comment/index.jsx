@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { intlShape } from 'react-intl';
-import { Icon, Divider } from 'antd';
+import { Divider } from 'antd';
 import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
+import EditIcon from '../../Icons/Edit';
 import MainContent from './MainContent';
 import CommentsSection from '../Section';
 import ProfileAvatar from '../../Users/Profile/Avatar';
@@ -15,9 +16,6 @@ const styles = {
   },
   avatar: {
     marginRight: '10px',
-  },
-  editButton: {
-    cursor: 'pointer',
   },
 };
 
@@ -49,8 +47,7 @@ export default class Comment extends Component {
             editing={editing}
             onStopEditing={this.handleStopEditing}
           />
-          {!editing &&
-            <Icon type="edit" onClick={this.handleStartEditing} style={styles.editButton} />}
+          {!editing && <EditIcon onClick={this.handleStartEditing} />}
         </div>
 
         <Divider />

@@ -1,15 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Icon } from 'antd';
 import noop from 'lodash/noop';
-import HideableButton from '../HideableButton';
-
-const styles = {
-  cursor: withPointer => ({
-    cursor: withPointer ? 'pointer' : 'default',
-  }),
-};
+import ToolTipIcon from '../Icons/ToolTipIcon';
+import HideableButton from '../Icons/HideableButton';
 
 function DestroyIconOrButton({
   loading,
@@ -18,19 +12,16 @@ function DestroyIconOrButton({
   onClick,
   intl: { formatMessage: t },
 }) {
+  const text = label || t({ id: 'forms.delete' });
+  const commonProps = { icon: 'trash-alt', onClick, loading };
+
   if (iconOnly) {
-    const type = loading ? 'loading' : 'delete';
-    return <Icon type={type} onClick={onClick} style={styles.cursor(!loading)} />;
+    return <ToolTipIcon toolTip={text} withPointer={!loading} {...commonProps} />;
   }
 
   return (
-    <HideableButton
-      type="danger"
-      icon="delete"
-      loading={loading}
-      onClick={onClick}
-    >
-      {label || t({ id: 'forms.delete' })}
+    <HideableButton type="danger" {...commonProps}>
+      {text}
     </HideableButton>
   );
 }

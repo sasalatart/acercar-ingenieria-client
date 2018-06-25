@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
-import IconText from '../IconText';
+import IconText from '../Icons/IconText';
 import { colors } from '../../theme';
 import routes from '../../lib/routes';
 
@@ -27,14 +27,14 @@ function Footer({ intl: { formatMessage: t } }) {
   return (
     <div style={styles.wrapper}>
       <a href={`mailto:${CONTACT_EMAIL}`}>
-        <IconText type="mail" text={CONTACT_EMAIL} withPointer />
+        <IconText icon="envelope" text={CONTACT_EMAIL} withPointer />
       </a>
       <div>
         <p style={styles.text}>Acercar Ingeniería</p>
         <p style={styles.text}>2014-2018</p>
       </div>
       <Link to={routes.credits} href={routes.credits}>
-        <IconText type="heart" text={t({ id: 'credits' })} withPointer />
+        <IconText icon="heart" text={t({ id: 'credits' })} withPointer />
       </Link>
     </div>
   );

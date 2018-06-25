@@ -48,17 +48,17 @@ export default class Major extends Component {
       icon: 'info-circle',
       text: major.name,
     }, {
-      icon: 'video-camera',
+      icon: 'video',
       key: this.majorKeys.videoLinks,
       text: 'Videos',
     }, {
       key: this.majorKeys.admins,
-      icon: 'star-o',
+      icon: 'star',
       text: 'Admins',
       noRender: !loggedIn,
     }, {
       key: this.majorKeys.users,
-      icon: 'team',
+      icon: 'users',
       text: t({ id: 'majors.interestedUsers' }),
       noRender: !loggedIn,
     }, {
@@ -67,7 +67,7 @@ export default class Major extends Component {
       text: 'FAQs',
     }, {
       key: this.majorKeys.articles,
-      icon: 'file-text',
+      icon: 'file-alt',
       text: t({ id: 'majors.articles' }),
       noRender: !loggedIn,
     }];

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { fieldInputPropTypes } from 'redux-form';
-import { Upload, Icon } from 'antd';
+import { Upload } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fieldMetaShape } from '../../shapes';
 import { themeStyles } from '../../theme';
 
@@ -53,7 +54,7 @@ export default class ImageInput extends Component {
   renderImage() {
     const { imageUrl } = this.state;
     if (!imageUrl) {
-      return <Icon type="plus" />;
+      return <FontAwesomeIcon icon="plus" />;
     }
 
     return <img alt="input" src={imageUrl} style={styles.image} />;

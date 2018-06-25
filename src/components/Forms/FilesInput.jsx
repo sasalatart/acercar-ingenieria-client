@@ -4,7 +4,7 @@ import { fieldInputPropTypes } from 'redux-form';
 import Dropzone from 'react-dropzone';
 import { List } from 'antd';
 import uniqBy from 'lodash/uniqBy';
-import IconText from '../IconText';
+import IconText from '../Icons/IconText';
 import DestroyButton from '../DestroyButton';
 import { attachmentShape, fieldMetaShape } from '../../shapes';
 import { themeStyles } from '../../theme';
@@ -76,7 +76,7 @@ class FilesInput extends Component {
     const text = `${file.name} (${size}MB)`;
     return (
       <Item actions={actions}>
-        <IconText type="paper-clip" text={text} />
+        <IconText icon="paperclip" text={text} />
       </Item>
     );
   }

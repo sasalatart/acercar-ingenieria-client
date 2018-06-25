@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import Radium from 'radium';
-import { Icon } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Hideable from '../Hideable';
 import { colors, breakpoints } from '../../../theme';
 
@@ -28,7 +28,7 @@ const styles = {
 function HeaderLink({ to, text, icon }) {
   return (
     <Link to={to} href={to} style={styles.link}>
-      <Icon type={icon} />
+      <FontAwesomeIcon icon={icon} />
       <Hideable>
         <span style={styles.text}>{text}</span>
       </Hideable>
@@ -39,11 +39,10 @@ function HeaderLink({ to, text, icon }) {
 HeaderLink.propTypes = {
   to: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  icon: PropTypes.string,
-};
-
-HeaderLink.defaultProps = {
-  icon: 'link',
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
 };
 
 export default Radium(HeaderLink);

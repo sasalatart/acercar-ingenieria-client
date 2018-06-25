@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import withAuthorization from '../../hoc/withAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
-import HideableButton from '../HideableButton';
+import HideableButton from '../Icons/HideableButton';
 
 function VideosActionBar({
   adminOrMajorAdmin,
@@ -14,7 +14,7 @@ function VideosActionBar({
 
   if (adminOrMajorAdmin) {
     const newVideoLinkButton = (
-      <HideableButton type="primary" icon="form" onClick={onNewClicked}>
+      <HideableButton type="primary" icon="plus" onClick={onNewClicked}>
         {t({ id: 'videoLinks.new' })}
       </HideableButton>
     );

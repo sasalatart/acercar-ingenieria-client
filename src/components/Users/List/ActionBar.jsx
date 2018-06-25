@@ -6,7 +6,7 @@ import withModal from '../../../hoc/withModal';
 import SearchButtons from '../../../containers/Search/Buttons';
 import EmailForm from '../../../containers/Majors/Major/Email/Form';
 import ActionBar from '../../../containers/Layout/ActionBar';
-import HideableButton from '../../HideableButton';
+import HideableButton from '../../Icons/HideableButton';
 
 function UsersActionBar({
   adminOrMajorAdmin,
@@ -27,7 +27,7 @@ function UsersActionBar({
 
   if (adminOrMajorAdmin && !admins && majorId) {
     const contactButton = (
-      <HideableButton key="email" onClick={onModalOpen} icon="mail">
+      <HideableButton key="email" onClick={onModalOpen} icon="envelope">
         {t({ id: 'majors.email' })}
       </HideableButton>
     );

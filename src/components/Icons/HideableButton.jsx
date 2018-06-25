@@ -2,22 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Radium from 'radium';
 import { Button } from 'antd';
-import ButtonLink from '../containers/ButtonLink';
-import Hideable from './Layout/Hideable';
-import { breakpointsKeys } from '../theme';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ButtonLink from '../../containers/ButtonLink';
+import Hideable from '../Layout/Hideable';
+import { breakpointsKeys } from '../../theme';
+
+const styles = {
+  icon: breakpointKey => ({
+    marginRight: '5px',
+    [breakpointKey]: {
+      marginRight: '1px',
+    },
+  }),
+};
 
 function HideableButton({
   breakpoint,
   icon,
   to,
-  style,
+  loading,
   children,
   ...rest
 }) {
   const Component = to ? Radium(ButtonLink) : Radium(Button);
-
   return (
-    <Component icon={icon} to={to} style={style} {...rest}>
+    <Component to={to} {...rest}>
+      <FontAwesomeIcon
+        icon={loading ? 'spinner' : icon}
+        spin={loading}
+        style={styles.icon(breakpoint)}
+      />
       <Hideable breakpoint={breakpoint}>
         {children}
       </Hideable>
@@ -27,16 +41,19 @@ function HideableButton({
 
 HideableButton.propTypes = {
   breakpoint: PropTypes.oneOf(Object.keys(breakpointsKeys)),
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
   to: PropTypes.string,
-  style: PropTypes.shape({}),
+  loading: PropTypes.bool,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
 };
 
 HideableButton.defaultProps = {
   breakpoint: breakpointsKeys.sm,
   to: undefined,
-  style: undefined,
+  loading: false,
 };
 
 export default HideableButton;

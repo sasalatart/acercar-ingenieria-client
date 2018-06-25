@@ -1,17 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+import { injectIntl, intlShape } from 'react-intl';
+import ToolTipIcon from '../../Icons/ToolTipIcon';
 
-function PinButton({ loading, pinned, onUpdate }) {
-  const pinType = pinned ? 'pushpin' : 'pushpin-o';
+function PinButton({
+  loading,
+  pinned,
+  onUpdate,
+  intl: { formatMessage: t },
+}) {
+  const pinType = pinned ? 'fas' : 'far';
+  const tooltip = t({ id: `announcements.${pinned ? 'unpin' : 'pin'}` });
 
-  return <Icon type={loading ? 'loading' : pinType} onClick={onUpdate} />;
+  return (
+    <ToolTipIcon
+      icon={[pinType, 'star']}
+      toolTip={tooltip}
+      onClick={onUpdate}
+      loading={loading}
+      withPointer
+    />
+  );
 }
 
 PinButton.propTypes = {
   loading: PropTypes.bool.isRequired,
   pinned: PropTypes.bool.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  intl: intlShape.isRequired,
 };
 
-export default PinButton;
+export default injectIntl(PinButton);

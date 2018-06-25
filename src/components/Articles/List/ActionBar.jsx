@@ -5,7 +5,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import ButtonLink from '../../../containers/ButtonLink';
-import HideableButton from '../../HideableButton';
+import HideableButton from '../../Icons/HideableButton';
 import {
   SelectField,
   TagsField,
@@ -88,7 +88,7 @@ class ArticlesActionBar extends Component {
 
     if (suffix !== suffixes.approved) {
       const buttonLink = (
-        <HideableButton key="goToApproved" to={routes.articles(majorId)} icon="file-text">
+        <HideableButton key="goToApproved" to={routes.articles(majorId)} icon="file-alt">
           {t({ id: 'articles' })}
         </HideableButton>
       );

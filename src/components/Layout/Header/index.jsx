@@ -7,8 +7,9 @@ import LoadingBar from 'react-redux-loading-bar';
 import AvatarWithNotifications from '../../Users/Profile/AvatarWithNotifications';
 import LocaleSelect from './LocaleSelect';
 import HeaderLink from './Link';
+import ToolTipIcon from '../../Icons/ToolTipIcon';
 import Hideable from '../Hideable';
-import HideableButton from '../../HideableButton';
+import HideableButton from '../../Icons/HideableButton';
 import Spaced from '../Spaced';
 import { userShape } from '../../../shapes';
 import routes from '../../../lib/routes';
@@ -65,9 +66,15 @@ function renderLoggedInButtons(currentUser, avatarProps, signOut, t) {
   return (
     <div>
       <AvatarWithNotifications currentUser={currentUser} {...avatarProps} style={styles.avatar} />
-      <HideableButton type="danger" icon="logout" onClick={signOut} style={styles.button} size="small">
-        {t({ id: 'sessions.signOut' })}
-      </HideableButton>
+      <ToolTipIcon
+        toolTip={t({ id: 'sessions.signOut' })}
+        icon="sign-out-alt"
+        onClick={signOut}
+        type="danger"
+        size="small"
+        style={styles.button}
+        button
+      />
     </div>
   );
 }
@@ -75,7 +82,7 @@ function renderLoggedInButtons(currentUser, avatarProps, signOut, t) {
 function renderLoggedOutButtons(t) {
   return (
     <div>
-      <HideableButton type="primary" icon="login" to={routes.signIn} style={styles.button}>
+      <HideableButton type="primary" icon="sign-in-alt" to={routes.signIn} style={styles.button}>
         {t({ id: 'sessions.signIn' })}
       </HideableButton>
       <HideableButton type="default" icon="rocket" to={routes.signUp} style={styles.button} ghost>
@@ -114,7 +121,7 @@ function renderLowerHeader(currentUser, t) {
       <HeaderLink
         to={routes.majors}
         text="Majors"
-        icon="pushpin"
+        icon="university"
       />
       <HeaderLink
         to={routes.questions()}
@@ -125,21 +132,21 @@ function renderLowerHeader(currentUser, t) {
         <HeaderLink
           to={routes.articles()}
           text={t({ id: 'articles' })}
-          icon="file-text"
+          icon="file-alt"
         />
       }
       {currentUser &&
         <HeaderLink
           to={routes.discussions}
           text={t({ id: 'discussions' })}
-          icon="message"
+          icon="comments"
         />
       }
       {currentUser && currentUser.admin &&
         <HeaderLink
           to={routes.users}
           text={t({ id: 'users' })}
-          icon="team"
+          icon="users"
         />
       }
       <HeaderLink

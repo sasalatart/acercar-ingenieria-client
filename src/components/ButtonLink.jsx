@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'antd';
 
-function ButtonLink({
-  type, children, goToRoute, ...extraProps
-}) {
-  return <Button type={type} onClick={goToRoute} {...extraProps}>{children}</Button>;
+function ButtonLink({ goToRoute, children, ...restProps }) {
+  return <Button {...restProps} onClick={goToRoute}>{children}</Button>;
 }
 
 ButtonLink.propTypes = {
