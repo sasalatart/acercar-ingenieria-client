@@ -6,12 +6,12 @@ import ActionBar from './ActionBar';
 import Title from '../Layout/Title';
 import { matchShape } from '../../shapes';
 
-function Notifications({ match, intl: { formatMessage: t } }) {
+function Notifications({ match, intl: { formatMessage: t }, ...restProps }) {
   const seen = !!match.params.seen;
 
   return (
     <Fragment>
-      <ActionBar seen={seen} />
+      <ActionBar seen={seen} {...restProps} />
       <Title>{t({ id: `notifications.${seen ? 'seen' : 'pending'}` })}</Title>
 
       <List seen={seen} />

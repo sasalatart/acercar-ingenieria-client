@@ -8,10 +8,10 @@ import Hideable from '../Layout/Hideable';
 import { breakpointsKeys } from '../../theme';
 
 const styles = {
-  icon: breakpointKey => ({
-    marginRight: '5px',
+  childrenWrapper: breakpointKey => ({
+    marginLeft: '5px',
     [breakpointKey]: {
-      marginRight: '1px',
+      marginLeft: '1px',
     },
   }),
 };
@@ -26,13 +26,9 @@ function HideableButton({
 }) {
   const Component = to ? Radium(ButtonLink) : Radium(Button);
   return (
-    <Component to={to} {...rest}>
-      <FontAwesomeIcon
-        icon={loading ? 'spinner' : icon}
-        spin={loading}
-        style={styles.icon(breakpoint)}
-      />
-      <Hideable breakpoint={breakpoint}>
+    <Component to={to} disabled={loading} {...rest}>
+      <FontAwesomeIcon icon={loading ? 'spinner' : icon} spin={loading} />
+      <Hideable breakpoint={breakpoint} style={styles.childrenWrapper(breakpoint)}>
         {children}
       </Hideable>
     </Component>

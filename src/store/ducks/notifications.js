@@ -24,6 +24,7 @@ const INITIAL_STATE = new Map({
 export const TYPES = {
   LOAD_UNSEEN: 'notifications/LOAD_UNSEEN',
   LOAD_SEEN: 'notifications/LOAD_SEEN',
+  UPDATE_ALL_AS_SEEN: 'notifications/UPDATE_ALL_AS_SEEN',
   LOAD_COUNT: 'notifications/LOAD_COUNT',
   SET_COUNT: 'notifications/SET_COUNT',
   DISPLAY: 'notifications/DISPLAY',
@@ -42,6 +43,17 @@ export function loadNotifications(page = 1, seen) {
       query: { page },
       fetchParams: { collection, page, suffix: getSuffix(seen) },
       responseSchema: [notificationsSchema],
+    },
+  };
+}
+
+export function setAllAsSeen() {
+  return {
+    type: TYPES.UPDATE_ALL_AS_SEEN,
+    payload: {
+      method: 'PUT',
+      url: '/notifications/seen',
+      fetchParams: { collection, suffix: suffixes.seen },
     },
   };
 }
@@ -69,6 +81,8 @@ export default function notificationsReducer(state = INITIAL_STATE, { type, payl
     case `${TYPES.LOAD_SEEN}_FULFILLED`:
     case `${TYPES.LOAD_UNSEEN}_FULFILLED`:
       return getPagingFns(payload).setPage(state, payload);
+    case `${TYPES.UPDATE_ALL_AS_SEEN}_FULFILLED`:
+      return pendingPagingFns.reducer.reset(state);
     case `${TYPES.LOAD_COUNT}_FULFILLED`:
       return state.set('count', payload.count);
     case TYPES.SET_COUNT: {

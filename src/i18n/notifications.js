@@ -2,6 +2,7 @@ export default {
   'en-US': {
     'notifications.pending': 'Pending Notifications',
     'notifications.seen': 'Seen Notifications',
+    'notifications.setAllAsSeen': 'Mark All as Read',
 
     'notifications.resource.user': 'the user',
     'notifications.resource.profile': 'your profile',
@@ -40,6 +41,7 @@ export default {
   'es-ES': {
     'notifications.pending': 'Notificaciones pendientes',
     'notifications.seen': 'Notificaciones vistas',
+    'notifications.setAllAsSeen': 'Marcar todas como leídas',
 
     'notifications.resource.user': 'el usuario',
     'notifications.resource.profile': 'tu perfil',
