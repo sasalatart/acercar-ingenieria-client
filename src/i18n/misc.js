@@ -1,5 +1,6 @@
 export default {
   'en-US': {
+    platform: 'Platform',
     goBack: 'Go Back',
     nothingHereYet: 'There is nothing here yet.',
     attachments: 'Attached files',
@@ -11,6 +12,7 @@ export default {
     mine: 'Mine',
   },
   'es-ES': {
+    platform: 'Plataforma',
     goBack: 'Volver',
     nothingHereYet: 'No hay nada aquí aún.',
     attachments: 'Archivos adjuntos',

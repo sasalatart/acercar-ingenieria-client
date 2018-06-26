@@ -6,11 +6,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DestroyButton from '../../../containers/DestroyButton';
 import ProfileAvatar from '../../Users/Profile/Avatar';
 import ProfileLink from '../../Users/Profile/Link';
+import ToolTipIcon from '../../Icons/ToolTipIcon';
 import { userShape } from '../../../shapes';
 import { getCollectionParams } from '../../../lib/users';
 
 const { Item } = List;
 const { Meta } = Item;
+
+const styles = {
+  rolelessIcon: {
+    cursor: 'default',
+  },
+};
+
+function renderRoleButton(user, admin, onClick, t) {
+  const roleNames = user.adminOfMajors.map(({ name }) => name);
+  if (user.admin) roleNames.unshift(t({ id: 'platform' }));
+
+  const commonProps = {
+    icon: roleNames.length ? ['fas', 'star'] : ['far', 'star'],
+    onClick: admin ? onClick : undefined,
+  };
+
+  return roleNames.length
+    ? <ToolTipIcon toolTip={t({ id: 'admin.of' }, { list: roleNames.join(', ') })} {...commonProps} />
+    : <FontAwesomeIcon style={admin ? undefined : styles.rolelessIcon} {...commonProps} />;
+}
 
 function renderDescription(user, admin, t) {
   const descriptionPrefix = t({ id: 'profile.generation' }, { year: user.generation });
@@ -34,10 +55,8 @@ function UserListItem({
   intl: { formatMessage: t },
 }) {
   const actions = [];
-  if (admin) {
-    const iconType = user.admin || user.adminOfMajors.length ? 'fas' : 'far';
-    actions.push(<FontAwesomeIcon icon={[iconType, 'star']} onClick={setSelectedUser} />);
-  }
+
+  actions.push(renderRoleButton(user, admin, setSelectedUser, t));
 
   if (adminOrMajorAdmin) {
     const destroyButton = (
