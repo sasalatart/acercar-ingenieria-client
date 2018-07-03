@@ -8,7 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 import DestroyButton from '../../containers/DestroyButton';
 import PaginationControls from '../../containers/Pagination';
 import IconText from '../Icons/IconText';
-import { themeStyles } from '../../theme';
+import { themeStyles, colors } from '../../theme';
 import { paginationShape, questionShape } from '../../shapes';
 import { getCollectionParams } from '../../lib/questions';
 
@@ -18,6 +18,9 @@ const styles = {
   panel: {
     marginBottom: '16px',
     borderRadius: '4px',
+  },
+  star: {
+    color: colors.starred,
   },
   answer: themeStyles.justifiedTextContainer,
   actions: {
@@ -57,7 +60,9 @@ export default class QuestionsList extends Component {
   }) => {
     const { adminOrMajorAdmin, onEditClicked, intl: { formatMessage: t } } = this.props;
 
-    const header = pinned ? <IconText icon="star" text={question} /> : question;
+    const header = pinned
+      ? <IconText icon="star" text={question} iconStyle={styles.star} />
+      : question;
 
     return (
       <Panel key={id} header={header} style={styles.panel}>

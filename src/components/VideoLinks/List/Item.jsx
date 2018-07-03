@@ -7,7 +7,7 @@ import lowerFirst from 'lodash/lowerFirst';
 import DestroyButton from '../../../containers/DestroyButton';
 import IconText from '../../Icons/IconText';
 import EditIcon from '../../Icons/Edit';
-import { breakpoints } from '../../../theme';
+import { colors, breakpoints } from '../../../theme';
 import { videoLinkShape } from '../../../shapes';
 import collections from '../../../lib/collections';
 
@@ -26,6 +26,9 @@ const styles = {
     [breakpoints.sm]: {
       height: '155px',
     },
+  },
+  star: {
+    color: colors.starred,
   },
 };
 
@@ -48,7 +51,9 @@ function VideoItem({ adminOrMajorAdmin, video, onEditClicked }) {
     actions.push(destroyButton);
   }
 
-  const title = video.pinned ? <IconText icon="star" text={video.title} /> : video.title;
+  const title = video.pinned
+    ? <IconText icon="star" text={video.title} iconStyle={styles.star} />
+    : video.title;
   return (
     <RadiumCard title={title} actions={actions} style={styles.card} bodyStyle={styles.cardBody}>
       <ReactPlayer url={video.url} width="100%" height="100%" controls />

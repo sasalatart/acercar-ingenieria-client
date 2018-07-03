@@ -19,12 +19,13 @@ function ToolTipIcon({
   button,
   withPointer,
   loading,
+  iconStyle,
   ...restProps
 }) {
   const iconProps = {
     icon: loading ? 'spinner' : icon,
     spin: loading,
-    style: styles.cursor(withPointer || onClick || button),
+    style: { ...styles.cursor(withPointer || onClick || button), ...iconStyle },
   };
 
   if (!button) {
@@ -56,6 +57,7 @@ ToolTipIcon.propTypes = {
   button: PropTypes.bool,
   withPointer: PropTypes.bool,
   loading: PropTypes.bool,
+  iconStyle: PropTypes.shape({}),
 };
 
 ToolTipIcon.defaultProps = {
@@ -64,6 +66,7 @@ ToolTipIcon.defaultProps = {
   button: false,
   withPointer: false,
   loading: false,
+  iconStyle: undefined,
 };
 
 export default ToolTipIcon;

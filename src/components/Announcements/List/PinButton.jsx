@@ -2,6 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import ToolTipIcon from '../../Icons/ToolTipIcon';
+import { colors } from '../../../theme';
+
+const styles = {
+  pinned: {
+    color: colors.starred,
+  },
+};
 
 function PinButton({
   loading,
@@ -18,6 +25,7 @@ function PinButton({
       toolTip={tooltip}
       onClick={onUpdate}
       loading={loading}
+      iconStyle={pinned ? styles.pinned : undefined}
       withPointer
     />
   );

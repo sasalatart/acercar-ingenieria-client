@@ -7,6 +7,7 @@ import DestroyButton from '../../../containers/DestroyButton';
 import ProfileAvatar from '../../Users/Profile/Avatar';
 import ProfileLink from '../../Users/Profile/Link';
 import ToolTipIcon from '../../Icons/ToolTipIcon';
+import { colors } from '../../../theme';
 import { userShape } from '../../../shapes';
 import { getCollectionParams } from '../../../lib/users';
 
@@ -14,7 +15,10 @@ const { Item } = List;
 const { Meta } = Item;
 
 const styles = {
-  rolelessIcon: {
+  iconWithRole: {
+    color: colors.starred,
+  },
+  iconWithoutRole: {
     cursor: 'default',
   },
 };
@@ -29,8 +33,14 @@ function renderRoleButton(user, admin, onClick, t) {
   };
 
   return roleNames.length
-    ? <ToolTipIcon toolTip={t({ id: 'admin.of' }, { list: roleNames.join(', ') })} {...commonProps} />
-    : <FontAwesomeIcon style={admin ? undefined : styles.rolelessIcon} {...commonProps} />;
+    ? (
+      <ToolTipIcon
+        toolTip={t({ id: 'admin.of' }, { list: roleNames.join(', ') })}
+        iconStyle={styles.iconWithRole}
+        {...commonProps}
+      />
+    )
+    : <FontAwesomeIcon style={admin ? undefined : styles.iconWithoutRole} {...commonProps} />;
 }
 
 function renderDescription(user, admin, t) {

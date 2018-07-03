@@ -20,12 +20,13 @@ function IconText({
   hideable,
   loading,
   onClick,
+  iconStyle,
   style,
 }) {
   const textTag = <span style={styles.text}>{text}</span>;
   return (
     <span style={{ ...style, ...styles.cursor(withPointer) }}>
-      <FontAwesomeIcon icon={icon} onClick={onClick} spin={loading} />
+      <FontAwesomeIcon icon={icon} onClick={onClick} spin={loading} style={iconStyle} />
       {hideable
         ? <Hideable>{textTag}</Hideable>
         : <span>{textTag}</span>
@@ -47,6 +48,7 @@ IconText.propTypes = {
   hideable: PropTypes.bool,
   loading: PropTypes.bool,
   onClick: PropTypes.func,
+  iconStyle: PropTypes.shape({}),
   style: PropTypes.shape({}),
 };
 
@@ -55,6 +57,7 @@ IconText.defaultProps = {
   hideable: false,
   loading: false,
   onClick: noop,
+  iconStyle: undefined,
   style: undefined,
 };
 
