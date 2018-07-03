@@ -61,7 +61,7 @@ export default class QuestionsList extends Component {
     const { adminOrMajorAdmin, onEditClicked, intl: { formatMessage: t } } = this.props;
 
     const header = pinned
-      ? <IconText icon="star" text={question} iconStyle={styles.star} />
+      ? <IconText icon="star" text={question} iconStyle={styles.star} withPointer />
       : question;
 
     return (
@@ -84,7 +84,10 @@ export default class QuestionsList extends Component {
 
   render() {
     const {
-      loading, pagination, questions, loadQuestions,
+      loading,
+      pagination,
+      questions,
+      loadQuestions,
     } = this.props;
 
     return (
@@ -96,7 +99,11 @@ export default class QuestionsList extends Component {
         render={() => (
           <Collapse bordered={false}>
             {questions
-              .sort((qA, qB) => new Date(qA.createdAt) - new Date(qB.createdAt))
+              .sort((qA, qB) => {
+                if (qA.pinned && !qB.pinned) return -1;
+                if (!qA.pinned && qB.pinned) return 1;
+                return new Date(qA.createdAt) - new Date(qB.createdAt);
+              })
               .map(this.renderItem)}
           </Collapse>
         )}
