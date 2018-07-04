@@ -9,6 +9,7 @@ function ApprovalButton({ approved, intl: { formatMessage: t }, ...rest }) {
       active={approved}
       content={approved ? t({ id: 'reject' }) : t({ id: 'approve' })}
       icon={approved ? 'lock' : 'unlock'}
+      danger={approved}
       {...rest}
     />
   );

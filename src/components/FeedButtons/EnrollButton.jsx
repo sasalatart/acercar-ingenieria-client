@@ -4,12 +4,10 @@ import { intlShape } from 'react-intl';
 import ToggleLoadingButton from '../ToggleLoadingButton';
 
 function EnrollButton({ enrolledByCurrentUser, intl: { formatMessage: t }, ...rest }) {
-  const contentState = enrolledByCurrentUser ? 'off' : 'on';
-
   return (
     <ToggleLoadingButton
       active={enrolledByCurrentUser}
-      content={t({ id: `notifications.${contentState}` })}
+      content={t({ id: `notifications.${enrolledByCurrentUser ? 'off' : 'on'}` })}
       icon={enrolledByCurrentUser ? ['fas', 'bell'] : ['far', 'bell-slash']}
       toolTipped
       {...rest}

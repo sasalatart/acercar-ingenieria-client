@@ -33,8 +33,8 @@ export default {
     'notifications.signUpOneMoreStep.description': 'A confirmation email will be sent to you briefly. Once you confirm this email, you will be able to sign in',
     'notifications.recoverPassword.description': 'An email with further instructions will be sent to you briefly',
 
-    'notifications.on': 'Notify me',
-    'notifications.off': 'Don\'t notify me',
+    'notifications.on': 'Click to receive notifications',
+    'notifications.off': 'Click to stop receiving notifications',
 
     'notifications.resourceNotApproved': 'The resource this notification references to is waiting admin approval',
   },
@@ -72,8 +72,8 @@ export default {
     'notifications.signUpOneMoreStep.description': 'Un email de confirmación será enviado a tu correo en los próximos minutos. Una vez validada tu dirección, podrás ingresar a la plataforma con tu cuenta',
     'notifications.recoverPassword.description': 'Un email con más instrucciones será enviado a tu correo en los próximos minutos',
 
-    'notifications.on': 'notificarme',
-    'notifications.off': 'no notificarme',
+    'notifications.on': 'Click para recibir notificaciones',
+    'notifications.off': 'Click para dejar de recibir notificaciones',
 
     'notifications.resourceNotApproved': 'El recurso al cual esta notificación apunta espera la aprobación de administradores',
   },

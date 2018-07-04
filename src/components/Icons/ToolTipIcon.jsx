@@ -22,16 +22,17 @@ function ToolTipIcon({
   iconStyle,
   ...restProps
 }) {
+  const handleClick = loading ? undefined : onClick;
   const iconProps = {
     icon: loading ? 'spinner' : icon,
     spin: loading,
-    style: { ...styles.cursor(withPointer || onClick || button), ...iconStyle },
+    style: { ...styles.cursor(!loading && (withPointer || onClick || button)), ...iconStyle },
   };
 
   if (!button) {
     return (
       <Tooltip title={toolTip}>
-        <FontAwesomeIcon {...iconProps} onClick={onClick} />
+        <FontAwesomeIcon {...iconProps} onClick={handleClick} />
       </Tooltip>
     );
   }
@@ -39,7 +40,7 @@ function ToolTipIcon({
   const Component = to ? Radium(ButtonLink) : Radium(Button);
   return (
     <Tooltip title={toolTip}>
-      <Component to={to} onClick={onClick} {...restProps}>
+      <Component to={to} onClick={handleClick} {...restProps}>
         <FontAwesomeIcon {...iconProps} />
       </Component>
     </Tooltip>

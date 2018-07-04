@@ -25,8 +25,13 @@ function IconText({
 }) {
   const textTag = <span style={styles.text}>{text}</span>;
   return (
-    <span style={{ ...style, ...styles.cursor(withPointer) }}>
-      <FontAwesomeIcon icon={icon} onClick={onClick} spin={loading} style={iconStyle} />
+    <span style={{ ...style, ...styles.cursor(withPointer && !loading) }}>
+      <FontAwesomeIcon
+        icon={loading ? 'spinner' : icon}
+        onClick={loading ? undefined : onClick}
+        spin={loading}
+        style={iconStyle}
+      />
       {hideable
         ? <Hideable>{textTag}</Hideable>
         : <span>{textTag}</span>

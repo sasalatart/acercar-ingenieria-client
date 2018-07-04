@@ -40,7 +40,7 @@ function PinnedAnnouncements({ admin, announcements, intl: { formatMessage: t } 
     <Fragment>
       {admin &&
         <ToolTipIcon
-          toolTip={t({ id: 'announcements.management' })}
+          toolTip={t({ id: 'announcements.goToManagement' })}
           to={routes.announcements}
           icon="plus"
           shape="circle"

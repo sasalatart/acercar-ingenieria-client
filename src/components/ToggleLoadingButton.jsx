@@ -1,62 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Tooltip, Button } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IconText from './Icons/IconText';
 import ToolTipIcon from './Icons/ToolTipIcon';
 import HideableButton from './Icons/HideableButton';
 
-function renderIconOnly(toolTipped, commonProps, content) {
-  return toolTipped
-    ? <ToolTipIcon {...commonProps} toolTip={content} />
-    : <IconText {...commonProps} text={content} hideable />;
+function getType(active, danger) {
+  if (danger) return 'danger';
+  return active ? 'primary' : 'secondary';
 }
 
 function ToggleLoadingButton({
   icon,
   content,
-  loading,
   iconOnly,
   toolTipped,
   active,
+  loading,
   disabled,
   size,
+  danger,
   onClick,
   style,
 }) {
-  if (loading && iconOnly) {
-    const commonProps = { icon: 'spinner', loading: true };
-    return renderIconOnly(toolTipped, commonProps, content);
-  } else if (loading) {
+  if (iconOnly) {
+    const commonProps = {
+      icon,
+      loading,
+      onClick,
+      withPointer: !disabled,
+    };
+
+    return toolTipped
+      ? <ToolTipIcon {...commonProps} toolTip={content} />
+      : <IconText {...commonProps} text={content} hideable />;
+  }
+
+  const buttonProps = {
+    type: getType(active, danger), disabled: disabled || loading, size, onClick, style,
+  };
+  const iconToRender = loading ? 'spinner' : icon;
+
+  if (toolTipped) {
     return (
-      <HideableButton
-        type="primary"
-        icon="spinner"
-        size={size}
-        style={style}
-        disabled
-        loading
-      >
-        {content}
-      </HideableButton>
+      <Tooltip title={content}>
+        <Button {...buttonProps}>
+          <FontAwesomeIcon icon={iconToRender} />
+        </Button>
+      </Tooltip>
     );
   }
 
-  if (iconOnly) {
-    const commonProps = { icon, onClick, withPointer: !disabled };
-    return renderIconOnly(toolTipped, commonProps, content);
-  }
-
-  return (
-    <HideableButton
-      type={active ? 'primary' : 'secondary'}
-      icon={icon}
-      onClick={onClick}
-      disabled={disabled}
-      size={size}
-      style={style}
-    >
-      {content}
-    </HideableButton>
-  );
+  return <HideableButton icon={iconToRender} {...buttonProps}>{content}</HideableButton>;
 }
 
 ToggleLoadingButton.propTypes = {
@@ -68,13 +64,14 @@ ToggleLoadingButton.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ]).isRequired,
-  loading: PropTypes.bool.isRequired,
   iconOnly: PropTypes.bool,
   toolTipped: PropTypes.bool,
   active: PropTypes.bool,
+  loading: PropTypes.bool.isRequired,
   disabled: PropTypes.bool,
   size: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  danger: PropTypes.bool,
   style: PropTypes.shape({}),
 };
 
@@ -84,6 +81,7 @@ ToggleLoadingButton.defaultProps = {
   active: false,
   disabled: false,
   size: 'default',
+  danger: false,
   style: undefined,
 };
 
