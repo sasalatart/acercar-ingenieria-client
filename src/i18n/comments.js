@@ -5,6 +5,7 @@ export default {
     comment: 'Comment',
     'comments.answer': 'Answer',
     'comments.extras': 'Show all ({extras} not being shown)...',
+    'comments.goToCommentable': 'Go to {commentable}',
   },
   'es-ES': {
     comments: 'Comentarios',
@@ -12,5 +13,6 @@ export default {
     comment: 'Comentario',
     'comments.answer': 'Responder',
     'comments.extras': 'Ver todos ({extras} sin mostrar)...',
+    'comments.goToCommentable': 'Ir a {commentable}',
   },
 };
