@@ -41,15 +41,16 @@ const styles = {
   },
 };
 
-function renderActions(adminOrMajorAdmin, article, majorId) {
+function renderActions(currentUserId, adminOrMajorAdmin, article, majorId) {
   const { id, commentsCount, likesCount } = article;
+  const isAuthor = currentUserId === article.author.id;
 
   const actions = [
     <LikeButton likesCount={likesCount} iconOnly disabled />,
     <IconText icon={['far', 'comment']} text={commentsCount} />,
   ];
 
-  if (adminOrMajorAdmin) {
+  if (isAuthor || adminOrMajorAdmin) {
     const destroyButton = <DestroyButton {...getCollectionParams(majorId, { id })} iconOnly />;
     actions.push(destroyButton);
   }
@@ -88,6 +89,7 @@ function renderShortDescription(id, shortDescription, t) {
 }
 
 function ArticleListItem({
+  currentUserId,
   adminOrMajorAdmin,
   article,
   displayMajor,
@@ -95,7 +97,7 @@ function ArticleListItem({
   intl: { formatMessage: t },
 }) {
   const majorId = article.majorSummary && article.majorSummary.id;
-  const actions = renderActions(adminOrMajorAdmin, article, majorId);
+  const actions = renderActions(currentUserId, adminOrMajorAdmin, article, majorId);
   const extra = renderExtra(article.previewUrl);
 
   return (
@@ -118,6 +120,7 @@ function ArticleListItem({
 }
 
 ArticleListItem.propTypes = {
+  currentUserId: PropTypes.number.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   article: articleSummaryShape.isRequired,
   displayMajor: PropTypes.bool.isRequired,

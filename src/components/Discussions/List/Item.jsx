@@ -25,13 +25,15 @@ const styles = {
   },
 };
 
-function renderActions(admin, discussion) {
+function renderActions(currentUserId, admin, discussion) {
   const {
     id,
+    author,
     impressionsCount,
     commentsCount,
     likesCount,
   } = discussion;
+  const isAuthor = currentUserId === author.id;
 
   const actions = [
     <IconText icon={['far', 'eye']} text={impressionsCount} />,
@@ -39,8 +41,9 @@ function renderActions(admin, discussion) {
     <IconText icon="comment" text={commentsCount} />,
   ];
 
-  if (admin) {
-    actions.push(<DestroyButton collection={collections.discussions} id={id} iconOnly />);
+  if (isAuthor || admin) {
+    const destroyButton = <DestroyButton collection={collections.discussions} id={id} iconOnly />;
+    actions.push(destroyButton);
   }
 
   return actions;
@@ -72,11 +75,17 @@ function renderMeta(discussion) {
   return <Meta title={titleTag} description={description} />;
 }
 
-function DiscussionListItem({ admin, discussion, onTagClick }) {
-  const { tagList } = discussion;
-
+function DiscussionListItem({
+  currentUserId,
+  admin,
+  discussion,
+  discussion: {
+    tagList,
+  },
+  onTagClick,
+}) {
   return (
-    <Item actions={renderActions(admin, discussion)}>
+    <Item actions={renderActions(currentUserId, admin, discussion)}>
       {renderMeta(discussion)}
       {tagList.length > 0 && <TagList tags={tagList} onTagClick={onTagClick} withIcon />}
     </Item>
@@ -84,6 +93,7 @@ function DiscussionListItem({ admin, discussion, onTagClick }) {
 }
 
 DiscussionListItem.propTypes = {
+  currentUserId: PropTypes.number.isRequired,
   admin: PropTypes.bool.isRequired,
   discussion: discussionSummaryShape.isRequired,
   onTagClick: PropTypes.func.isRequired,

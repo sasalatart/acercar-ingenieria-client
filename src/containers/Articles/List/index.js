@@ -2,7 +2,10 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { addQueryToCurrentUri } from '../../../store/ducks/routes';
-import { getCanCreateArticles } from '../../../store/ducks/sessions';
+import {
+  getCurrentUserId,
+  getCanCreateArticles,
+} from '../../../store/ducks/sessions';
 import {
   loadMajors,
   getMajorOptions,
@@ -39,6 +42,7 @@ function mapStateToProps(state, ownProps) {
   const articleSummaries = pagingFns.getPagedEntities(state, params);
 
   return {
+    currentUserId: getCurrentUserId(state),
     majorId,
     suffix,
     loading: isEmpty(articleSummaries) && getIsFetching(state, params),

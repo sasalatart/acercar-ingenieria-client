@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { addQueryToCurrentUri } from '../../../store/ducks/routes';
+import { getCurrentUserId } from '../../../store/ducks/sessions';
 import {
   loadDiscussions,
   resetPagination,
@@ -22,6 +23,7 @@ function mapStateToProps(state, ownProps) {
   const discussionSummaries = pagingFns.getPagedEntities(state);
 
   return {
+    currentUserId: getCurrentUserId(state),
     loading: isEmpty(discussionSummaries) && getIsFetching(state, params),
     pagination: pagingFns.getMeta(state),
     discussionSummaries,

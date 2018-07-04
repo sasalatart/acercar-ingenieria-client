@@ -12,6 +12,7 @@ import { suffixes } from '../../../lib/articles';
 
 export default class ArticlesList extends Component {
   static propTypes = {
+    currentUserId: PropTypes.number.isRequired,
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
@@ -37,6 +38,7 @@ export default class ArticlesList extends Component {
 
   renderListItem = article => (
     <ListItem
+      currentUserId={this.props.currentUserId}
       adminOrMajorAdmin={this.props.adminOrMajorAdmin}
       article={article}
       displayMajor={!this.props.majorId && !!article.majorSummary}

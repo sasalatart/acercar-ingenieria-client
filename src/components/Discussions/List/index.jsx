@@ -11,6 +11,7 @@ import { paginationShape, discussionSummaryShape } from '../../../shapes';
 
 export default class DiscussionsList extends Component {
   static propTypes = {
+    currentUserId: PropTypes.number.isRequired,
     admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     pagination: paginationShape,
@@ -35,6 +36,7 @@ export default class DiscussionsList extends Component {
 
   renderListItem = discussion => (
     <DiscussionListItem
+      currentUserId={this.props.currentUserId}
       admin={this.props.admin}
       discussion={discussion}
       onTagClick={this.props.onTagClick}
