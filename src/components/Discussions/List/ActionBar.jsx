@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
 import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
-import ButtonLink from '../../../containers/ButtonLink';
+import ButtonLink from '../../../containers/Layout/ButtonLink';
 import { TagsField } from '../../Forms';
 import HideableButton from '../../Icons/HideableButton';
 import routes from '../../../lib/routes';

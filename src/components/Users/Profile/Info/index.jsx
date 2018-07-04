@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
-import { userShape } from '../../../../shapes';
+import withAuthorization from '../../../../hoc/withAuthorization';
+import Title from '../../../Layout/Title';
+import SubTitle from '../../../Layout/SubTitle';
 import ProfileCard from '../Card';
 import RolesList from './RolesList';
 import MajorsList from './MajorsList';
-import withAuthorization from '../../../../hoc/withAuthorization';
 import ActionBar from './ActionBar';
-import Title from '../../../Layout/Title';
-import SubTitle from '../../../Layout/SubTitle';
+import { userShape } from '../../../../shapes';
 
 const styles = {
   cardWrapper: {

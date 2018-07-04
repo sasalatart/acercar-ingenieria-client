@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../../containers/Pagination';
-import ActionBar from './ActionBar';
+import PaginationControls from '../../../containers/Layout/Pagination';
 import Title from '../../Layout/Title';
+import ActionBar from './ActionBar';
 import DiscussionListItem from './Item';
 import { paginationShape, discussionSummaryShape } from '../../../shapes';
 

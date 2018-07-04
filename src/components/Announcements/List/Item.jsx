@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, Card } from 'antd';
 import PinButton from '../../../containers/Announcements/List/PinButton';
 import DestroyButton from '../../../containers/DestroyButton';
-import Image from '../../Image';
+import Image from '../../Layout/Image';
 import { announcementShape } from '../../../shapes';
 import collections from '../../../lib/collections';
 

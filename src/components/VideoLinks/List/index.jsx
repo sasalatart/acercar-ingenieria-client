@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../../containers/Pagination';
+import PaginationControls from '../../../containers/Layout/Pagination';
 import VideoItem from './Item';
 import { paginationShape, videoLinkShape } from '../../../shapes';
 

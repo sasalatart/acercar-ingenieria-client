@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
+import PaginationControls from '../../../containers/Layout/Pagination';
 import Comment from './Item/Comment';
-import PaginationControls from '../../../containers/Pagination';
 import { paginationShape, commentShape } from '../../../shapes';
 
 export default class CommentsList extends Component {

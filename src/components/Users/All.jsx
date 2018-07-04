@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Select } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import ActionBar from './List/ActionBar';
-import Title from '../Layout/Title';
 import UsersList from '../../containers/Users/List';
-import DataPlaceholder from '../DataPlaceholder';
+import Title from '../Layout/Title';
+import DataPlaceholder from '../Layout/DataPlaceholder';
+import ActionBar from './List/ActionBar';
 import { majorShape } from '../../shapes';
 
 const { Option, OptGroup } = Select;

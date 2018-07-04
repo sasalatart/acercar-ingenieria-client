@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Tag } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import noop from 'lodash/noop';
-import { colors } from '../theme';
+import { colors } from '../../theme';
 
 const styles = {
   container: {

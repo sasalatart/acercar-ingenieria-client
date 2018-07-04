@@ -4,7 +4,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import withAuthorization from '../../../hoc/withAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
-import ButtonLink from '../../../containers/ButtonLink';
+import ButtonLink from '../../../containers/Layout/ButtonLink';
 import ReportButton from '../../Reports/Button';
 import routes from '../../../lib/routes';
 import collections from '../../../lib/collections';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { List } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { attachmentShape } from '../shapes';
+import { attachmentShape } from '../../shapes';
 
 const { Item } = List;
 

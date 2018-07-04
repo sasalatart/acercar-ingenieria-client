@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Divider } from 'antd';
-import RichText from '../RichText';
-import Attachments from '../Attachments';
+import RichText from '../Layout/RichText';
+import Attachments from '../Layout/Attachments';
 import { attachmentShape } from '../../shapes';
 
 function MediaContent({ richText, attachments }) {

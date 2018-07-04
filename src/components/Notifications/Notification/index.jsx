@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import DateWithFormat from '../../DateWithFormat';
+import DateWithFormat from '../../Layout/DateWithFormat';
 import ActionText from './ActionText';
 import NotifyableText from './NotifyableText';
 import { notificationShape } from '../../../shapes';

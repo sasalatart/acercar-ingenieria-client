@@ -13,8 +13,8 @@ import {
   FilesField,
   SubmitButton,
 } from '../Forms';
-import DataPlaceholder from '../DataPlaceholder';
 import ActionBar from '../../containers/Layout/ActionBar';
+import DataPlaceholder from '../Layout/DataPlaceholder';
 import Title from '../Layout/Title';
 import { optionShape, attachmentShape } from '../../shapes';
 

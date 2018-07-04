@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider } from 'antd';
 import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../containers/Pagination';
+import PaginationControls from '../../containers/Layout/Pagination';
 import Notification from '../../containers/Notifications/Notification';
 import { paginationShape, notificationShape } from '../../shapes';
 

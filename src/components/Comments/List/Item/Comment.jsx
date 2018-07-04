@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import Radium from 'radium';
 import { Button, Divider } from 'antd';
+import Hideable from '../../../Layout/Hideable';
 import Actions from './Actions';
 import MainContent from '../../Comment/MainContent';
 import AnswerForm from './AnswerForm';
 import ProfileAvatar from '../../../Users/Profile/Avatar';
 import ChildComments from './Children';
-import Hideable from '../../../Layout/Hideable';
 import { commentShape } from '../../../../shapes';
 import { breakpoints } from '../../../../theme';
 

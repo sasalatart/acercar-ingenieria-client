@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import ToggleLoadingButton from './ToggleLoadingButton';
+import ToggleLoadingButton from './Layout/ToggleLoadingButton';
 
 function ApprovalButton({ approved, intl: { formatMessage: t }, ...rest }) {
   return (

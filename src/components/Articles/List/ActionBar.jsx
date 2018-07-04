@@ -2,9 +2,9 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { injectIntl, intlShape } from 'react-intl';
-import SearchButtons from '../../../containers/Search/Buttons';
 import ActionBar from '../../../containers/Layout/ActionBar';
-import ButtonLink from '../../../containers/ButtonLink';
+import ButtonLink from '../../../containers/Layout/ButtonLink';
+import SearchButtons from '../../../containers/Search/Buttons';
 import HideableButton from '../../Icons/HideableButton';
 import {
   SelectField,

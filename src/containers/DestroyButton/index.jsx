@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { destroyAccount } from '../store/ducks/sessions';
-import { destroyUser } from '../store/ducks/users';
-import { destroyAnnouncement } from '../store/ducks/announcements';
-import { destroyMajor } from '../store/ducks/majors';
-import { destroyQuestion } from '../store/ducks/questions';
-import { destroyArticle } from '../store/ducks/articles';
-import { destroyDiscussion } from '../store/ducks/discussions';
-import { destroyComment } from '../store/ducks/comments';
-import { destroyVideoLink } from '../store/ducks/video-links';
-import { destroyCredit } from '../store/ducks/credits';
-import { getIsDestroying } from '../store/ducks/loading';
-import ImportantDestroyButton from '../components/DestroyButton/Important';
-import DestroyButton from '../components/DestroyButton';
-import collections from '../lib/collections';
+import { destroyAccount } from '../../store/ducks/sessions';
+import { destroyUser } from '../../store/ducks/users';
+import { destroyAnnouncement } from '../../store/ducks/announcements';
+import { destroyMajor } from '../../store/ducks/majors';
+import { destroyQuestion } from '../../store/ducks/questions';
+import { destroyArticle } from '../../store/ducks/articles';
+import { destroyDiscussion } from '../../store/ducks/discussions';
+import { destroyComment } from '../../store/ducks/comments';
+import { destroyVideoLink } from '../../store/ducks/video-links';
+import { destroyCredit } from '../../store/ducks/credits';
+import { getIsDestroying } from '../../store/ducks/loading';
+import ImportantDestroyButton from '../../components/DestroyButton/Important';
+import DestroyButton from '../../components/DestroyButton';
+import collections from '../../lib/collections';
 
 function DestroyButtonWrapper(props) {
   return props.important

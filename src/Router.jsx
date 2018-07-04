@@ -2,6 +2,7 @@ import React from 'react';
 import { ConnectedRouter } from 'react-router-redux';
 import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
+import AppLayout from './components/Layout/App';
 import {
   loggedOutRoute,
   loggedInRoute,
@@ -19,12 +20,11 @@ import Discussions from './components/Discussions';
 import Comments from './components/Comments';
 import AboutUs from './components/AboutUs';
 import Credits from './containers/Credits';
-import Layout from './components/Layout';
 
 export default function Router() {
   return (
     <ConnectedRouter history={history}>
-      <Layout>
+      <AppLayout>
         <Switch>
           <Route exact path="/" component={PinnedAnnouncements} />
           <Route exact path="/announcements" render={adminRoute(Announcements)} />
@@ -38,7 +38,7 @@ export default function Router() {
           <Route path="/about-us" component={AboutUs} />
           <Route path="/credits" component={Credits} />
         </Switch>
-      </Layout>
+      </AppLayout>
     </ConnectedRouter>
   );
 }

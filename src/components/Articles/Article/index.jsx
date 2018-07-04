@@ -8,17 +8,17 @@ import {
   Divider,
 } from 'antd';
 import Linkify from 'react-linkify';
-import ActionBar from './ActionBar';
-import FeedButtons from '../../FeedButtons';
 import Title from '../../Layout/Title';
 import SubTitle from '../../Layout/SubTitle';
 import MediaContent from '../../Layout/MediaContent';
-import DateWithFormat from '../../DateWithFormat';
+import DateWithFormat from '../../Layout/DateWithFormat';
+import TagList from '../../Layout/TagList';
+import Image from '../../Layout/Image';
+import ActionBar from './ActionBar';
+import FeedButtons from '../../FeedButtons';
 import CommentsSection from '../../Comments/Section';
-import TagList from '../../TagList';
 import Author from '../../Author';
 import MajorLink from '../../Majors/Major/Link';
-import Image from '../../Image';
 import { themeStyles } from '../../../theme';
 import { articleShape, articleSummaryShape } from '../../../shapes';
 import collections from '../../../lib/collections';

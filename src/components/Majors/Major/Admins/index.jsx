@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../../../containers/Pagination';
-import ActionBar from './ActionBar';
+import PaginationControls from '../../../../containers/Layout/Pagination';
 import Title from '../../../Layout/Title';
+import ActionBar from './ActionBar';
 import ProfileCard from '../../../Users/Profile/Card';
 import { paginationShape, userShape } from '../../../../shapes';
 

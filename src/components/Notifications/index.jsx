@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import { injectIntl, intlShape } from 'react-intl';
 import List from '../../containers/Notifications/List';
-import ActionBar from './ActionBar';
 import Title from '../Layout/Title';
+import ActionBar from './ActionBar';
 import { matchShape } from '../../shapes';
 
 function Notifications({ match, intl: { formatMessage: t }, ...restProps }) {

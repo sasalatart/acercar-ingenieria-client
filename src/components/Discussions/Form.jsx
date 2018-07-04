@@ -11,7 +11,7 @@ import {
   FilesField,
   SubmitButton,
 } from '../Forms';
-import DataPlaceholder from '../DataPlaceholder';
+import DataPlaceholder from '../Layout/DataPlaceholder';
 import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import { attachmentShape } from '../../shapes';

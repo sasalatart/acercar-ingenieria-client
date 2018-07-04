@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Layout } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Hideable from './Layout/Hideable';
-import { themeStyles, breakpointsKeys } from '../theme';
+import Hideable from './Hideable';
+import { themeStyles, breakpointsKeys } from '../../theme';
 
 const { Sider } = Layout;
 const { Item } = Menu;

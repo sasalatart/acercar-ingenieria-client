@@ -7,7 +7,7 @@ import {
 } from '../../store/ducks/sessions';
 import { loadDiscussion, getDiscussionEntity } from '../../store/ducks/discussions';
 import { getIsFetching } from '../../store/ducks/loading';
-import DataPlaceholder from '../../components/DataPlaceholder';
+import DataPlaceholder from '../../components/Layout/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
 import collections from '../../lib/collections';
 

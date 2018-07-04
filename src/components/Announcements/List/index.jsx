@@ -2,12 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../../containers/Pagination';
+import PaginationControls from '../../../containers/Layout/Pagination';
 import Form from '../../../containers/Announcements/Form';
-import Item from './Item';
-import Lightbox from '../../Lightbox';
-import ActionBar from './ActionBar';
 import Title from '../../Layout/Title';
+import Lightbox from '../../Layout/Lightbox';
+import Item from './Item';
+import ActionBar from './ActionBar';
 import { paginationShape, announcementShape } from '../../../shapes';
 import { breakpoints } from '../../../theme';
 

@@ -20,7 +20,7 @@ const styles = {
   },
 };
 
-class AILayout extends Component {
+class AppLayout extends Component {
   static propTypes = {
     location: locationShape.isRequired,
     children: PropTypes.node.isRequired,
@@ -52,4 +52,4 @@ class AILayout extends Component {
   }
 }
 
-export default withRouter(AILayout);
+export default withRouter(AppLayout);

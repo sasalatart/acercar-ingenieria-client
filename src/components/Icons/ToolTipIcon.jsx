@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 import { Button, Tooltip } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ButtonLink from '../../containers/ButtonLink';
+import ButtonLink from '../../containers/Layout/ButtonLink';
 
 const styles = {
   cursor: withPointer => ({

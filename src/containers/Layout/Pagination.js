@@ -3,8 +3,8 @@ import {
   addQueryToCurrentUri,
   getSearch,
   getPage,
-} from '../store/ducks/routes';
-import Pagination from '../components/Pagination';
+} from '../../store/ducks/routes';
+import Pagination from '../../components/Layout/Pagination';
 
 function mapStateToProps(state) {
   return {

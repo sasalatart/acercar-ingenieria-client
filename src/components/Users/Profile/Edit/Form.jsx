@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert, Row, Col } from 'antd';
+import DataPlaceholder from '../../../Layout/DataPlaceholder';
 import {
   TextField,
   NumberField,
@@ -11,7 +12,6 @@ import {
   SelectField,
   SubmitButton,
 } from '../../../Forms';
-import DataPlaceholder from '../../../DataPlaceholder';
 import { majorShape, optionShape } from '../../../../shapes';
 import { colors } from '../../../../theme';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Linkify from 'react-linkify';
+import DateWithFormat from '../../Layout/DateWithFormat';
 import EditForm from './EditForm';
-import DateWithFormat from '../../DateWithFormat';
 import ProfileLink from '../../Users/Profile/Link';
 import { commentShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';

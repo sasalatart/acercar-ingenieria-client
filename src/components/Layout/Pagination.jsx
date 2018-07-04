@@ -4,7 +4,7 @@ import Radium from 'radium';
 import { Pagination } from 'antd';
 import URI from 'urijs';
 import DataPlaceholder from './DataPlaceholder';
-import { paginationShape } from '../shapes';
+import { paginationShape } from '../../shapes';
 
 const styles = {
   paginationWrapper: {

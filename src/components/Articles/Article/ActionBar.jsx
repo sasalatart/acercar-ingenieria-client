@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import DestroyButton from '../../../containers/DestroyButton';
-import ReportButton from '../../Reports/Button';
-import ApprovalButton from '../../../containers/ApprovalButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
+import DestroyButton from '../../../containers/DestroyButton';
+import ApprovalButton from '../../../containers/ApprovalButton';
+import ReportButton from '../../Reports/Button';
 import HideableButton from '../../Icons/HideableButton';
 import { articleShape, articleSummaryShape } from '../../../shapes';
 import routes from '../../../lib/routes';

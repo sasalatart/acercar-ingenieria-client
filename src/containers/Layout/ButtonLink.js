@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import ButtonLink from '../components/ButtonLink';
+import ButtonLink from '../../components/Layout/ButtonLink';
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {

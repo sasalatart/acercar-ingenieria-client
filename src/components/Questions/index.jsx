@@ -4,8 +4,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import withModalForm from '../../hoc/withModalForm';
 import Form from '../../containers/Questions/Form';
 import QuestionsList from '../../containers/Questions/List';
-import QuestionsActionBar from './ActionBar';
 import Title from '../Layout/Title';
+import QuestionsActionBar from './ActionBar';
 import { matchShape } from '../../shapes';
 
 function Questions({

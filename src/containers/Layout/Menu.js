@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { replace as replaceRoute } from 'react-router-redux';
 import withSizes from 'react-sizes';
-import { getPathname } from '../store/ducks/routes';
-import Menu from '../components/Menu';
+import { getPathname } from '../../store/ducks/routes';
+import Menu from '../../components/Layout/Menu';
 
 function mapStateToProps(state) {
   return {

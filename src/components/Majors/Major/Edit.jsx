@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
-import Form from '../../../containers/Majors/Form';
 import ActionBar from '../../../containers/Layout/ActionBar';
+import Form from '../../../containers/Majors/Form';
 import Title from '../../Layout/Title';
 import { majorShape } from '../../../shapes';
 

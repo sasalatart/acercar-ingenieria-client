@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import IconText from './Icons/IconText';
-import ToolTipIcon from './Icons/ToolTipIcon';
-import HideableButton from './Icons/HideableButton';
+import IconText from '../Icons/IconText';
+import ToolTipIcon from '../Icons/ToolTipIcon';
+import HideableButton from '../Icons/HideableButton';
 
 function getType(active, danger) {
   if (danger) return 'danger';

@@ -4,8 +4,8 @@ import { injectIntl, intlShape } from 'react-intl';
 import withModalForm from '../../hoc/withModalForm';
 import Form from '../../containers/VideoLinks/Form';
 import VideosList from '../../containers/VideoLinks/List';
-import ActionBar from './ActionBar';
 import Title from '../Layout/Title';
+import ActionBar from './ActionBar';
 import { matchShape } from '../../shapes';
 import { parseBaseResource } from '../../lib/collections';
 

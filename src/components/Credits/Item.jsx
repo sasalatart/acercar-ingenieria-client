@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import { Card } from 'antd';
 import DestroyButton from '../../containers/DestroyButton';
-import Image from '../Image';
+import Image from '../Layout/Image';
 import EditIcon from '../Icons/Edit';
 import { creditShape } from '../../shapes';
 import collections from '../../lib/collections';

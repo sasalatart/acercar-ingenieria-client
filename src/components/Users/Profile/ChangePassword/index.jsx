@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 import ActionBar from '../../../../containers/Layout/ActionBar';
-import Title from '../../../Layout/Title';
 import Form from '../../../../containers/Users/Profile/ChangePassword/Form';
+import Title from '../../../Layout/Title';
 
 function ChangePassword({ intl: { formatMessage: t } }) {
   return (

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card } from 'antd';
 import get from 'lodash/get';
 import noop from 'lodash/noop';
-import Image from '../../Image';
+import Image from '../../Layout/Image';
 import { userShape } from '../../../shapes';
 import avatarPlaceholder from '../../../images/user.png';
 

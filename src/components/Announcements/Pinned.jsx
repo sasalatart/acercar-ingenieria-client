@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { intlShape } from 'react-intl';
 import { Carousel } from 'antd';
+import Image, { sizes } from '../Layout/Image';
 import ToolTipIcon from '../Icons/ToolTipIcon';
-import Image, { sizes } from '../Image';
 import { announcementShape } from '../../shapes';
 import routes from '../../lib/routes';
 

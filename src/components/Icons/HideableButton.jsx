@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Radium from 'radium';
 import { Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ButtonLink from '../../containers/ButtonLink';
+import ButtonLink from '../../containers/Layout/ButtonLink';
 import Hideable from '../Layout/Hideable';
 import { breakpointsKeys } from '../../theme';
 

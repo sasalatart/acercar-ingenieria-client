@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Editor } from 'react-draft-wysiwyg';
 import DataPlaceholder from './DataPlaceholder';
-import { stateFromContent } from './Forms/RichTextInput';
+import { stateFromContent } from '../Forms/RichTextInput';
 
 function RichText({ content }) {
   return content

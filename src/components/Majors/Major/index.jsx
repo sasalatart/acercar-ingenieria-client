@@ -11,16 +11,16 @@ import {
   articleCreationRoute,
   articleEditionRoute,
 } from '../../../containers/Routes';
-import MajorInfo from './Info';
-import Edit from './Edit';
+import Menu from '../../../containers/Layout/Menu';
 import MajorAdmins from '../../../containers/Majors/Major/Admins';
 import UsersList from '../../../containers/Users/List';
 import ArticlesList from '../../../containers/Articles/List';
 import ArticleForm from '../../../containers/Articles/Form';
 import Article from '../../../containers/Articles/Article';
+import MajorInfo from './Info';
+import Edit from './Edit';
 import Questions from '../../Questions';
 import VideoLinks from '../../VideoLinks';
-import Menu from '../../../containers/Menu';
 import { majorShape } from '../../../shapes';
 import { themeStyles } from '../../../theme';
 import { getMajorPaths } from '../../../lib/routes';

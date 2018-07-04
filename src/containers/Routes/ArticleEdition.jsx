@@ -12,7 +12,7 @@ import {
   getArticleIdFromProps,
 } from '../../store/ducks/articles';
 import { getIsFetching } from '../../store/ducks/loading';
-import DataPlaceholder from '../../components/DataPlaceholder';
+import DataPlaceholder from '../../components/Layout/DataPlaceholder';
 import Restricted from '../../components/Routes/Restricted';
 import { getCollectionParams } from '../../lib/articles';
 

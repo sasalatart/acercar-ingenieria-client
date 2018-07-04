@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Lightbox from 'react-images';
-import { lightboxImageShape } from '../shapes';
+import { lightboxImageShape } from '../../shapes';
 
 export default class AILightbox extends Component {
   static propTypes = {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
-import DataPlaceholder from '../components/DataPlaceholder';
+import DataPlaceholder from '../components/Layout/DataPlaceholder';
 
 export default function HOC(fetchFnName, resourceName) {
   return WrappedComponent =>
