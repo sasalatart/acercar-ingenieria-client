@@ -1,9 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
-import { Alert, Input, Button } from 'antd';
+import {
+  Alert,
+  Form,
+  Input,
+  Button,
+} from 'antd';
 import withModal from '../../hoc/withModal';
 import DestroyIconOrButton from './IconOrButton';
+
+const FormItem = Form.Item;
 
 const styles = {
   alert: {
@@ -53,10 +60,9 @@ class ImportantDestroyButton extends Component {
           style={styles.alert}
           showIcon
         />
-        <Input
-          placeholder={t({ id: 'forms.confirm.textToFill' }, { textToFill })}
-          onChange={this.handleTextChange}
-        />
+        <FormItem label={t({ id: 'forms.confirm.textToFill' }, { textToFill })}>
+          <Input onChange={this.handleTextChange} />
+        </FormItem>
       </Fragment>
     );
   }
