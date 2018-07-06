@@ -38,7 +38,11 @@ function ToggleLoadingButton({
   }
 
   const buttonProps = {
-    type: getType(active, danger), disabled: disabled || loading, size, onClick, style,
+    type: getType(active, danger),
+    disabled: disabled || loading,
+    size,
+    onClick,
+    style,
   };
   const iconToRender = loading ? 'spinner' : icon;
 
@@ -46,13 +50,17 @@ function ToggleLoadingButton({
     return (
       <Tooltip title={content}>
         <Button {...buttonProps}>
-          <FontAwesomeIcon icon={iconToRender} />
+          <FontAwesomeIcon icon={iconToRender} spin={loading} />
         </Button>
       </Tooltip>
     );
   }
 
-  return <HideableButton icon={iconToRender} {...buttonProps}>{content}</HideableButton>;
+  return (
+    <HideableButton icon={iconToRender} loading={loading} {...buttonProps}>
+      {content}
+    </HideableButton>
+  );
 }
 
 ToggleLoadingButton.propTypes = {
