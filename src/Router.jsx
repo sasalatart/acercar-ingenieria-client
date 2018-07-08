@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router-dom';
 import { history } from './store/configure-store';
 import AppLayout from './components/Layout/App';

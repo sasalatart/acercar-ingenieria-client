@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { goBack } from 'react-router-redux';
+import { goBack } from 'connected-react-router';
 import { injectIntl } from 'react-intl';
 import ActionBar from '../../components/Layout/ActionBar';
 

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { replace as replaceRoute } from 'react-router-redux';
+import { replace as replaceRoute } from 'connected-react-router';
 import withSizes from 'react-sizes';
 import { getPathname } from '../../store/ducks/routes';
 import Menu from '../../components/Layout/Menu';

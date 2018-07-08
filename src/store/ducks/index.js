@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { loadingBarReducer } from 'react-redux-loading-bar';
 import pick from 'lodash/pick';
@@ -23,7 +22,6 @@ import credits from './credits';
 import loading from './loading';
 
 const appReducer = combineReducers({
-  router: routerReducer,
   form: formReducer,
   i18n,
   entities,

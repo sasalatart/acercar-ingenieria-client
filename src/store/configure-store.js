@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import immutableTransform from 'redux-persist-transform-immutable';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
-import { routerMiddleware } from 'react-router-redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { loadingBarMiddleware } from 'react-redux-loading-bar';
 import createHistory from 'history/createBrowserHistory';
 import root from './ducks';
@@ -19,9 +19,8 @@ const persistConfig = {
   blacklist: ['router', 'form'],
 };
 
-const persistedReducer = persistReducer(persistConfig, root);
-
 export const history = createHistory();
+const persistedReducer = persistReducer(persistConfig, connectRouter(history)(root));
 
 const middleware = [
   thunkMiddleware,

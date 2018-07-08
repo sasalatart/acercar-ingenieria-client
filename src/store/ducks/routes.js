@@ -1,4 +1,4 @@
-import { push, replace } from 'react-router-redux';
+import { push, replace } from 'connected-react-router';
 import { createSelector } from 'reselect';
 import URI from 'urijs';
 import humps from 'humps';
