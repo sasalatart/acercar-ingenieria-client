@@ -7,17 +7,18 @@ export default function HOC(WrappedComponent, validators) {
       intl: intlShape.isRequired,
     }
 
-    state = { validators: validators(this.props.intl.formatMessage) }
-
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.intl.locale !== this.props.intl.locale) {
-        this.setValidators(nextProps.intl.formatMessage);
+    static getDerivedStateFromProps(nextProps, prevState) {
+      if (nextProps.intl.locale !== prevState.prevLocale) {
+        return {
+          validators: validators(nextProps.intl.formatMessage),
+          prevLocale: nextProps.intl.locale,
+        };
       }
+
+      return null;
     }
 
-    setValidators(t) {
-      this.setState({ validators: validators(t) });
-    }
+    state = { validators: validators(this.props.intl.formatMessage) }
 
     render() {
       return <WrappedComponent {...this.props} validators={this.state.validators} />;

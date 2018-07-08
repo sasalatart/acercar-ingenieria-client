@@ -6,7 +6,7 @@ Client built on top of React for a project of the Centro de Alumnos de Ingenier√
 
 ## Technologies Used
 
-- [React 16.2.0](https://reactjs.org/)
+- [React 16.4.0](https://reactjs.org/)
 - [Redux](https://redux.js.org/)
 - [Pusher](https://pusher.com/)
 

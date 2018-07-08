@@ -17,13 +17,18 @@ export default class AILightbox extends Component {
     showThumbnails: true,
   }
 
-  state = { currentIndex: this.props.startingIndex };
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.startingIndex !== this.props.startingIndex) {
-      this.setState({ currentIndex: nextProps.startingIndex });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.prevStartingIndex !== nextProps.startingIndex) {
+      return {
+        currentIndex: nextProps.startingIndex,
+        prevStartingIndex: nextProps.startingIndex,
+      };
     }
+
+    return null;
   }
+
+  state = { currentIndex: this.props.startingIndex };
 
   handleNextClicked = () => this.changeCurrentIndex(this.state.currentIndex + 1);
 

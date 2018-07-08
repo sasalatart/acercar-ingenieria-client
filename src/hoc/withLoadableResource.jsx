@@ -16,7 +16,6 @@ export default function HOC(fetchFnName, resourceName) {
 
       render() {
         const { loading, ...restProps } = this.props;
-
         const noData = !loading && isEmpty(this.props[resourceName]);
 
         return loading || noData
