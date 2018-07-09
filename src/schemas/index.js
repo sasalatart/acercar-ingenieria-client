@@ -6,12 +6,12 @@ export const majorSummariesSchema = new schema.Entity('majorSummaries');
 
 export const majorsOfInterestSchema = new schema.Entity('majorsOfInterest');
 
-export const userSummariesSchema = new schema.Entity('userSummaries');
-
 export const usersSchema = new schema.Entity('users', {
   majorsOfInterest: [majorsOfInterestSchema],
   adminOfMajors: [majorSummariesSchema],
 });
+
+export const userSummariesSchema = new schema.Entity('userSummaries');
 
 export const announcementsSchema = new schema.Entity('announcements');
 
@@ -49,7 +49,7 @@ export const commentsSchema = new schema.Entity('comments', {
   childComments: [childCommentsSchema],
 });
 
-export const videoLinksSchema = new schema.Entity('videos');
+export const videoLinksSchema = new schema.Entity('videoLinks');
 
 export const notificationsSchema = new schema.Entity('notifications', {
   notificator: userSummariesSchema,

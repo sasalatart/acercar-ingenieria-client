@@ -9,6 +9,7 @@ export default {
     'sessions.signOut': 'Sign Out',
     'sessions.changePassword': 'Change Password',
     'sessions.destroyMyAccount': 'Delete My Account',
+    'sessions.unauthenticated.error': 'You need to sign in or sign up before continuing.',
   },
   'es-ES': {
     'sessions.signIn': 'Ingresar',
@@ -20,5 +21,6 @@ export default {
     'sessions.signOut': 'Cerrar sesión',
     'sessions.changePassword': 'Cambiar contraseña',
     'sessions.destroyMyAccount': 'Eliminar mi cuenta',
+    'sessions.unauthenticated.error': 'Tienes que iniciar sesión o registrarte para poder continuar.',
   },
 };

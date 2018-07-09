@@ -1,25 +1,25 @@
 import React from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from 'react-router-dom';
-import { history } from './store/configure-store';
-import AppLayout from './components/Layout/App';
+import { history } from '../../store/configure-store';
+import AppLayout from '../Layout/App';
 import {
   loggedOutRoute,
   loggedInRoute,
   adminRoute,
   questionsAdministrationRoute,
-} from './containers/Routes';
-import PinnedAnnouncements from './containers/Announcements/Pinned';
-import Announcements from './containers/Announcements/List';
-import Auth from './components/Auth';
-import Users from './components/Users';
-import Majors from './components/Majors';
-import Articles from './components/Articles';
-import Questions from './components/Questions';
-import Discussions from './components/Discussions';
-import Comments from './components/Comments';
-import AboutUs from './components/AboutUs';
-import Credits from './containers/Credits';
+} from '../../containers/Routes';
+import PinnedAnnouncements from '../../containers/Announcements/Pinned';
+import Announcements from '../../containers/Announcements/List';
+import Credits from '../../containers/Credits';
+import Auth from '../Auth';
+import Users from '../Users';
+import Majors from '../Majors';
+import Articles from '../Articles';
+import Questions from '../Questions';
+import Discussions from '../Discussions';
+import Comments from '../Comments';
+import AboutUs from '../AboutUs';
 
 export default function Router() {
   return (

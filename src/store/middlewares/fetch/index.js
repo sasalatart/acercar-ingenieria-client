@@ -33,7 +33,7 @@ const fetchMiddleware = store => next => (action) => {
 
       return response.status < 400
         ? parseResponse(body, response.headers, action.payload)
-        : parseError(body, response.status, action.payload, store);
+        : parseError(body, response.status, action.payload, store, locale);
     });
 
   return next({

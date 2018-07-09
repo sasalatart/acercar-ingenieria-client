@@ -5,15 +5,22 @@ import { denormalize } from 'normalizr';
 import { getId } from './shared';
 
 export const INITIAL_STATE = new Map({
+  majors: new Map({}),
+  majorSummaries: new Map({}),
+  majorsOfInterest: new Map({}),
   users: new Map({}),
   userSummaries: new Map({}),
   announcements: new Map({}),
-  majors: new Map({}),
-  majorsOfInterest: new Map({}),
-  majorSummaries: new Map({}),
   questions: new Map({}),
   articles: new Map({}),
+  articleSummaries: new Map({}),
+  discussions: new Map({}),
+  discussionSummaries: new Map({}),
   categories: new Map({}),
+  comments: new Map({}),
+  videoLinks: new Map({}),
+  notifications: new Map({}),
+  credits: new Map({}),
 });
 
 const TYPES = {

@@ -29,6 +29,7 @@ export const TYPES = {
   RECOVER_PASSWORD: 'sessions/RECOVER_PASSWORD',
   CONFIRM_EMAIL: 'sessions/CONFIRM_EMAIL',
   SIGN_OUT: 'sessions/SIGN_OUT',
+  LOCAL_SIGN_OUT: 'sessions/LOCAL_SIGN_OUT',
   UPDATE: 'sessions/UPDATE',
   CHANGE_PASSWORD: 'sessions/CHANGE_PASSWORD',
   DESTROY_ACCOUNT: 'sessions/DESTROY_ACCOUNT',
@@ -101,6 +102,13 @@ export function signOut() {
         url: '/auth/sign_out',
       },
     });
+  };
+}
+
+export function localSignOut() {
+  return (dispatch) => {
+    dispatch(goToLanding());
+    return dispatch({ type: TYPES.LOCAL_SIGN_OUT });
   };
 }
 

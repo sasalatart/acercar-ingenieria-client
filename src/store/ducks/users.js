@@ -48,13 +48,13 @@ export function loadUsers(page = 1, majorId, query) {
   };
 }
 
-export function loadUser(id) {
+export function loadUser(id, silentError) {
   return {
     type: TYPES.LOAD,
     payload: {
       method: 'GET',
       url: `/users/${id}`,
-      fetchParams: { collection, id },
+      fetchParams: { collection, id, silentError },
       responseSchema: usersSchema,
     },
   };

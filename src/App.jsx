@@ -6,7 +6,7 @@ import 'antd/dist/antd.min.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import configureStore from './store/configure-store';
 import IntlProvider from './containers/IntlProvider';
-import Router from './Router';
+import Bootstrap from './containers/Bootstrap';
 import configureIcons from './lib/icons';
 
 const { store, persistor } = configureStore();
@@ -18,7 +18,7 @@ export default function App() {
       <PersistGate loading={null} persistor={persistor}>
         <StyleRoot>
           <IntlProvider>
-            <Router />
+            <Bootstrap />
           </IntlProvider>
         </StyleRoot>
       </PersistGate>
