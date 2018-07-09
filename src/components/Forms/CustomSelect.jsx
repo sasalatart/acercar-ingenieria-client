@@ -35,6 +35,7 @@ function reduceValue(value = []) {
 
 export function CustomTagsSelect(props) {
   const {
+    mode,
     value,
     onChange,
     onBlur,
@@ -43,7 +44,7 @@ export function CustomTagsSelect(props) {
 
   return (
     <Select
-      mode="tags"
+      mode={mode}
       tokenSeparators={[', ']}
       optionFilterProp="children"
       filterOption={filter}
@@ -58,6 +59,7 @@ export function CustomTagsSelect(props) {
 }
 
 CustomTagsSelect.propTypes = {
+  mode: PropTypes.string,
   value: PropTypes.string,
   options: PropTypes.arrayOf(optionShape).isRequired,
   onBlur: PropTypes.func.isRequired,
@@ -65,5 +67,6 @@ CustomTagsSelect.propTypes = {
 };
 
 CustomTagsSelect.defaultProps = {
+  mode: 'tags',
   value: undefined,
 };

@@ -108,6 +108,7 @@ export default class ArticleForm extends Component {
               <Field
                 name="categoryList"
                 component={TagsField}
+                mode="multiple"
                 label={t({ id: 'categories' })}
                 options={categoryOptions}
               />
