@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
+import { getCurrentUserId } from '../../../store/ducks/sessions';
 import {
   loadUsers,
   resetPagination as resetUsersPagination,
@@ -30,6 +31,7 @@ function mapStateToProps(state, { majorId, admins }) {
   const users = pagingFns.getPagedEntities(state, params);
 
   return {
+    currentUserId: getCurrentUserId(state),
     loading: isEmpty(users) && getIsFetching(state, params),
     pagination: pagingFns.getMeta(state, params),
     users,

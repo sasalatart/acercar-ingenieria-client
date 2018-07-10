@@ -12,6 +12,7 @@ import { paginationShape, userShape } from '../../../shapes';
 
 export default class UsersList extends Component {
   static propTypes = {
+    currentUserId: PropTypes.number.isRequired,
     admin: PropTypes.bool.isRequired,
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -38,6 +39,7 @@ export default class UsersList extends Component {
 
   renderUser = user => (
     <UserListItem
+      currentUserId={this.props.currentUserId}
       admin={this.props.admin}
       adminOrMajorAdmin={this.props.adminOrMajorAdmin}
       user={user}

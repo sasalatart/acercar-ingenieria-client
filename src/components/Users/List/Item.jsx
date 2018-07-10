@@ -57,6 +57,7 @@ function renderDescription(user, admin, t) {
 }
 
 function UserListItem({
+  currentUserId,
   admin,
   adminOrMajorAdmin,
   user,
@@ -68,7 +69,7 @@ function UserListItem({
 
   actions.push(renderRoleButton(user, admin, setSelectedUser, t));
 
-  if (adminOrMajorAdmin) {
+  if (adminOrMajorAdmin && user.id !== currentUserId) {
     const destroyButton = (
       <DestroyButton
         {...getCollectionParams(majorId, { id: user.id })}
@@ -93,6 +94,7 @@ function UserListItem({
 }
 
 UserListItem.propTypes = {
+  currentUserId: PropTypes.number.isRequired,
   admin: PropTypes.bool.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   user: userShape.isRequired,
