@@ -1,10 +1,14 @@
 import { connect } from 'react-redux';
-import { toggleAdmin, getIsAdminUpdating } from '../../../store/ducks/admins';
+import { toggleAdmin } from '../../../store/ducks/admins';
+import { getIsUpdating } from '../../../store/ducks/loading';
 import Switch from '../../../components/Users/AdminStatus/Switch';
+import { getCollectionParams } from '../../../lib/users';
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state, { userId, majorId }) {
+  const params = getCollectionParams(majorId, { id: userId });
+
   return {
-    updating: getIsAdminUpdating(state, ownProps),
+    updating: getIsUpdating(state, params),
   };
 }
 
