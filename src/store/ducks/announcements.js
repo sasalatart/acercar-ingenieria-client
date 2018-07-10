@@ -1,4 +1,4 @@
-import { Map, Set } from 'immutable';
+import { Map, OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
 import pagingFnsFactory from './paginations';
@@ -14,7 +14,7 @@ const INITIAL_STATE = new Map({
   pagination: new Map({
     platform: new Map({}),
   }),
-  pinned: new Set([]),
+  pinned: new OrderedSet([]),
 });
 
 export const TYPES = {
@@ -96,7 +96,7 @@ export default function announcementsReducer(state = INITIAL_STATE, { type, payl
     case `${TYPES.LOAD_INDEX}_FULFILLED`:
       return pagingFns.reducer.setPage(state, payload);
     case `${TYPES.LOAD_PINNED}_FULFILLED`:
-      return state.set('pinned', new Set(payload.result));
+      return state.set('pinned', new OrderedSet(payload.result));
     case TYPES.ADD_TO_PAGINATION:
       return pagingFns.reducer.addToPage(state, payload);
     case `${TYPES.DESTROY}_FULFILLED`: {
