@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { Map, OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
