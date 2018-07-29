@@ -3,8 +3,7 @@ import humps from 'humps';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { getTokens } from '../store/ducks/sessions';
-
-const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+import { BASE_API_URL } from '../lib/routes';
 
 export const CHANNELS = {
   USER: userId => `private-user-${userId}`,
