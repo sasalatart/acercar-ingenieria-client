@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import IntlProvider from '../../containers/IntlProvider';
 import LoadingPlaceholder from './LoadingPlaceholder';
 import Router from '../Routes/Router';
 
@@ -30,6 +31,6 @@ export default class Bootstrap extends Component {
   render() {
     return this.state.fetching || this.state.displayingLogo
       ? <LoadingPlaceholder onLogoDisplayed={this.handleLogoDisplayed} />
-      : <Router />;
+      : <IntlProvider><Router /></IntlProvider>;
   }
 }

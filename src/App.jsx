@@ -5,7 +5,6 @@ import { StyleRoot } from 'radium';
 import 'antd/dist/antd.min.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import configureStore from './store/configure-store';
-import IntlProvider from './containers/IntlProvider';
 import Bootstrap from './containers/Bootstrap';
 import configureIcons from './lib/icons';
 
@@ -17,9 +16,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <StyleRoot>
-          <IntlProvider>
-            <Bootstrap />
-          </IntlProvider>
+          <Bootstrap />
         </StyleRoot>
       </PersistGate>
     </Provider>
