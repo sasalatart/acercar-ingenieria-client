@@ -8,7 +8,9 @@ import Title from './Layout/Title';
 import { themeStyles } from '../theme';
 
 const styles = {
-  justifiedText: themeStyles.justifiedTextContainer,
+  justifiedText: {
+    textAlign: 'justify',
+  },
   mediaContainer: themeStyles.mediaContainer,
 };
 

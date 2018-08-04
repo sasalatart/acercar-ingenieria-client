@@ -13,7 +13,7 @@ import Author from '../../Author';
 import IconText from '../../Icons/IconText';
 import ArticleLink from '../Article/Link';
 import MajorLink from '../../Majors/Major/Link';
-import { themeStyles, breakpointsKeys } from '../../../theme';
+import { breakpointsKeys } from '../../../theme';
 import { articleSummaryShape } from '../../../shapes';
 import { getCollectionParams } from '../../../lib/articles';
 import articlePlaceholder from '../../../images/article.png';
@@ -22,7 +22,9 @@ const { Item } = List;
 const { Meta } = Item;
 
 const styles = {
-  shortDescription: themeStyles.justifiedTextContainer,
+  shortDescription: {
+    whiteSpace: 'pre-wrap',
+  },
   imageWrapper: {
     display: 'flex',
     justifyContent: 'center',

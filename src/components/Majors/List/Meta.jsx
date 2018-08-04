@@ -5,14 +5,15 @@ import get from 'lodash/get';
 import Image, { sizes } from '../../Layout/Image';
 import MajorLink from '../Major/Link';
 import { majorShape, majorOfInterestShape } from '../../../shapes';
-import { themeStyles } from '../../../theme';
 import majorPlaceholder from '../../../images/major.png';
 
 const { Item } = List;
 const { Meta } = Item;
 
 const styles = {
-  shortDescription: themeStyles.justifiedTextContainer,
+  shortDescription: {
+    textAlign: 'justify',
+  },
 };
 
 function MajorMeta({ major, majorOfInterest, intl: { formatMessage: t } }) {

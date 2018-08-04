@@ -17,7 +17,9 @@ import majorPlaceholder from '../../../../images/major.png';
 
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
-  shortDescription: themeStyles.justifiedTextContainer,
+  shortDescription: {
+    textAlign: 'justify',
+  },
 };
 
 function MajorInfo({ loggedIn, major, intl: { formatMessage: t } }) {

@@ -8,7 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../containers/Layout/Pagination';
 import DestroyButton from '../../containers/DestroyButton';
 import IconText from '../Icons/IconText';
-import { themeStyles, colors } from '../../theme';
+import { colors } from '../../theme';
 import { paginationShape, questionShape } from '../../shapes';
 import { getCollectionParams } from '../../lib/questions';
 
@@ -22,7 +22,9 @@ const styles = {
   star: {
     color: colors.starred,
   },
-  answer: themeStyles.justifiedTextContainer,
+  answer: {
+    whiteSpace: 'pre-wrap',
+  },
   actions: {
     display: 'flex',
     justifyContent: 'flex-end',

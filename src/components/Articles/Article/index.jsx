@@ -31,7 +31,7 @@ const styles = {
   },
   shortDescription: {
     marginTop: '25px',
-    ...themeStyles.justifiedTextContainer,
+    whiteSpace: 'pre-wrap',
   },
   tagsContainer: {
     display: 'flex',

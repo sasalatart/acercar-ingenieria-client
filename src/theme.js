@@ -50,10 +50,6 @@ export const themeStyles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  justifiedTextContainer: {
-    textAlign: 'justify',
-    whiteSpace: 'pre-wrap',
-  },
   error: {
     color: colors.error,
   },
