@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Linkify from 'react-linkify';
@@ -81,11 +81,13 @@ function renderMeta(article, majorId) {
   return <Meta title={titleTag} description={authorName} />;
 }
 
-function renderShortDescription(id, shortDescription, t) {
+function renderShortDescription(id, shortDescription) {
   return (
     <Linkify>
       <p style={styles.shortDescription}>{shortDescription}</p>
-      <ArticleLink id={id}>{t({ id: 'articles.readMore' })}</ArticleLink>
+      <ArticleLink id={id}>
+        <FormattedMessage id="articles.readMore" />
+      </ArticleLink>
     </Linkify>
   );
 }
@@ -96,7 +98,6 @@ function ArticleListItem({
   article,
   displayMajor,
   onTagClick,
-  intl: { formatMessage: t },
 }) {
   const majorId = article.majorSummary && article.majorSummary.id;
   const actions = renderActions(currentUserId, adminOrMajorAdmin, article, majorId);
@@ -116,7 +117,7 @@ function ArticleListItem({
       {article.categoryList.length > 0 &&
         <TagList tags={article.categoryList} onTagClick={onTagClick} withIcon />
       }
-      {renderShortDescription(article.id, article.shortDescription, t)}
+      {renderShortDescription(article.id, article.shortDescription)}
     </Item>
   );
 }
@@ -127,7 +128,6 @@ ArticleListItem.propTypes = {
   article: articleSummaryShape.isRequired,
   displayMajor: PropTypes.bool.isRequired,
   onTagClick: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(ArticleListItem);
+export default ArticleListItem;

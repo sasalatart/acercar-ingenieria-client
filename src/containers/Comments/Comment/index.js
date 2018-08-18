@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { goToLanding } from '../../../store/ducks/routes';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
 import { loadComment, getCommentEntity } from '../../../store/ducks/comments';
@@ -29,9 +28,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const component = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(withLoadableResource('loadComment', 'comment')(Comment));
-
-export default injectIntl(component);

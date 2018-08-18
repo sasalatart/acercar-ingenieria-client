@@ -59,7 +59,10 @@ CustomMenu.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
+    text: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]).isRequired,
     noRender: PropTypes.bool,
   })).isRequired,
   activeMenuKey: PropTypes.string.isRequired,

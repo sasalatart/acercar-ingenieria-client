@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { loadMajor, getMajorEntity } from '../../../store/ducks/majors';
 import { getIsFetching } from '../../../store/ducks/loading';
 import withLoadableResource from '../../../hoc/withLoadableResource';
@@ -24,9 +23,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const component = connect(
+export default withAuthorization(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withLoadableResource('loadMajor', 'major')(Major));
-
-export default injectIntl(withAuthorization(component));
+)(withLoadableResource('loadMajor', 'major')(Major)));

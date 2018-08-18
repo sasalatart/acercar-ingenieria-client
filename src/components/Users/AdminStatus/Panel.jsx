@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import map from 'lodash/map';
 import AdminStatusSwitch from '../../../containers/Users/AdminStatus/Switch';
 import { userShape } from '../../../shapes';
@@ -11,13 +11,12 @@ function AdminStatusPanel({
     majorsOfInterest,
     adminOfMajors,
   },
-  intl: { formatMessage: t },
 }) {
   const adminOfMajorsIds = map(adminOfMajors, 'id');
 
   return (
     <Fragment>
-      <AdminStatusSwitch userId={id} label={`Admin (${t({ id: 'platform' })})`} active={admin} />
+      <AdminStatusSwitch userId={id} label={<FormattedMessage id="admin.platform" />} active={admin} />
       {majorsOfInterest.map(majorOfInterest => (
         <AdminStatusSwitch
           key={`${id}-${majorOfInterest.majorId}`}
@@ -33,7 +32,6 @@ function AdminStatusPanel({
 
 AdminStatusPanel.propTypes = {
   user: userShape.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(AdminStatusPanel);
+export default AdminStatusPanel;

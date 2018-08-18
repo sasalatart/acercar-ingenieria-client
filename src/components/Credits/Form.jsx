@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { intlShape } from 'react-intl';
-import {
-  TextField,
-  ImageField,
-  SubmitButton,
-} from '../Forms';
+import { FormattedMessage } from 'react-intl';
+import { TextField, ImageField, SubmitButton } from '../Forms';
 
 function CreditsForm({
   validators,
@@ -14,7 +10,6 @@ function CreditsForm({
   submitting,
   currentResourceURL,
   handleSubmit,
-  intl: { formatMessage: t },
 }) {
   const resourceValidators = [validators.image, validators.maxResourceSize];
   if (!currentResourceURL) resourceValidators.push(validators.required);
@@ -24,26 +19,26 @@ function CreditsForm({
       <Field
         name="resourceName"
         component={TextField}
-        label={t({ id: 'forms.resourceName' })}
+        label={<FormattedMessage id="forms.resourceName" />}
         validate={validators.required}
       />
       <Field
         name="resourceUrl"
         component={TextField}
-        label={t({ id: 'forms.resourceUrl' })}
+        label={<FormattedMessage id="forms.resourceUrl" />}
         validate={[validators.required, validators.resourceUrl]}
       />
       <Field
         name="authorName"
         component={TextField}
-        label={t({ id: 'forms.authorName' })}
+        label={<FormattedMessage id="forms.authorName" />}
         validate={validators.required}
       />
       <Field
         name="resource"
         component={ImageField}
         imagePlaceholder={currentResourceURL}
-        label={t({ id: 'forms.picture' })}
+        label={<FormattedMessage id="forms.picture" />}
         validate={resourceValidators}
       />
       <SubmitButton disabled={!valid || submitting} loading={submitting} />
@@ -57,7 +52,6 @@ CreditsForm.propTypes = {
   submitting: PropTypes.bool.isRequired,
   currentResourceURL: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 CreditsForm.defaultProps = {

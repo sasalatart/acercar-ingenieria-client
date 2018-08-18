@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { getPage } from '../../../store/ducks/routes';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
@@ -31,5 +30,4 @@ function mapDispatchToProps(dispatch, { baseResourceName, baseResourceId }) {
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(CommentsList);
-export default injectIntl(withAuthorization(component));
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(CommentsList));

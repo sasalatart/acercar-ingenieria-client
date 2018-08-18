@@ -1,21 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import withAuthorization from '../../hoc/withAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
 import HideableButton from '../Icons/HideableButton';
 
-function VideosActionBar({
-  adminOrMajorAdmin,
-  onNewClicked,
-  intl: { formatMessage: t },
-}) {
+function VideosActionBar({ adminOrMajorAdmin, onNewClicked }) {
   const actions = [];
 
   if (adminOrMajorAdmin) {
     const newVideoLinkButton = (
       <HideableButton type="primary" icon="plus" onClick={onNewClicked}>
-        {t({ id: 'videoLinks.new' })}
+        <FormattedMessage id="videoLinks.new" />
       </HideableButton>
     );
 
@@ -28,7 +24,6 @@ function VideosActionBar({
 VideosActionBar.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   onNewClicked: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(withAuthorization(VideosActionBar));
+export default withAuthorization(VideosActionBar);

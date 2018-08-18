@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { goToUser } from '../../../../store/ducks/routes';
 import { loadAdmins, getPagingFns } from '../../../../store/ducks/admins';
@@ -27,7 +26,4 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MajorAdmins));
+export default connect(mapStateToProps, mapDispatchToProps)(MajorAdmins);

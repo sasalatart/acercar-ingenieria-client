@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { addQueryToCurrentUri } from '../../store/ducks/routes';
 import { resetPagination as resetUsersPagination } from '../../store/ducks/users';
 import { resetPagination as resetAdminsPagination } from '../../store/ducks/admins';
@@ -27,4 +26,4 @@ const mapDispatchToProps = {
   resetAdminsPagination,
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(AllUsers));
+export default connect(mapStateToProps, mapDispatchToProps)(AllUsers);

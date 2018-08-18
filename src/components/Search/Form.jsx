@@ -30,7 +30,10 @@ function SearchForm({
 }
 
 SearchForm.propTypes = {
-  searchTextLabel: PropTypes.string.isRequired,
+  searchTextLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
   valid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   renderExtraFields: PropTypes.func,

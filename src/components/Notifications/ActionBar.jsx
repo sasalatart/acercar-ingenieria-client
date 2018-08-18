@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ActionBar from '../../containers/Layout/ActionBar';
 import HideableButton from '../Icons/HideableButton';
 import routes from '../../lib/routes';
@@ -10,7 +10,6 @@ function NotificationsActionBar({
   noPendingNotifications,
   settingAllAsSeen,
   setAllAsSeen,
-  intl: { formatMessage: t },
 }) {
   const actions = [
     <HideableButton
@@ -18,7 +17,7 @@ function NotificationsActionBar({
       to={routes.profileNotifications(!seen)}
       icon={seen ? 'eye' : 'eye-slash'}
     >
-      {t({ id: seen ? 'notifications.pending' : 'notifications.seen' })}
+      <FormattedMessage id={seen ? 'notifications.pending' : 'notifications.seen'} />
     </HideableButton>,
   ];
 
@@ -31,7 +30,7 @@ function NotificationsActionBar({
         disabled={settingAllAsSeen || noPendingNotifications}
         onClick={setAllAsSeen}
       >
-        {t({ id: 'notifications.setAllAsSeen' })}
+        <FormattedMessage id="notifications.setAllAsSeen" />
       </HideableButton>
     );
     actions.unshift(setAllAsSeenButton);
@@ -45,7 +44,6 @@ NotificationsActionBar.propTypes = {
   noPendingNotifications: PropTypes.bool.isRequired,
   settingAllAsSeen: PropTypes.bool.isRequired,
   setAllAsSeen: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(NotificationsActionBar);
+export default NotificationsActionBar;

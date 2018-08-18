@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import withAuthorization from '../../../../hoc/withAuthorization';
 import Title from '../../../Layout/Title';
@@ -23,8 +23,8 @@ const styles = {
   },
 };
 
-function renderSubTitle(user, admin, t) {
-  const textPrefix = t({ id: 'profile.generation' }, { year: user.generation });
+function renderSubTitle(user, admin) {
+  const textPrefix = <FormattedMessage id="profile.generation" values={{ year: user.generation }} />;
 
   if (!admin) return textPrefix;
 
@@ -35,7 +35,6 @@ function renderSubTitle(user, admin, t) {
 function ProfileInfo({
   admin,
   user,
-  intl: { formatMessage: t },
   ...restProps
 }) {
   return (
@@ -49,12 +48,12 @@ function ProfileInfo({
         </Col>
         <Col md={18}>
           <Title>{user.firstName} {user.lastName}</Title>
-          <SubTitle>{renderSubTitle(user, admin, t)}</SubTitle>
+          <SubTitle>{renderSubTitle(user, admin)}</SubTitle>
 
           <Divider>Roles</Divider>
           <RolesList user={user} />
 
-          <Divider style={styles.divider}>{t({ id: 'profile.majorsOfInterest' })}</Divider>
+          <Divider style={styles.divider}><FormattedMessage id="profile.majorsOfInterest" /></Divider>
           <MajorsList majorsOfInterest={user.majorsOfInterest} />
         </Col>
       </Row>
@@ -65,11 +64,10 @@ function ProfileInfo({
 ProfileInfo.propTypes = {
   admin: PropTypes.bool.isRequired,
   user: userShape,
-  intl: intlShape.isRequired,
 };
 
 ProfileInfo.defaultProps = {
   user: undefined,
 };
 
-export default injectIntl(withAuthorization(ProfileInfo));
+export default withAuthorization(ProfileInfo);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DestroyButton from '../../../containers/DestroyButton';
@@ -23,9 +23,9 @@ const styles = {
   },
 };
 
-function renderRoleButton(user, admin, onClick, t) {
+function renderRoleButton(user, admin, onClick) {
   const roleNames = user.adminOfMajors.map(({ name }) => name);
-  if (user.admin) roleNames.unshift(t({ id: 'platform' }));
+  if (user.admin) roleNames.unshift('Acercar Ingeniería');
 
   const commonProps = {
     icon: roleNames.length ? ['fas', 'star'] : ['far', 'star'],
@@ -35,7 +35,7 @@ function renderRoleButton(user, admin, onClick, t) {
   return roleNames.length
     ? (
       <ToolTipIcon
-        toolTip={t({ id: 'admin.of' }, { list: roleNames.join(', ') })}
+        toolTip={<FormattedMessage id="admin.of" values={{ list: roleNames.join(', ') }} />}
         iconStyle={styles.iconWithRole}
         {...commonProps}
       />
@@ -43,8 +43,8 @@ function renderRoleButton(user, admin, onClick, t) {
     : <FontAwesomeIcon style={admin ? undefined : styles.iconWithoutRole} {...commonProps} />;
 }
 
-function renderDescription(user, admin, t) {
-  const descriptionPrefix = t({ id: 'profile.generation' }, { year: user.generation });
+function renderDescription(user, admin) {
+  const descriptionPrefix = <FormattedMessage id="profile.generation" values={{ year: user.generation }} />;
 
   if (!admin) return descriptionPrefix;
 
@@ -63,17 +63,16 @@ function UserListItem({
   user,
   majorId,
   setSelectedUser,
-  intl: { formatMessage: t },
 }) {
   const actions = [];
 
-  actions.push(renderRoleButton(user, admin, setSelectedUser, t));
+  actions.push(renderRoleButton(user, admin, setSelectedUser));
 
   if (adminOrMajorAdmin && user.id !== currentUserId) {
     const destroyButton = (
       <DestroyButton
         {...getCollectionParams(majorId, { id: user.id })}
-        warningMessage={t({ id: 'users.destroyWarning' })}
+        warningMessage={<FormattedMessage id="users.destroyWarning" />}
         textToFill={`${user.firstName} ${user.lastName}`}
         important
         iconOnly
@@ -84,7 +83,7 @@ function UserListItem({
 
   const avatar = <ProfileAvatar user={user} />;
   const title = <ProfileLink id={user.id}>{user.firstName} {user.lastName}</ProfileLink>;
-  const description = renderDescription(user, adminOrMajorAdmin, t);
+  const description = renderDescription(user, adminOrMajorAdmin);
 
   return (
     <Item actions={actions}>
@@ -100,11 +99,10 @@ UserListItem.propTypes = {
   user: userShape.isRequired,
   majorId: PropTypes.number,
   setSelectedUser: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 UserListItem.defaultProps = {
   majorId: undefined,
 };
 
-export default injectIntl(UserListItem);
+export default UserListItem;

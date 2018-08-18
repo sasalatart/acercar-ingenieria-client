@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Divider } from 'antd';
 import lowerFirst from 'lodash/lowerFirst';
 import Comment from './Comment';
@@ -25,7 +25,6 @@ function ChildComments({
   parentCommentCommentableId,
   comments,
   extraComments,
-  intl: { formatMessage: t },
 }) {
   return (
     <Fragment>
@@ -37,7 +36,7 @@ function ChildComments({
               baseResourceName={`${lowerFirst(parentCommentCommentableType)}s`}
               baseResourceId={parentCommentCommentableId}
             >
-              {t({ id: 'comments.extras' }, { extras: extraComments })}
+              <FormattedMessage id="comments.extras" values={{ extras: extraComments }} />
             </CommentLink>
           </Divider>
         </div>
@@ -64,7 +63,6 @@ ChildComments.propTypes = {
   parentCommentCommentableId: PropTypes.number.isRequired,
   comments: PropTypes.arrayOf(childCommentShape).isRequired,
   extraComments: PropTypes.number.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(ChildComments);
+export default ChildComments;

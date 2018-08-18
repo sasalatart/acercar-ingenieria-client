@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
 import Form from '../../../containers/Announcements/Form';
@@ -32,7 +32,6 @@ export default class Announcements extends Component {
     onModalOpen: PropTypes.func.isRequired,
     onModalClose: PropTypes.func.isRequired,
     renderModal: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -83,14 +82,13 @@ export default class Announcements extends Component {
       onModalOpen,
       onModalClose,
       renderModal,
-      intl: { formatMessage: t },
     } = this.props;
     const { lightboxOpen, clickedIndex } = this.state;
 
     return (
       <Fragment>
         <ActionBar onCreateClicked={onModalOpen} />
-        <Title>{t({ id: 'announcements' })}</Title>
+        <Title><FormattedMessage id="announcements" /></Title>
 
         <PaginationControls
           pagination={pagination}
@@ -108,7 +106,7 @@ export default class Announcements extends Component {
             onClose={this.handleLightboxClosed}
           />}
 
-        {renderModal(t({ id: 'announcements.new' }), <Form onSubmitSuccess={onModalClose} />)}
+        {renderModal(<FormattedMessage id="announcements.new" />, <Form onSubmitSuccess={onModalClose} />)}
       </Fragment>
     );
   }

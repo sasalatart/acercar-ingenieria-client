@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ToolTipIcon from './ToolTipIcon';
 
-function EditIcon({ onClick, to, intl: { formatMessage: t } }) {
+function EditIcon({ onClick, to }) {
   const toRender = (
     <ToolTipIcon
-      toolTip={t({ id: 'forms.edit' })}
+      toolTip={<FormattedMessage id="forms.edit" />}
       icon="edit"
       onClick={onClick}
       withPointer
@@ -22,7 +22,6 @@ function EditIcon({ onClick, to, intl: { formatMessage: t } }) {
 EditIcon.propTypes = {
   to: PropTypes.string,
   onClick: PropTypes.func,
-  intl: intlShape.isRequired,
 };
 
 EditIcon.defaultProps = {
@@ -30,4 +29,4 @@ EditIcon.defaultProps = {
   onClick: undefined,
 };
 
-export default injectIntl(EditIcon);
+export default EditIcon;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { Row, Col } from 'antd';
 import {
@@ -34,11 +34,10 @@ function MajorForm({
   valid,
   submitting,
   handleSubmit,
-  intl: { formatMessage: t },
 }) {
   const categoryOptions = CATEGORIES.map(key => ({
     key,
-    label: t({ id: `majors.${key}` }),
+    label: <FormattedMessage id={`majors.${key}`} />,
     value: key,
   }));
 
@@ -49,7 +48,7 @@ function MajorForm({
           <Field
             name="name"
             component={TextField}
-            label={t({ id: 'forms.name' })}
+            label={<FormattedMessage id="forms.name" />}
             validate={validators.required}
           />
         </Col>
@@ -68,13 +67,13 @@ function MajorForm({
       <Field
         name="shortDescription"
         component={TextArea}
-        label={t({ id: 'forms.shortDescription' })}
+        label={<FormattedMessage id="forms.shortDescription" />}
         validate={[validators.required, validators.maxShortDescriptionLength]}
       />
       <Field
         name="videoUrl"
         component={TextField}
-        label={t({ id: 'forms.videoURL' })}
+        label={<FormattedMessage id="forms.videoURL" />}
         validate={[validators.required, validators.videoUrl]}
       />
       <div style={styles.logoFieldWrapper}>
@@ -89,7 +88,7 @@ function MajorForm({
       <Field
         name="description"
         component={RichTextField}
-        label={t({ id: 'forms.description' })}
+        label={<FormattedMessage id="forms.description" />}
         validate={validators.requiredRichText}
       />
       <SubmitButton disabled={!valid || submitting} loading={submitting} />
@@ -103,7 +102,6 @@ MajorForm.propTypes = {
   valid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 MajorForm.defaultProps = {

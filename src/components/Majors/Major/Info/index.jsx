@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
 import get from 'lodash/get';
@@ -22,12 +22,12 @@ const styles = {
   },
 };
 
-function MajorInfo({ loggedIn, major, intl: { formatMessage: t } }) {
+function MajorInfo({ loggedIn, major }) {
   return (
     <Fragment>
       <ActionBar id={major.id} />
       <Title>{major.name}</Title>
-      <SubTitle>{t({ id: `majors.${major.category}` })}</SubTitle>
+      <SubTitle><FormattedMessage id={`majors.${major.category}`} /></SubTitle>
 
       <Divider />
       <Row type="flex" justify="center" align="middle" gutter={24}>
@@ -66,7 +66,6 @@ function MajorInfo({ loggedIn, major, intl: { formatMessage: t } }) {
 MajorInfo.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   major: majorShape.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(MajorInfo);
+export default MajorInfo;

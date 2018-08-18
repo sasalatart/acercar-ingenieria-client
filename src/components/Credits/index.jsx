@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Radium from 'radium';
 import Form from '../../containers/Credits/Form';
 import Title from '../Layout/Title';
@@ -35,7 +35,6 @@ class Credits extends Component {
     onEditClicked: PropTypes.func.isRequired,
     onFormClose: PropTypes.func.isRequired,
     renderModal: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -65,14 +64,12 @@ class Credits extends Component {
       onNewClicked,
       onFormClose,
       renderModal,
-      intl: { formatMessage: t },
     } = this.props;
 
-    const modalTitle = editingId ? t({ id: 'credits.edit' }) : t({ id: 'credits.new' });
     return (
       <Fragment>
         <ActionBar onNewClicked={onNewClicked} />
-        <Title>{t({ id: 'credits' })}</Title>
+        <Title><FormattedMessage id="credits" /></Title>
 
         <div style={styles.obtainedFromWrapper}>
           <FormattedMessage id="credits.obtainedFrom" values={{ link: OBTAINED_FROM_LINK }} />
@@ -80,7 +77,10 @@ class Credits extends Component {
 
         {this.renderCredits()}
 
-        {renderModal(modalTitle, <Form id={editingId} onSubmitSuccess={onFormClose} />)}
+        {renderModal(
+          <FormattedMessage id={editingId ? 'credits.edit' : 'credits.new'} />,
+          <Form id={editingId} onSubmitSuccess={onFormClose} />,
+        )}
       </Fragment>
     );
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List, Avatar } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import { userShape } from '../../../../shapes';
@@ -12,22 +12,22 @@ function renderRole(role) {
   );
 }
 
-function RolesList({ user, intl: { formatMessage: t } }) {
+function RolesList({ user }) {
   const roles = [];
 
   if (user.admin) {
-    roles.push({ icon: 'star', name: t({ id: 'admin.ofPlatform' }) });
+    roles.push({ icon: 'star', name: <FormattedMessage id="admin.ofPlatform" /> });
   }
 
   if (!isEmpty(user.adminOfMajors)) {
     roles.push(...user.adminOfMajors.map(({ name }) => ({
       icon: 'book',
-      name: t({ id: 'admin.ofMajor' }, { major: name }),
+      name: <FormattedMessage id="admin.ofMajor" values={{ major: name }} />,
     })));
   }
 
   if (!roles.length) {
-    roles.push({ icon: 'user', name: t({ id: 'student' }) });
+    roles.push({ icon: 'user', name: <FormattedMessage id="student" /> });
   }
 
   return (
@@ -37,7 +37,6 @@ function RolesList({ user, intl: { formatMessage: t } }) {
 
 RolesList.propTypes = {
   user: userShape.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(RolesList);
+export default RolesList;

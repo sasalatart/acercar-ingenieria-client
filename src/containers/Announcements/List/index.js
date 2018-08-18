@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { pagingFns, loadAnnouncements } from '../../../store/ducks/announcements';
 import { getIsFetching } from '../../../store/ducks/loading';
@@ -25,4 +24,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 const component = connect(mapStateToProps, mapDispatchToProps)(Announcements);
-export default injectIntl(withModal(component));
+export default withModal(component);

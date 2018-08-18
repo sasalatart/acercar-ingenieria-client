@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
@@ -19,7 +19,6 @@ export default class DiscussionsList extends Component {
     mine: PropTypes.bool,
     loadDiscussions: PropTypes.func.isRequired,
     onTagClick: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -50,14 +49,15 @@ export default class DiscussionsList extends Component {
       discussionSummaries,
       mine,
       loadDiscussions,
-      intl: { formatMessage: t },
       ...restProps
     } = this.props;
 
     return (
       <Fragment>
         <ActionBar mine={mine} {...restProps} />
-        <Title>{t({ id: mine ? 'discussions.mine' : 'discussions' })}</Title>
+        <Title>
+          <FormattedMessage id={mine ? 'discussions.mine' : 'discussions'} />
+        </Title>
 
         <PaginationControls
           pagination={pagination}

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { attachmentShape } from '../../shapes';
@@ -26,10 +26,10 @@ function renderItem(attachment) {
   );
 }
 
-function Attachments({ attachments, intl: { formatMessage: t } }) {
+function Attachments({ attachments }) {
   return (
     <Fragment>
-      <h1>{t({ id: 'attachments' })}</h1>
+      <h1><FormattedMessage id="attachments" /></h1>
       <List
         dataSource={attachments}
         renderItem={renderItem}
@@ -42,7 +42,6 @@ function Attachments({ attachments, intl: { formatMessage: t } }) {
 
 Attachments.propTypes = {
   attachments: PropTypes.arrayOf(attachmentShape).isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(Attachments);
+export default Attachments;

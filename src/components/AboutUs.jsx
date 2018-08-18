@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'antd';
 import Linkify from 'react-linkify';
 import ReactPlayer from 'react-player';
@@ -14,43 +14,39 @@ const styles = {
   mediaContainer: themeStyles.mediaContainer,
 };
 
-function renderParagraph(text) {
+function renderParagraph(textId) {
   return (
     <Linkify>
-      <p style={styles.justifiedText}>{text}</p>
+      <p style={styles.justifiedText}>
+        <FormattedMessage id={textId} />
+      </p>
     </Linkify>
   );
 }
 
-function AboutUs({ intl: { formatMessage: t } }) {
+export default function AboutUs() {
   return (
     <Fragment>
       <ActionBar />
-      <Title>{t({ id: 'aboutUs' })}</Title>
+      <Title><FormattedMessage id="aboutUs" /></Title>
 
       <Row gutter={36}>
         <Col sm={12}>
-          <h1>{t({ id: 'aboutUs.whatIsAI.title' })}</h1>
-          {renderParagraph(t({ id: 'aboutUs.whatIsAI.content' }))}
+          <h1><FormattedMessage id="aboutUs.whatIsAI.title" /></h1>
+          {renderParagraph('aboutUs.whatIsAI.content')}
 
           <div style={styles.mediaContainer}>
             <ReactPlayer url="//player.vimeo.com/video/56773559" controls />
           </div>
         </Col>
         <Col sm={12}>
-          <h1>{t({ id: 'aboutUs.mission.title' })}</h1>
-          {renderParagraph(t({ id: 'aboutUs.mission.content' }))}
+          <h1><FormattedMessage id="aboutUs.mission.title" /></h1>
+          {renderParagraph('aboutUs.mission.content')}
 
-          <h1>{t({ id: 'aboutUs.vision.title' })}</h1>
-          {renderParagraph(t({ id: 'aboutUs.vision.content' }))}
+          <h1><FormattedMessage id="aboutUs.vision.title" /></h1>
+          {renderParagraph('aboutUs.vision.content')}
         </Col>
       </Row>
     </Fragment>
   );
 }
-
-AboutUs.propTypes = {
-  intl: intlShape.isRequired,
-};
-
-export default injectIntl(AboutUs);

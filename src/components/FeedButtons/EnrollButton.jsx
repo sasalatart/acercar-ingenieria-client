@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ToggleLoadingButton from '../Layout/ToggleLoadingButton';
 
-function EnrollButton({ enrolledByCurrentUser, intl: { formatMessage: t }, ...rest }) {
+function EnrollButton({ enrolledByCurrentUser, ...rest }) {
   return (
     <ToggleLoadingButton
       active={enrolledByCurrentUser}
-      content={t({ id: `notifications.${enrolledByCurrentUser ? 'off' : 'on'}` })}
+      content={<FormattedMessage id={`notifications.${enrolledByCurrentUser ? 'off' : 'on'}`} />}
       icon={enrolledByCurrentUser ? ['fas', 'bell'] : ['far', 'bell-slash']}
       toolTipped
       {...rest}
@@ -17,7 +17,6 @@ function EnrollButton({ enrolledByCurrentUser, intl: { formatMessage: t }, ...re
 
 EnrollButton.propTypes = {
   enrolledByCurrentUser: PropTypes.bool,
-  intl: intlShape.isRequired,
 };
 
 EnrollButton.defaultProps = {

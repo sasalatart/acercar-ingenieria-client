@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Layout } from 'antd';
 import {
   loggedInRoute,
@@ -37,11 +37,10 @@ export default class Major extends Component {
     loggedIn: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     major: majorShape.isRequired,
-    intl: intlShape.isRequired,
   };
 
   getMenuItems = () => {
-    const { loggedIn, major, intl: { formatMessage: t } } = this.props;
+    const { loggedIn, major } = this.props;
 
     return [{
       key: this.majorKeys.info,
@@ -59,7 +58,7 @@ export default class Major extends Component {
     }, {
       key: this.majorKeys.users,
       icon: 'users',
-      text: t({ id: 'majors.interestedUsers' }),
+      text: <FormattedMessage id="majors.interestedUsers" />,
       noRender: !loggedIn,
     }, {
       key: this.majorKeys.questions,
@@ -68,7 +67,7 @@ export default class Major extends Component {
     }, {
       key: this.majorKeys.articles,
       icon: 'file-alt',
-      text: t({ id: 'majors.articles' }),
+      text: <FormattedMessage id="majors.articles" />,
       noRender: !loggedIn,
     }];
   }

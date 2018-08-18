@@ -46,8 +46,9 @@ IconText.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]).isRequired,
   text: PropTypes.oneOfType([
-    PropTypes.string.isRequired,
-    PropTypes.number.isRequired,
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.element,
   ]).isRequired,
   withPointer: PropTypes.bool,
   hideable: PropTypes.bool,

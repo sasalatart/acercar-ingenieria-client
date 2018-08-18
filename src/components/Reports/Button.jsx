@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Alert } from 'antd';
 import withModal from '../../hoc/withModal';
 import ReportForm from '../../containers/Reports/Form';
@@ -18,14 +18,13 @@ function ReportButton({
   renderModal,
   onModalOpen,
   onModalClose,
-  intl: { formatMessage: t },
 }) {
   const modalContents = (
     <Fragment>
       <Alert
         type="info"
-        message={t({ id: 'instructions' })}
-        description={t({ id: 'reports.instructions' })}
+        message={<FormattedMessage id="instructions" />}
+        description={<FormattedMessage id="reports.instructions" />}
         style={styles.alert}
         showIcon
       />
@@ -37,10 +36,10 @@ function ReportButton({
   return (
     <Fragment>
       <HideableButton onClick={onModalOpen} icon="exclamation-circle">
-        {t({ id: 'report' })}
+        <FormattedMessage id="report" />
       </HideableButton>
 
-      {renderModal(t({ id: 'reports.sendForm' }), modalContents)}
+      {renderModal(<FormattedMessage id="reports.sendForm" />, modalContents)}
     </Fragment>
   );
 }
@@ -51,7 +50,7 @@ ReportButton.propTypes = {
   renderModal: PropTypes.func.isRequired,
   onModalOpen: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+
 };
 
-export default injectIntl(withModal(ReportButton));
+export default withModal(ReportButton);

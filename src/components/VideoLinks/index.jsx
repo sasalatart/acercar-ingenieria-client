@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import withModalForm from '../../hoc/withModalForm';
 import Form from '../../containers/VideoLinks/Form';
 import VideosList from '../../containers/VideoLinks/List';
@@ -16,7 +16,6 @@ function VideoLinks({
   onEditClicked,
   onFormClose,
   renderModal,
-  intl: { formatMessage: t },
 }) {
   const videoLinkableProps = parseBaseResource(match.params);
 
@@ -28,7 +27,7 @@ function VideoLinks({
       <VideosList {...videoLinkableProps} onEditClicked={onEditClicked} />
 
       {renderModal(
-        editingId ? t({ id: 'videoLinks.edit' }) : t({ id: 'videoLinks.new' }),
+        <FormattedMessage id={editingId ? 'videoLinks.edit' : 'videoLinks.new'} />,
         <Form id={editingId} {...videoLinkableProps} onSubmitSuccess={onFormClose} />,
       )}
     </Fragment>
@@ -43,11 +42,10 @@ VideoLinks.propTypes = {
   onEditClicked: PropTypes.func.isRequired,
   onFormClose: PropTypes.func.isRequired,
   renderModal: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 VideoLinks.defaultProps = {
   editingId: undefined,
 };
 
-export default injectIntl(withModalForm(VideoLinks));
+export default withModalForm(VideoLinks);

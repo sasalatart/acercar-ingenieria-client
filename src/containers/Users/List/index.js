@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
 import {
@@ -51,5 +50,4 @@ function mapDispatchToProps(dispatch, { majorId, admins }) {
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(UsersList);
-export default injectIntl(withAuthorization(component));
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(UsersList));

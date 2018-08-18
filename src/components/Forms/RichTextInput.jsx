@@ -29,7 +29,10 @@ class RichTextInput extends Component {
   static propTypes = {
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
     meta: fieldMetaShape.isRequired,
-    label: PropTypes.string,
+    label: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]),
     editorProps: PropTypes.shape({}),
   };
 

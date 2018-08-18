@@ -1,13 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert } from 'antd';
-import {
-  TextArea,
-  SwitchField,
-  SubmitButton,
-} from '../Forms';
+import { TextArea, SwitchField, SubmitButton } from '../Forms';
 
 const styles = {
   pinnedWrapper: {
@@ -27,15 +23,14 @@ function QuestionForm({
   valid,
   submitting,
   handleSubmit,
-  intl: { formatMessage: t },
 }) {
   return (
     <Fragment>
       {!id &&
         <Alert
           type="info"
-          message={t({ id: 'forms.beforeCreatingQuestionAlert.message' })}
-          description={t({ id: 'forms.beforeCreatingQuestionAlert.description' })}
+          message={<FormattedMessage id="forms.beforeCreatingQuestionAlert.message" />}
+          description={<FormattedMessage id="forms.beforeCreatingQuestionAlert.description" />}
           style={styles.alert}
           showIcon
         />
@@ -44,20 +39,24 @@ function QuestionForm({
         <Field
           name="question"
           component={TextArea}
-          label={t({ id: 'forms.question' })}
+          label={<FormattedMessage id="forms.question" />}
           validate={[validators.required, validators.minLength, validators.maxQuestionLength]}
         />
         {adminOrMajorAdmin &&
           <Field
             name="answer"
             component={TextArea}
-            label={t({ id: 'forms.answer' })}
+            label={<FormattedMessage id="forms.answer" />}
             validate={[validators.minLength, validators.maxAnswerLength]}
           />
         }
         {adminOrMajorAdmin &&
           <div style={styles.pinnedWrapper}>
-            <Field name="pinned" component={SwitchField} label={t({ id: 'forms.pinned' })} />
+            <Field
+              name="pinned"
+              component={SwitchField}
+              label={<FormattedMessage id="forms.pinned" />}
+            />
           </div>
         }
         <SubmitButton disabled={!valid || submitting} loading={submitting} />
@@ -73,7 +72,6 @@ QuestionForm.propTypes = {
   valid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 QuestionForm.defaultProps = {

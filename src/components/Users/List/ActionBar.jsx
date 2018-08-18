@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import withAuthorization from '../../../hoc/withAuthorization';
 import withModal from '../../../hoc/withModal';
 import SearchButtons from '../../../containers/Search/Buttons';
@@ -15,12 +15,11 @@ function UsersActionBar({
   renderModal,
   onModalOpen,
   resetPagination,
-  intl: { formatMessage: t },
 }) {
   const actions = [
     <SearchButtons
       key="search"
-      searchTextLabel={t({ id: 'search.users' })}
+      searchTextLabel={<FormattedMessage id="search.users" />}
       beforeSearch={resetPagination}
     />,
   ];
@@ -28,7 +27,7 @@ function UsersActionBar({
   if (adminOrMajorAdmin && !admins && majorId) {
     const contactButton = (
       <HideableButton key="email" onClick={onModalOpen} icon="envelope">
-        {t({ id: 'majors.email' })}
+        <FormattedMessage id="majors.email" />
       </HideableButton>
     );
 
@@ -39,7 +38,7 @@ function UsersActionBar({
     <Fragment>
       <ActionBar actions={actions} />
 
-      {renderModal(t({ id: 'majors.email' }), <EmailForm majorId={majorId} />)}
+      {renderModal(<FormattedMessage id="majors.email" />, <EmailForm majorId={majorId} />)}
     </Fragment>
   );
 }
@@ -51,11 +50,10 @@ UsersActionBar.propTypes = {
   renderModal: PropTypes.func.isRequired,
   onModalOpen: PropTypes.func.isRequired,
   resetPagination: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 UsersActionBar.defaultProps = {
   majorId: undefined,
 };
 
-export default injectIntl(withAuthorization(withModal(UsersActionBar)));
+export default withAuthorization(withModal(UsersActionBar));

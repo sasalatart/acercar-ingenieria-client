@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import ToolTipIcon from '../Icons/ToolTipIcon';
 import HideableButton from '../Icons/HideableButton';
@@ -10,9 +10,8 @@ function DestroyIconOrButton({
   iconOnly,
   label,
   onClick,
-  intl: { formatMessage: t },
 }) {
-  const text = label || t({ id: 'forms.delete' });
+  const text = label || <FormattedMessage id="forms.delete" />;
   const commonProps = { icon: 'trash-alt', onClick, loading };
 
   if (iconOnly) {
@@ -29,9 +28,11 @@ function DestroyIconOrButton({
 DestroyIconOrButton.propTypes = {
   loading: PropTypes.bool.isRequired,
   iconOnly: PropTypes.bool.isRequired,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
   onClick: PropTypes.func,
-  intl: intlShape.isRequired,
 };
 
 DestroyIconOrButton.defaultProps = {
@@ -39,4 +40,4 @@ DestroyIconOrButton.defaultProps = {
   onClick: noop,
 };
 
-export default injectIntl(DestroyIconOrButton);
+export default DestroyIconOrButton;

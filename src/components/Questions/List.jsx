@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Collapse, Button } from 'antd';
 import Linkify from 'react-linkify';
 import get from 'lodash/get';
@@ -43,7 +43,6 @@ export default class QuestionsList extends Component {
     pagination: paginationShape,
     loadQuestions: PropTypes.func.isRequired,
     onEditClicked: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -60,7 +59,7 @@ export default class QuestionsList extends Component {
   renderItem = ({
     id, majorSummary, question, answer, pinned,
   }) => {
-    const { adminOrMajorAdmin, onEditClicked, intl: { formatMessage: t } } = this.props;
+    const { adminOrMajorAdmin, onEditClicked } = this.props;
 
     const header = pinned
       ? <IconText icon="star" text={question} iconStyle={styles.star} withPointer />
@@ -75,7 +74,7 @@ export default class QuestionsList extends Component {
         {adminOrMajorAdmin &&
           <div style={styles.actions}>
             <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
-              {t({ id: 'forms.edit' })}
+              <FormattedMessage id="forms.edit" />
             </Button>
             <DestroyButton {...getCollectionParams(get(majorSummary, 'id'), { id })} />
           </div>

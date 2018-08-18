@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Spin } from 'antd';
 
 const styles = {
@@ -19,9 +19,9 @@ const styles = {
   },
 };
 
-function Spinner({ absolute, noData, intl: { formatMessage: t } }) {
+function Spinner({ absolute, noData }) {
   if (noData) {
-    return <h1 style={styles.textCentered}>{t({ id: 'nothingHereYet' })}</h1>;
+    return <h1 style={styles.textCentered}><FormattedMessage id="nothingHereYet" /></h1>;
   }
 
   return (
@@ -34,7 +34,6 @@ function Spinner({ absolute, noData, intl: { formatMessage: t } }) {
 Spinner.propTypes = {
   noData: PropTypes.bool,
   absolute: PropTypes.bool,
-  intl: intlShape.isRequired,
 };
 
 Spinner.defaultProps = {
@@ -42,4 +41,4 @@ Spinner.defaultProps = {
   absolute: false,
 };
 
-export default injectIntl(Spinner);
+export default Spinner;

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Radium from 'radium';
 import LoadingBar from 'react-redux-loading-bar';
 import AvatarWithNotifications from '../../Users/Profile/AvatarWithNotifications';
@@ -62,12 +62,12 @@ const styles = {
   },
 };
 
-function renderLoggedInButtons(currentUser, avatarProps, signOut, t) {
+function renderLoggedInButtons(currentUser, avatarProps, signOut) {
   return (
     <div>
       <AvatarWithNotifications currentUser={currentUser} {...avatarProps} style={styles.avatar} />
       <ToolTipIcon
-        toolTip={t({ id: 'sessions.signOut' })}
+        toolTip={<FormattedMessage id="sessions.signOut" />}
         icon="sign-out-alt"
         onClick={signOut}
         type="danger"
@@ -79,20 +79,20 @@ function renderLoggedInButtons(currentUser, avatarProps, signOut, t) {
   );
 }
 
-function renderLoggedOutButtons(t) {
+function renderLoggedOutButtons() {
   return (
     <div>
       <HideableButton type="primary" icon="sign-in-alt" to={routes.signIn} style={styles.button}>
-        {t({ id: 'sessions.signIn' })}
+        <FormattedMessage id="sessions.signIn" />
       </HideableButton>
       <HideableButton type="default" icon="rocket" to={routes.signUp} style={styles.button} ghost>
-        {t({ id: 'sessions.signUp' })}
+        <FormattedMessage id="sessions.signUp" />
       </HideableButton>
     </div>
   );
 }
 
-function renderUpperHeader(currentUser, avatarProps, localeProps, signOut, t) {
+function renderUpperHeader(currentUser, avatarProps, localeProps, signOut) {
   return (
     <Spaced style={styles.upperHeader} padded>
       <Link to={routes.landing} href={routes.landing} style={styles.innerUpperHeader}>
@@ -106,8 +106,8 @@ function renderUpperHeader(currentUser, avatarProps, localeProps, signOut, t) {
       </Link>
       <div style={styles.innerUpperHeader}>
         {currentUser
-          ? renderLoggedInButtons(currentUser, avatarProps, signOut, t)
-          : renderLoggedOutButtons(t)
+          ? renderLoggedInButtons(currentUser, avatarProps, signOut)
+          : renderLoggedOutButtons()
         }
         <LocaleSelect {...localeProps} style={styles.localeSelect} />
       </div>
@@ -115,7 +115,7 @@ function renderUpperHeader(currentUser, avatarProps, localeProps, signOut, t) {
   );
 }
 
-function renderLowerHeader(currentUser, t) {
+function renderLowerHeader(currentUser) {
   return (
     <Spaced style={styles.lowerHeader} padded>
       <HeaderLink
@@ -131,27 +131,27 @@ function renderLowerHeader(currentUser, t) {
       {currentUser &&
         <HeaderLink
           to={routes.articles()}
-          text={t({ id: 'articles' })}
+          text={<FormattedMessage id="articles" />}
           icon="file-alt"
         />
       }
       {currentUser &&
         <HeaderLink
           to={routes.discussions}
-          text={t({ id: 'discussions' })}
+          text={<FormattedMessage id="discussions" />}
           icon="comments"
         />
       }
       {currentUser && currentUser.admin &&
         <HeaderLink
           to={routes.users}
-          text={t({ id: 'users' })}
+          text={<FormattedMessage id="users" />}
           icon="users"
         />
       }
       <HeaderLink
         to={routes.aboutUs}
-        text={t({ id: 'aboutUs' })}
+        text={<FormattedMessage id="aboutUs" />}
         icon="smile"
       />
     </Spaced>
@@ -166,15 +166,14 @@ function Header({
   loadNotificationsCount,
   setNotificationsCount,
   signOut,
-  intl: { formatMessage: t },
 }) {
   const localeProps = { locale, setLocale };
   const avatarProps = { notificationsCount, loadNotificationsCount, setNotificationsCount };
 
   return (
     <Fragment>
-      {renderUpperHeader(currentUser, avatarProps, localeProps, signOut, t)}
-      {renderLowerHeader(currentUser, t)}
+      {renderUpperHeader(currentUser, avatarProps, localeProps, signOut)}
+      {renderLowerHeader(currentUser)}
       <LoadingBar style={styles.loadingBar} />
     </Fragment>
   );
@@ -188,7 +187,6 @@ Header.propTypes = {
   loadNotificationsCount: PropTypes.func.isRequired,
   setNotificationsCount: PropTypes.func.isRequired,
   signOut: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 Header.defaultProps = {

@@ -20,7 +20,10 @@ function RadioField(props) {
 RadioField.propTypes = {
   button: PropTypes.bool,
   radioOptions: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string.isRequired,
+    label: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]).isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,

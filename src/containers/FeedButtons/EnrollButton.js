@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { enroll, unenroll } from '../../store/ducks/enrollments';
 import {
   getIsCreating,
@@ -26,5 +25,4 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(EnrollButton);
-export default injectIntl(withAuthorization(component));
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(EnrollButton));

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import MajorMeta from '../../../Majors/List/Meta';
@@ -22,9 +22,9 @@ function renderMajor(majorOfInterest) {
   );
 }
 
-function MajorsList({ majorsOfInterest, intl: { formatMessage: t } }) {
+function MajorsList({ majorsOfInterest }) {
   if (isEmpty(majorsOfInterest)) {
-    return <h4 style={styles.noneOfInterest}>{t({ id: 'profile.noMajorsOfInterest' })}</h4>;
+    return <h4 style={styles.noneOfInterest}><FormattedMessage id="profile.noMajorsOfInterest" /></h4>;
   }
 
   return (
@@ -39,11 +39,10 @@ function MajorsList({ majorsOfInterest, intl: { formatMessage: t } }) {
 
 MajorsList.propTypes = {
   majorsOfInterest: PropTypes.arrayOf(majorOfInterestShape),
-  intl: intlShape.isRequired,
 };
 
 MajorsList.defaultProps = {
   majorsOfInterest: [],
 };
 
-export default injectIntl(MajorsList);
+export default MajorsList;

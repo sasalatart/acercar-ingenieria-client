@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
-import { injectIntl } from 'react-intl';
 import { goToArticles } from '../../../store/ducks/routes';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
 import {
@@ -61,4 +60,4 @@ const component = connect(
   mapDispatchToProps,
 )(withLoadableResource('loadArticle', 'article')(ArticleWrapper));
 
-export default injectIntl(withRouter(withAuthorization(component)));
+export default withRouter(withAuthorization(component));

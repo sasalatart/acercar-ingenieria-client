@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { intlShape } from 'react-intl';
-import {
-  ImageField,
-  SwitchField,
-  SubmitButton,
-} from '../Forms';
+import { FormattedMessage } from 'react-intl';
+import { ImageField, SwitchField, SubmitButton } from '../Forms';
 
 const styles = {
   centered: {
@@ -24,7 +20,6 @@ function AnnouncementForm({
   valid,
   submitting,
   handleSubmit,
-  intl: { formatMessage: t },
 }) {
   return (
     <form onSubmit={handleSubmit}>
@@ -39,7 +34,7 @@ function AnnouncementForm({
         <Field
           name="pinned"
           component={SwitchField}
-          label={t({ id: 'forms.pinned' })}
+          label={<FormattedMessage id="forms.pinned" />}
         />
       </div>
       <SubmitButton disabled={!valid || submitting} loading={submitting} />
@@ -52,7 +47,6 @@ AnnouncementForm.propTypes = {
   valid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 export default AnnouncementForm;

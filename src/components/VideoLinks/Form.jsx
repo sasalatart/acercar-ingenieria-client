@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { TextField, SwitchField, SubmitButton } from '../Forms';
 
@@ -18,14 +18,13 @@ function VideosForm({
   valid,
   submitting,
   handleSubmit,
-  intl: { formatMessage: t },
 }) {
   return (
     <form onSubmit={handleSubmit}>
       <Field
         name="title"
         component={TextField}
-        label={t({ id: 'forms.title' })}
+        label={<FormattedMessage id="forms.title" />}
         validate={validators.required}
       />
       <Field
@@ -38,7 +37,7 @@ function VideosForm({
         <Field
           name="pinned"
           component={SwitchField}
-          label={t({ id: 'forms.pinned' })}
+          label={<FormattedMessage id="forms.pinned" />}
         />
       </div>
       <SubmitButton disabled={!valid || submitting} loading={submitting} />
@@ -51,7 +50,6 @@ VideosForm.propTypes = {
   valid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 export default VideosForm;

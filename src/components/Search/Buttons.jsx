@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import withModal from '../../hoc/withModal';
 import HideableButton from '../Icons/HideableButton';
 import Form from '../../containers/Search/Form';
@@ -21,10 +21,9 @@ function SearchButton({
   onModalOpen,
   onModalClose,
   renderModal,
-  intl: { formatMessage: t },
   ...restProps
 }) {
-  const title = t({ id: 'search' });
+  const title = <FormattedMessage id="search" />;
 
   return (
     <Fragment>
@@ -34,7 +33,7 @@ function SearchButton({
 
       {filtersActive &&
         <HideableButton icon="times" onClick={removeFilter} style={styles.button}>
-          {t({ id: 'search.reset' })}
+          <FormattedMessage id="search.reset" />
         </HideableButton>
       }
 
@@ -49,7 +48,6 @@ SearchButton.propTypes = {
   onModalOpen: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired,
   renderModal: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(withModal(SearchButton));
+export default withModal(SearchButton);

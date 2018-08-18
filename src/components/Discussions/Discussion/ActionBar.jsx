@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import withAuthorization from '../../../hoc/withAuthorization';
 import DestroyButton from '../../../containers/DestroyButton';
 import ActionBar from '../../../containers/Layout/ActionBar';
@@ -14,7 +14,6 @@ function DiscussionActionBar({
   admin,
   isAuthor,
   onDestroy,
-  intl: { formatMessage: t },
 }) {
   const commonProps = { collection: collections.discussions, id };
 
@@ -23,7 +22,7 @@ function DiscussionActionBar({
   if (admin || isAuthor) {
     const editButton = (
       <ButtonLink key="edit" to={routes.discussionEdit(id)} icon="edit">
-        {t({ id: 'forms.edit' })}
+        <FormattedMessage id="forms.edit" />
       </ButtonLink>
     );
 
@@ -43,7 +42,6 @@ DiscussionActionBar.propTypes = {
   admin: PropTypes.bool.isRequired,
   isAuthor: PropTypes.bool.isRequired,
   onDestroy: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(withAuthorization(DiscussionActionBar));
+export default withAuthorization(DiscussionActionBar);

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Alert, Col, Row } from 'antd';
 import {
   TextField,
@@ -44,7 +44,6 @@ export default class ArticleForm extends Component {
     loadMajors: PropTypes.func.isRequired,
     loadCategories: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -70,7 +69,6 @@ export default class ArticleForm extends Component {
       valid,
       submitting,
       handleSubmit,
-      intl: { formatMessage: t },
     } = this.props;
 
     if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
@@ -78,12 +76,14 @@ export default class ArticleForm extends Component {
     return (
       <Fragment>
         <ActionBar />
-        <Title>{t({ id: `articles.${id ? 'edit' : 'new'}` })}</Title>
+        <Title>
+          <FormattedMessage id={id ? 'articles.edit' : 'articles.new'} />
+        </Title>
 
         {!adminOrMajorAdmin &&
           <Alert
             type="warning"
-            message={t({ id: 'articles.approvalRequired.message' })}
+            message={<FormattedMessage id="articles.approvalRequired.message" />}
             showIcon
           />
         }
@@ -92,7 +92,7 @@ export default class ArticleForm extends Component {
           <Field
             name="title"
             component={TextField}
-            label={t({ id: 'forms.title' })}
+            label={<FormattedMessage id="forms.title" />}
             validate={[validators.required]}
           />
           <Row gutter={GUTTER}>
@@ -109,13 +109,13 @@ export default class ArticleForm extends Component {
                 name="categoryList"
                 component={TagsField}
                 mode="multiple"
-                label={t({ id: 'categories' })}
+                label={<FormattedMessage id="categories" />}
                 options={categoryOptions}
               />
               <Field
                 name="shortDescription"
                 component={TextArea}
-                label={t({ id: 'forms.shortDescription' })}
+                label={<FormattedMessage id="forms.shortDescription" />}
                 validate={[validators.required, validators.maxShortDescriptionLength]}
               />
             </Col>
@@ -124,7 +124,7 @@ export default class ArticleForm extends Component {
                 <Field
                   name="preview"
                   component={ImageField}
-                  label={t({ id: 'forms.optionalPicture' })}
+                  label={<FormattedMessage id="forms.optionalPicture" />}
                   imagePlaceholder={currentPreviewURL}
                   validate={[validators.image, validators.maxPreviewSize]}
                 />
@@ -134,7 +134,7 @@ export default class ArticleForm extends Component {
           <Field
             name="content"
             component={RichTextField}
-            label={t({ id: 'forms.content' })}
+            label={<FormattedMessage id="forms.content" />}
             validate={validators.requiredRichText}
           />
           <div style={styles.fileInputWrapper}>
@@ -142,8 +142,8 @@ export default class ArticleForm extends Component {
               name="attachments"
               component={FilesField}
               previousAttachments={previousAttachments}
-              instructions={t({ id: 'forms.dropzone' })}
-              label={t({ id: 'forms.attachments' })}
+              instructions={<FormattedMessage id="forms.dropzone" />}
+              label={<FormattedMessage id="forms.attachments" />}
               validate={validators.maxSizePerAttachment}
             />
           </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ProfileLink from './Users/Profile/Link';
 import { userSummaryShape } from '../shapes';
 
@@ -12,10 +12,10 @@ const styles = {
   },
 };
 
-function Author({ author, spanned, intl: { formatMessage: t } }) {
+function Author({ author, spanned }) {
   const content = (
     <span>
-      <span>{t({ id: 'submittedBy' })}</span>
+      <span><FormattedMessage id="submittedBy" /></span>
       <ProfileLink id={author.id}>{author.firstName} {author.lastName}</ProfileLink>
     </span>
   );
@@ -28,11 +28,10 @@ function Author({ author, spanned, intl: { formatMessage: t } }) {
 Author.propTypes = {
   author: userSummaryShape.isRequired,
   spanned: PropTypes.bool,
-  intl: intlShape.isRequired,
 };
 
 Author.defaultProps = {
   spanned: false,
 };
 
-export default injectIntl(Author);
+export default Author;

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Button, Divider } from 'antd';
 import Title from '../Layout/Title';
 import Form from '../../containers/Comments/Form';
@@ -20,7 +20,6 @@ class CommentsSection extends Component {
     answersList: PropTypes.bool,
     toggable: PropTypes.bool,
     disabled: PropTypes.bool,
-    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -34,8 +33,7 @@ class CommentsSection extends Component {
   handleSetVisible = () => this.setState({ visible: true });
 
   renderTitleText() {
-    const { answersList, intl: { formatMessage: t } } = this.props;
-    return t({ id: answersList ? 'answers' : 'comments' });
+    return <FormattedMessage id={this.props.answersList ? 'answers' : 'comments'} />;
   }
 
   renderToggleButton() {
@@ -75,4 +73,4 @@ class CommentsSection extends Component {
   }
 }
 
-export default injectIntl(CommentsSection);
+export default CommentsSection;

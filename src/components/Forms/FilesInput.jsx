@@ -29,8 +29,14 @@ class FilesInput extends Component {
     previousAttachments: PropTypes.arrayOf(attachmentShape).isRequired,
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
     meta: fieldMetaShape.isRequired,
-    label: PropTypes.string,
-    instructions: PropTypes.string.isRequired,
+    label: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]),
+    instructions: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]).isRequired,
   };
 
   static defaultProps = {

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Divider } from 'antd';
 import lowerFirst from 'lodash/lowerFirst';
 import Title from '../../Layout/Title';
@@ -39,7 +39,6 @@ const styles = {
 export default class Comment extends Component {
   static propTypes = {
     comment: commentShape.isRequired,
-    intl: intlShape.isRequired,
   };
 
   state = { editing: false };
@@ -49,31 +48,31 @@ export default class Comment extends Component {
   handleStopEditing = () => this.setState({ editing: false });
 
   renderSubtitle() {
-    const { comment: { commentableType, commentableId }, intl: { formatMessage: t } } = this.props;
+    const { comment: { commentableType, commentableId } } = this.props;
     const CommentableLink = LINKS[commentableType];
     if (!CommentableLink) return null;
 
     const translatedCommentable = commentableType === LINKABLE_COMMENTABLES.major
       ? commentableType
-      : t({ id: lowerFirst(commentableType) });
+      : <FormattedMessage id={lowerFirst(commentableType)} />;
 
     return (
       <SubTitle>
         <CommentableLink id={commentableId}>
-          {t({ id: 'comments.goToCommentable' }, { commentable: translatedCommentable })}
+          <FormattedMessage id="comments.goToCommentable" values={{ commentable: translatedCommentable }} />
         </CommentableLink>
       </SubTitle>
     );
   }
 
   render() {
-    const { comment, intl: { formatMessage: t }, ...restProps } = this.props;
+    const { comment, ...restProps } = this.props;
     const { editing } = this.state;
 
     return (
       <Fragment>
         <ActionBar comment={comment} {...restProps} />
-        <Title>{t({ id: 'comment' })}</Title>
+        <Title><FormattedMessage id="comment" /></Title>
         {this.renderSubtitle()}
 
         <div style={styles.wrapper}>

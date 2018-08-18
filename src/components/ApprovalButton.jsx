@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ToggleLoadingButton from './Layout/ToggleLoadingButton';
 
-function ApprovalButton({ approved, intl: { formatMessage: t }, ...rest }) {
+function ApprovalButton({ approved, ...rest }) {
   return (
     <ToggleLoadingButton
       active={approved}
-      content={approved ? t({ id: 'reject' }) : t({ id: 'approve' })}
+      content={<FormattedMessage id={approved ? 'reject' : 'approve'} />}
       icon={approved ? 'lock' : 'unlock'}
       danger={approved}
       {...rest}
@@ -17,7 +17,6 @@ function ApprovalButton({ approved, intl: { formatMessage: t }, ...rest }) {
 
 ApprovalButton.propTypes = {
   approved: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(ApprovalButton);
+export default ApprovalButton;

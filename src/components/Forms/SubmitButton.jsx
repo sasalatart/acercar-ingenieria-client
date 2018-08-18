@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Button } from 'antd';
 
 const styles = {
@@ -15,7 +15,10 @@ const styles = {
 };
 
 function SubmitButton({
-  disabled, loading, size, style, intl: { formatMessage: t },
+  disabled,
+  loading,
+  size,
+  style,
 }) {
   return (
     <div style={styles.wrapper}>
@@ -27,7 +30,7 @@ function SubmitButton({
         size={size}
         style={{ ...styles.submitButton, ...style }}
       >
-        {t({ id: 'forms.submit' })}
+        <FormattedMessage id="forms.submit" />
       </Button>
     </div>
   );
@@ -38,7 +41,6 @@ SubmitButton.propTypes = {
   loading: PropTypes.bool.isRequired,
   size: PropTypes.string,
   style: PropTypes.shape({}),
-  intl: intlShape.isRequired,
 };
 
 SubmitButton.defaultProps = {
@@ -46,4 +48,4 @@ SubmitButton.defaultProps = {
   style: {},
 };
 
-export default injectIntl(SubmitButton);
+export default SubmitButton;

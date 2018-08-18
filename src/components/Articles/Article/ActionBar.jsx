@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import DestroyButton from '../../../containers/DestroyButton';
 import ApprovalButton from '../../../containers/ApprovalButton';
@@ -19,7 +19,6 @@ function ArticleActionBar({
     approved,
   },
   onDestroy,
-  intl: { formatMessage: t },
 }) {
   const majorId = majorSummary && majorSummary.id;
   const commonProps = getCollectionParams(majorId, { id });
@@ -34,7 +33,7 @@ function ArticleActionBar({
         icon="edit"
         to={routes.articleEdit(id, majorId)}
       >
-        {t({ id: 'forms.edit' })}
+        <FormattedMessage id="forms.edit" />
       </HideableButton>
     );
 
@@ -62,7 +61,6 @@ ArticleActionBar.propTypes = {
     articleSummaryShape,
   ]).isRequired,
   onDestroy: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(ArticleActionBar);
+export default ArticleActionBar;

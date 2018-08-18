@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Radium from 'radium';
 import HideableButton from '../Icons/HideableButton';
 import { breakpoints } from '../../theme';
@@ -29,11 +29,11 @@ function renderActions(actions) {
   );
 }
 
-function ActionBar({ actions, goBack, intl: { formatMessage: t } }) {
+function ActionBar({ actions, goBack }) {
   return (
     <div style={styles.actionBar(actions.length)}>
       <HideableButton type="primary" icon="chevron-left" onClick={goBack}>
-        {t({ id: 'goBack' })}
+        <FormattedMessage id="goBack" />
       </HideableButton>
       {renderActions(actions)}
     </div>
@@ -43,7 +43,6 @@ function ActionBar({ actions, goBack, intl: { formatMessage: t } }) {
 ActionBar.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.node),
   goBack: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 ActionBar.defaultProps = {

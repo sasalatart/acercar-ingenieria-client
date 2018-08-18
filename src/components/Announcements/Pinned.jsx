@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Carousel } from 'antd';
 import Image, { sizes } from '../Layout/Image';
 import ToolTipIcon from '../Icons/ToolTipIcon';
@@ -33,14 +33,15 @@ function mapAnnouncements(announcements) {
   ));
 }
 
-function PinnedAnnouncements({ admin, announcements, intl: { formatMessage: t } }) {
+function PinnedAnnouncements({ admin, announcements }) {
+  const tooltip = <FormattedMessage id="announcements.goToManagement" />;
   const mappedAnnouncements = mapAnnouncements(announcements);
 
   return (
     <Fragment>
       {admin &&
         <ToolTipIcon
-          toolTip={t({ id: 'announcements.goToManagement' })}
+          toolTip={tooltip}
           to={routes.announcements}
           icon="plus"
           shape="circle"
@@ -60,7 +61,6 @@ function PinnedAnnouncements({ admin, announcements, intl: { formatMessage: t } 
 PinnedAnnouncements.propTypes = {
   admin: PropTypes.bool.isRequired,
   announcements: PropTypes.arrayOf(announcementShape).isRequired,
-  intl: intlShape.isRequired,
 };
 
 export default PinnedAnnouncements;

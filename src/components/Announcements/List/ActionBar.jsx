@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import HideableButton from '../../Icons/HideableButton';
 
-function AnnouncementsActionBar({ onCreateClicked, intl: { formatMessage: t } }) {
+function AnnouncementsActionBar({ onCreateClicked }) {
   const actions = [
     <HideableButton type="primary" icon="plus" onClick={onCreateClicked}>
-      {t({ id: 'forms.create' })}
+      <FormattedMessage id="forms.create" />
     </HideableButton>,
   ];
 
@@ -16,7 +16,6 @@ function AnnouncementsActionBar({ onCreateClicked, intl: { formatMessage: t } })
 
 AnnouncementsActionBar.propTypes = {
   onCreateClicked: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(AnnouncementsActionBar);
+export default AnnouncementsActionBar;

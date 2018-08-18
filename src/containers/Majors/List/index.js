@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import {
   loadMajors,
@@ -28,5 +27,4 @@ const mapDispatchToProps = {
   loadMajors,
 };
 
-const component = connect(mapStateToProps, mapDispatchToProps)(List);
-export default injectIntl(withAuthorization(component));
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(List));

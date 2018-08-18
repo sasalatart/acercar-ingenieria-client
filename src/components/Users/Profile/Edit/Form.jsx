@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Field } from 'redux-form';
 import { Alert, Row, Col } from 'antd';
 import DataPlaceholder from '../../../Layout/DataPlaceholder';
@@ -45,7 +45,6 @@ export default class ProfileEditForm extends Component {
     submitting: PropTypes.bool.isRequired,
     loadMajors: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -69,12 +68,11 @@ export default class ProfileEditForm extends Component {
       return null;
     }
 
-    const { intl: { formatMessage: t } } = this.props;
     return (
       <Alert
         type="warning"
-        message={t({ id: 'forms.warning' })}
-        description={t({ id: 'forms.emailChanged' })}
+        message={<FormattedMessage id="forms.warning" />}
+        description={<FormattedMessage id="forms.emailChanged" />}
         style={styles.emailChangedWarning}
         showIcon
       />
@@ -90,7 +88,6 @@ export default class ProfileEditForm extends Component {
       valid,
       submitting,
       handleSubmit,
-      intl: { formatMessage: t },
     } = this.props;
 
     if (!majors) {
@@ -116,7 +113,7 @@ export default class ProfileEditForm extends Component {
               <Field
                 name="generation"
                 component={NumberField}
-                label={t({ id: 'forms.generation' })}
+                label={<FormattedMessage id="forms.generation" />}
                 validate={[validators.required, validators.numeric, validators.isBetweenYears]}
                 style={styles.generationInput}
               />
@@ -127,7 +124,7 @@ export default class ProfileEditForm extends Component {
               <Field
                 name="firstName"
                 component={TextField}
-                label={t({ id: 'forms.firstName' })}
+                label={<FormattedMessage id="forms.firstName" />}
                 validate={[validators.required, validators.maxNameLength]}
               />
             </Col>
@@ -135,7 +132,7 @@ export default class ProfileEditForm extends Component {
               <Field
                 name="lastName"
                 component={TextField}
-                label={t({ id: 'forms.lastName' })}
+                label={<FormattedMessage id="forms.lastName" />}
                 validate={[validators.required, validators.maxNameLength]}
               />
             </Col>

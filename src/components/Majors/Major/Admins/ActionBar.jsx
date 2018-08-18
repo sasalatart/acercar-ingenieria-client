@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Alert } from 'antd';
 import withModal from '../../../../hoc/withModal';
 import ActionBar from '../../../../containers/Layout/ActionBar';
@@ -13,13 +13,13 @@ const styles = {
   },
 };
 
-function renderModalContents(majorId, t) {
+function renderModalContents(majorId) {
   return (
     <Fragment>
       <Alert
         type="info"
-        message={t({ id: 'forms.beforeContactingAdmins.message' })}
-        description={t({ id: 'forms.beforeContactingAdmins.description' })}
+        message={<FormattedMessage id="forms.beforeContactingAdmins.message" />}
+        description={<FormattedMessage id="forms.beforeContactingAdmins.description" />}
         style={styles.alert}
         showIcon
       />
@@ -34,14 +34,13 @@ function MajorAdminsActionBar({
   hasAdmins,
   onModalOpen,
   renderModal,
-  intl: { formatMessage: t },
 }) {
   const actions = [];
 
   if (hasAdmins) {
     const contactButton = (
       <HideableButton onClick={onModalOpen} icon="envelope">
-        {t({ id: 'majors.email.personal' })}
+        <FormattedMessage id="majors.email.personal" />
       </HideableButton>
     );
 
@@ -52,7 +51,10 @@ function MajorAdminsActionBar({
     <Fragment>
       <ActionBar actions={actions} />
 
-      {renderModal(t({ id: 'majors.email.personal' }), renderModalContents(majorId, t))}
+      {renderModal(
+        <FormattedMessage id="majors.email.personal" />,
+        renderModalContents(majorId),
+      )}
     </Fragment>
   );
 }
@@ -62,7 +64,6 @@ MajorAdminsActionBar.propTypes = {
   hasAdmins: PropTypes.bool.isRequired,
   onModalOpen: PropTypes.func.isRequired,
   renderModal: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(withModal(MajorAdminsActionBar));
+export default withModal(MajorAdminsActionBar);

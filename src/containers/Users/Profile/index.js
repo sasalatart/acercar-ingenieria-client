@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { goToLanding } from '../../../store/ducks/routes';
 import { loadUser, getUserEntity } from '../../../store/ducks/users';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
@@ -37,10 +36,8 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
   };
 }
 
-const component = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
 )(Profile);
-
-export default injectIntl(component);

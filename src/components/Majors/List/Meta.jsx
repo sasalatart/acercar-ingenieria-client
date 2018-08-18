@@ -1,5 +1,5 @@
 import React from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import get from 'lodash/get';
 import Image, { sizes } from '../../Layout/Image';
@@ -16,7 +16,7 @@ const styles = {
   },
 };
 
-function MajorMeta({ major, majorOfInterest, intl: { formatMessage: t } }) {
+function MajorMeta({ major, majorOfInterest }) {
   const id = major ? major.id : majorOfInterest.majorId;
   const { logo, name } = major || majorOfInterest;
 
@@ -33,7 +33,7 @@ function MajorMeta({ major, majorOfInterest, intl: { formatMessage: t } }) {
   );
 
   const description = majorOfInterest
-    ? t({ id: `majors.${majorOfInterest.category}` })
+    ? <FormattedMessage id={`majors.${majorOfInterest.category}`} />
     : <p style={styles.shortDescription}>{major.shortDescription}</p>;
 
   return <Meta avatar={avatar} title={title} description={description} />;
@@ -42,7 +42,6 @@ function MajorMeta({ major, majorOfInterest, intl: { formatMessage: t } }) {
 MajorMeta.propTypes = {
   major: majorShape,
   majorOfInterest: majorOfInterestShape,
-  intl: intlShape.isRequired,
 };
 
 MajorMeta.defaultProps = {
@@ -50,4 +49,4 @@ MajorMeta.defaultProps = {
   majorOfInterest: undefined,
 };
 
-export default injectIntl(MajorMeta);
+export default MajorMeta;

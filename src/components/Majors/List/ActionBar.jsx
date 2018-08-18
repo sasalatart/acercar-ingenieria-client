@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import withAuthorization from '../../../hoc/withAuthorization';
 import ActionBar from '../../../containers/Layout/ActionBar';
 import HideableButton from '../../Icons/HideableButton';
 import routes from '../../../lib/routes';
 
-function MajorsActionBar({ admin, intl: { formatMessage: t } }) {
+function MajorsActionBar({ admin }) {
   const actions = [];
 
   if (admin) {
     const buttonLink = (
       <HideableButton to={routes.majorsNew} icon="plus">
-        {t({ id: 'majors.new' })}
+        <FormattedMessage id="majors.new" />
       </HideableButton>
     );
 
@@ -24,7 +24,6 @@ function MajorsActionBar({ admin, intl: { formatMessage: t } }) {
 
 MajorsActionBar.propTypes = {
   admin: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(withAuthorization(MajorsActionBar));
+export default withAuthorization(MajorsActionBar);

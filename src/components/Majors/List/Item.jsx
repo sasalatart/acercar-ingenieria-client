@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import DestroyButton from '../../../containers/DestroyButton';
 import MajorMeta from './Meta';
@@ -11,7 +11,7 @@ import collections from '../../../lib/collections';
 
 const { Item } = List;
 
-function MajorItem({ admin, major, intl: { formatMessage: t } }) {
+function MajorItem({ admin, major }) {
   const actions = [];
 
   if (admin) {
@@ -23,7 +23,7 @@ function MajorItem({ admin, major, intl: { formatMessage: t } }) {
       <DestroyButton
         collection={collections.majors}
         id={major.id}
-        warningMessage={t({ id: 'majors.destroyWarning' })}
+        warningMessage={<FormattedMessage id="majors.destroyWarning" />}
         textToFill={major.name}
         important
         iconOnly
@@ -42,7 +42,6 @@ function MajorItem({ admin, major, intl: { formatMessage: t } }) {
 MajorItem.propTypes = {
   admin: PropTypes.bool.isRequired,
   major: majorShape.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(MajorItem);
+export default MajorItem;

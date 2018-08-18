@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Radium from 'radium';
 import { Button, Divider } from 'antd';
 import Hideable from '../../../Layout/Hideable';
@@ -39,7 +39,6 @@ class CommentItem extends Component {
     currentUserId: PropTypes.number.isRequired,
     comment: commentShape.isRequired,
     answeringDisabled: PropTypes.bool,
-    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -63,7 +62,6 @@ class CommentItem extends Component {
         commentableType,
       },
       answeringDisabled,
-      intl: { formatMessage: t },
     } = this.props;
 
     if (answeringDisabled || !approvedCommentable || commentableType === 'Comment') {
@@ -79,7 +77,7 @@ class CommentItem extends Component {
         style={styles.answerButton}
         ghost
       >
-        {t({ id: 'comments.answer' })}
+        <FormattedMessage id="comments.answer" />
       </Button>
     );
   }
@@ -147,4 +145,4 @@ class CommentItem extends Component {
   }
 }
 
-export default injectIntl(Radium(CommentItem));
+export default Radium(CommentItem);

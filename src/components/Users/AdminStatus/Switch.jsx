@@ -36,7 +36,10 @@ AdminStatusSwitch.propTypes = {
   userId: PropTypes.number.isRequired,
   majorId: PropTypes.number,
   updating: PropTypes.bool.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
   active: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
 };

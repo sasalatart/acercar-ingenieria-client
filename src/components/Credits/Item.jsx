@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Card } from 'antd';
 import DestroyButton from '../../containers/DestroyButton';
 import Image from '../Layout/Image';
@@ -27,7 +27,6 @@ function CreditItem({
     resource,
   },
   onEditClicked,
-  intl: { formatMessage: t },
 }) {
   const actions = [];
   if (admin) {
@@ -42,7 +41,7 @@ function CreditItem({
   const title = <a href={resourceUrl} target="_blank">{resourceName}</a>;
   return (
     <Card cover={imageTag} actions={actions} style={styles.card}>
-      <Meta title={title} description={t({ id: 'credits.by' }, { authorName })} />
+      <Meta title={title} description={<FormattedMessage id="credits.by" values={{ authorName }} />} />
     </Card>
   );
 }
@@ -51,7 +50,6 @@ CreditItem.propTypes = {
   admin: PropTypes.bool.isRequired,
   credit: creditShape.isRequired,
   onEditClicked: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(CreditItem);
+export default CreditItem;

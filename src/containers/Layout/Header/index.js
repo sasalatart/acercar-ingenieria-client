@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import { setLocale, getLocale } from '../../../store/ducks/i18n';
 import { signOut, getCurrentUserEntity } from '../../../store/ducks/sessions';
 import {
@@ -24,7 +23,4 @@ const mapDispatchToProps = {
   signOut,
 };
 
-export default injectIntl(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -21,7 +21,10 @@ const styles = {
 export default class ImageInput extends Component {
   static propTypes = {
     input: PropTypes.shape(fieldInputPropTypes).isRequired,
-    label: PropTypes.string,
+    label: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]),
     imagePlaceholder: PropTypes.string,
     meta: fieldMetaShape.isRequired,
   };

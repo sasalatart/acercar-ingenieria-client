@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import {
   Alert,
   Form,
@@ -22,14 +22,19 @@ class ImportantDestroyButton extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     iconOnly: PropTypes.bool,
-    label: PropTypes.string,
-    warningMessage: PropTypes.string.isRequired,
+    label: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]),
+    warningMessage: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]).isRequired,
     textToFill: PropTypes.string.isRequired,
     onDestroy: PropTypes.func.isRequired,
     onModalOpen: PropTypes.func.isRequired,
     onModalClose: PropTypes.func.isRequired,
     renderModal: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -49,18 +54,18 @@ class ImportantDestroyButton extends Component {
   }
 
   renderContents() {
-    const { warningMessage, textToFill, intl: { formatMessage: t } } = this.props;
+    const { warningMessage, textToFill } = this.props;
 
     return (
       <Fragment>
         <Alert
           type="warning"
-          message={t({ id: 'forms.warning' })}
+          message={<FormattedMessage id="forms.warning" />}
           description={warningMessage}
           style={styles.alert}
           showIcon
         />
-        <FormItem label={t({ id: 'forms.confirm.textToFill' }, { textToFill })}>
+        <FormItem label={<FormattedMessage id="forms.confirm.textToFill" values={{ textToFill }} />}>
           <Input onChange={this.handleTextChange} />
         </FormItem>
       </Fragment>
@@ -68,16 +73,16 @@ class ImportantDestroyButton extends Component {
   }
 
   renderFooter() {
-    const { label, onModalClose, intl: { formatMessage: t } } = this.props;
+    const { label, onModalClose } = this.props;
     const { disabled } = this.state;
 
     return (
       [
         <Button key="close" icon="close" onClick={onModalClose}>
-          {t({ id: 'forms.confirm.cancel' })}
+          <FormattedMessage id="forms.confirm.cancel" />
         </Button>,
         <Button key="submit" type="danger" disabled={disabled} onClick={this.handleDestroy}>
-          {label || t({ id: 'forms.delete' })}
+          {label || <FormattedMessage id="forms.delete" />}
         </Button>,
       ]
     );
@@ -90,7 +95,6 @@ class ImportantDestroyButton extends Component {
       label,
       onModalOpen,
       renderModal,
-      intl: { formatMessage: t },
     } = this.props;
 
     return (
@@ -103,7 +107,7 @@ class ImportantDestroyButton extends Component {
         />
 
         {renderModal(
-          t({ id: 'forms.confirm.message' }),
+          <FormattedMessage id="forms.confirm.message" />,
           this.renderContents(),
           this.renderFooter(),
         )}
@@ -112,4 +116,4 @@ class ImportantDestroyButton extends Component {
   }
 }
 
-export default injectIntl(withModal(ImportantDestroyButton));
+export default withModal(ImportantDestroyButton);

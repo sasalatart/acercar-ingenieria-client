@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import {
   Alert,
   Row,
@@ -83,7 +83,6 @@ function Article({
     majorSummary,
     categoryList,
   },
-  intl: { formatMessage: t },
   ...restProps
 }) {
   return (
@@ -112,8 +111,8 @@ function Article({
       {!article.approved &&
         <Alert
           type="warning"
-          message={t({ id: 'articles.approvalPending.message' })}
-          description={t({ id: 'articles.approvalPending.description' })}
+          message={<FormattedMessage id="articles.approvalPending.message" />}
+          description={<FormattedMessage id="articles.approvalPending.description" />}
           showIcon
         />
       }
@@ -128,7 +127,6 @@ Article.propTypes = {
     articleShape,
     articleSummaryShape,
   ]).isRequired,
-  intl: intlShape.isRequired,
 };
 
 export default Article;

@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { loadCredits, getCreditsEntities } from '../../store/ducks/credits';
 import { getIsFetching } from '../../store/ducks/loading';
@@ -28,4 +27,4 @@ const component = connect(
   mapDispatchToProps,
 )(withLoadableResource('loadCredits', 'credits')(Credits));
 
-export default injectIntl(withAuthorization(withModalForm(component)));
+export default withAuthorization(withModalForm(component));

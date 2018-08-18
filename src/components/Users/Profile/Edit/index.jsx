@@ -1,22 +1,16 @@
 import React, { Fragment } from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import EditForm from '../../../../containers/Users/Profile/Edit/Form';
 import Title from '../../../Layout/Title';
 
-function ProfileEdit({ intl: { formatMessage: t } }) {
+export default function ProfileEdit() {
   return (
     <Fragment>
       <ActionBar />
-      <Title>{t({ id: 'profile.edit' })}</Title>
+      <Title><FormattedMessage id="profile.edit" /></Title>
 
       <EditForm />
     </Fragment>
   );
 }
-
-ProfileEdit.propTypes = {
-  intl: intlShape.isRequired,
-};
-
-export default injectIntl(ProfileEdit);

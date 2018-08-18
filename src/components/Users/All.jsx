@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Select } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import UsersList from '../../containers/Users/List';
@@ -30,7 +30,6 @@ export default class SearchUsers extends Component {
     addQueryToCurrentUri: PropTypes.func.isRequired,
     resetUsersPagination: PropTypes.func.isRequired,
     resetAdminsPagination: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   state = {
@@ -60,15 +59,15 @@ export default class SearchUsers extends Component {
     );
   };
 
-  mapMajors = (majors) => {
-    const { intl: { formatMessage: t } } = this.props;
-
-    return majors.map(({ id, name }) =>
-      <Option key={id} value={id}>{t({ id: 'admins.ofMajor' }, { majorName: name })}</Option>);
-  }
+  mapMajors = majors => (
+    majors.map(({ id, name }) => (
+      <Option key={id} value={id}>
+        <FormattedMessage id="admins.ofMajor" values={{ majorName: name }} />
+      </Option>
+    )))
 
   renderSelect() {
-    const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
+    const { disciplinaryMajors, interdisciplinaryMajors } = this.props;
 
     if (isEmpty(disciplinaryMajors) && isEmpty(interdisciplinaryMajors)) {
       return <DataPlaceholder />;
@@ -80,12 +79,12 @@ export default class SearchUsers extends Component {
     return (
       <div style={styles.selectContainer}>
         <Select defaultValue="all" style={styles.select} onChange={this.handleChange}>
-          <Option value="all">{t({ id: 'users.all' })}</Option>
-          <Option value="platformAdmins">{t({ id: 'admins.platform' })}</Option>
-          <OptGroup label={t({ id: 'majors.disciplinaries' })}>
+          <Option value="all"><FormattedMessage id="users.all" /></Option>
+          <Option value="platformAdmins"><FormattedMessage id="admins.platform" /></Option>
+          <OptGroup key="disciplinaries" label={<FormattedMessage id="majors.disciplinaries" />}>
             {disciplinaryMajorOptions}
           </OptGroup>
-          <OptGroup label={t({ id: 'majors.interdisciplinaries' })}>
+          <OptGroup key="interdisciplinaries" label={<FormattedMessage id="majors.interdisciplinaries" />}>
             {interdisciplinaryMajorOptions}
           </OptGroup>
         </Select>
@@ -94,13 +93,12 @@ export default class SearchUsers extends Component {
   }
 
   render() {
-    const { intl: { formatMessage: t } } = this.props;
     const { searchFilter } = this.state;
 
     return (
       <Fragment>
         <ActionBar {...searchFilter} resetPagination={this.handleResetPagination} />
-        <Title>{t({ id: 'users' })}</Title>
+        <Title><FormattedMessage id="users" /></Title>
 
         {this.renderSelect()}
         <UsersList {...searchFilter} />

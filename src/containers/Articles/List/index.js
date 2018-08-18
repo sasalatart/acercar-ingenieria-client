@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { addQueryToCurrentUri } from '../../../store/ducks/routes';
 import {
@@ -69,5 +68,4 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(ArticlesList);
-export default injectIntl(withAuthorization(component));
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(ArticlesList));

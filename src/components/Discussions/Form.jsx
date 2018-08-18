@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Col, Row } from 'antd';
 import {
   TextField,
@@ -43,7 +43,6 @@ export default class DiscussionForm extends Component {
     submitting: PropTypes.bool.isRequired,
     loadDiscussion: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -57,13 +56,13 @@ export default class DiscussionForm extends Component {
   }
 
   renderTopRow() {
-    const { validators, admin, intl: { formatMessage: t } } = this.props;
+    const { validators, admin } = this.props;
 
     const titleField = (
       <Field
         name="title"
         component={TextField}
-        label={t({ id: 'forms.title' })}
+        label={<FormattedMessage id="forms.title" />}
         validate={[
           validators.required,
           validators.minTitleLength,
@@ -86,7 +85,7 @@ export default class DiscussionForm extends Component {
             <Field
               name="pinned"
               component={SwitchField}
-              label={t({ id: 'forms.pinned' })}
+              label={<FormattedMessage id="forms.pinned" />}
             />
           </div>
         </Col>
@@ -104,24 +103,24 @@ export default class DiscussionForm extends Component {
       valid,
       submitting,
       handleSubmit,
-      intl: { formatMessage: t },
     } = this.props;
 
     if (loading || noData) return <DataPlaceholder noData={noData} absolute />;
 
-    const defaultTag = t({ id: 'discussions.defaultTag' });
-
+    const defaultTag = 'Acercar Ingeniería';
     return (
       <Fragment>
         <ActionBar />
-        <Title>{t({ id: `discussions.${id ? 'edit' : 'new'}` })}</Title>
+        <Title>
+          <FormattedMessage id={id ? 'discussions.edit' : 'discussions.new'} />
+        </Title>
 
         <form onSubmit={handleSubmit}>
           {this.renderTopRow()}
           <Field
             name="description"
             component={RichTextField}
-            label={t({ id: 'forms.content' })}
+            label={<FormattedMessage id="forms.content" />}
             validate={validators.requiredRichText}
           />
           <div style={styles.tagsInputWrapper}>
@@ -138,8 +137,8 @@ export default class DiscussionForm extends Component {
               name="attachments"
               component={FilesField}
               previousAttachments={previousAttachments}
-              instructions={t({ id: 'forms.dropzone' })}
-              label={t({ id: 'forms.attachments' })}
+              instructions={<FormattedMessage id="forms.dropzone" />}
+              label={<FormattedMessage id="forms.attachments" />}
               validate={validators.maxSizePerAttachment}
             />
           </div>

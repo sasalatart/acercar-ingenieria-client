@@ -71,6 +71,7 @@ ToggleLoadingButton.propTypes = {
   content: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
+    PropTypes.element,
   ]).isRequired,
   iconOnly: PropTypes.bool,
   toolTipped: PropTypes.bool,

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../../containers/Layout/Pagination';
 import Title from '../../../Layout/Title';
@@ -42,12 +42,11 @@ function MajorAdmins({
   pagination,
   loadAdmins,
   goToUser,
-  intl: { formatMessage: t },
 }) {
   return (
     <Fragment>
       <ActionBar majorId={majorId} hasAdmins={majorAdmins.length > 0} />
-      <Title>{t({ id: 'majors.admins' })}</Title>
+      <Title><FormattedMessage id="majors.admins" /></Title>
 
       <PaginationControls
         pagination={pagination}
@@ -67,7 +66,6 @@ MajorAdmins.propTypes = {
   majorAdmins: PropTypes.arrayOf(userShape),
   loadAdmins: PropTypes.func.isRequired,
   goToUser: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 MajorAdmins.defaultProps = {
@@ -75,4 +73,4 @@ MajorAdmins.defaultProps = {
   majorAdmins: [],
 };
 
-export default injectIntl(MajorAdmins);
+export default MajorAdmins;

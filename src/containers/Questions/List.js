@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 import { loadQuestions, getPagingFns } from '../../store/ducks/questions';
 import { getIsFetching } from '../../store/ducks/loading';
@@ -27,5 +26,4 @@ function mapDispatchToProps(dispatch, ownProps) {
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(QuestionsList);
-export default injectIntl(withAuthorization(component));
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(QuestionsList));

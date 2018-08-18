@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
@@ -21,7 +21,6 @@ export default class ArticlesList extends Component {
     articleSummaries: PropTypes.arrayOf(articleSummaryShape),
     loadArticles: PropTypes.func.isRequired,
     onTagClick: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -53,7 +52,6 @@ export default class ArticlesList extends Component {
       pagination,
       articleSummaries,
       loadArticles,
-      intl: { formatMessage: t },
       ...restProps
     } = this.props;
 
@@ -62,8 +60,8 @@ export default class ArticlesList extends Component {
         <ActionBar suffix={suffix} {...restProps} />
         <Title>
           {suffix === suffixes.approved
-            ? t({ id: 'articles' })
-            : t({ id: `articles.${suffix}` })
+            ? <FormattedMessage id="articles" />
+            : <FormattedMessage id={`articles.${suffix}`} />
           }
         </Title>
 

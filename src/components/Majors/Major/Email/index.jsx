@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import Form from '../../../../containers/Majors/Major/Email/Form';
 import Title from '../../../Layout/Title';
 
-function Email({ majorId, intl: { formatMessage: t } }) {
+function Email({ majorId }) {
   return (
     <Fragment>
       <ActionBar />
-      <Title>{t({ id: 'emails.send' })}</Title>
+      <Title><FormattedMessage id="emails.send" /></Title>
 
       <Form majorId={majorId} />
     </Fragment>
@@ -18,7 +18,6 @@ function Email({ majorId, intl: { formatMessage: t } }) {
 
 Email.propTypes = {
   majorId: PropTypes.number.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(Email);
+export default Email;

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { List, Modal } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
@@ -25,7 +25,6 @@ export default class UsersList extends Component {
     setSelectedUser: PropTypes.func.isRequired,
     unsetSelectedUser: PropTypes.func.isRequired,
     withTitle: PropTypes.bool,
-    intl: intlShape.isRequired,
   }
 
   static defaultProps = {
@@ -50,12 +49,12 @@ export default class UsersList extends Component {
   );
 
   renderAdminStatusPanelModal() {
-    const { selectedUser, unsetSelectedUser, intl: { formatMessage: t } } = this.props;
+    const { selectedUser, unsetSelectedUser } = this.props;
     const { firstName, lastName } = selectedUser;
 
     return (
       <Modal
-        title={t({ id: 'admins.changeStatusFor' }, { userName: `${firstName} ${lastName}` })}
+        title={<FormattedMessage id="admins.changeStatusFor" values={{ userName: `${firstName} ${lastName}` }} />}
         onCancel={unsetSelectedUser}
         footer={null}
         visible
@@ -73,14 +72,13 @@ export default class UsersList extends Component {
       selectedUser,
       withTitle,
       loadUsers,
-      intl: { formatMessage: t },
       ...restProps
     } = this.props;
 
     return (
       <Fragment>
         {withTitle && <ActionBar {...restProps} />}
-        {withTitle && <Title>{t({ id: 'users' })}</Title>}
+        {withTitle && <Title><FormattedMessage id="users" /></Title>}
 
         <PaginationControls
           pagination={pagination}

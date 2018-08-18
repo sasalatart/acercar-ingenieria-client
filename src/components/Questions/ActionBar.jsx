@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import withAuthorization from '../../hoc/withAuthorization';
 import ActionBar from '../../containers/Layout/ActionBar';
 import HideableButton from '../Icons/HideableButton';
@@ -13,7 +13,6 @@ function QuestionsActionBar({
   majorId,
   pending,
   onProposeClicked,
-  intl: { formatMessage: t },
 }) {
   const actions = [];
 
@@ -22,7 +21,7 @@ function QuestionsActionBar({
 
     const buttonLink = (
       <HideableButton key="link" to={route} icon={[pending ? 'fas' : 'far', 'question-circle']}>
-        {pending ? t({ id: 'questions' }) : t({ id: 'questions.pending' })}
+        <FormattedMessage id={pending ? 'questions' : 'questions.pending'} />
       </HideableButton>
     );
 
@@ -32,7 +31,7 @@ function QuestionsActionBar({
   if (loggedIn) {
     const proposeOneButton = (
       <HideableButton key="propose" type="primary" icon="plus" onClick={onProposeClicked}>
-        {t({ id: 'forms.proposeOne' })}
+        <FormattedMessage id="forms.proposeOne" />
       </HideableButton>
     );
 
@@ -48,11 +47,10 @@ QuestionsActionBar.propTypes = {
   majorId: PropTypes.number,
   pending: PropTypes.bool.isRequired,
   onProposeClicked: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 QuestionsActionBar.defaultProps = {
   majorId: undefined,
 };
 
-export default injectIntl(withAuthorization(QuestionsActionBar));
+export default withAuthorization(QuestionsActionBar);

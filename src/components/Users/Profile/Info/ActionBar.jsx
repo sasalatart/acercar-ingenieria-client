@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import DestroyButton from '../../../../containers/DestroyButton';
 import ActionBar from '../../../../containers/Layout/ActionBar';
 import { userShape } from '../../../../shapes';
@@ -11,13 +11,12 @@ function ProfileActionBar({
   isOwner,
   user,
   goToLanding,
-  intl: { formatMessage: t },
 }) {
   const actions = [];
 
   if (admin || isOwner) {
     const commonProps = {
-      warningMessage: t({ id: 'users.destroyWarning' }),
+      warningMessage: <FormattedMessage id="users.destroyWarning" />,
       textToFill: `${user.firstName} ${user.lastName}`,
       important: true,
     };
@@ -27,7 +26,7 @@ function ProfileActionBar({
         <DestroyButton
           {...commonProps}
           collection="auth"
-          label={t({ id: 'sessions.destroyMyAccount' })}
+          label={<FormattedMessage id="sessions.destroyMyAccount" />}
         />
       )
       : (
@@ -50,11 +49,10 @@ ProfileActionBar.propTypes = {
   isOwner: PropTypes.bool.isRequired,
   user: userShape,
   goToLanding: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
 };
 
 ProfileActionBar.defaultProps = {
   user: undefined,
 };
 
-export default injectIntl(ProfileActionBar);
+export default ProfileActionBar;

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Tabs, Alert, List } from 'antd';
 import Title from '../../Layout/Title';
 import ActionBar from './ActionBar';
@@ -16,6 +16,17 @@ const styles = {
   },
 };
 
+function renderTypeDefinition(type) {
+  return (
+    <Alert
+      description={<FormattedMessage id={`majors.${type}.description`} />}
+      type="info"
+      style={styles.typeDefinition}
+      showIcon
+    />
+  );
+}
+
 export default class MajorsList extends Component {
   static propTypes = {
     admin: PropTypes.bool.isRequired,
@@ -23,7 +34,6 @@ export default class MajorsList extends Component {
     disciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     loadMajors: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   };
 
   state = {
@@ -36,19 +46,6 @@ export default class MajorsList extends Component {
 
   handleTabChange = (key) => {
     this.setState({ activeTab: key });
-  }
-
-  renderTypeDefinition(type) {
-    const { formatMessage: t } = this.props.intl;
-
-    return (
-      <Alert
-        description={t({ id: `majors.${type}.description` })}
-        type="info"
-        style={styles.typeDefinition}
-        showIcon
-      />
-    );
   }
 
   renderMajors(majors) {
@@ -64,7 +61,7 @@ export default class MajorsList extends Component {
   }
 
   render() {
-    const { disciplinaryMajors, interdisciplinaryMajors, intl: { formatMessage: t } } = this.props;
+    const { disciplinaryMajors, interdisciplinaryMajors } = this.props;
 
     return (
       <Fragment>
@@ -72,13 +69,13 @@ export default class MajorsList extends Component {
         <Title>Majors</Title>
 
         <Tabs activeKey={this.state.activeTab} size="large" onChange={this.handleTabChange}>
-          <TabPane key={TAB_NAMES.disciplinaries} tab={t({ id: 'majors.disciplinaries' })}>
-            {this.renderTypeDefinition(TAB_NAMES.disciplinaries)}
+          <TabPane key={TAB_NAMES.disciplinaries} tab={<FormattedMessage id="majors.disciplinaries" />}>
+            {renderTypeDefinition(TAB_NAMES.disciplinaries)}
             {this.renderMajors(disciplinaryMajors)}
           </TabPane>
 
-          <TabPane key={TAB_NAMES.interdisciplinaries} tab={t({ id: 'majors.interdisciplinaries' })}>
-            {this.renderTypeDefinition(TAB_NAMES.interdisciplinaries)}
+          <TabPane key={TAB_NAMES.interdisciplinaries} tab={<FormattedMessage id="majors.interdisciplinaries" />}>
+            {renderTypeDefinition(TAB_NAMES.interdisciplinaries)}
             {this.renderMajors(interdisciplinaryMajors)}
           </TabPane>
         </Tabs>

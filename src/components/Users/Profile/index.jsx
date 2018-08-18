@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
-import { intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Layout, Badge } from 'antd';
 import Menu from '../../../containers/Layout/Menu';
 import Notifications from '../../../containers/Notifications';
@@ -34,7 +34,6 @@ export default class Profile extends Component {
     notificationsCount: PropTypes.number.isRequired,
     loadUser: PropTypes.func.isRequired,
     goToLanding: PropTypes.func.isRequired,
-    intl: intlShape.isRequired,
   };
 
   static defaultProps = {
@@ -53,16 +52,16 @@ export default class Profile extends Component {
   }
 
   getMenuItems = () => {
-    const { notificationsCount, intl: { formatMessage: t } } = this.props;
+    const { notificationsCount } = this.props;
 
     return [{
       key: routes.profile,
       icon: 'user',
-      text: t({ id: 'profile.info' }),
+      text: <FormattedMessage id="profile.info" />,
     }, {
       key: routes.profileNotifications(),
       icon: 'bullhorn',
-      text: t({ id: 'profile.notifications' }),
+      text: <FormattedMessage id="profile.notifications" />,
       extra: (
         <Hideable style={styles.extra}>
           <Badge count={notificationsCount} />
@@ -71,11 +70,11 @@ export default class Profile extends Component {
     }, {
       key: routes.profileEdit,
       icon: 'edit',
-      text: t({ id: 'profile.edit' }),
+      text: <FormattedMessage id="profile.edit" />,
     }, {
       key: routes.profilePassword,
       icon: 'lock',
-      text: t({ id: 'profile.changePassword' }),
+      text: <FormattedMessage id="profile.changePassword" />,
     }];
   }
 

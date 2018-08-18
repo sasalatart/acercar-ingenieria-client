@@ -5,7 +5,6 @@ export default {
     'discussions.mine': 'My Threads',
     'discussions.new': 'New Discussion',
     'discussions.edit': 'Edit Discussion',
-    'discussions.defaultTag': 'Question',
   },
   'es-ES': {
     discussions: 'Foro',
@@ -13,6 +12,5 @@ export default {
     'discussions.mine': 'Mis Temas',
     'discussions.new': 'Nuevo tema',
     'discussions.edit': 'Editar tema',
-    'discussions.defaultTag': 'Duda',
   },
 };

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'antd';
 import SignUpForm from '../../../containers/Auth/SignUp/Form';
 import Title from '../../Layout/Title';
@@ -13,10 +13,10 @@ const styles = {
   },
 };
 
-function SignUp({ intl: { formatMessage: t } }) {
+export default function SignUp() {
   return (
     <Fragment>
-      <Title>{t({ id: 'sessions.signUp' })}</Title>
+      <Title><FormattedMessage id="sessions.signUp" /></Title>
 
       <Row type="flex" justify="center">
         <Col sm={24} lg={12} xl={10}>
@@ -24,7 +24,7 @@ function SignUp({ intl: { formatMessage: t } }) {
 
           <p style={styles.extra}>
             <Link to={routes.signIn} href={routes.signIn}>
-              {t({ id: 'sessions.orSignIn' })}
+              <FormattedMessage id="sessions.orSignIn" />
             </Link>
           </p>
         </Col>
@@ -32,9 +32,3 @@ function SignUp({ intl: { formatMessage: t } }) {
     </Fragment>
   );
 }
-
-SignUp.propTypes = {
-  intl: intlShape.isRequired,
-};
-
-export default injectIntl(SignUp);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import IconText from '../Icons/IconText';
 import { colors } from '../../theme';
 import routes from '../../lib/routes';
@@ -23,7 +23,7 @@ const styles = {
   },
 };
 
-function Footer({ intl: { formatMessage: t } }) {
+export default function Footer() {
   return (
     <div style={styles.wrapper}>
       <a href={`mailto:${CONTACT_EMAIL}`}>
@@ -34,14 +34,8 @@ function Footer({ intl: { formatMessage: t } }) {
         <p style={styles.text}>2014-2018</p>
       </div>
       <Link to={routes.credits} href={routes.credits}>
-        <IconText icon="heart" text={t({ id: 'credits' })} withPointer />
+        <IconText icon="heart" text={<FormattedMessage id="credits" />} withPointer />
       </Link>
     </div>
   );
 }
-
-Footer.propTypes = {
-  intl: intlShape.isRequired,
-};
-
-export default injectIntl(Footer);

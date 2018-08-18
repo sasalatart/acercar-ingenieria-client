@@ -48,7 +48,10 @@ function ToolTipIcon({
 }
 
 ToolTipIcon.propTypes = {
-  toolTip: PropTypes.string.isRequired,
+  toolTip: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
   icon: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),

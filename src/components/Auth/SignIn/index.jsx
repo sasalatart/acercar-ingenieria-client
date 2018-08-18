@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Row, Col } from 'antd';
 import SignInForm from '../../../containers/Auth/SignIn/Form';
 import Title from '../../Layout/Title';
@@ -13,10 +13,10 @@ const styles = {
   },
 };
 
-function SignIn({ intl: { formatMessage: t } }) {
+export default function SignIn() {
   return (
     <Fragment>
-      <Title>{t({ id: 'sessions.signIn' })}</Title>
+      <Title><FormattedMessage id="sessions.signIn" /></Title>
 
       <Row type="flex" justify="center">
         <Col sm={24} lg={12} xl={10}>
@@ -24,12 +24,12 @@ function SignIn({ intl: { formatMessage: t } }) {
 
           <p style={styles.extra}>
             <Link to={routes.signUp} href={routes.signUp}>
-              {t({ id: 'sessions.orSignUp' })}
+              <FormattedMessage id="sessions.orSignUp" />
             </Link>
           </p>
           <p style={styles.extra}>
             <Link to={routes.passwordRecovery} href={routes.passwordRecovery}>
-              {t({ id: 'sessions.forgotPassword' })}
+              <FormattedMessage id="sessions.forgotPassword" />
             </Link>
           </p>
         </Col>
@@ -37,9 +37,3 @@ function SignIn({ intl: { formatMessage: t } }) {
     </Fragment>
   );
 }
-
-SignIn.propTypes = {
-  intl: intlShape.isRequired,
-};
-
-export default injectIntl(SignIn);

@@ -26,7 +26,10 @@ function CustomSwitch({
 CustomSwitch.propTypes = {
   input: PropTypes.shape(fieldInputPropTypes).isRequired,
   meta: PropTypes.shape(fieldMetaPropTypes).isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
   wrapperStyle: PropTypes.shape({}),
 };
 

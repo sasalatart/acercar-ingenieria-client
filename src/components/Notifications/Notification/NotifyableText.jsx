@@ -1,10 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import {
-  injectIntl,
-  FormattedMessage,
-  intlShape,
-} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Tooltip } from 'antd';
 import truncate from 'lodash/truncate';
 import DiscussionLink from '../../Discussions/Discussion/Link';
@@ -29,29 +25,32 @@ function renderNotCommentNotification(
   notifyableId,
   notifyableMeta,
   seeDisabled,
-  t,
 ) {
   const content = truncate(notifyableMeta.title);
 
   const hasApprovedProperty = Object.prototype.hasOwnProperty.call(notifyableMeta, 'approved');
   if (!seeDisabled && hasApprovedProperty && !notifyableMeta.approved) {
-    return <Tooltip title={t({ id: 'notifications.resourceNotApproved' })}>{content}</Tooltip>;
+    return (
+      <Tooltip title={<FormattedMessage id="notifications.resourceNotApproved" />}>
+        {content}
+      </Tooltip>
+    );
   }
 
   const LinkTag = LINK_TAGS[notifyableType];
   return <LinkTag id={notifyableId} {...notifyableMeta}>{content}</LinkTag>;
 }
 
-function renderCommentNotification(notifyableMeta, seeDisabled, t) {
+function renderCommentNotification(notifyableMeta, seeDisabled) {
   const {
     commentableType, commentableId, approvedCommentable, content,
   } = notifyableMeta;
 
   const CommentableLink = LINK_TAGS[commentableType];
-  const commentable = t({ id: commentableType.toLowerCase() });
+  const commentable = <FormattedMessage id={commentableType.toLowerCase()} />;
   const enrollable = approvedCommentable || seeDisabled
     ? <CommentableLink id={commentableId}>{commentable}</CommentableLink>
-    : <Tooltip title={t({ id: 'notifications.resourceNotApproved' })}>{commentable}</Tooltip>;
+    : <Tooltip title={<FormattedMessage id="notifications.resourceNotApproved" />}>{commentable}</Tooltip>;
 
   return (
     <Fragment>
@@ -69,15 +68,13 @@ function NotifyableText({
   notifyableId,
   notifyableMeta,
   seeDisabled,
-  intl: { formatMessage: t },
 }) {
-  const resourceText = t({ id: `notifications.resource.${notifyableType.toLowerCase()}` });
   return (
     <Fragment>
-      {resourceText}{' '}
+      <FormattedMessage id={`notifications.resource.${notifyableType.toLowerCase()}`} />{' '}
       {notifyableType !== NOTIFYABLE_TYPES.comment
-        ? renderNotCommentNotification(notifyableType, notifyableId, notifyableMeta, seeDisabled, t)
-        : renderCommentNotification(notifyableMeta, seeDisabled, t)
+        ? renderNotCommentNotification(notifyableType, notifyableId, notifyableMeta, seeDisabled)
+        : renderCommentNotification(notifyableMeta, seeDisabled)
       }
     </Fragment>
   );
@@ -88,7 +85,6 @@ NotifyableText.propTypes = {
   notifyableId: PropTypes.number.isRequired,
   notifyableMeta: PropTypes.shape({}).isRequired,
   seeDisabled: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
 };
 
-export default injectIntl(NotifyableText);
+export default NotifyableText;
