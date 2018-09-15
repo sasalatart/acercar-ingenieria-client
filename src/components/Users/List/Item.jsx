@@ -9,7 +9,7 @@ import ProfileLink from '../../Users/Profile/Link';
 import ToolTipIcon from '../../Icons/ToolTipIcon';
 import { colors } from '../../../theme';
 import { userShape } from '../../../shapes';
-import { getCollectionParams } from '../../../lib/users';
+import collections from '../../../lib/collections';
 
 const { Item } = List;
 const { Meta } = Item;
@@ -61,7 +61,6 @@ function UserListItem({
   admin,
   adminOrMajorAdmin,
   user,
-  majorId,
   setSelectedUser,
 }) {
   const actions = [];
@@ -71,7 +70,8 @@ function UserListItem({
   if (adminOrMajorAdmin && user.id !== currentUserId) {
     const destroyButton = (
       <DestroyButton
-        {...getCollectionParams(majorId, { id: user.id })}
+        id={user.id}
+        collection={collections.users}
         warningMessage={<FormattedMessage id="users.destroyWarning" />}
         textToFill={`${user.firstName} ${user.lastName}`}
         important
@@ -97,12 +97,7 @@ UserListItem.propTypes = {
   admin: PropTypes.bool.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   user: userShape.isRequired,
-  majorId: PropTypes.number,
   setSelectedUser: PropTypes.func.isRequired,
-};
-
-UserListItem.defaultProps = {
-  majorId: undefined,
 };
 
 export default UserListItem;

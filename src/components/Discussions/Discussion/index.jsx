@@ -46,7 +46,7 @@ function Discussion({
         </div>
       }
 
-      <FeedButtons resource={discussion} baseResourceName={collections.discussions} />
+      <FeedButtons resource={discussion} baseCollection={collections.discussions} />
 
       <Divider />
       <Author author={author} />
@@ -56,7 +56,7 @@ function Discussion({
       <MediaContent richText={description} attachments={attachments} />
 
       <Divider />
-      <CommentsSection baseResourceName={collections.discussions} baseResourceId={id} />
+      <CommentsSection baseCollection={collections.discussions} baseId={id} />
     </Fragment>
   );
 }

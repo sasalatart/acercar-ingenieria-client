@@ -12,7 +12,6 @@ import AllUsers from '../../components/Users/All';
 function mapStateToProps(state) {
   const disciplinaryMajors = getDisciplinaryMajors(state);
   const interdisciplinaryMajors = getInterdisciplinaryMajors(state);
-
   return {
     disciplinaryMajors,
     interdisciplinaryMajors,

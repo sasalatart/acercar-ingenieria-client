@@ -1,18 +1,14 @@
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
-import { getIsUpdating } from '../../store/ducks/loading';
-import { setAllAsSeen, getPagingFns } from '../../store/ducks/notifications';
+import { setAllAsSeen, getPaginationData, getIsSettingAllAsSeen } from '../../store/ducks/notifications';
 import Notifications from '../../components/Notifications';
-import collections from '../../lib/collections';
 import { suffixes } from '../../lib/notifications';
 
 function mapStateToProps(state) {
-  const params = { collection: collections.notifications, suffix: suffixes.pending };
-  const pagingFns = getPagingFns(params, true).selectors;
-
+  const { pagedEntities } = getPaginationData(state, { suffix: suffixes.unseen });
   return {
-    noPendingNotifications: isEmpty(pagingFns.getPagedEntities(state, params)),
-    settingAllAsSeen: getIsUpdating(state, { ...params, suffix: suffixes.seen }),
+    noUnseenNotifications: isEmpty(pagedEntities),
+    settingAllAsSeen: getIsSettingAllAsSeen(state),
   };
 }
 

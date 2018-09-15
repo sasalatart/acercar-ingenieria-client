@@ -1,12 +1,10 @@
 import humps from 'humps';
-import get from 'lodash/get';
-import pick from 'lodash/pick';
 import { goToLanding, goToSignIn } from '../../ducks/routes';
 import { localSignOut, getIsLoggedIn } from '../../ducks/sessions';
 import { displayErrorNotification } from '../../ducks/notifications';
 import messages from '../../../i18n/messages';
 
-export default async function parseError(body, status, payload, store, locale) {
+export default async function parseError(body, status, meta, store, locale) {
   const { error, errors } = humps.camelizeKeys(body);
   const description = error || errors[0] || errors.fullMessages;
 
@@ -18,10 +16,8 @@ export default async function parseError(body, status, payload, store, locale) {
     store.dispatch(action);
   }
 
-  if (!get(payload, 'fetchParams.silentError')) {
-    store.dispatch(displayErrorNotification({ message: 'Error', description }));
-  }
+  store.dispatch(displayErrorNotification({ message: 'Error', description }));
 
   // eslint-disable-next-line prefer-promise-reject-errors
-  return Promise.reject({ request: pick(payload, 'fetchParams') });
+  return Promise.reject({ meta });
 }

@@ -7,17 +7,17 @@ import routes from '../../lib/routes';
 
 function NotificationsActionBar({
   seen,
-  noPendingNotifications,
+  noUnseenNotifications,
   settingAllAsSeen,
   setAllAsSeen,
 }) {
   const actions = [
     <HideableButton
-      key="goToPending"
+      key="toggleList"
       to={routes.profileNotifications(!seen)}
       icon={seen ? 'eye' : 'eye-slash'}
     >
-      <FormattedMessage id={seen ? 'notifications.pending' : 'notifications.seen'} />
+      <FormattedMessage id={seen ? 'notifications.unseen' : 'notifications.seen'} />
     </HideableButton>,
   ];
 
@@ -27,7 +27,7 @@ function NotificationsActionBar({
         key="setAllAsSeen"
         icon="dot-circle"
         loading={settingAllAsSeen}
-        disabled={settingAllAsSeen || noPendingNotifications}
+        disabled={settingAllAsSeen || noUnseenNotifications}
         onClick={setAllAsSeen}
       >
         <FormattedMessage id="notifications.setAllAsSeen" />
@@ -41,7 +41,7 @@ function NotificationsActionBar({
 
 NotificationsActionBar.propTypes = {
   seen: PropTypes.bool.isRequired,
-  noPendingNotifications: PropTypes.bool.isRequired,
+  noUnseenNotifications: PropTypes.bool.isRequired,
   settingAllAsSeen: PropTypes.bool.isRequired,
   setAllAsSeen: PropTypes.func.isRequired,
 };

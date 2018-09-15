@@ -1,166 +1,101 @@
-import { Map } from 'immutable';
+import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 import find from 'lodash/find';
-import { getEntityFactory } from './entities';
-import pagingFnsFactory, {
-  prepareGetPagingFns,
-  removeFromAllPages,
-  resetPaginationActionFactory,
-} from './paginations';
-import { getMajorOptionsForCurrentUser } from './sessions';
 import { goToArticle } from './routes';
+import { getIsRequestingFactory } from './loading';
+import { getEntityFactory } from './entities';
+import { getMajorOptionsForCurrentUser } from './sessions';
+import { fulfilledType, withFulfilledTypes } from './shared';
+import paginationReducerFactory, { paginationDataSelectorFactory } from './shared/paginations';
+import { crudActionsFactory } from './shared/crud';
 import { articlesSchema, articleSummariesSchema } from '../../schemas';
-import { suffixes, getCollectionParams } from '../../lib/articles';
+import { suffixes, getLoadIndexType, getPaginationKey } from '../../lib/articles';
 import collections from '../../lib/collections';
 
-const collection = collections.articles;
-
-function createPagingFns(suffix, baseResourceName) {
-  return pagingFnsFactory(collection, articleSummariesSchema, { suffix, baseResourceName });
-}
-
-const majorsPagingFns = {
-  pending: createPagingFns(suffixes.pending, collections.majors),
-  mine: createPagingFns(suffixes.mine, collections.majors),
-  approved: createPagingFns(suffixes.approved, collections.majors),
-};
-
-const platformPagingFns = {
-  pending: createPagingFns(suffixes.pending),
-  mine: createPagingFns(suffixes.mine),
-  approved: createPagingFns(suffixes.approved),
-};
-
-const INITIAL_STATE = new Map({
-  pagination: new Map({
-    platform: new Map({
-      approved: new Map({}),
-      mine: new Map({}),
-      pending: new Map({}),
-    }),
-    majors: new Map({
-      approved: new Map({}),
-      mine: new Map({}),
-      pending: new Map({}),
-    }),
-  }),
-});
-
-const TYPES = {
-  LOAD_INDEX: 'articles/LOAD_INDEX',
+const TYPES = withFulfilledTypes({
+  LOAD_PLATFORM_APPROVED: 'articles/LOAD_PLATFORM_APPROVED',
+  LOAD_PLATFORM_MINE: 'articles/LOAD_PLATFORM_MINE',
+  LOAD_PLATFORM_UNAPPROVED: 'articles/LOAD_PLATFORM_UNAPPROVED',
+  LOAD_MAJORS_APPROVED: 'articles/LOAD_MAJORS_APPROVED',
+  LOAD_MAJORS_MINE: 'articles/LOAD_MAJORS_MINE',
+  LOAD_MAJORS_UNAPPROVED: 'articles/LOAD_MAJORS_UNAPPROVED',
   LOAD: 'articles/LOAD',
   CREATE: 'articles/CREATE',
   UPDATE: 'articles/UPDATE',
-  APPROVAL: 'articles/UPDATE_APPROVAL',
+  TOGGLE_APPROVAL: 'articles/TOGGLE_APPROVAL',
   DESTROY: 'articles/DESTROY',
   RESET_PAGINATION: 'articles/RESET_PAGINATION',
-};
+});
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => (
-  baseResourceId ? majorsPagingFns[suffix] : platformPagingFns[suffix]
-));
+function reducerFactory(setType) {
+  return paginationReducerFactory({
+    setPage: fulfilledType(setType),
+    removeFromPages: TYPES.DESTROY_FULFILLED,
+    resetPagination: TYPES.RESET_PAGINATION,
+  });
+}
 
-export function loadArticles(page = 1, majorId, suffix, search) {
-  const urlSuffix = suffix !== suffixes.approved ? `/${suffix}` : '';
-  const query = { page, ...search };
+export default combineReducers({
+  platformApproved: reducerFactory(TYPES.LOAD_PLATFORM_APPROVED),
+  platformMine: reducerFactory(TYPES.LOAD_PLATFORM_MINE),
+  platformUnapproved: reducerFactory(TYPES.LOAD_PLATFORM_UNAPPROVED),
+  majorsApproved: reducerFactory(TYPES.LOAD_MAJORS_APPROVED),
+  majorsMine: reducerFactory(TYPES.LOAD_MAJORS_MINE),
+  majorsUnapproved: reducerFactory(TYPES.LOAD_MAJORS_UNAPPROVED),
+});
 
-  return {
-    type: TYPES.LOAD_INDEX,
-    payload: {
-      method: 'GET',
-      url: majorId ? `/majors/${majorId}/articles${urlSuffix}` : `/articles${urlSuffix}`,
-      query,
-      fetchParams: { ...query, ...getCollectionParams(majorId, { suffix }) },
-      responseSchema: [articleSummariesSchema],
-    },
+export function loadArticles({ query, baseId, suffix }) {
+  const types = { LOAD_INDEX: getLoadIndexType(TYPES, baseId, suffix) };
+  const urlOptions = {
+    collection: collections.articles,
+    baseCollection: collections.majors,
+    suffix: suffix !== suffixes.approved ? suffix : undefined,
   };
+  const { loadIndex } = crudActionsFactory(types, articleSummariesSchema, urlOptions);
+  return dispatch => dispatch(loadIndex({ query, baseId }));
 }
 
-export function loadArticle(id, majorId) {
+const {
+  load, create, update, destroy,
+} = crudActionsFactory(TYPES, articlesSchema, { baseCollection: collections.majors });
+
+export const loadArticle = load;
+
+export const createArticle = (body, baseId) =>
+  dispatch => dispatch(create(body, baseId))
+    .then(({ value: { result } }) => dispatch(goToArticle(result, baseId)));
+
+export const updateArticle = (id, body, baseId) =>
+  dispatch => dispatch(update(id, body))
+    .then(() => dispatch(goToArticle(id, baseId)));
+
+export const destroyArticle = destroy;
+
+export function toggleArticleApproval(id, approved, baseId) {
   return {
-    type: TYPES.LOAD,
-    payload: {
-      method: 'GET',
-      url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-      fetchParams: getCollectionParams(majorId, { id }),
-      responseSchema: articlesSchema,
-    },
-  };
-}
-
-export function createArticle(body, majorId) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.CREATE,
-      payload: {
-        method: 'POST',
-        url: majorId ? `/majors/${majorId}/articles` : '/articles',
-        fetchParams: getCollectionParams(majorId),
-        body,
-        responseSchema: articlesSchema,
-      },
-    }).then(({ value: { result } }) => {
-      dispatch(goToArticle(result, majorId));
-    });
-}
-
-export function updateArticle(id, body, majorId) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.UPDATE,
-      payload: {
-        method: 'PUT',
-        url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-        fetchParams: getCollectionParams(majorId, { id }),
-        body,
-        responseSchema: articlesSchema,
-      },
-    }).then(() => {
-      dispatch(goToArticle(id, majorId));
-    });
-}
-
-export function articleApproval(id, majorId, approved) {
-  return {
-    type: TYPES.APPROVAL,
+    type: TYPES.TOGGLE_APPROVAL,
     payload: {
       method: 'PUT',
-      url: majorId ? `/majors/${majorId}/articles/${id}/approval` : `/articles/${id}/approval`,
-      fetchParams: getCollectionParams(majorId, { id }),
+      url: baseId
+        ? `/majors/${baseId}/articles/${id}/approval`
+        : `/articles/${id}/approval`,
       body: { approved },
       responseSchema: articlesSchema,
     },
+    meta: { id },
   };
 }
 
-export function destroyArticle(id, majorId) {
-  return {
-    type: TYPES.DESTROY,
-    payload: {
-      method: 'DELETE',
-      url: majorId ? `/majors/${majorId}/articles/${id}` : `/articles/${id}`,
-      fetchParams: getCollectionParams(majorId, { id }),
-    },
-  };
-}
+export const resetPagination = () => ({ type: TYPES.RESET_PAGINATION });
 
-export const resetPagination = resetPaginationActionFactory(TYPES.RESET_PAGINATION);
+const getArticlesState = state => state.articles;
 
-export default function articlesReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return getPagingFns(payload).setPage(state, payload);
-    case `${TYPES.DESTROY}_FULFILLED`:
-      return removeFromAllPages(
-        state,
-        Object.values(majorsPagingFns).concat(Object.values(platformPagingFns)),
-        payload.request.fetchParams,
-      );
-    case TYPES.RESET_PAGINATION:
-      return getPagingFns(payload).reset(state, payload.baseResourceId);
-    default:
-      return state;
-  }
+export function getPaginationData(state, params) {
+  return paginationDataSelectorFactory(
+    getArticlesState,
+    getPaginationKey(params.baseId, params.suffix),
+    articleSummariesSchema,
+  )(state, params);
 }
 
 export const getArticleEntity = getEntityFactory(articlesSchema);
@@ -188,3 +123,12 @@ export function getArticleIdFromProps(props) {
     || props.articleId
   );
 }
+
+export function getIsLoadingArticles(state, props) {
+  const type = getLoadIndexType(TYPES, props.baseId, props.suffix);
+  return getIsRequestingFactory(type)(state, props);
+}
+
+export const getIsLoadingArticle = getIsRequestingFactory(TYPES.LOAD);
+export const getIsTogglingArticleApproval = getIsRequestingFactory(TYPES.TOGGLE_APPROVAL);
+export const getIsDestroyingArticle = getIsRequestingFactory(TYPES.DESTROY);

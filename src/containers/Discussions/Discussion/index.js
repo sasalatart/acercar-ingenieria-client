@@ -5,20 +5,19 @@ import {
   loadDiscussion,
   getDiscussionEntity,
   getDiscussionSummaryEntity,
+  getIsLoadingDiscussion,
 } from '../../../store/ducks/discussions';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withLoadableResource from '../../../hoc/withLoadableResource';
 import Discussion from '../../../components/Discussions/Discussion';
-import collections from '../../../lib/collections';
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection: collections.discussions };
+function mapStateToProps(state, { match: { params } }) {
   const discussion = getDiscussionEntity(state, params)
     || getDiscussionSummaryEntity(state, params);
 
   return {
+    ...getPlaceholderFlags(getIsLoadingDiscussion(state, params), discussion),
     isAuthor: !!(discussion && getCurrentUserId(state) === discussion.author.id),
-    loading: !discussion && getIsFetching(state, params),
     discussion,
   };
 }

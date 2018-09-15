@@ -16,4 +16,4 @@ const form = reduxForm({
       .then(() => props.callback()),
 })(ReportForm);
 
-export default I18nForm(form, emailValidations);
+export default I18nForm(emailValidations)(form);

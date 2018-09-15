@@ -25,15 +25,15 @@ function CommentActionBar({
   const actions = [
     <LikeButton
       key="like"
-      baseResourceName={collections.comments}
-      baseResourceId={id}
+      baseCollection={collections.comments}
+      baseId={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
     />,
     <EnrollButton
       key="enroll"
-      baseResourceName={collections.comments}
-      baseResourceId={id}
+      baseCollection={collections.comments}
+      baseId={id}
       enrolledByCurrentUser={enrolledByCurrentUser}
     />,
   ];
@@ -44,8 +44,8 @@ function CommentActionBar({
         key="destroy"
         collection={collections.comments}
         id={id}
-        baseResourceName={`${lowerFirst(commentableType)}s`}
-        baseResourceId={commentableId}
+        baseCollection={`${lowerFirst(commentableType)}s`}
+        baseId={commentableId}
         callback={onDestroy}
       />
     );

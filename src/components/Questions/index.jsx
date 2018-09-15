@@ -17,14 +17,18 @@ function Questions({
   renderModal,
 }) {
   const majorId = +match.params.majorId;
-  const pending = !!match.params.pending;
+  const unanswered = !!match.params.unanswered;
 
   return (
     <Fragment>
-      <QuestionsActionBar majorId={majorId} pending={pending} onProposeClicked={onNewClicked} />
-      <Title>{pending ? <FormattedMessage id="questions.pending" /> : 'FAQs'}</Title>
+      <QuestionsActionBar
+        majorId={majorId}
+        unanswered={unanswered}
+        onCreateClicked={onNewClicked}
+      />
+      <Title>{unanswered ? <FormattedMessage id="questions.unanswered" /> : 'FAQs'}</Title>
 
-      <QuestionsList majorId={majorId} pending={pending} onEditClicked={onEditClicked} />
+      <QuestionsList majorId={majorId} unanswered={unanswered} onEditClicked={onEditClicked} />
 
       {renderModal(
         <FormattedMessage id={editingId ? 'questions.edit' : 'questions.new'} />,

@@ -33,8 +33,8 @@ function ChildComments({
           <Divider style={styles.divider} dashed>
             <CommentLink
               id={parentCommentId}
-              baseResourceName={`${lowerFirst(parentCommentCommentableType)}s`}
-              baseResourceId={parentCommentCommentableId}
+              baseCollection={`${lowerFirst(parentCommentCommentableType)}s`}
+              baseId={parentCommentCommentableId}
             >
               <FormattedMessage id="comments.extras" values={{ extras: extraComments }} />
             </CommentLink>

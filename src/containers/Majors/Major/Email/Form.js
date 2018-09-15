@@ -15,4 +15,4 @@ const form = reduxForm({
     dispatch(sendEmail(props.majorId, processValues(values), props.personal)),
 })(EmailForm);
 
-export default I18nForm(form, emailValidations);
+export default I18nForm(emailValidations)(form);

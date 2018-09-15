@@ -10,4 +10,4 @@ const form = reduxForm({
     .then(() => props.onSubmitSuccess && props.onSubmitSuccess()),
 })(AnnouncementForm);
 
-export default I18nForm(form, announcementsValidations);
+export default I18nForm(announcementsValidations)(form);

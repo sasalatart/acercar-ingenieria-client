@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
 import VideoItem from './Item';
-import { paginationShape, videoLinkShape } from '../../../shapes';
+import { paginationInfoShape, videoLinkShape } from '../../../shapes';
 
 const styles = {
   itemsContainer: {
@@ -31,16 +30,17 @@ function renderVideos(adminOrMajorAdmin, videos, onEditClicked) {
 function VideosList({
   adminOrMajorAdmin,
   loading,
+  noData,
   videos,
-  pagination,
+  paginationInfo,
   loadVideoLinks,
   onEditClicked,
 }) {
   return (
     <PaginationControls
-      pagination={pagination}
+      paginationInfo={paginationInfo}
       loading={loading}
-      noData={!loading && isEmpty(videos)}
+      noData={noData}
       loadFn={loadVideoLinks}
       render={() => renderVideos(adminOrMajorAdmin, videos, onEditClicked)}
     />
@@ -50,15 +50,11 @@ function VideosList({
 VideosList.propTypes = {
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
-  videos: PropTypes.arrayOf(videoLinkShape),
-  pagination: paginationShape,
+  noData: PropTypes.bool.isRequired,
+  videos: PropTypes.arrayOf(videoLinkShape).isRequired,
+  paginationInfo: paginationInfoShape.isRequired,
   loadVideoLinks: PropTypes.func.isRequired,
   onEditClicked: PropTypes.func.isRequired,
-};
-
-VideosList.defaultProps = {
-  videos: [],
-  pagination: undefined,
 };
 
 export default VideosList;

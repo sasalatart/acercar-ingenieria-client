@@ -2,12 +2,11 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
 import Title from '../../Layout/Title';
 import ActionBar from './ActionBar';
 import ListItem from './Item';
-import { paginationShape, articleSummaryShape } from '../../../shapes';
+import { paginationInfoShape, articleSummaryShape } from '../../../shapes';
 import { suffixes } from '../../../lib/articles';
 
 export default class ArticlesList extends Component {
@@ -15,18 +14,17 @@ export default class ArticlesList extends Component {
     currentUserId: PropTypes.number.isRequired,
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
     suffix: PropTypes.string.isRequired,
-    pagination: paginationShape,
-    articleSummaries: PropTypes.arrayOf(articleSummaryShape),
+    paginationInfo: paginationInfoShape.isRequired,
+    articleSummaries: PropTypes.arrayOf(articleSummaryShape).isRequired,
     loadArticles: PropTypes.func.isRequired,
     onTagClick: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     majorId: undefined,
-    pagination: undefined,
-    articleSummaries: [],
   }
 
   componentDidUpdate(prevProps) {
@@ -48,8 +46,9 @@ export default class ArticlesList extends Component {
   render() {
     const {
       loading,
+      noData,
       suffix,
-      pagination,
+      paginationInfo,
       articleSummaries,
       loadArticles,
       ...restProps
@@ -66,9 +65,9 @@ export default class ArticlesList extends Component {
         </Title>
 
         <PaginationControls
-          pagination={pagination}
+          paginationInfo={paginationInfo}
           loading={loading}
-          noData={!loading && isEmpty(articleSummaries)}
+          noData={noData}
           loadFn={loadArticles}
           render={() => (
             <List

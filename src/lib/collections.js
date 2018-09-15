@@ -1,13 +1,13 @@
 import keyMirror from 'keymirror';
 
-export function parseBaseResource(params) {
-  const baseResourceKey = Object.keys(params).find(key => /Id/.test(key));
+export function parseBaseCollection(params) {
+  const baseKey = Object.keys(params).find(key => /Id/.test(key));
 
-  if (!baseResourceKey) return undefined;
+  if (!baseKey) return undefined;
 
   return {
-    baseResourceName: baseResourceKey.replace('Id', 's'),
-    baseResourceId: +params[baseResourceKey],
+    baseCollection: baseKey.replace('Id', 's'),
+    baseId: +params[baseKey],
   };
 }
 

@@ -1,6 +1,6 @@
 export default {
   'en-US': {
-    'notifications.pending': 'Pending Notifications',
+    'notifications.unseen': 'Unseen Notifications',
     'notifications.seen': 'Seen Notifications',
     'notifications.setAllAsSeen': 'Mark All as Read',
 
@@ -39,7 +39,7 @@ export default {
     'notifications.resourceNotApproved': 'The resource this notification references to is waiting admin approval',
   },
   'es-ES': {
-    'notifications.pending': 'Notificaciones pendientes',
+    'notifications.unseen': 'Notificaciones no vistas',
     'notifications.seen': 'Notificaciones vistas',
     'notifications.setAllAsSeen': 'Marcar todas como leídas',
 

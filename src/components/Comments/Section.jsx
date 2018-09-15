@@ -15,8 +15,8 @@ const styles = {
 
 class CommentsSection extends Component {
   static propTypes = {
-    baseResourceName: PropTypes.string.isRequired,
-    baseResourceId: PropTypes.number.isRequired,
+    baseCollection: PropTypes.string.isRequired,
+    baseId: PropTypes.number.isRequired,
     answersList: PropTypes.bool,
     toggable: PropTypes.bool,
     disabled: PropTypes.bool,
@@ -48,22 +48,22 @@ class CommentsSection extends Component {
 
   render() {
     const {
-      baseResourceName,
-      baseResourceId,
+      baseCollection,
+      baseId,
       answersList,
       disabled,
     } = this.props;
 
     if (!this.state.visible) return this.renderToggleButton();
 
-    const commonProps = { baseResourceName, baseResourceId };
+    const commonProps = { baseCollection, baseId };
     return (
       <Fragment>
         <Title>{this.renderTitleText()}</Title>
 
         {!disabled &&
           <Fragment>
-            <Form {...commonProps} reverseList={answersList} />
+            <Form {...commonProps} addToEnd={answersList} />
             <Divider />
           </Fragment>
         }

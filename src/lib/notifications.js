@@ -1,9 +1,9 @@
 import keyMirror from 'keymirror';
 
-export const suffixes = keyMirror({ seen: null, pending: null });
+export const suffixes = keyMirror({ seen: null, unseen: null });
 
 export function getSuffix(seen) {
-  return seen ? suffixes.seen : suffixes.pending;
+  return seen ? suffixes.seen : suffixes.unseen;
 }
 
 export const NOTIFYABLE_TYPES = {
@@ -11,3 +11,7 @@ export const NOTIFYABLE_TYPES = {
   article: 'Article',
   comment: 'Comment',
 };
+
+export function getLoadIndexType(types, suffix) {
+  return suffix === suffixes.seen ? types.LOAD_SEEN : types.LOAD_UNSEEN;
+}

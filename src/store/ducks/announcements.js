@@ -1,43 +1,47 @@
-import { Map, OrderedSet } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
-import pagingFnsFactory from './paginations';
+import { combineReducers } from 'redux';
+import { OrderedSet } from 'immutable';
+import { getIsRequestingFactory } from './loading';
+import { withFulfilledTypes } from './shared';
+import paginationReducerFactory, { addToPaginationActionFactory, paginationDataSelectorFactory } from './shared/paginations';
+import crudReducerFactory, { crudActionsFactory, crudSelectorsFactory } from './shared/crud';
 import { announcementsSchema } from '../../schemas';
-import { getEntities } from './entities';
-import collections from '../../lib/collections';
-import { suffixes } from '../../lib/announcements';
 
-const collection = collections.announcements;
-export const pagingFns = pagingFnsFactory(collection, announcementsSchema);
-
-const INITIAL_STATE = new Map({
-  pagination: new Map({
-    platform: new Map({}),
-  }),
-  pinned: new OrderedSet([]),
-});
-
-export const TYPES = {
+export const TYPES = withFulfilledTypes({
   LOAD_INDEX: 'announcements/LOAD_INDEX',
   LOAD_PINNED: 'announcements/LOAD_PINNED',
   CREATE: 'announcements/CREATE',
-  UPDATE: 'announcements/UPDATE',
+  TOGGLE_PIN: 'announcements/TOGGLE_PIN',
   DESTROY: 'announcements/DESTROY',
   ADD_TO_PAGINATION: 'announcements/ADD_TO_PAGINATION',
-};
+});
 
-export function loadAnnouncements(page = 1) {
-  return {
-    type: TYPES.LOAD_INDEX,
-    payload: {
-      method: 'GET',
-      url: '/announcements',
-      query: { page },
-      fetchParams: { collection, page },
-      responseSchema: [announcementsSchema],
-    },
-  };
+export default combineReducers({
+  pagination: paginationReducerFactory({
+    setPage: TYPES.LOAD_INDEX_FULFILLED,
+    addToPage: TYPES.ADD_TO_PAGINATION,
+    removeFromPages: TYPES.DESTROY_FULFILLED,
+  }),
+  pinned: crudReducerFactory({
+    set: TYPES.LOAD_PINNED_FULFILLED,
+    remove: TYPES.DESTROY_FULFILLED,
+  }, new OrderedSet([])),
+});
+
+const { loadIndex, create, destroy } = crudActionsFactory(TYPES, announcementsSchema);
+
+export const loadAnnouncements = loadIndex;
+
+const addToPagination = addToPaginationActionFactory(TYPES.ADD_TO_PAGINATION);
+
+export function createAnnouncement(body) {
+  return (dispatch, getState) => dispatch(create(body))
+    .then(({ value: { result } }) => {
+      // eslint-disable-next-line no-use-before-define
+      dispatch(addToPagination(result, getPaginationData(getState()).paginationInfo));
+    });
 }
+
+export const destroyAnnouncement = destroy;
 
 export function loadPinnedAnnouncements() {
   return {
@@ -45,82 +49,37 @@ export function loadPinnedAnnouncements() {
     payload: {
       method: 'GET',
       url: '/announcements/pinned',
-      fetchParams: { collection, suffix: suffixes.pinned },
       responseSchema: [announcementsSchema],
     },
   };
 }
 
-export function createAnnouncement(body) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.CREATE,
-      payload: {
-        method: 'POST',
-        url: '/announcements',
-        fetchParams: { collection },
-        body,
-        responseSchema: announcementsSchema,
-      },
-    }).then(({ value: { result } }) => {
-      dispatch(pagingFns.actions.addToPagination(TYPES.ADD_TO_PAGINATION, result));
-    });
-}
-
-export function updatePinned(id, pinned) {
+export function togglePinned(id, pinned) {
   return {
-    type: TYPES.UPDATE,
+    type: TYPES.TOGGLE_PIN,
     payload: {
       method: 'PUT',
       url: `/announcements/${id}`,
-      fetchParams: { collection, id },
       body: { pinned },
       responseSchema: announcementsSchema,
     },
+    meta: { id },
   };
 }
 
-export function destroyAnnouncement(id) {
-  return {
-    type: TYPES.DESTROY,
-    payload: {
-      method: 'DELETE',
-      url: `/announcements/${id}`,
-      fetchParams: { collection, id },
-    },
-  };
-}
+export const getAnnouncementsState = state => state.announcements;
 
-export default function announcementsReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return pagingFns.reducer.setPage(state, payload);
-    case `${TYPES.LOAD_PINNED}_FULFILLED`:
-      return state.set('pinned', new OrderedSet(payload.result));
-    case TYPES.ADD_TO_PAGINATION:
-      return pagingFns.reducer.addToPage(state, payload);
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { fetchParams } = payload.request;
-      return pagingFns
-        .reducer
-        .removeFromPage(state, fetchParams)
-        .update('pinned', ids => ids.delete(fetchParams.id));
-    }
-    default:
-      return state;
-  }
-}
-
-export const getAnnouncementsData = state => state.announcements;
-
-const getPinnedIds = createSelector(
-  getAnnouncementsData,
-  announcementsData => announcementsData.get('pinned'),
+export const getPaginationData = paginationDataSelectorFactory(
+  getAnnouncementsState,
+  'pagination',
+  announcementsSchema,
 );
 
-export const getPinnedAnnouncementsEntities = createSelector(
-  getPinnedIds,
-  getEntities,
-  (pinnedIdsList, entities) =>
-    denormalize(pinnedIdsList, [announcementsSchema], entities).toJS(),
-);
+export const {
+  getResourceEntities: getPinnedAnnouncementsEntities,
+} = crudSelectorsFactory(getAnnouncementsState, 'pinned', announcementsSchema);
+
+export const getIsLoadingAnnouncements = getIsRequestingFactory(TYPES.LOAD_INDEX);
+export const getIsLoadingPinned = getIsRequestingFactory(TYPES.LOAD_PINNED);
+export const getIsTogglingPin = getIsRequestingFactory(TYPES.TOGGLE_PIN);
+export const getIsDestroyingAnnouncement = getIsRequestingFactory(TYPES.DESTROY);

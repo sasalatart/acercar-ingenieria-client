@@ -1,28 +1,25 @@
 import { connect } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
-import { loadQuestions, getPagingFns } from '../../store/ducks/questions';
-import { getIsFetching } from '../../store/ducks/loading';
+import { loadQuestions, getPaginationData, getIsLoadingQuestions } from '../../store/ducks/questions';
+import { getPlaceholderFlags } from '../../store/ducks/shared';
 import withAuthorization from '../../hoc/withAuthorization';
 import QuestionsList from '../../components/Questions/List';
-import { getSuffix, getCollectionParams } from '../../lib/questions';
+import { getSuffix } from '../../lib/questions';
 
-function mapStateToProps(state, { majorId, pending }) {
-  const params = { ...getCollectionParams(majorId, { suffix: getSuffix(pending) }), paged: true };
-  const pagingFns = getPagingFns(params, true).selectors;
-  const questions = pagingFns.getPagedEntities(state, params);
-
+function mapStateToProps(state, { majorId, unanswered }) {
+  const params = { baseId: majorId, majorId, suffix: getSuffix(unanswered) };
+  const { paginationInfo, pagedEntities: questions } = getPaginationData(state, params);
+  params.page = paginationInfo.page;
   return {
-    loading: isEmpty(questions) && getIsFetching(state, params),
-    pagination: pagingFns.getMeta(state, params),
+    ...getPlaceholderFlags(getIsLoadingQuestions(state, params), questions),
+    paginationInfo,
     questions,
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { majorId, pending } = ownProps;
-
+function mapDispatchToProps(dispatch, { majorId: baseId, unanswered }) {
+  const suffix = getSuffix(unanswered);
   return {
-    loadQuestions: ({ page }) => dispatch(loadQuestions(page, majorId, pending)),
+    loadQuestions: query => dispatch(loadQuestions({ query, baseId, suffix })),
   };
 }
 

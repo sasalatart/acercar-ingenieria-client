@@ -15,8 +15,8 @@ import ArticleLink from '../Article/Link';
 import MajorLink from '../../Majors/Major/Link';
 import { breakpointsKeys } from '../../../theme';
 import { articleSummaryShape } from '../../../shapes';
-import { getCollectionParams } from '../../../lib/articles';
 import articlePlaceholder from '../../../images/article.png';
+import collections from '../../../lib/collections';
 
 const { Item } = List;
 const { Meta } = Item;
@@ -43,7 +43,7 @@ const styles = {
   },
 };
 
-function renderActions(currentUserId, adminOrMajorAdmin, article, majorId) {
+function renderActions(currentUserId, adminOrMajorAdmin, article) {
   const { id, commentsCount, likesCount } = article;
   const isAuthor = currentUserId === article.author.id;
 
@@ -53,7 +53,7 @@ function renderActions(currentUserId, adminOrMajorAdmin, article, majorId) {
   ];
 
   if (isAuthor || adminOrMajorAdmin) {
-    const destroyButton = <DestroyButton {...getCollectionParams(majorId, { id })} iconOnly />;
+    const destroyButton = <DestroyButton id={id} collection={collections.articles} iconOnly />;
     actions.push(destroyButton);
   }
 
@@ -100,7 +100,7 @@ function ArticleListItem({
   onTagClick,
 }) {
   const majorId = article.majorSummary && article.majorSummary.id;
-  const actions = renderActions(currentUserId, adminOrMajorAdmin, article, majorId);
+  const actions = renderActions(currentUserId, adminOrMajorAdmin, article);
   const extra = renderExtra(article.previewUrl);
 
   return (

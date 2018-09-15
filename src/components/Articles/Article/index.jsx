@@ -68,8 +68,8 @@ function renderContent(article) {
 
       <Divider />
       <CommentsSection
-        baseResourceName={collections.articles}
-        baseResourceId={article.id}
+        baseCollection={collections.articles}
+        baseId={article.id}
         disabled={!article.approved}
       />
     </Fragment>
@@ -104,15 +104,15 @@ function Article({
 
       <FeedButtons
         resource={article}
-        baseResourceName={collections.articles}
+        baseCollection={collections.articles}
         disabled={!article.approved}
       />
 
       {!article.approved &&
         <Alert
           type="warning"
-          message={<FormattedMessage id="articles.approvalPending.message" />}
-          description={<FormattedMessage id="articles.approvalPending.description" />}
+          message={<FormattedMessage id="articles.notApprovedYet.message" />}
+          description={<FormattedMessage id="articles.notApprovedYet.description" />}
           showIcon
         />
       }

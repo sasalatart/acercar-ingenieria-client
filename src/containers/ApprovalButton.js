@@ -1,17 +1,16 @@
 import { connect } from 'react-redux';
-import { articleApproval } from '../store/ducks/articles';
-import { getIsUpdating } from '../store/ducks/loading';
+import { toggleArticleApproval, getIsTogglingArticleApproval } from '../store/ducks/articles';
 import ApprovalButton from '../components/ApprovalButton';
 
 function mapStateToProps(state, ownProps) {
   return {
-    loading: getIsUpdating(state, ownProps),
+    loading: getIsTogglingArticleApproval(state, ownProps),
   };
 }
 
-function mapDispatchToProps(dispatch, { id, baseResourceId, approved }) {
+function mapDispatchToProps(dispatch, { id, baseId, approved }) {
   return {
-    onClick: () => dispatch(articleApproval(id, baseResourceId, !approved)),
+    onClick: () => dispatch(toggleArticleApproval(id, !approved, baseId)),
   };
 }
 

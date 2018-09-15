@@ -1,27 +1,27 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
-import { pagingFns, loadAnnouncements } from '../../../store/ducks/announcements';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { loadAnnouncements, getPaginationData, getIsLoadingAnnouncements } from '../../../store/ducks/announcements';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withModal from '../../../hoc/withModal';
 import Announcements from '../../../components/Announcements/List';
-import collections from '../../../lib/collections';
 
 function mapStateToProps(state) {
-  const params = { collection: collections.announcements, paged: true };
-  const announcements = pagingFns.selectors.getPagedEntities(state);
-
+  const { paginationInfo, pagedEntities: announcements } = getPaginationData(state);
+  const params = { page: paginationInfo.page };
   return {
-    loading: isEmpty(announcements) && getIsFetching(state, params),
+    ...getPlaceholderFlags(getIsLoadingAnnouncements(state, params), announcements),
     announcements,
-    pagination: pagingFns.selectors.getMeta(state),
+    paginationInfo,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadAnnouncements: ({ page }) => dispatch(loadAnnouncements(page)),
+    loadAnnouncements: query => dispatch(loadAnnouncements({ query })),
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(Announcements);
-export default withModal(component);
+export default compose(
+  withModal,
+  connect(mapStateToProps, mapDispatchToProps),
+)(Announcements);

@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
 import Form from '../../../containers/Announcements/Form';
 import Title from '../../Layout/Title';
 import Lightbox from '../../Layout/Lightbox';
 import Item from './Item';
 import ActionBar from './ActionBar';
-import { paginationShape, announcementShape } from '../../../shapes';
+import { paginationInfoShape, announcementShape } from '../../../shapes';
 import { breakpoints } from '../../../theme';
 
 const styles = {
@@ -26,17 +25,13 @@ const styles = {
 export default class Announcements extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    pagination: paginationShape,
-    announcements: PropTypes.arrayOf(announcementShape),
+    noData: PropTypes.bool.isRequired,
+    paginationInfo: paginationInfoShape.isRequired,
+    announcements: PropTypes.arrayOf(announcementShape).isRequired,
     loadAnnouncements: PropTypes.func.isRequired,
     onModalOpen: PropTypes.func.isRequired,
     onModalClose: PropTypes.func.isRequired,
     renderModal: PropTypes.func.isRequired,
-  }
-
-  static defaultProps = {
-    pagination: undefined,
-    announcements: [],
   }
 
   state = { lightboxOpen: false, clickedIndex: undefined };
@@ -58,11 +53,9 @@ export default class Announcements extends Component {
   }
 
   renderAnnouncements() {
-    const { announcements } = this.props;
-
     return (
       <div style={styles.container}>
-        {announcements.map(announcement => (
+        {this.props.announcements.map(announcement => (
           <Item
             key={announcement.id}
             announcement={announcement}
@@ -76,8 +69,8 @@ export default class Announcements extends Component {
   render() {
     const {
       loading,
-      pagination,
-      announcements,
+      noData,
+      paginationInfo,
       loadAnnouncements,
       onModalOpen,
       onModalClose,
@@ -91,9 +84,9 @@ export default class Announcements extends Component {
         <Title><FormattedMessage id="announcements" /></Title>
 
         <PaginationControls
-          pagination={pagination}
+          paginationInfo={paginationInfo}
           loading={loading}
-          noData={!loading && isEmpty(announcements)}
+          noData={noData}
           render={() => this.renderAnnouncements()}
           loadFn={loadAnnouncements}
         />

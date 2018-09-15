@@ -2,13 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { List, Modal } from 'antd';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
 import Title from '../../Layout/Title';
 import ActionBar from './ActionBar';
 import UserListItem from './Item';
 import AdminStatusPanel from '../AdminStatus/Panel';
-import { paginationShape, userShape } from '../../../shapes';
+import { paginationInfoShape, userShape } from '../../../shapes';
 
 export default class UsersList extends Component {
   static propTypes = {
@@ -16,10 +15,11 @@ export default class UsersList extends Component {
     admin: PropTypes.bool.isRequired,
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
     admins: PropTypes.bool,
-    pagination: paginationShape,
-    users: PropTypes.arrayOf(userShape),
+    paginationInfo: paginationInfoShape.isRequired,
+    users: PropTypes.arrayOf(userShape).isRequired,
     selectedUser: userShape,
     loadUsers: PropTypes.func.isRequired,
     setSelectedUser: PropTypes.func.isRequired,
@@ -30,8 +30,6 @@ export default class UsersList extends Component {
   static defaultProps = {
     majorId: undefined,
     admins: false,
-    pagination: undefined,
-    users: [],
     selectedUser: undefined,
     withTitle: false,
   }
@@ -42,9 +40,7 @@ export default class UsersList extends Component {
       admin={this.props.admin}
       adminOrMajorAdmin={this.props.adminOrMajorAdmin}
       user={user}
-      majorId={this.props.majorId}
       setSelectedUser={() => this.props.setSelectedUser(user.id)}
-      unsetSelectedUser={this.props.unsetSelectedUser}
     />
   );
 
@@ -67,7 +63,8 @@ export default class UsersList extends Component {
   render() {
     const {
       loading,
-      pagination,
+      noData,
+      paginationInfo,
       users,
       selectedUser,
       withTitle,
@@ -81,9 +78,9 @@ export default class UsersList extends Component {
         {withTitle && <Title><FormattedMessage id="users" /></Title>}
 
         <PaginationControls
-          pagination={pagination}
+          paginationInfo={paginationInfo}
           loading={loading}
-          noData={!loading && isEmpty(users)}
+          noData={noData}
           loadFn={loadUsers}
           render={() => (
             <List

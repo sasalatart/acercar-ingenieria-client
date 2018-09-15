@@ -4,7 +4,7 @@ import Radium from 'radium';
 import { Pagination } from 'antd';
 import URI from 'urijs';
 import DataPlaceholder from './DataPlaceholder';
-import { paginationShape } from '../../shapes';
+import { paginationInfoShape } from '../../shapes';
 
 const styles = {
   paginationWrapper: {
@@ -19,8 +19,7 @@ class PaginationControls extends Component {
     loading: PropTypes.bool.isRequired,
     noData: PropTypes.bool.isRequired,
     search: PropTypes.string,
-    current: PropTypes.number,
-    pagination: paginationShape,
+    paginationInfo: paginationInfoShape.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
     loadFn: PropTypes.func.isRequired,
     render: PropTypes.func.isRequired,
@@ -28,21 +27,20 @@ class PaginationControls extends Component {
 
   static defaultProps = {
     search: '',
-    current: 1,
-    pagination: undefined,
   }
 
   componentDidMount() {
-    this.props.loadFn({ page: this.props.current });
+    this.props.loadFn({ page: this.props.paginationInfo.page });
   }
 
   componentDidUpdate(prevProps) {
-    const { current, search, loadFn } = this.props;
-    const pageChanged = prevProps.current !== current;
+    const { paginationInfo, search, loadFn } = this.props;
+    const pageChanged = prevProps.paginationInfo.page !== paginationInfo.page;
     const searchChanged = prevProps.search !== search;
 
     if (pageChanged || searchChanged) {
-      loadFn({ page: current, ...URI.parseQuery(search) });
+      const query = URI.parseQuery(search);
+      loadFn({ ...query, page: query.page || 1 });
     }
   }
 
@@ -51,12 +49,11 @@ class PaginationControls extends Component {
   }
 
   renderPaginationTag() {
-    const { current, pagination: { perPage, totalRecords } } = this.props;
-
+    const { perPage, totalRecords, page } = this.props.paginationInfo;
     return (
       <div style={styles.paginationWrapper}>
         <Pagination
-          current={current}
+          current={page}
           pageSize={perPage}
           total={totalRecords}
           onChange={this.handlePageChange}
@@ -72,10 +69,6 @@ class PaginationControls extends Component {
   }
 
   render() {
-    if (!this.props.pagination) {
-      return this.renderContent();
-    }
-
     return (
       <Fragment>
         {this.renderPaginationTag()}

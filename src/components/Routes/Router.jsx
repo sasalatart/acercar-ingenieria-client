@@ -32,7 +32,7 @@ export default function Router() {
           <Route path="/users" render={loggedInRoute(Users)} />
           <Route path="/majors" component={Majors} />
           <Route path="/articles" render={loggedInRoute(Articles)} />
-          <Route path="/questions/:pending?" render={questionsAdministrationRoute(Questions)} />
+          <Route path="/questions/:unanswered?" render={questionsAdministrationRoute(Questions)} />
           <Route path="/discussions" render={loggedInRoute(Discussions)} />
           <Route path="/comments" render={loggedInRoute(Comments)} />
           <Route path="/about-us" component={AboutUs} />

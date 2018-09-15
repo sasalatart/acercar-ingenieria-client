@@ -1,12 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../../containers/Layout/Pagination';
 import Title from '../../../Layout/Title';
 import ActionBar from './ActionBar';
 import ProfileCard from '../../../Users/Profile/Card';
-import { paginationShape, userShape } from '../../../../shapes';
+import { paginationInfoShape, userShape } from '../../../../shapes';
 
 const styles = {
   cardsWrapper: {
@@ -37,9 +36,10 @@ function renderProfileCards(majorAdmins, goToUser) {
 
 function MajorAdmins({
   loading,
+  noData,
   majorId,
   majorAdmins,
-  pagination,
+  paginationInfo,
   loadAdmins,
   goToUser,
 }) {
@@ -49,9 +49,9 @@ function MajorAdmins({
       <Title><FormattedMessage id="majors.admins" /></Title>
 
       <PaginationControls
-        pagination={pagination}
+        paginationInfo={paginationInfo}
         loading={loading}
-        noData={!loading && isEmpty(majorAdmins)}
+        noData={noData}
         loadFn={loadAdmins}
         render={() => renderProfileCards(majorAdmins, goToUser)}
       />
@@ -61,16 +61,12 @@ function MajorAdmins({
 
 MajorAdmins.propTypes = {
   loading: PropTypes.bool.isRequired,
+  noData: PropTypes.bool.isRequired,
   majorId: PropTypes.number.isRequired,
-  pagination: paginationShape,
-  majorAdmins: PropTypes.arrayOf(userShape),
+  paginationInfo: paginationInfoShape.isRequired,
+  majorAdmins: PropTypes.arrayOf(userShape).isRequired,
   loadAdmins: PropTypes.func.isRequired,
   goToUser: PropTypes.func.isRequired,
-};
-
-MajorAdmins.defaultProps = {
-  pagination: undefined,
-  majorAdmins: [],
 };
 
 export default MajorAdmins;

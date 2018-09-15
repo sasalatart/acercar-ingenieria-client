@@ -1,144 +1,68 @@
-import { Map, OrderedSet } from 'immutable';
+import { combineReducers } from 'redux';
+import { OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
-import { majorsSchema } from '../../schemas';
 import { goToMajor } from './routes';
-import { getEntities } from './entities';
+import { getIsRequestingFactory } from './loading';
 import { resourceSuccessNotification } from './notifications';
-import { getId } from './shared';
-import collections from '../../lib/collections';
+import { getEntityFactory } from './entities';
+import { withFulfilledTypes } from './shared';
+import crudReducerFactory, { crudActionsFactory, crudSelectorsFactory } from './shared/crud';
+import { majorsSchema } from '../../schemas';
 
-const collection = collections.majors;
-
-const INITIAL_STATE = new Map({
-  activeIds: new OrderedSet(),
-});
-
-export const TYPES = {
+export const TYPES = withFulfilledTypes({
   LOAD_INDEX: 'majors/LOAD_INDEX',
   LOAD: 'majors/LOAD',
   CREATE: 'majors/CREATE',
   UPDATE: 'majors/UPDATE',
   DESTROY: 'majors/DESTROY',
   EMAIL: 'majors/EMAIL',
-};
+});
 
-export function loadMajors() {
-  return {
-    type: TYPES.LOAD_INDEX,
-    payload: {
-      method: 'GET',
-      url: '/majors',
-      fetchParams: { collection, page: 1 },
-      responseSchema: [majorsSchema],
-    },
-  };
-}
+export default combineReducers({
+  activeMajorsIds: crudReducerFactory({ set: TYPES.LOAD_INDEX_FULFILLED }, new OrderedSet([])),
+});
 
-export function loadMajor(id) {
-  return {
-    type: TYPES.LOAD,
-    payload: {
-      method: 'GET',
-      url: `/majors/${id}`,
-      fetchParams: { collection, id },
-      responseSchema: majorsSchema,
-    },
-  };
-}
+const {
+  loadIndex, load, create, update, destroy,
+} = crudActionsFactory(TYPES, majorsSchema);
+
+export const loadMajors = loadIndex;
+export const loadMajor = load;
+export const destroyMajor = destroy;
 
 export function createMajor(body) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.CREATE,
-      payload: {
-        method: 'POST',
-        url: '/majors',
-        fetchParams: { collection },
-        body,
-        responseSchema: majorsSchema,
-      },
-    }).then(({ value: { result } }) => {
-      dispatch(goToMajor(result));
-    });
+  return dispatch => dispatch(create(body))
+    .then(({ value: { result } }) => dispatch(goToMajor(result)));
 }
 
 export function updateMajor(id, body) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.UPDATE,
-      payload: {
-        method: 'PUT',
-        url: `/majors/${id}`,
-        fetchParams: { collection, id },
-        body,
-        responseSchema: majorsSchema,
-      },
-    }).then(() => {
-      dispatch(goToMajor(id));
-    });
-}
-
-export function destroyMajor(id) {
-  return {
-    type: TYPES.DESTROY,
-    payload: {
-      method: 'DELETE',
-      url: `/majors/${id}`,
-      fetchParams: { collection, id },
-    },
-  };
+  return dispatch => dispatch(update(id, body))
+    .then(() => dispatch(goToMajor(id)));
 }
 
 export function sendEmail(id, body, personal) {
-  const urlSuffix = personal ? 'personal-email' : 'email';
-
   return dispatch =>
     dispatch({
       type: TYPES.EMAIL,
       payload: {
         method: 'POST',
-        url: `/majors/${id}/${urlSuffix}`,
-        fetchParams: { collection, id },
+        url: `/majors/${id}/${personal ? 'personal-email' : 'email'}`,
         body,
       },
+      meta: { id },
     }).then(() => {
       dispatch(resourceSuccessNotification('email', 'sent'));
       dispatch(goToMajor(id));
     });
 }
 
-export default function majorsReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return state.set('activeIds', new OrderedSet(action.payload.result));
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { id } = action.payload.request.fetchParams;
-      return state.update('activeIds', ids => ids.delete(id));
-    }
-    default:
-      return state;
-  }
-}
+const getMajorsState = state => state.majors;
 
-const getMajorsData = state => state.majors;
+export const {
+  getResourceEntities: getMajorEntities,
+} = crudSelectorsFactory(getMajorsState, 'activeMajorsIds', majorsSchema);
 
-const getActiveIds = createSelector(
-  getMajorsData,
-  majorsData => majorsData.get('activeIds'),
-);
-
-export const getMajorEntities = createSelector(
-  getActiveIds,
-  getEntities,
-  (activeIds, entities) => denormalize(activeIds, [majorsSchema], entities).toJS(),
-);
-
-export const getMajorEntity = createSelector(
-  getId,
-  getEntities,
-  (majorId, entities) => entities.getIn(['majors', majorId]),
-);
+export const getMajorEntity = getEntityFactory(majorsSchema);
 
 function filterByCategory(majorEntities, categoryType) {
   return majorEntities.filter(({ category }) => category === categoryType);
@@ -168,3 +92,7 @@ export function getMajorIdFromProps(props) {
     || props.majorId
   );
 }
+
+export const getIsLoadingMajors = getIsRequestingFactory(TYPES.LOAD_INDEX);
+export const getIsLoadingMajor = getIsRequestingFactory(TYPES.LOAD);
+export const getIsDestroyingMajor = getIsRequestingFactory(TYPES.DESTROY);

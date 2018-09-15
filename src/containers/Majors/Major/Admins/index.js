@@ -1,27 +1,23 @@
 import { connect } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
 import { goToUser } from '../../../../store/ducks/routes';
-import { loadAdmins, getPagingFns } from '../../../../store/ducks/admins';
-import { getIsFetching } from '../../../../store/ducks/loading';
+import { loadAdmins, getPaginationData, getIsLoadingAdmins } from '../../../../store/ducks/admins';
+import { getPlaceholderFlags } from '../../../../store/ducks/shared';
 import MajorAdmins from '../../../../components/Majors/Major/Admins';
-import { getCollectionParams } from '../../../../lib/admins';
 
 function mapStateToProps(state, { majorId }) {
-  const params = { ...getCollectionParams(majorId), paged: true };
-  const pagingFns = getPagingFns(params, true).selectors;
-
-  const majorAdmins = pagingFns.getPagedEntities(state, params);
-
+  const params = { baseId: majorId };
+  const { paginationInfo, pagedEntities: majorAdmins } = getPaginationData(state, params);
+  params.page = paginationInfo.page;
   return {
-    loading: isEmpty(majorAdmins) && getIsFetching(state, params),
-    pagination: pagingFns.getMeta(state, params),
+    ...getPlaceholderFlags(getIsLoadingAdmins(state, params), majorAdmins),
+    paginationInfo,
     majorAdmins,
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { majorId }) {
   return {
-    loadAdmins: ({ page }) => dispatch(loadAdmins(page, ownProps.majorId)),
+    loadAdmins: query => dispatch(loadAdmins({ query, baseId: majorId })),
     goToUser: id => dispatch(goToUser(id)),
   };
 }

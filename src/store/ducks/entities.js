@@ -44,17 +44,17 @@ export function updateEntity(collection, id, updateFn) {
   };
 }
 
-export default function entitiesReducer(state = INITIAL_STATE, action) {
-  if (action.type.includes('DESTROY_FULFILLED')) {
-    const { collection, id } = action.payload.request.fetchParams;
+export default function entitiesReducer(state = INITIAL_STATE, { type, payload, meta }) {
+  if (meta && meta.destroy && type.includes('FULFILLED')) {
+    const { collection, id } = meta;
     return state.deleteIn([collection, String(id)]);
   }
 
-  if (!action.payload || !action.payload.entities || action.type === REHYDRATE) {
+  if (!payload || !payload.entities || type === REHYDRATE) {
     return state;
   }
 
-  const { entities } = action.payload;
+  const { entities } = payload;
   return Object.keys(entities).reduce(
     (newState, entityName) => {
       const mappedEntities = new Map(entities[entityName]);

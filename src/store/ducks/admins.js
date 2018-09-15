@@ -1,51 +1,80 @@
+import { combineReducers } from 'redux';
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import { denormalize } from 'normalizr';
-import { usersSchema } from '../../schemas';
-import { getEntities } from './entities';
-import pagingFnsFactory, {
-  prepareGetPagingFns,
-  removeFromAllPages,
-  resetPaginationActionFactory,
-} from './paginations';
 import { TYPES as USERS_TYPES } from './users';
-import { getCollectionParams as getAdminsCollectionParams } from '../../lib/admins';
-import { getCollectionParams as getUsersCollectionParams } from '../../lib/users';
+import { getIsRequestingFactory } from './loading';
+import { getEntities } from './entities';
+import { withFulfilledTypes } from './shared';
+import paginationReducerFactory, { paginationDataSelectorFactory } from './shared/paginations';
+import { crudActionsFactory } from './shared/crud';
+import { usersSchema } from '../../schemas';
+import { getToggleType } from '../../lib/admins';
 import collections from '../../lib/collections';
 
-const commonArgs = [collections.admins, usersSchema];
-const platformPagingFns = pagingFnsFactory(...commonArgs);
-const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: collections.majors });
-
 const INITIAL_STATE = Map({
-  pagination: new Map({
-    platform: new Map({}),
-    majors: new Map({}),
-  }),
   selectedUserId: undefined,
 });
 
-const TYPES = {
-  LOAD_INDEX: 'admins/LOAD_INDEX',
+const TYPES = withFulfilledTypes({
+  FROM_PLATFORM: 'admins/FROM_PLATFORM',
+  FROM_MAJOR: 'admins/FROM_MAJOR',
   SET_SELECTED_USER: 'admins/SET_SELECTED_USER',
   UNSET_SELECTED_USER: 'admins/UNSET_SELECTED_USER',
-  UPDATE_ROLE: 'admins/UPDATE_ROLE',
+  PROMOTE_TO_PLATFORM: 'admins/PROMOTE_TO_PLATFORM',
+  DEMOTE_FROM_PLATFORM: 'admins/DEMOTE_FROM_PLATFORM',
+  PROMOTE_TO_MAJOR: 'admins/PROMOTE_TO_MAJOR',
+  DEMOTE_FROM_MAJOR: 'admins/DEMOTE_FROM_MAJOR',
   RESET_PAGINATION: 'admins/RESET_PAGINATION',
-};
+});
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceId }) => (
-  baseResourceId ? majorsPagingFns : platformPagingFns
-));
+function adminsReducer(state = INITIAL_STATE, { type, payload }) {
+  switch (type) {
+    case TYPES.SET_SELECTED_USER:
+      return state.set('selectedUserId', payload.id);
+    case TYPES.UNSET_SELECTED_USER:
+      return state.set('selectedUserId', undefined);
+    default:
+      return state;
+  }
+}
 
-export function loadAdmins(page = 1, majorId, query) {
+export default combineReducers({
+  data: adminsReducer,
+  platformPagination: paginationReducerFactory({
+    setPage: TYPES.FROM_PLATFORM_FULFILLED,
+    addToPage: TYPES.PROMOTE_TO_PLATFORM_FULFILLED,
+    removeFromPages: [USERS_TYPES.DESTROY_FULFILLED, TYPES.DEMOTE_FROM_PLATFORM_FULFILLED],
+    resetPagination: TYPES.RESET_PAGINATION,
+  }),
+  majorAdminsPagination: paginationReducerFactory({
+    setPage: TYPES.FROM_MAJOR_FULFILLED,
+    addToPage: TYPES.PROMOTE_TO_MAJOR_FULFILLED,
+    removeFromPages: [USERS_TYPES.DESTROY_FULFILLED, TYPES.DEMOTE_FROM_MAJOR_FULFILLED],
+    resetPagination: TYPES.RESET_PAGINATION,
+  }),
+});
+
+export function loadAdmins({ baseId, query }) {
+  const types = { LOAD_INDEX: baseId ? TYPES.FROM_MAJOR : TYPES.FROM_PLATFORM };
+  const urlOptions = { collection: collections.admins, baseCollection: collections.majors };
+  const { loadIndex } = crudActionsFactory(types, usersSchema, urlOptions);
+  return dispatch => dispatch(loadIndex({ baseId, query }));
+}
+
+export function toggleAdmin(id, promote, baseId) {
   return {
-    type: TYPES.LOAD_INDEX,
+    type: getToggleType(TYPES, promote, baseId),
     payload: {
-      method: 'GET',
-      url: majorId ? `/majors/${majorId}/admins` : '/admins',
-      query: { page, ...query },
-      fetchParams: { page, ...query, ...getAdminsCollectionParams(majorId) },
-      responseSchema: [usersSchema],
+      method: promote ? 'POST' : 'DELETE',
+      url: baseId
+        ? `/majors/${baseId}/users/${id}/admin`
+        : `/users/${id}/admin`,
+      responseSchema: usersSchema,
+    },
+    meta: {
+      id,
+      baseId,
     },
   };
 }
@@ -63,52 +92,25 @@ export function unsetSelectedUser() {
   };
 }
 
-export function toggleAdmin(id, majorId, promote) {
-  const suffixUrl = `/users/${id}/admin`;
+export function resetPagination() {
   return {
-    type: TYPES.UPDATE_ROLE,
-    payload: {
-      method: promote ? 'POST' : 'DELETE',
-      url: majorId ? `/majors/${majorId}${suffixUrl}` : suffixUrl,
-      fetchParams: getUsersCollectionParams(majorId, { id }),
-      responseSchema: usersSchema,
-    },
+    type: TYPES.RESET_PAGINATION,
   };
 }
 
-export const resetPagination = resetPaginationActionFactory(TYPES.RESET_PAGINATION);
+export const getAdminsState = state => state.admins;
 
-export default function adminsReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return getPagingFns(payload).setPage(state, payload);
-    case TYPES.SET_SELECTED_USER:
-      return state.set('selectedUserId', payload.id);
-    case TYPES.UNSET_SELECTED_USER:
-      return state.set('selectedUserId', undefined);
-    case `${TYPES.UPDATE_ROLE}_FULFILLED`: {
-      const pageAction = type.includes(TYPES.PROMOTE) ? 'addToPage' : 'removeFromPage';
-      return getPagingFns(payload)[pageAction](state, payload.request.fetchParams);
-    }
-    case `${TYPES.UPDATE_ROLE}_REJECTED`: {
-      return state.set('selectedUserId', undefined);
-    }
-    case `${USERS_TYPES.DESTROY}_FULFILLED`: {
-      const { fetchParams } = payload.request;
-      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], fetchParams);
-    }
-    case TYPES.RESET_PAGINATION:
-      return getPagingFns(payload).reset(state, payload.baseResourceId);
-    default:
-      return state;
-  }
+export function getPaginationData(state, params) {
+  return paginationDataSelectorFactory(
+    getAdminsState,
+    params.baseId ? 'majorAdminsPagination' : 'platformPagination',
+    usersSchema,
+  )(state, params);
 }
 
-export const getAdminsData = state => state.admins;
-
 export const getSelectedUserId = createSelector(
-  getAdminsData,
-  adminsData => adminsData.get('selectedUserId'),
+  getAdminsState,
+  adminsState => adminsState.data.get('selectedUserId'),
 );
 
 export const getSelectedUserEntity = createSelector(
@@ -116,3 +118,14 @@ export const getSelectedUserEntity = createSelector(
   getEntities,
   (userId, entities) => denormalize(userId, usersSchema, entities),
 );
+
+export function getIsLoadingAdmins(state, params) {
+  const type = params.baseId ? TYPES.FROM_MAJOR : TYPES.FROM_PLATFORM;
+  return getIsRequestingFactory(type)(state, params);
+}
+
+export function getIsTogglingAdmin(state, props) {
+  const getIsPromoting = getIsRequestingFactory(getToggleType(TYPES, true, props.baseId));
+  const getIsDemoting = getIsRequestingFactory(getToggleType(TYPES, false, props.baseId));
+  return getIsPromoting(state, props) || getIsDemoting(state, props);
+}

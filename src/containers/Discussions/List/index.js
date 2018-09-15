@@ -1,45 +1,42 @@
+import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
 import { addQueryToCurrentUri } from '../../../store/ducks/routes';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
 import {
   loadDiscussions,
   resetPagination,
-  getPagingFns,
+  getPaginationData,
+  getIsLoadingDiscussions,
 } from '../../../store/ducks/discussions';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withAuthorization from '../../../hoc/withAuthorization';
 import DiscussionsList from '../../../components/Discussions/List';
 import { getSuffix } from '../../../lib/discussions';
-import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = {
-    collection: collections.discussions, suffix: getSuffix(ownProps.mine), paged: true,
-  };
-  const pagingFns = getPagingFns(params, true).selectors;
-
-  const discussionSummaries = pagingFns.getPagedEntities(state);
-
+  const params = { suffix: getSuffix(ownProps.mine) };
+  const { paginationInfo, pagedEntities: discussionSummaries } = getPaginationData(state, params);
+  params.page = paginationInfo.page;
   return {
+    ...getPlaceholderFlags(getIsLoadingDiscussions(state, params), discussionSummaries),
     currentUserId: getCurrentUserId(state),
-    loading: isEmpty(discussionSummaries) && getIsFetching(state, params),
-    pagination: pagingFns.getMeta(state),
+    paginationInfo,
     discussionSummaries,
   };
 }
 
 function mapDispatchToProps(dispatch, { mine }) {
-  const suffix = getSuffix(mine);
-
   return {
-    loadDiscussions: ({ page, ...query }) => dispatch(loadDiscussions(page, mine, query)),
-    resetPagination: () => dispatch(resetPagination({ suffix })),
+    ...bindActionCreators({ resetPagination }, dispatch),
+    loadDiscussions: query => dispatch(loadDiscussions({ query, suffix: getSuffix(mine) })),
     onTagClick: (text) => {
-      dispatch(resetPagination({ suffix }));
+      dispatch(resetPagination());
       dispatch(addQueryToCurrentUri({ tagList: text }));
     },
   };
 }
 
-export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(DiscussionsList));
+export default compose(
+  withAuthorization,
+  connect(mapStateToProps, mapDispatchToProps),
+)(DiscussionsList);

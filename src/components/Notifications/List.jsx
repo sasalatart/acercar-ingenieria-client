@@ -1,24 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider } from 'antd';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../containers/Layout/Pagination';
 import Notification from '../../containers/Notifications/Notification';
-import { paginationShape, notificationShape } from '../../shapes';
+import { paginationInfoShape, notificationShape } from '../../shapes';
 
 export default class NotificationsList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     seen: PropTypes.bool.isRequired,
-    notifications: PropTypes.arrayOf(notificationShape),
-    pagination: paginationShape,
+    notifications: PropTypes.arrayOf(notificationShape).isRequired,
+    paginationInfo: paginationInfoShape.isRequired,
     loadNotifications: PropTypes.func.isRequired,
   };
-
-  static defaultProps = {
-    notifications: [],
-    pagination: undefined,
-  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.seen !== this.props.seen) {
@@ -35,14 +30,14 @@ export default class NotificationsList extends Component {
 
   render() {
     const {
-      loading, pagination, notifications, loadNotifications,
+      loading, noData, paginationInfo, notifications, loadNotifications,
     } = this.props;
 
     return (
       <PaginationControls
-        pagination={pagination}
+        paginationInfo={paginationInfo}
         loading={loading}
-        noData={!loading && isEmpty(notifications)}
+        noData={noData}
         loadFn={loadNotifications}
         render={() => notifications.map(this.renderItem)}
       />

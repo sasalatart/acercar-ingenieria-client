@@ -1,34 +1,32 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import isEmpty from 'lodash/isEmpty';
-import { loadVideoLinks, getPagingFns } from '../../../store/ducks/video-links';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { loadVideoLinks, getPaginationData, getIsLoadingVideoLinks } from '../../../store/ducks/video-links';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withAuthorization from '../../../hoc/withAuthorization';
 import VideoLinksList from '../../../components/VideoLinks/List';
-import collections, { parseBaseResource } from '../../../lib/collections';
+import { parseBaseCollection } from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = {
-    ...parseBaseResource(ownProps.match.params), collection: collections.videoLinks, paged: true,
-  };
-
-  const pagingFns = getPagingFns(params, true).selectors;
-  const videos = pagingFns.getPagedEntities(state, params);
-
+  const params = parseBaseCollection(ownProps.match.params);
+  const { paginationInfo, pagedEntities: videos } = getPaginationData(state, params);
+  params.page = paginationInfo.page;
   return {
-    loading: isEmpty(videos) && getIsFetching(state, params),
-    pagination: pagingFns.getMeta(state, params),
+    ...getPlaceholderFlags(getIsLoadingVideoLinks(state, params), videos),
+    paginationInfo,
     videos,
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { baseResourceName, baseResourceId } = parseBaseResource(ownProps.match.params);
-
+  const { baseId } = parseBaseCollection(ownProps.match.params);
   return {
-    loadVideoLinks: ({ page }) => dispatch(loadVideoLinks(page, baseResourceName, baseResourceId)),
+    loadVideoLinks: query => dispatch(loadVideoLinks({ baseId, query })),
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(VideoLinksList);
-export default withRouter(withAuthorization(component));
+export default compose(
+  withRouter,
+  withAuthorization,
+  connect(mapStateToProps, mapDispatchToProps),
+)(VideoLinksList);

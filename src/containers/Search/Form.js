@@ -3,10 +3,7 @@ import { reduxForm } from 'redux-form';
 import mapValues from 'lodash/mapValues';
 import pickBy from 'lodash/pickBy';
 import identity from 'lodash/identity';
-import {
-  addQueryToCurrentUri,
-  getActiveFilters,
-} from '../../store/ducks/routes';
+import { addQueryToCurrentUri, getActiveFilters } from '../../store/ducks/routes';
 import SearchForm from '../../components/Search/Form';
 
 function mapStateToProps(state, { extraFilters }) {

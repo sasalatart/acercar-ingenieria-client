@@ -1,3 +1,4 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import get from 'lodash/get';
@@ -12,13 +13,12 @@ import {
   updateArticle,
   getArticleEntity,
   getMajorOptionsForArticle,
+  getIsLoadingArticle,
 } from '../../store/ducks/articles';
-import { getIsFetching } from '../../store/ducks/loading';
 import withAuthorization from '../../hoc/withAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import ArticleForm from '../../components/Articles/Form';
 import articlesValidations from '../../validations/articles';
-import { getCollectionParams } from '../../lib/articles';
 import { processAttachableFormValues } from '../../lib/attachments';
 import articlePlaceholder from '../../images/article.png';
 
@@ -36,23 +36,24 @@ function getInitialValues(id, majorId, article) {
   };
 }
 
-function mapStateToProps(state, { match: { params: { majorId, id } } }) {
-  const params = getCollectionParams(majorId, { id });
-  const intId = params.id && +params.id;
-  const intMajorId = params.majorId && +params.majorId;
+function mapStateToProps(state, { match }) {
+  const id = match.params.id && +match.params.id;
+  const majorId = match.params.majorId && +match.params.majorId;
+
+  const params = { id, baseId: majorId };
 
   const article = getArticleEntity(state, params);
   const majorOptions = article
     ? getMajorOptionsForArticle(state, params)
     : getMajorOptionsForCurrentUser(state);
   const categoryOptions = getCategoryOptions(state);
-  const loading = (id && getIsFetching(state, params)) || !categoryOptions.length;
+  const loading = (id && getIsLoadingArticle(state, params)) || !categoryOptions.length;
 
   return {
-    id: intId,
+    id,
     loading,
     noData: !loading && !!params.id && !article,
-    initialValues: getInitialValues(intId, intMajorId, article),
+    initialValues: getInitialValues(id, majorId, article),
     majorOptions,
     categoryOptions,
     currentPreviewURL: get(article, 'previewUrl') || articlePlaceholder,
@@ -80,5 +81,8 @@ const form = reduxForm({
   },
 })(ArticleForm);
 
-const component = connect(mapStateToProps, mapDispatchToProps)(form);
-export default withAuthorization(I18nForm(component, articlesValidations));
+export default compose(
+  withAuthorization,
+  I18nForm(articlesValidations),
+  connect(mapStateToProps, mapDispatchToProps),
+)(form);

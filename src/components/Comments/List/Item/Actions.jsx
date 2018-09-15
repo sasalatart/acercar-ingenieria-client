@@ -38,8 +38,8 @@ function renderLikeButton(comment) {
 
   return (
     <LikeButton
-      baseResourceName={collections.comments}
-      baseResourceId={id}
+      baseCollection={collections.comments}
+      baseId={id}
       likedByCurrentUser={likedByCurrentUser}
       likesCount={likesCount}
       iconOnly
@@ -51,8 +51,8 @@ function renderEnrollButton(comment) {
   const { id, enrolledByCurrentUser } = comment;
   const enrollButton = (
     <EnrollButton
-      baseResourceName={collections.comments}
-      baseResourceId={id}
+      baseCollection={collections.comments}
+      baseId={id}
       enrolledByCurrentUser={enrolledByCurrentUser}
       iconOnly
     />
@@ -71,8 +71,8 @@ function renderDestroyButton(comment, approved) {
     <DestroyButton
       collection={collections.comments}
       id={id}
-      baseResourceName={`${lowerFirst(commentableType)}s`}
-      baseResourceId={commentableId}
+      baseCollection={`${lowerFirst(commentableType)}s`}
+      baseId={commentableId}
       iconOnly
     />
   );

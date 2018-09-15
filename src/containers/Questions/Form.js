@@ -1,3 +1,4 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import pick from 'lodash/pick';
@@ -16,7 +17,7 @@ const FIELDS = ['question', 'answer', 'pinned'];
 function mapStateToProps(state, ownProps) {
   return {
     initialValues: ownProps.id
-      ? pick(getQuestionEntity(state, { questionId: ownProps.id }), FIELDS)
+      ? pick(getQuestionEntity(state, ownProps), FIELDS)
       : {},
   };
 }
@@ -24,17 +25,21 @@ function mapStateToProps(state, ownProps) {
 const form = reduxForm({
   form: 'question',
   onSubmit: (values, dispatch, ownProps) => {
-    const { id, majorId, onSubmitSuccess } = ownProps;
-    const fromAnsweredRoute = !ownProps.match.params.pending;
-
+    const {
+      adminOrMajorAdmin, id, majorId, onSubmitSuccess, match: { params: { unanswered } },
+    } = ownProps;
+    const shouldChangeRoute = adminOrMajorAdmin && !!unanswered === !!values.answer;
     const action = id
-      ? updateQuestion(id, values, majorId)
-      : createQuestion(values, majorId, fromAnsweredRoute === !!values.answer);
+      ? updateQuestion(id, values, majorId, shouldChangeRoute)
+      : createQuestion(values, majorId, shouldChangeRoute);
 
     return dispatch(action)
       .then(() => onSubmitSuccess && onSubmitSuccess());
   },
 })(QuestionsForm);
 
-const component = connect(mapStateToProps)(form);
-export default withAuthorization(I18nForm(component, questionsValidations));
+export default compose(
+  withAuthorization,
+  I18nForm(questionsValidations),
+  connect(mapStateToProps),
+)(form);

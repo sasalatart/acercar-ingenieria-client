@@ -95,10 +95,10 @@ class ArticlesActionBar extends Component {
       actions.push(buttonLink);
     }
 
-    if (adminOrMajorAdmin && suffix !== suffixes.pending) {
+    if (adminOrMajorAdmin && suffix !== suffixes.unapproved) {
       const buttonLink = (
-        <HideableButton key="goToPending" to={routes.articles(majorId, suffixes.pending)} icon="lock">
-          <FormattedMessage id="articles.pending" />
+        <HideableButton key="goToUnapproved" to={routes.articles(majorId, suffixes.unapproved)} icon="lock">
+          <FormattedMessage id="articles.unapproved" />
         </HideableButton>
       );
       actions.push(buttonLink);

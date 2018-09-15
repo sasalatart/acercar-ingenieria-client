@@ -1,3 +1,4 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import get from 'lodash/get';
@@ -9,13 +10,12 @@ import {
   createDiscussion,
   updateDiscussion,
   getDiscussionEntity,
+  getIsLoadingDiscussion,
 } from '../../store/ducks/discussions';
-import { getIsFetching } from '../../store/ducks/loading';
 import withAuthorization from '../../hoc/withAuthorization';
 import I18nForm from '../../hoc/I18nForm';
 import DiscussionForm from '../../components/Discussions/Form';
 import discussionsValidations from '../../validations/discussions';
-import collections from '../../lib/collections';
 import { processAttachableFormValues } from '../../lib/attachments';
 
 const FIELDS = [
@@ -31,12 +31,10 @@ function getInitialValues(id, discussion) {
   };
 }
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection: collections.discussions };
+function mapStateToProps(state, { match: { params } }) {
   const id = params.id && +params.id;
-
   const discussion = getDiscussionEntity(state, params);
-  const loading = !!id && !discussion && getIsFetching(state, params);
+  const loading = !!id && !discussion && getIsLoadingDiscussion(state, params);
 
   return {
     id,
@@ -47,9 +45,9 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { match: { params: { id } } }) {
   return {
-    loadDiscussion: () => dispatch(loadDiscussion(ownProps.match.params.id)),
+    loadDiscussion: () => dispatch(loadDiscussion(id)),
   };
 }
 
@@ -67,5 +65,8 @@ const form = reduxForm({
   },
 })(DiscussionForm);
 
-const component = connect(mapStateToProps, mapDispatchToProps)(form);
-export default withAuthorization(I18nForm(component, discussionsValidations));
+export default compose(
+  withAuthorization,
+  I18nForm(discussionsValidations),
+  connect(mapStateToProps, mapDispatchToProps),
+)(form);

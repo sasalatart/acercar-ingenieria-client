@@ -3,31 +3,28 @@ import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../../containers/Layout/Pagination';
 import Comment from './Item/Comment';
-import { paginationShape, commentShape } from '../../../shapes';
+import { paginationInfoShape, commentShape } from '../../../shapes';
 
 export default class CommentsList extends Component {
   static propTypes = {
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     currentUserId: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
-    pagination: paginationShape,
-    comments: PropTypes.arrayOf(commentShape),
-    currentPage: PropTypes.number.isRequired,
+    paginationInfo: paginationInfoShape.isRequired,
+    comments: PropTypes.arrayOf(commentShape).isRequired,
     answeringDisabled: PropTypes.bool,
     disabled: PropTypes.bool,
     loadComments: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
-    pagination: undefined,
-    comments: [],
     answeringDisabled: false,
     disabled: false,
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.disabled !== this.props.disabled) {
-      this.props.loadComments({ page: this.props.currentPage });
+      this.props.loadComments({ page: this.props.paginationInfo.page });
     }
   }
 
@@ -51,13 +48,13 @@ export default class CommentsList extends Component {
     const {
       loading,
       comments,
-      pagination,
+      paginationInfo,
       loadComments,
     } = this.props;
 
     return (
       <PaginationControls
-        pagination={pagination}
+        paginationInfo={paginationInfo}
         loading={loading}
         noData={!loading && isEmpty(comments)}
         render={() => this.renderComments()}

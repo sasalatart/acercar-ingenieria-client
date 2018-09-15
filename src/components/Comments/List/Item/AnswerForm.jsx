@@ -24,8 +24,8 @@ function AnswerForm({ parentCommentId, onStopAnswering }) {
     <div style={styles.wrapper}>
       <div style={styles.mainContent}>
         <Form
-          baseResourceName={collections.comments}
-          baseResourceId={parentCommentId}
+          baseCollection={collections.comments}
+          baseId={parentCommentId}
           onSubmitSuccess={onStopAnswering}
           autoFocus
         />

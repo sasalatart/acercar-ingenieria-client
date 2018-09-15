@@ -111,7 +111,7 @@ export default class Major extends Component {
             />
 
             <Route
-              path={`${this.majorRoutes.questions}/:pending?`}
+              path={`${this.majorRoutes.questions}/:unanswered?`}
               render={questionsAdministrationRoute(Questions)}
             />
 
@@ -131,8 +131,8 @@ export default class Major extends Component {
             />
 
             <Route
-              path={this.majorRoutes.articlesPending}
-              render={articlesAdministrationRoute(ArticlesList, { pending: true })}
+              path={this.majorRoutes.articlesUnapproved}
+              render={articlesAdministrationRoute(ArticlesList, { unapproved: true })}
             />
 
             <Route

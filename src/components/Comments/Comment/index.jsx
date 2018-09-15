@@ -87,8 +87,8 @@ export default class Comment extends Component {
 
         <Divider />
         <CommentsSection
-          baseResourceName={collections.comments}
-          baseResourceId={comment.id}
+          baseCollection={collections.comments}
+          baseId={comment.id}
           disabled={!comment.approvedCommentable}
           answersList
         />

@@ -1,23 +1,20 @@
 import { connect } from 'react-redux';
 import { goToLanding } from '../../../store/ducks/routes';
-import { loadUser, getUserEntity } from '../../../store/ducks/users';
+import { loadUser, getUserEntity, getIsLoadingUser } from '../../../store/ducks/users';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
 import { getNotificationsCount } from '../../../store/ducks/notifications';
-import { getIsFetching } from '../../../store/ducks/loading';
 import Profile from '../../../components/Users/Profile';
-import collections from '../../../lib/collections';
 
-function mapStateToProps(state, ownProps) {
-  const id = +ownProps.match.params.id || getCurrentUserId(state);
-  const params = { collection: collections.users, id };
+function mapStateToProps(state, { match, mine }) {
+  const id = +match.params.id || getCurrentUserId(state);
+  const params = { id };
   const user = getUserEntity(state, params);
-  const loading = !!id && !user && getIsFetching(state, params);
-
+  const loading = !!id && !user && getIsLoadingUser(state, params);
   return {
     loading,
-    noData: !loading && !ownProps.mine && !user,
-    user,
+    noData: !loading && !mine && !user,
     id,
+    user,
     notificationsCount: getNotificationsCount(state),
   };
 }
@@ -36,8 +33,4 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps,
-)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(Profile);

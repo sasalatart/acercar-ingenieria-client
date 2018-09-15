@@ -1,3 +1,4 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { getTokensFromSearch } from '../../../../store/ducks/routes';
@@ -17,5 +18,7 @@ const form = reduxForm({
   onSubmit: (values, dispatch, ownProps) => dispatch(changePassword(values, ownProps.tokens)),
 })(Form);
 
-const component = connect(mapStateToProps)(form);
-export default I18nForm(component, usersValidations);
+export default compose(
+  I18nForm(usersValidations),
+  connect(mapStateToProps),
+)(form);

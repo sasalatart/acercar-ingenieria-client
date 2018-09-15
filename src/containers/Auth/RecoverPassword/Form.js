@@ -9,4 +9,4 @@ const form = reduxForm({
   onSubmit: (values, dispatch) => dispatch(recoverPassword(values)),
 })(Form);
 
-export default I18nForm(form, usersValidations);
+export default I18nForm(usersValidations)(form);

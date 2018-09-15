@@ -78,7 +78,7 @@ export const matchShape = PropTypes.shape({
   params: PropTypes.shape({}),
 });
 
-export const paginationShape = PropTypes.shape({
+export const paginationInfoShape = PropTypes.shape({
   page: PropTypes.number.isRequired,
   totalPages: PropTypes.number.isRequired,
   perPage: PropTypes.number.isRequired,

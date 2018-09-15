@@ -1,21 +1,17 @@
 import { Map } from 'immutable';
 import { denormalize } from 'normalizr';
 import { createSelector } from 'reselect';
+import { goToLanding, goToSignIn, goToProfile } from './routes';
+import { getIsRequestingFactory } from './loading';
 import { getEntities } from './entities';
-import { usersSchema } from '../../schemas';
 import {
   confirmationEmailSentNotification,
   recoverPasswordEmailSentNotification,
   resourceSuccessNotification,
 } from './notifications';
-import {
-  goToLanding,
-  goToSignIn,
-  goToProfile,
-} from './routes';
 import { getMajorOptions } from './majors';
+import { usersSchema } from '../../schemas';
 import routes, { BASE_CLIENT_URL } from '../../lib/routes';
-import collections from '../../lib/collections';
 
 const INITIAL_STATE = new Map({
   currentUserId: undefined,
@@ -119,10 +115,10 @@ export function updateProfile(id, body) {
       payload: {
         method: 'PUT',
         url: `/users/${id}`,
-        fetchParams: { collection: collections.users, id },
         body,
         responseSchema: usersSchema,
       },
+      meta: { id },
     }).then(() => {
       dispatch(goToProfile());
     });
@@ -152,7 +148,6 @@ export function destroyAccount() {
       payload: {
         method: 'DELETE',
         url: '/auth',
-        fetchParams: { collection: 'auth' },
       },
     }).then(() => {
       dispatch(resourceSuccessNotification('profile', 'destroyed'));
@@ -246,3 +241,5 @@ export const getMajorOptionsForCurrentUser = createSelector(
       .map(({ majorId, name }) => ({ key: majorId, value: majorId, label: name }));
   },
 );
+
+export const getIsDestroyingAccount = getIsRequestingFactory(TYPES.DESTROY_ACCOUNT);

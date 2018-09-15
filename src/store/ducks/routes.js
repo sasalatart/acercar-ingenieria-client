@@ -25,6 +25,10 @@ export function goToMajor(majorId) {
   return push(routes.major(majorId));
 }
 
+export function goToQuestions(majorId, suffix) {
+  return push(routes.questions(majorId, suffix));
+}
+
 export function goToArticles(majorId) {
   return push(routes.articles(majorId));
 }

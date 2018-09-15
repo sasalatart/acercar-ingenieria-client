@@ -1,161 +1,109 @@
-import { Map } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
+import { combineReducers } from 'redux';
 import remove from 'lodash/remove';
-import { updateEntity, getEntities } from './entities';
-import pagingFnsFactory, { prepareGetPagingFns } from './paginations';
-import { getId } from './shared';
+import upperFirst from 'lodash/upperFirst';
+import { getIsRequestingFactory } from './loading';
+import { updateEntity, getEntityFactory } from './entities';
+import { fulfilledType } from './shared';
+import paginationReducerFactory, { addToPaginationActionFactory, paginationDataSelectorFactory } from './shared/paginations';
+import { crudActionsFactory } from './shared/crud';
 import { commentsSchema } from '../../schemas';
-import collections from '../../lib/collections';
-
-const collection = collections.comments;
-
-function createPagingFns(baseResourceName) {
-  return pagingFnsFactory(collection, commentsSchema, { baseResourceName });
-}
-
-const pagingFns = {
-  comments: createPagingFns(collection),
-  majors: createPagingFns(collections.majors),
-  articles: createPagingFns(collections.articles),
-  discussions: createPagingFns(collections.discussions),
-};
-
-const INITIAL_STATE = new Map({
-  pagination: new Map({
-    comments: new Map({}),
-    majors: new Map({}),
-    articles: new Map({}),
-    discussions: new Map({}),
-  }),
-});
+import { getLoadIndexType, getAddToPaginationType } from '../../lib/comments';
 
 const TYPES = {
-  LOAD_INDEX: 'comments/LOAD_INDEX',
+  LOAD_INDEX_FROM_COMMENT: 'comments/LOAD_INDEX_FROM_COMMENT',
+  LOAD_INDEX_FROM_MAJOR: 'comments/LOAD_INDEX_FROM_MAJOR',
+  LOAD_INDEX_FROM_ARTICLE: 'comments/LOAD_INDEX_FROM_ARTICLE',
+  LOAD_INDEX_FROM_DISCUSSION: 'comments/LOAD_INDEX_FROM_DISCUSSION',
   LOAD: 'comments/LOAD',
   CREATE: 'comments/CREATE',
   UPDATE: 'comments/UPDATE',
   DESTROY: 'comments/DESTROY',
-  ADD_TO_PAGINATION: 'comments/ADD_TO_PAGINATION',
+  ADD_TO_FROM_COMMENT: 'comments/ADD_TO_FROM_COMMENT',
+  ADD_TO_FROM_MAJOR: 'comments/ADD_TO_FROM_MAJOR',
+  ADD_TO_FROM_ARTICLE: 'comments/ADD_TO_FROM_ARTICLE',
+  ADD_TO_FROM_DISCUSSION: 'comments/ADD_TO_FROM_DISCUSSION',
+  RESET_PAGINATION: 'comments/RESET_PAGINATION',
 };
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceName }) =>
-  pagingFns[baseResourceName]);
-
-export function loadComments(baseResourceName, baseResourceId, page = 1) {
-  return {
-    type: TYPES.LOAD_INDEX,
-    payload: {
-      method: 'GET',
-      url: `/${baseResourceName}/${baseResourceId}/comments`,
-      query: { page },
-      fetchParams: {
-        collection, page, baseResourceName, baseResourceId,
-      },
-      responseSchema: [commentsSchema],
-    },
-  };
+function reducerFactory(setType, addToPageType) {
+  return paginationReducerFactory({
+    setPage: fulfilledType(setType),
+    removeFromPages: fulfilledType(TYPES.DESTROY),
+    addToPage: addToPageType,
+    resetPagination: TYPES.RESET_PAGINATION,
+  });
 }
 
-export function loadComment(id, baseResourceName, baseResourceId) {
-  const urlPrefix = baseResourceName ? `/${baseResourceName}/${baseResourceId}` : '';
+export default combineReducers({
+  fromComments: reducerFactory(TYPES.LOAD_INDEX_FROM_COMMENT, TYPES.ADD_TO_FROM_COMMENT),
+  fromMajors: reducerFactory(TYPES.LOAD_INDEX_FROM_MAJOR, TYPES.ADD_TO_FROM_MAJOR),
+  fromArticles: reducerFactory(TYPES.LOAD_INDEX_FROM_ARTICLE, TYPES.ADD_TO_FROM_ARTICLE),
+  fromDiscussions: reducerFactory(TYPES.LOAD_INDEX_FROM_DISCUSSION, TYPES.ADD_TO_FROM_DISCUSSION),
+});
 
-  return {
-    type: TYPES.LOAD,
-    payload: {
-      method: 'GET',
-      url: `${urlPrefix}/comments/${id}`,
-      fetchParams: {
-        baseResourceName, baseResourceId, collection, id,
-      },
-      responseSchema: commentsSchema,
-    },
-  };
+export function loadComments({ baseCollection, baseId, query }) {
+  const types = { LOAD_INDEX: getLoadIndexType(TYPES, baseCollection) };
+  const { loadIndex } = crudActionsFactory(types, commentsSchema, { baseCollection });
+  return dispatch => dispatch(loadIndex({ baseId, query }));
 }
 
-export function createComment(body, baseResourceName, baseResourceId, reverseList) {
-  return dispatch =>
-    dispatch({
-      type: TYPES.CREATE,
-      payload: {
-        method: 'POST',
-        url: `/${baseResourceName}/${baseResourceId}/comments`,
-        fetchParams: { collection, baseResourceName, baseResourceId },
-        body,
-        responseSchema: commentsSchema,
-      },
-    }).then(({ value: { result } }) => {
-      const isChild = baseResourceName === collection;
+export const {
+  load: loadComment,
+  update: updateComment,
+} = crudActionsFactory(TYPES, commentsSchema);
 
-      const updateFn = commentable => ({
+const { destroy } = crudActionsFactory(TYPES, commentsSchema);
+
+export function createComment(body, baseId, baseCollection, addToEnd) {
+  const { create } = crudActionsFactory(TYPES, commentsSchema, { baseCollection });
+
+  return (dispatch, getState) => dispatch(create(body, baseId))
+    .then(({ value: { result } }) => {
+      const isChild = baseCollection === commentsSchema.key;
+      dispatch(updateEntity(baseCollection, baseId, commentable => ({
         ...commentable,
         enrolledByCurrentUser: true,
-        childComments: isChild
-          ? [...commentable.childComments, result]
-          : undefined,
-      });
-      dispatch(updateEntity(baseResourceName, baseResourceId, updateFn));
+        childComments: isChild ? [...commentable.childComments, result] : undefined,
+      })));
 
-      if (isChild && !reverseList) return;
+      if (isChild && !addToEnd) return;
 
-      const actionCreator = getPagingFns({ baseResourceName }, true).actions.addToPagination;
-      dispatch(actionCreator(TYPES.ADD_TO_PAGINATION, result, baseResourceId, reverseList));
+      // eslint-disable-next-line no-use-before-define
+      const { paginationInfo } = getPaginationData(getState(), { baseCollection, baseId });
+      const type = getAddToPaginationType(TYPES, baseCollection);
+      const addToPagination = addToPaginationActionFactory(type);
+      dispatch(addToPagination(result, paginationInfo, { baseId, addToEnd }));
     });
 }
 
-export function updateComment(id, body, baseResourceName, baseResourceId) {
-  return {
-    type: TYPES.UPDATE,
-    payload: {
-      method: 'PUT',
-      url: `/${baseResourceName}/${baseResourceId}/comments/${id}`,
-      fetchParams: {
-        collection, id, baseResourceName, baseResourceId,
-      },
-      body,
-      responseSchema: commentsSchema,
-    },
-  };
-}
-
-export function destroyComment(id, baseResourceName, baseResourceId) {
+export function destroyComment(id, baseCollection, baseId) {
   return (dispatch) => {
-    if (baseResourceName === collection) {
-      const updateFn = (parentComment) => {
+    if (baseCollection === commentsSchema.key) {
+      dispatch(updateEntity(baseCollection, baseId, (parentComment) => {
         remove(parentComment.childComments, childId => childId === id);
         return { ...parentComment };
-      };
-      dispatch(updateEntity(collection, baseResourceId, updateFn));
+      }));
     }
-
-    return dispatch({
-      type: TYPES.DESTROY,
-      payload: {
-        method: 'DELETE',
-        url: `/${baseResourceName}/${baseResourceId}/comments/${id}`,
-        fetchParams: {
-          collection, id, baseResourceName, baseResourceId,
-        },
-      },
-    });
+    return dispatch(destroy(id));
   };
 }
 
-export default function commentsReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return getPagingFns(payload).setPage(state, payload);
-    case `${TYPES.DESTROY}_FULFILLED`:
-      return getPagingFns(payload).removeFromPage(state, payload.request.fetchParams);
-    case TYPES.ADD_TO_PAGINATION:
-      return getPagingFns(payload).addToPage(state, payload);
-    default:
-      return state;
-  }
+const getCommentsState = state => state.comments;
+
+export const getCommentEntity = getEntityFactory(commentsSchema);
+
+export function getPaginationData(state, props) {
+  return paginationDataSelectorFactory(
+    getCommentsState,
+    `from${upperFirst(props.baseCollection)}`,
+    commentsSchema,
+  )(state, props);
 }
 
-export const getCommentEntity = createSelector(
-  getId,
-  getEntities,
-  (commentId, entities) => denormalize(commentId, commentsSchema, entities),
-);
+export function getIsLoadingComments(state, params) {
+  const type = getLoadIndexType(TYPES, params.baseCollection);
+  return getIsRequestingFactory(type)(state, params);
+}
+
+export const getIsLoadingComment = getIsRequestingFactory(TYPES.LOAD);
+export const getIsDestroyingComment = getIsRequestingFactory(TYPES.DESTROY);

@@ -1,32 +1,32 @@
+import { getIsRequestingFactory } from './loading';
 import { updateEntity } from './entities';
-import collections from '../../lib/collections';
-
-const collection = collections.enrollments;
 
 const TYPES = {
-  CREATE_ENROLLMENT: 'enrollments/CREATE_ENROLLMENT',
-  DESTROY_ENROLLMENT: 'enrollments/DESTROY_ENROLLMENT',
+  articles: 'enrollments/TOGGLE_ARTICLE_ENROLLMENT',
+  discussions: 'enrollments/TOGGLE_DISCUSSION_ENROLLMENT',
+  comments: 'enrollments/TOGGLE_COMMENT_ENROLLMENT',
 };
 
 export function enrollingFactory(enrolling) {
-  return (baseResourceName, baseResourceId) =>
+  return (baseCollection, baseId) =>
     dispatch =>
       dispatch({
-        type: enrolling ? TYPES.CREATE_ENROLLMENT : TYPES.DESTROY_ENROLLMENT,
+        type: TYPES[baseCollection],
         payload: {
           method: enrolling ? 'POST' : 'DELETE',
-          url: `/${baseResourceName}/${baseResourceId}/enrollments`,
-          fetchParams: { baseResourceName, baseResourceId, collection },
+          url: `/${baseCollection}/${baseId}/enrollments`,
         },
-      }).then(() => {
-        const updateFn = entity => ({
+        meta: { baseId },
+      }).then(() =>
+        dispatch(updateEntity(baseCollection, baseId, entity => ({
           ...entity,
           enrolledByCurrentUser: !entity.enrolledByCurrentUser,
-        });
-        return dispatch(updateEntity(baseResourceName, baseResourceId, updateFn));
-      });
+        }))));
 }
 
 export const enroll = enrollingFactory(true);
-
 export const unenroll = enrollingFactory(false);
+
+export function getIsTogglingEnrollment(state, params) {
+  return getIsRequestingFactory(TYPES[params.baseCollection])(state, params);
+}

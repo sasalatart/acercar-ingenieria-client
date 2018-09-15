@@ -7,23 +7,21 @@ import PaginationControls from '../../../containers/Layout/Pagination';
 import Title from '../../Layout/Title';
 import ActionBar from './ActionBar';
 import DiscussionListItem from './Item';
-import { paginationShape, discussionSummaryShape } from '../../../shapes';
+import { paginationInfoShape, discussionSummaryShape } from '../../../shapes';
 
 export default class DiscussionsList extends Component {
   static propTypes = {
     currentUserId: PropTypes.number.isRequired,
     admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
-    pagination: paginationShape,
-    discussionSummaries: PropTypes.arrayOf(discussionSummaryShape),
+    paginationInfo: paginationInfoShape.isRequired,
+    discussionSummaries: PropTypes.arrayOf(discussionSummaryShape).isRequired,
     mine: PropTypes.bool,
     loadDiscussions: PropTypes.func.isRequired,
     onTagClick: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
-    pagination: undefined,
-    discussionSummaries: [],
     mine: false,
   }
 
@@ -45,7 +43,7 @@ export default class DiscussionsList extends Component {
   render() {
     const {
       loading,
-      pagination,
+      paginationInfo,
       discussionSummaries,
       mine,
       loadDiscussions,
@@ -60,7 +58,7 @@ export default class DiscussionsList extends Component {
         </Title>
 
         <PaginationControls
-          pagination={pagination}
+          paginationInfo={paginationInfo}
           loading={loading}
           noData={!loading && isEmpty(discussionSummaries)}
           loadFn={loadDiscussions}

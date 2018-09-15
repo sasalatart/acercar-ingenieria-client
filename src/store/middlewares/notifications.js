@@ -9,19 +9,16 @@ function getCategory(created, updated, destroyed) {
 }
 
 const notificationsMiddleware = store => next => (action) => {
-  if (action.type === TYPES.DISPLAY) {
-    notification[action.payload.type](action.payload);
+  const { type, payload, meta } = action;
+
+  if (type === TYPES.DISPLAY) {
+    notification[payload.type](payload);
   }
 
-  const created = action.type.includes('CREATE_FULFILLED');
-  const updated = action.type.includes('UPDATE_FULFILLED');
-  const destroyed = action.type.includes('DESTROY_FULFILLED');
-
-  if (created || updated || destroyed) {
-    const { collection } = action.payload.request.fetchParams;
+  if (meta && (meta.create || meta.update || meta.destroy) && type.includes('FULFILLED')) {
     store.dispatch(resourceSuccessNotification(
-      collection.slice(0, -1),
-      getCategory(created, updated, destroyed),
+      meta.collection.slice(0, -1),
+      getCategory(meta.create, meta.update, meta.destroy),
     ));
   }
 

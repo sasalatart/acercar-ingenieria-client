@@ -44,7 +44,7 @@ export default class SearchUsers extends Component {
     const { resetAdminsPagination, resetUsersPagination } = this.props;
     const { admins, majorId } = this.state.searchFilter;
     const resetPaginationFn = admins ? resetAdminsPagination : resetUsersPagination;
-    return resetPaginationFn({ baseResourceId: majorId });
+    return resetPaginationFn({ baseId: majorId });
   }
 
   handleChange = (value) => {

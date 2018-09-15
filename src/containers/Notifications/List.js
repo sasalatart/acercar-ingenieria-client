@@ -1,27 +1,23 @@
 import { connect } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
-import { loadNotifications, getPagingFns } from '../../store/ducks/notifications';
-import { getIsFetching } from '../../store/ducks/loading';
+import { loadNotifications, getPaginationData, getIsLoadingNotifications } from '../../store/ducks/notifications';
+import { getPlaceholderFlags } from '../../store/ducks/shared';
 import NotificationsList from '../../components/Notifications/List';
-import collections from '../../lib/collections';
 import { getSuffix } from '../../lib/notifications';
 
 function mapStateToProps(state, { seen }) {
-  const params = { collection: collections.notifications, suffix: getSuffix(seen), paged: true };
-
-  const pagingFns = getPagingFns(params, true).selectors;
-  const notifications = pagingFns.getPagedEntities(state, params);
-
+  const params = { suffix: getSuffix(seen) };
+  const { paginationInfo, pagedEntities: notifications } = getPaginationData(state, params);
+  params.page = paginationInfo.page;
   return {
-    loading: isEmpty(notifications) && getIsFetching(state, params),
-    pagination: pagingFns.getMeta(state, params),
+    ...getPlaceholderFlags(getIsLoadingNotifications(state, params), notifications),
+    paginationInfo,
     notifications,
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { seen }) {
   return {
-    loadNotifications: ({ page }) => dispatch(loadNotifications(page, ownProps.seen)),
+    loadNotifications: query => dispatch(loadNotifications({ suffix: getSuffix(seen), query })),
   };
 }
 

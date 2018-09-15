@@ -13,7 +13,7 @@ function Notifications({ match, ...restProps }) {
     <Fragment>
       <ActionBar seen={seen} {...restProps} />
       <Title>
-        <FormattedMessage id={seen ? 'notifications.seen' : 'notifications.pending'} />
+        <FormattedMessage id={seen ? 'notifications.seen' : 'notifications.unseen'} />
       </Title>
 
       <List seen={seen} />

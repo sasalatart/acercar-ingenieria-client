@@ -41,8 +41,8 @@ function VideoItem({ adminOrMajorAdmin, video, onEditClicked }) {
 
     const destroyButton = (
       <DestroyButton
-        baseResourceName={`${lowerFirst(video.videoLinkableType)}s`}
-        baseResourceId={video.videoLinkableId}
+        baseCollection={`${lowerFirst(video.videoLinkableType)}s`}
+        baseId={video.videoLinkableId}
         collection={collections.videoLinks}
         id={video.id}
         iconOnly

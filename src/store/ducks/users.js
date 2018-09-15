@@ -1,97 +1,67 @@
-import { Map } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
-import { getEntities } from './entities';
-import { getId } from './shared';
+import { combineReducers } from 'redux';
+import { getIsRequestingFactory } from './loading';
+import { getEntityFactory } from './entities';
+import { fulfilledType, withFulfilledTypes } from './shared';
+import paginationReducerFactory, { paginationDataSelectorFactory } from './shared/paginations';
+import { crudActionsFactory } from './shared/crud';
 import { usersSchema } from '../../schemas';
-import pagingFnsFactory, {
-  prepareGetPagingFns,
-  removeFromAllPages,
-  resetPaginationActionFactory,
-} from './paginations';
 import collections from '../../lib/collections';
-import { getCollectionParams } from '../../lib/users';
 
-const collection = collections.users;
-const commonArgs = [collection, usersSchema];
-const platformPagingFns = pagingFnsFactory(...commonArgs);
-const majorsPagingFns = pagingFnsFactory(...commonArgs, { baseResourceName: collections.majors });
-
-const INITIAL_STATE = Map({
-  pagination: new Map({
-    platform: new Map({}),
-    majors: new Map({}),
-  }),
-});
-
-export const TYPES = {
-  LOAD_INDEX: 'users/LOAD_INDEX',
+export const TYPES = withFulfilledTypes({
+  LOAD_INDEX_FROM_PLATFORM: 'users/LOAD_INDEX_FROM_PLATFORM',
+  LOAD_INDEX_FROM_MAJOR: 'users/LOAD_INDEX_FROM_MAJOR',
   LOAD: 'users/LOAD',
   DESTROY: 'users/DESTROY',
   RESET_PAGINATION: 'users/RESET_PAGINATION',
-};
+});
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceId }) => (
-  baseResourceId ? majorsPagingFns : platformPagingFns
-));
-
-export function loadUsers(page = 1, majorId, query) {
-  return {
-    type: TYPES.LOAD_INDEX,
-    payload: {
-      method: 'GET',
-      url: majorId ? `/majors/${majorId}/users` : '/users',
-      query: { page, ...query },
-      fetchParams: { ...getCollectionParams(majorId), page },
-      responseSchema: [usersSchema],
-    },
-  };
+function getLoadIndexType(baseId) {
+  return baseId ? TYPES.LOAD_INDEX_FROM_MAJOR : TYPES.LOAD_INDEX_FROM_PLATFORM;
 }
 
-export function loadUser(id, silentError) {
-  return {
-    type: TYPES.LOAD,
-    payload: {
-      method: 'GET',
-      url: `/users/${id}`,
-      fetchParams: { collection, id, silentError },
-      responseSchema: usersSchema,
-    },
-  };
+function reducerFactory(setType) {
+  return paginationReducerFactory({
+    setPage: fulfilledType(setType),
+    removeFromPages: TYPES.DESTROY_FULFILLED,
+    resetPagination: TYPES.RESET_PAGINATION,
+  });
 }
 
-export function destroyUser(id, majorId) {
-  return {
-    type: TYPES.DESTROY,
-    payload: {
-      method: 'DELETE',
-      url: majorId ? `/majors/${majorId}/users/${id}` : `/users/${id}`,
-      fetchParams: getCollectionParams(majorId, { id }),
-    },
-  };
+export default combineReducers({
+  platformPagination: reducerFactory(TYPES.LOAD_INDEX_FROM_PLATFORM),
+  majorsPagination: reducerFactory(TYPES.LOAD_INDEX_FROM_MAJOR),
+});
+
+export function loadUsers({ baseId, query }) {
+  const type = getLoadIndexType(baseId);
+  const urlOptions = { collection: collections.users, baseCollection: collections.majors };
+  const { loadIndex } = crudActionsFactory({ LOAD_INDEX: type }, usersSchema, urlOptions);
+  return dispatch => dispatch(loadIndex({ baseId, query }));
 }
 
-export const resetPagination = resetPaginationActionFactory(TYPES.RESET_PAGINATION);
+export const {
+  load: loadUser,
+  destroy: destroyUser,
+} = crudActionsFactory(TYPES, usersSchema);
 
-export default function usersReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return getPagingFns(payload).setPage(state, payload);
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { fetchParams } = payload.request;
-      return removeFromAllPages(state, [majorsPagingFns, platformPagingFns], fetchParams);
-    }
-    case TYPES.RESET_PAGINATION:
-      return getPagingFns(payload).reset(state, payload.baseResourceId);
-    default:
-      return state;
-  }
+export const resetPagination = () => ({ type: TYPES.RESET_PAGINATION });
+
+const getUsersState = state => state.users;
+
+export function getPaginationData(state, params) {
+  return paginationDataSelectorFactory(
+    getUsersState,
+    params.baseId ? 'majorsPagination' : 'platformPagination',
+    usersSchema,
+  )(state, params);
 }
 
-export const getUsersData = state => state.users;
+export const getUserEntity = getEntityFactory(usersSchema);
 
-export const getUserEntity = createSelector(
-  getId,
-  getEntities,
-  (userId, entities) => denormalize(userId, usersSchema, entities),
-);
+export function getIsLoadingUsers(state, params) {
+  const type = getLoadIndexType(params.baseId);
+  return getIsRequestingFactory(type)(state, params);
+}
+
+export const getIsLoadingUser = getIsRequestingFactory(TYPES.LOAD);
+export const getIsDestroyingUser = getIsRequestingFactory(TYPES.DESTROY);

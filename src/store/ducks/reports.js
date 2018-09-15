@@ -11,12 +11,12 @@ export function report(id, collection, body) {
       payload: {
         method: 'POST',
         url: `/${collection}/${id}/reports`,
-        fetchParams: { collection, id },
         body: {
           ...body,
           resourceUrl: window.location.href,
         },
       },
+      meta: { collection, id },
     }).then(() => {
       dispatch(resourceSuccessNotification('report', 'sent'));
     });

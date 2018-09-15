@@ -1,3 +1,4 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import get from 'lodash/get';
@@ -15,9 +16,7 @@ const FIELDS = [
   'name', 'category', 'videoUrl', 'shortDescription', 'description',
 ];
 
-function mapStateToProps(state, ownProps) {
-  const { major } = ownProps;
-
+function mapStateToProps(state, { major }) {
   return {
     initialValues: major ? pick(major, FIELDS) : {},
     currentLogoURL: get(major, 'logo.medium', majorPlaceholder),
@@ -31,6 +30,7 @@ const form = reduxForm({
     : dispatch(createMajor(values))),
 })(Form);
 
-const component = connect(mapStateToProps)(form);
-export default I18nForm(component, majorsValidations);
-
+export default compose(
+  I18nForm(majorsValidations),
+  connect(mapStateToProps),
+)(form);

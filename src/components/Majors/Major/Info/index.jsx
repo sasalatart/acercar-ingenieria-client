@@ -53,8 +53,8 @@ function MajorInfo({ loggedIn, major }) {
         <Fragment>
           <Divider />
           <CommentsSection
-            baseResourceName={collections.majors}
-            baseResourceId={major.id}
+            baseCollection={collections.majors}
+            baseId={major.id}
             toggable
           />
         </Fragment>

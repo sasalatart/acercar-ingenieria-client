@@ -1,29 +1,24 @@
 import { connect } from 'react-redux';
 import { goToLanding } from '../../../store/ducks/routes';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
-import { loadComment, getCommentEntity } from '../../../store/ducks/comments';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { loadComment, getCommentEntity, getIsLoadingComment } from '../../../store/ducks/comments';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withLoadableResource from '../../../hoc/withLoadableResource';
 import Comment from '../../../components/Comments/Comment';
-import collections, { parseBaseResource } from '../../../lib/collections';
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection: collections.comments };
+function mapStateToProps(state, { match: { params } }) {
   const comment = getCommentEntity(state, params);
 
   return {
+    ...getPlaceholderFlags(getIsLoadingComment(state, params), comment),
     isAuthor: !!(comment && getCurrentUserId(state) === comment.author.id),
-    loading: !comment && getIsFetching(state, params),
     comment,
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { params } = ownProps.match;
-  const { baseResourceName, baseResourceId } = parseBaseResource(params) || {};
-
+function mapDispatchToProps(dispatch, { match: { params: { id } } }) {
   return {
-    loadComment: () => dispatch(loadComment(params.id, baseResourceName, baseResourceId)),
+    loadComment: () => dispatch(loadComment(id)),
     onDestroy: () => dispatch(goToLanding()),
   };
 }

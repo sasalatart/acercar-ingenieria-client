@@ -1,27 +1,18 @@
 import { connect } from 'react-redux';
-import { enroll, unenroll } from '../../store/ducks/enrollments';
-import {
-  getIsCreating,
-  getIsDestroying,
-} from '../../store/ducks/loading';
+import { enroll, unenroll, getIsTogglingEnrollment } from '../../store/ducks/enrollments';
 import withAuthorization from '../../hoc/withAuthorization';
 import EnrollButton from '../../components/FeedButtons/EnrollButton';
-import collections from '../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps, collection: collections.enrollments };
-
   return {
-    loading: getIsCreating(state, params) || getIsDestroying(state, params),
+    loading: getIsTogglingEnrollment(state, ownProps),
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { baseResourceName, baseResourceId, enrolledByCurrentUser } = ownProps;
-
+function mapDispatchToProps(dispatch, { baseCollection, baseId, enrolledByCurrentUser }) {
   const onClickFn = enrolledByCurrentUser ? unenroll : enroll;
   return {
-    onClick: () => dispatch(onClickFn(baseResourceName, baseResourceId)),
+    onClick: () => dispatch(onClickFn(baseCollection, baseId)),
   };
 }
 

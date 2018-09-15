@@ -30,10 +30,9 @@ const fetchMiddleware = store => next => (action) => {
 
       refreshTokens(response, store, action.type);
       const body = response.status === 204 ? {} : await response.json();
-
       return response.status < 400
         ? parseResponse(body, response.headers, action.payload)
-        : parseError(body, response.status, action.payload, store, locale);
+        : parseError(body, response.status, action.meta, store, locale);
     });
 
   return next({
@@ -42,6 +41,7 @@ const fetchMiddleware = store => next => (action) => {
       promise,
       data: action.payload,
     },
+    meta: action.meta || {},
   });
 };
 

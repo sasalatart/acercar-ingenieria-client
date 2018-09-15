@@ -5,18 +5,18 @@ import routes from '../../../lib/routes';
 
 function CommentLink({
   id,
-  baseResourceName,
-  baseResourceId,
+  baseCollection,
+  baseId,
   children,
 }) {
-  const href = routes.comment(id, baseResourceName, baseResourceId);
+  const href = routes.comment(id, baseCollection, baseId);
   return <Link to={href} href={href}>{children}</Link>;
 }
 
 CommentLink.propTypes = {
   id: PropTypes.number.isRequired,
-  baseResourceName: PropTypes.string,
-  baseResourceId: PropTypes.number,
+  baseCollection: PropTypes.string,
+  baseId: PropTypes.number,
   children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,
@@ -24,8 +24,8 @@ CommentLink.propTypes = {
 };
 
 CommentLink.defaultProps = {
-  baseResourceName: undefined,
-  baseResourceId: undefined,
+  baseCollection: undefined,
+  baseId: undefined,
 };
 
 export default CommentLink;

@@ -8,14 +8,14 @@ import {
   loadArticle,
   getArticleEntity,
   getArticleSummaryEntity,
+  getIsLoadingArticle,
 } from '../../../store/ducks/articles';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withAuthorization from '../../../hoc/withAuthorization';
 import withLoadableResource from '../../../hoc/withLoadableResource';
 import Article from '../../../components/Articles/Article';
 import { articleShape, articleSummaryShape, matchShape } from '../../../shapes';
 import routes from '../../../lib/routes';
-import { getCollectionParams } from '../../../lib/articles';
 
 function ArticleWrapper(props) {
   const { article, match: { params } } = props;
@@ -37,20 +37,19 @@ ArticleWrapper.defaultProps = {
   article: undefined,
 };
 
-function mapStateToProps(state, { match: { params: { id, majorId } } }) {
-  const params = getCollectionParams(majorId, { id });
+function mapStateToProps(state, { match: { params } }) {
   const article = getArticleEntity(state, params) || getArticleSummaryEntity(state, params);
 
   return {
+    ...getPlaceholderFlags(getIsLoadingArticle(state, params), article),
     isAuthor: !!(article && getCurrentUserId(state) === article.author.id),
-    loading: !article && getIsFetching(state, params),
     article,
   };
 }
 
 function mapDispatchToProps(dispatch, { match: { params: { id, majorId } } }) {
   return {
-    loadArticle: () => dispatch(loadArticle(id, majorId)),
+    loadArticle: () => dispatch(loadArticle(id)),
     onDestroy: () => dispatch(goToArticles(majorId)),
   };
 }

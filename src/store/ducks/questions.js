@@ -1,144 +1,118 @@
-import { Map } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
+import { combineReducers } from 'redux';
+import { goToQuestions } from './routes';
+import { getIsRequestingFactory } from './loading';
+import { getEntityFactory } from './entities';
+import { withFulfilledTypes } from './shared';
+import paginationReducerFactory, { addToPaginationActionFactory, paginationDataSelectorFactory } from './shared/paginations';
+import { crudActionsFactory } from './shared/crud';
 import { questionsSchema } from '../../schemas';
-import { getEntities } from './entities';
-import pagingFnsFactory, { prepareGetPagingFns, removeFromAllPages } from './paginations';
-import { getQuestionId } from './shared';
-import { suffixes, getSuffix, getCollectionParams } from '../../lib/questions';
+import {
+  suffixes,
+  getSuffix,
+  getPaginationKey,
+  getLoadIndexType,
+  getAddToPaginationType,
+} from '../../lib/questions';
 import collections from '../../lib/collections';
 
-const collection = collections.questions;
-
-function createPagingFns(suffix, baseResourceName) {
-  return pagingFnsFactory(collection, questionsSchema, { suffix, baseResourceName });
-}
-
-const majorsPagingFns = {
-  [suffixes.pending]: createPagingFns(suffixes.pending, collections.majors),
-  [suffixes.answered]: createPagingFns(suffixes.answered, collections.majors),
-};
-
-const platformPagingFns = {
-  [suffixes.pending]: createPagingFns(suffixes.pending),
-  [suffixes.answered]: createPagingFns(suffixes.answered),
-};
-
-const INITIAL_STATE = new Map({
-  pagination: new Map({
-    platform: new Map({}),
-    majors: new Map({}),
-  }),
-});
-
-const TYPES = {
-  LOAD_ANSWERED: 'questions/LOAD_ANSWERED',
-  LOAD_UNANSWERED: 'questions/LOAD_UNANSWERED',
+const TYPES = withFulfilledTypes({
+  LOAD_PLATFORM_ANSWERED: 'questions/LOAD_PLATFORM_ANSWERED',
+  LOAD_PLATFORM_UNANSWERED: 'questions/LOAD_PLATFORM_UNANSWERED',
+  LOAD_MAJORS_ANSWERED: 'questions/LOAD_MAJORS_ANSWERED',
+  LOAD_MAJORS_UNANSWERED: 'questions/LOAD_MAJORS_UNANSWERED',
   CREATE: 'questions/CREATE',
   UPDATE: 'questions/UPDATE',
   DESTROY: 'questions/DESTROY',
-  ADD_TO_ANSWERED_PAGINATION: 'questions/ADD_TO_ANSWERED_PAGINATION',
-  ADD_TO_UNANSWERED_PAGINATION: 'questions/ADD_TO_UNANSWERED_PAGINATION',
-};
+  ADD_TO_PLATFORM_ANSWERED: 'questions/ADD_TO_PLATFORM_ANSWERED',
+  ADD_TO_PLATFORM_UNANSWERED: 'questions/ADD_TO_PLATFORM_UNANSWERED',
+  ADD_TO_MAJORS_ANSWERED: 'questions/ADD_TO_MAJORS_ANSWERED',
+  ADD_TO_MAJORS_UNANSWERED: 'questions/ADD_TO_MAJORS_UNANSWERED',
+});
 
-export const getPagingFns = prepareGetPagingFns(({ baseResourceId, suffix }) => (
-  baseResourceId ? majorsPagingFns[suffix] : platformPagingFns[suffix]
-));
+export default combineReducers({
+  platformAnswered: paginationReducerFactory({
+    setPage: TYPES.LOAD_PLATFORM_ANSWERED_FULFILLED,
+    addToPage: TYPES.ADD_TO_PLATFORM_ANSWERED,
+    removeFromPages: TYPES.DESTROY_FULFILLED,
+  }),
+  platformUnanswered: paginationReducerFactory({
+    setPage: TYPES.LOAD_PLATFORM_UNANSWERED_FULFILLED,
+    addToPage: TYPES.ADD_TO_PLATFORM_UNANSWERED,
+    removeFromPages: TYPES.DESTROY_FULFILLED,
+  }),
+  majorsAnswered: paginationReducerFactory({
+    setPage: TYPES.LOAD_MAJORS_ANSWERED_FULFILLED,
+    addToPage: TYPES.ADD_TO_MAJORS_ANSWERED,
+    removeFromPages: TYPES.DESTROY_FULFILLED,
+  }),
+  majorsUnanswered: paginationReducerFactory({
+    setPage: TYPES.LOAD_MAJORS_UNANSWERED_FULFILLED,
+    addToPage: TYPES.ADD_TO_MAJORS_UNANSWERED,
+    removeFromPages: TYPES.DESTROY_FULFILLED,
+  }),
+});
 
-export function loadQuestions(page = 1, baseResourceId, pending) {
-  const urlSuffix = pending ? '/pending' : '';
-
-  return {
-    type: pending ? TYPES.LOAD_UNANSWERED : TYPES.LOAD_ANSWERED,
-    payload: {
-      method: 'GET',
-      url: baseResourceId ? `/majors/${baseResourceId}/questions${urlSuffix}` : `/questions${urlSuffix}`,
-      query: { page },
-      fetchParams: { page, ...getCollectionParams(baseResourceId, { suffix: getSuffix(pending) }) },
-      responseSchema: [questionsSchema],
-    },
+export function loadQuestions({ query, baseId, suffix }) {
+  const type = getLoadIndexType(TYPES, baseId, suffix);
+  const urlOptions = {
+    baseCollection: collections.majors,
+    suffix: suffix === suffixes.unanswered ? suffix : undefined,
   };
+  const { loadIndex } = crudActionsFactory({ LOAD_INDEX: type }, questionsSchema, urlOptions);
+  return dispatch => dispatch(loadIndex({ baseId, query }));
 }
 
-export function createQuestion(values, majorId, shouldAddToPagination) {
+const {
+  create, update, destroy,
+} = crudActionsFactory(TYPES, questionsSchema, { baseCollection: collections.majors });
+
+export function createQuestion(body, baseId, shouldChangeRoute) {
+  return (dispatch, getState) =>
+    dispatch(create(body, baseId))
+      .then((response) => {
+        if (shouldChangeRoute) {
+          dispatch(goToQuestions(baseId, body.answer ? undefined : suffixes.unanswered));
+          return response;
+        }
+
+        const suffix = getSuffix(!body.answer);
+        const type = getAddToPaginationType(TYPES, baseId, suffix);
+        const addToPagination = addToPaginationActionFactory(type);
+        // eslint-disable-next-line no-use-before-define
+        const { paginationInfo } = getPaginationData(getState(), { baseId, suffix });
+        dispatch(addToPagination(response.value.result, paginationInfo, { baseId }));
+        return response;
+      });
+}
+
+export function updateQuestion(id, body, baseId, shouldChangeRoute) {
   return dispatch =>
-    dispatch({
-      type: TYPES.CREATE,
-      payload: {
-        method: 'POST',
-        url: majorId ? `/majors/${majorId}/questions` : '/questions',
-        fetchParams: getCollectionParams(majorId),
-        body: values,
-        responseSchema: questionsSchema,
-      },
-    }).then(({ value: { result } }) => {
-      if (!shouldAddToPagination) return;
-
-      const type = values.answer
-        ? TYPES.ADD_TO_ANSWERED_PAGINATION
-        : TYPES.ADD_TO_UNANSWERED_PAGINATION;
-
-      const params = { baseResourceId: majorId, suffix: getSuffix(!values.answer) };
-      const pagingFns = getPagingFns(params, true);
-      dispatch(pagingFns.actions.addToPagination(type, result, majorId));
-    });
+    dispatch(update(id, body))
+      .then((response) => {
+        if (shouldChangeRoute) {
+          dispatch(goToQuestions(baseId, body.answer ? undefined : suffixes.unanswered));
+        }
+        return response;
+      });
 }
 
-export function updateQuestion(id, values, majorId) {
-  return {
-    type: TYPES.UPDATE,
-    payload: {
-      method: 'PUT',
-      url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-      fetchParams: getCollectionParams(majorId, { id }),
-      body: values,
-      responseSchema: questionsSchema,
-    },
-  };
+export const destroyQuestion = destroy;
+
+export const getQuestionsState = state => state.questions;
+
+export function getPaginationData(state, params) {
+  return paginationDataSelectorFactory(
+    getQuestionsState,
+    getPaginationKey(params.baseId, params.suffix),
+    questionsSchema,
+  )(state, params);
 }
 
-export function destroyQuestion(id, majorId) {
-  return {
-    type: TYPES.DESTROY,
-    payload: {
-      method: 'DELETE',
-      url: majorId ? `/majors/${majorId}/questions/${id}` : `/questions/${id}`,
-      fetchParams: getCollectionParams(majorId, { id }),
-    },
-  };
+export const getQuestionEntity = getEntityFactory(questionsSchema);
+
+export function getIsLoadingQuestions(state, params) {
+  const type = getLoadIndexType(TYPES, params.baseId, params.suffix);
+  return getIsRequestingFactory(type)(state, params);
 }
 
-export default function questionsReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_ANSWERED}_FULFILLED`:
-    case `${TYPES.LOAD_UNANSWERED}_FULFILLED`:
-      return getPagingFns(payload).setPage(state, payload);
-    case `${TYPES.UPDATE}_FULFILLED`: {
-      const { fetchParams, body } = payload.request;
-      const pagingFns = getPagingFns({ ...fetchParams, suffix: getSuffix(!!body.answer) });
-      return pagingFns.removeFromPage(state, fetchParams);
-    }
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { fetchParams } = payload.request;
-      const pendingPagingFns = getPagingFns({ ...payload, suffix: suffixes.pending }, true);
-      const answeredPagingFns = getPagingFns({ ...payload, suffix: suffixes.answered }, true);
-      return removeFromAllPages(state, [pendingPagingFns, answeredPagingFns], fetchParams);
-    }
-    case TYPES.ADD_TO_ANSWERED_PAGINATION:
-      return getPagingFns({ ...payload, suffix: suffixes.answered })
-        .addToPage(state, payload);
-    case TYPES.ADD_TO_UNANSWERED_PAGINATION:
-      return getPagingFns({ ...payload, suffix: suffixes.pending })
-        .addToPage(state, payload);
-    default:
-      return state;
-  }
-}
-
-export const getQuestionsData = state => state.questions;
-
-export const getQuestionEntity = createSelector(
-  getQuestionId,
-  getEntities,
-  (questionId, entities) => denormalize(questionId, questionsSchema, entities),
-);
+export const getIsDestroyingQuestion = getIsRequestingFactory(TYPES.DESTROY);

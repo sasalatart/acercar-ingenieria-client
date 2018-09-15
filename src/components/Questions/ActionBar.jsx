@@ -11,17 +11,17 @@ function QuestionsActionBar({
   loggedIn,
   adminOrMajorAdmin,
   majorId,
-  pending,
-  onProposeClicked,
+  unanswered,
+  onCreateClicked,
 }) {
   const actions = [];
 
   if (adminOrMajorAdmin) {
-    const route = routes.questions(majorId, pending ? undefined : suffixes.pending);
+    const route = routes.questions(majorId, unanswered ? undefined : suffixes.unanswered);
 
     const buttonLink = (
-      <HideableButton key="link" to={route} icon={[pending ? 'fas' : 'far', 'question-circle']}>
-        <FormattedMessage id={pending ? 'questions' : 'questions.pending'} />
+      <HideableButton key="link" to={route} icon={[unanswered ? 'fas' : 'far', 'question-circle']}>
+        <FormattedMessage id={unanswered ? 'questions' : 'questions.unanswered'} />
       </HideableButton>
     );
 
@@ -30,7 +30,7 @@ function QuestionsActionBar({
 
   if (loggedIn) {
     const proposeOneButton = (
-      <HideableButton key="propose" type="primary" icon="plus" onClick={onProposeClicked}>
+      <HideableButton key="propose" type="primary" icon="plus" onClick={onCreateClicked}>
         <FormattedMessage id="forms.proposeOne" />
       </HideableButton>
     );
@@ -45,8 +45,8 @@ QuestionsActionBar.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   adminOrMajorAdmin: PropTypes.bool.isRequired,
   majorId: PropTypes.number,
-  pending: PropTypes.bool.isRequired,
-  onProposeClicked: PropTypes.func.isRequired,
+  unanswered: PropTypes.bool.isRequired,
+  onCreateClicked: PropTypes.func.isRequired,
 };
 
 QuestionsActionBar.defaultProps = {

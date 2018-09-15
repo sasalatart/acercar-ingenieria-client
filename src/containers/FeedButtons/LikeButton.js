@@ -1,31 +1,23 @@
 import { connect } from 'react-redux';
 import noop from 'lodash/noop';
-import { like, unlike } from '../../store/ducks/likes';
-import { getIsCreating, getIsDestroying } from '../../store/ducks/loading';
+import { like, unlike, getIsTogglingLike } from '../../store/ducks/likes';
 import withAuthorization from '../../hoc/withAuthorization';
 import LikeButton from '../../components/FeedButtons/LikeButton';
-import collections from '../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps, collection: collections.likes };
-
   return {
-    loading: !ownProps.disabled && (getIsCreating(state, params) || getIsDestroying(state, params)),
+    loading: getIsTogglingLike(state, ownProps),
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const {
-    baseResourceName, baseResourceId, likedByCurrentUser, disabled,
-  } = ownProps;
+  if (ownProps.disabled) return { onClick: noop };
 
-  if (disabled) return { onClick: noop };
-
+  const { baseCollection, baseId, likedByCurrentUser } = ownProps;
   const onClickFn = likedByCurrentUser ? unlike : like;
   return {
-    onClick: () => dispatch(onClickFn(baseResourceName, baseResourceId)),
+    onClick: () => dispatch(onClickFn(baseCollection, baseId)),
   };
 }
 
-const component = connect(mapStateToProps, mapDispatchToProps)(LikeButton);
-export default withAuthorization(component);
+export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(LikeButton));

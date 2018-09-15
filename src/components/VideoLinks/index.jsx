@@ -7,7 +7,7 @@ import VideosList from '../../containers/VideoLinks/List';
 import Title from '../Layout/Title';
 import ActionBar from './ActionBar';
 import { matchShape } from '../../shapes';
-import { parseBaseResource } from '../../lib/collections';
+import { parseBaseCollection } from '../../lib/collections';
 
 function VideoLinks({
   match,
@@ -17,7 +17,7 @@ function VideoLinks({
   onFormClose,
   renderModal,
 }) {
-  const videoLinkableProps = parseBaseResource(match.params);
+  const videoLinkableProps = parseBaseCollection(match.params);
 
   return (
     <Fragment>

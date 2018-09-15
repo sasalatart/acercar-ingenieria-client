@@ -1,33 +1,33 @@
+import { getIsRequestingFactory } from './loading';
 import { updateEntity } from './entities';
-import collections from '../../lib/collections';
-
-const collection = collections.likes;
 
 const TYPES = {
-  CREATE_LIKE: 'likes/CREATE_LIKE',
-  DESTROY_LIKE: 'likes/DESTROY_LIKE',
+  articles: 'likes/TOGGLE_ARTICLE_LIKE',
+  discussions: 'likes/TOGGLE_DISCUSSION_LIKE',
+  comments: 'likes/TOGGLE_COMMENT_LIKE',
 };
 
 function likingFactory(liking) {
-  return (baseResourceName, baseResourceId) =>
+  return (baseCollection, baseId) =>
     dispatch =>
       dispatch({
-        type: liking ? TYPES.CREATE_LIKE : TYPES.DESTROY_LIKE,
+        type: TYPES[baseCollection],
         payload: {
           method: liking ? 'POST' : 'DELETE',
-          url: `/${baseResourceName}/${baseResourceId}/likes`,
-          fetchParams: { baseResourceName, baseResourceId, collection },
+          url: `/${baseCollection}/${baseId}/likes`,
         },
-      }).then(() => {
-        const updateFn = entity => ({
+        meta: { baseId },
+      }).then(() =>
+        dispatch(updateEntity(baseCollection, baseId, entity => ({
           ...entity,
           likesCount: entity.likesCount + (liking ? 1 : -1),
           likedByCurrentUser: liking,
-        });
-        return dispatch(updateEntity(baseResourceName, baseResourceId, updateFn));
-      });
+        }))));
 }
 
 export const like = likingFactory(true);
-
 export const unlike = likingFactory(false);
+
+export function getIsTogglingLike(state, params) {
+  return getIsRequestingFactory(TYPES[params.baseCollection])(state, params);
+}

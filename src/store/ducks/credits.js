@@ -1,103 +1,40 @@
-import { Map, OrderedSet } from 'immutable';
-import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
+import { combineReducers } from 'redux';
+import { OrderedSet } from 'immutable';
+import { getIsRequestingFactory } from './loading';
+import { getEntityFactory } from './entities';
+import { withFulfilledTypes } from './shared';
+import crudReducerFactory, { crudActionsFactory, crudSelectorsFactory } from './shared/crud';
 import { creditsSchema } from '../../schemas';
-import { getEntities } from './entities';
-import { getCreditId } from './shared';
-import collections from '../../lib/collections';
 
-const collection = collections.credits;
-
-const INITIAL_STATE = new Map({
-  activeIds: new OrderedSet(),
-});
-
-const TYPES = {
+const TYPES = withFulfilledTypes({
   LOAD_INDEX: 'credits/LOAD_INDEX',
   CREATE: 'credits/CREATE',
   UPDATE: 'credits/UPDATE',
   DESTROY: 'credits/DESTROY',
-};
+});
 
-export function loadCredits() {
-  return {
-    type: TYPES.LOAD_INDEX,
-    payload: {
-      method: 'GET',
-      url: '/credits',
-      fetchParams: { collection, page: 1 },
-      responseSchema: [creditsSchema],
-    },
-  };
-}
+export default combineReducers({
+  activeCreditsIds: crudReducerFactory({
+    set: TYPES.LOAD_INDEX_FULFILLED,
+    add: TYPES.CREATE_FULFILLED,
+    remove: TYPES.DESTROY_FULFILLED,
+  }, new OrderedSet([])),
+});
 
-export function createCredit(values) {
-  return {
-    type: TYPES.CREATE,
-    payload: {
-      method: 'POST',
-      url: '/credits',
-      fetchParams: { collection },
-      body: values,
-      responseSchema: creditsSchema,
-    },
-  };
-}
+export const {
+  loadIndex: loadCredits,
+  create: createCredit,
+  update: updateCredit,
+  destroy: destroyCredit,
+} = crudActionsFactory(TYPES, creditsSchema);
 
-export function updateCredit(id, values) {
-  return {
-    type: TYPES.UPDATE,
-    payload: {
-      method: 'PUT',
-      url: `/credits/${id}`,
-      fetchParams: { id, collection },
-      body: values,
-      responseSchema: creditsSchema,
-    },
-  };
-}
+export const getCreditsState = state => state.credits;
 
-export function destroyCredit(id) {
-  return {
-    type: TYPES.DESTROY,
-    payload: {
-      method: 'DELETE',
-      url: `/credits/${id}`,
-      fetchParams: { id, collection },
-    },
-  };
-}
+export const {
+  getResourceEntities: getCreditsEntities,
+} = crudSelectorsFactory(getCreditsState, 'activeCreditsIds', creditsSchema);
 
-export default function creditsReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return state.set('activeIds', new OrderedSet(payload.result));
-    case `${TYPES.CREATE}_FULFILLED`:
-      return state.update('activeIds', ids => ids.add(payload.result));
-    case `${TYPES.DESTROY}_FULFILLED`: {
-      const { id } = payload.request.fetchParams;
-      return state.update('activeIds', ids => ids.delete(id));
-    }
-    default:
-      return state;
-  }
-}
+export const getCreditEntity = getEntityFactory(creditsSchema);
 
-const getCreditsData = state => state.credits;
-
-const getActiveIds = createSelector(
-  getCreditsData,
-  creditsData => creditsData.get('activeIds'),
-);
-
-export const getCreditsEntities = createSelector(
-  getActiveIds,
-  getEntities,
-  (activeIds, entities) => denormalize(activeIds, [creditsSchema], entities).toJS(),
-);
-
-export const getCreditEntity = createSelector(
-  getCreditId,
-  getEntities,
-  (creditId, entities) => denormalize(creditId, creditsSchema, entities),
-);
+export const getIsLoadingCredits = getIsRequestingFactory(TYPES.LOAD_INDEX);
+export const getIsDestroyingCredit = getIsRequestingFactory(TYPES.DESTROY);

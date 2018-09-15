@@ -1,29 +1,28 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { loadMajor, getMajorEntity } from '../../../store/ducks/majors';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { loadMajor, getMajorEntity, getIsLoadingMajor } from '../../../store/ducks/majors';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withLoadableResource from '../../../hoc/withLoadableResource';
 import withAuthorization from '../../../hoc/withAuthorization';
 import Major from '../../../components/Majors/Major';
-import collections from '../../../lib/collections';
 
-function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps.match.params, collection: collections.majors };
+function mapStateToProps(state, { match: { params } }) {
   const major = getMajorEntity(state, params);
-
   return {
-    loading: !major && getIsFetching(state, params),
+    ...getPlaceholderFlags(getIsLoadingMajor(state, params), major),
     id: +params.id,
     major,
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch, { match: { params: { id } } }) {
   return {
-    loadMajor: () => dispatch(loadMajor(ownProps.match.params.id)),
+    loadMajor: () => dispatch(loadMajor(id)),
   };
 }
 
-export default withAuthorization(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(withLoadableResource('loadMajor', 'major')(Major)));
+export default compose(
+  withAuthorization,
+  connect(mapStateToProps, mapDispatchToProps),
+  withLoadableResource('loadMajor', 'major'),
+)(Major);

@@ -9,4 +9,4 @@ const form = reduxForm({
   onSubmit: (values, dispatch) => dispatch(signIn(values)),
 })(SignInForm);
 
-export default I18nForm(form, usersValidations);
+export default I18nForm(usersValidations)(form);

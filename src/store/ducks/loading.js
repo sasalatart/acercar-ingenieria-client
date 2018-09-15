@@ -1,140 +1,44 @@
-import { Map, Set } from 'immutable';
+import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 import compact from 'lodash/compact';
-import keyMirror from 'keymirror';
-import { getPage } from './routes';
-import { BASE_RESOURCE_NAME_FALLBACK } from './paginations';
 
-const INITIAL_STATE = new Map({
-  fetching: new Map({}),
-  creating: new Map({}),
-  updating: new Map({}),
-  destroying: new Map({}),
-});
+const INITIAL_STATE = new Map({});
 
-const CATEGORIES = keyMirror({
-  fetching: null,
-  creating: null,
-  updating: null,
-  destroying: null,
-});
-
-function getCategory(fetching, creating, updating, destroying) {
-  if (fetching) return CATEGORIES.fetching;
-  if (creating) return CATEGORIES.creating;
-  if (updating) return CATEGORIES.updating;
-  if (destroying) return CATEGORIES.destroying;
-  return undefined;
+function getLoadingKeys(meta = {}) {
+  const { page, baseId, id } = meta;
+  return compact([page, baseId && id && `${baseId}-${id}`, baseId || id]).map(String);
 }
 
-function getPath(category, paged, collection, baseResourceName, baseResourceId, suffix) {
-  return compact([
-    category,
-    paged ? 'pages' : undefined,
-    collection,
-    baseResourceId ? baseResourceName : BASE_RESOURCE_NAME_FALLBACK,
-    baseResourceId,
-    suffix,
-  ]);
+function getKeyPath(requestName, meta = {}) {
+  return meta.page && meta.baseId ? [requestName, meta.baseId] : [requestName];
 }
 
-export default function loadingReducer(state = INITIAL_STATE, action) {
-  const { type } = action;
+export default function loadingReducer(state = INITIAL_STATE, { type, meta }) {
+  const matches = /(.*)_(PENDING|FULFILLED|REJECTED)/.exec(type);
+  if (!matches) return state;
+  const [, requestName, requestState] = matches;
 
-  const pending = type.includes('PENDING');
-  const fulfilledOrRejected = type.match(/FULFILLED|REJECTED/g);
-
-  if (!pending && !fulfilledOrRejected) {
-    return state;
-  }
-
-  const fetching = type.includes('LOAD');
-  const creating = type.includes('CREATE');
-  const updating = type.includes('UPDATE');
-  const destroying = type.includes('DESTROY');
-
-  if (!fetching && !creating && !updating && !destroying) {
-    return state;
-  }
-
-  const { fetchParams } = pending ? action.payload : action.payload.request;
-  const {
-    id, collection, page, baseResourceName, baseResourceId, suffix,
-  } = fetchParams;
-
-  const category = getCategory(fetching, creating, updating, destroying);
-  const paged = fetching && page;
-  const path = getPath(category, paged, collection, baseResourceName, baseResourceId, suffix);
-
-  if (fetching && page) {
-    return pending
-      ? state.updateIn(path, pages => (pages ? pages.add(+page) : new Set([+page])))
-      : state.updateIn(path, pages => pages && pages.delete(+page));
-  }
-
-  if (id || baseResourceId) {
-    const effectiveId = id || baseResourceId;
-    return pending
-      ? state.updateIn(path, ids => (ids ? ids.add(+effectiveId) : new Set([+effectiveId])))
-      : state.updateIn(path, ids => ids && ids.delete(+effectiveId));
-  }
-
-  return pending
-    ? state.setIn(path, pending)
-    : state.deleteIn(path);
+  const loadingStatus = requestState === 'PENDING';
+  const path = getKeyPath(requestName, meta);
+  const key = getLoadingKeys(meta)[0];
+  return key
+    ? state.mergeIn(path, new Map({ [key]: loadingStatus }))
+    : state.setIn(path, loadingStatus);
 }
 
-export const getLoadingData = state => state.loading;
+const getLoadingState = state => state.loading;
+const getParams = (state, params) => params;
 
-const getCollection = (state, params) => params.collection;
-const getBaseResourceName = (state, params) => params.baseResourceName;
-const getBaseResourceId = (state, params) => params.baseResourceId;
-const getSuffix = (state, params) => params.suffix;
-const getPaged = (state, params) => params.paged;
-const getId = (state, params) => params.id;
-
-export const getIsFetching = createSelector(
-  getLoadingData,
-  getCollection,
-  getBaseResourceName,
-  getBaseResourceId,
-  getSuffix,
-  getPaged,
-  getPage,
-  getId,
-  (loadingData, collection, baseResourceName, baseResourceId, suffix, paged, page, id) => {
-    const category = CATEGORIES.fetching;
-    const path = getPath(category, paged, collection, baseResourceName, baseResourceId, suffix);
-
-    if (id || paged) {
-      const idOrPage = +id || +page || 1;
-      const idsOrPages = loadingData.getIn(path);
-      return !!(idsOrPages && idsOrPages.has(idOrPage));
-    }
-
-    return !!loadingData.getIn(path);
-  },
-);
-
-function getIsChangingFactory(category) {
+export function getIsRequestingFactory(requestName) {
   return createSelector(
-    getLoadingData,
-    getBaseResourceName,
-    getBaseResourceId,
-    getCollection,
-    getId,
-    getSuffix,
-    (loadingData, baseResourceName, baseResourceId, collection, id, suffix) => {
-      const path = getPath(category, false, collection, baseResourceName, baseResourceId, suffix);
-      const effectiveId = id || baseResourceId;
-      if (!effectiveId) return !!loadingData.getIn(path);
-      return (loadingData.getIn(path) || new Set([])).has(effectiveId);
+    getLoadingState,
+    getParams,
+    (loadingState, params) => {
+      const path = getKeyPath(requestName, params);
+      const keys = getLoadingKeys(params);
+      return keys.length === 0
+        ? !!loadingState.getIn(path)
+        : keys.reduce((acc, key) => acc || !!loadingState.getIn([...path, key]), false);
     },
   );
 }
-
-export const getIsCreating = getIsChangingFactory(CATEGORIES.creating);
-
-export const getIsUpdating = getIsChangingFactory(CATEGORIES.updating);
-
-export const getIsDestroying = getIsChangingFactory(CATEGORIES.destroying);

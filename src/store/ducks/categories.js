@@ -1,54 +1,25 @@
-import { Map } from 'immutable';
+import { combineReducers } from 'redux';
+import { OrderedSet } from 'immutable';
 import { createSelector } from 'reselect';
-import { denormalize } from 'normalizr';
-import { getEntities } from './entities';
+import { withFulfilledTypes } from './shared';
+import crudReducerFactory, { crudActionsFactory, crudSelectorsFactory } from './shared/crud';
 import { categoriesSchema } from '../../schemas';
-import collections from '../../lib/collections';
 
-const collection = collections.categories;
-
-const INITIAL_STATE = Map({
-  activeCategoryIds: [],
+const TYPES = withFulfilledTypes({
+  LOAD_INDEX: 'categories/LOAD_INDEX',
 });
 
-const TYPES = {
-  LOAD_INDEX: 'categories/LOAD_INDEX',
-};
+export default combineReducers({
+  activeCategoryIds: crudReducerFactory({ set: TYPES.LOAD_INDEX_FULFILLED }, new OrderedSet([])),
+});
 
-export function loadCategories() {
-  return {
-    type: TYPES.LOAD_INDEX,
-    payload: {
-      method: 'GET',
-      url: '/categories',
-      fetchParams: { collection },
-      responseSchema: [categoriesSchema],
-    },
-  };
-}
+export const { loadIndex: loadCategories } = crudActionsFactory(TYPES, categoriesSchema);
 
-export default function categoriesReducer(state = INITIAL_STATE, { type, payload }) {
-  switch (type) {
-    case `${TYPES.LOAD_INDEX}_FULFILLED`:
-      return state.set('activeCategoryIds', payload.result);
-    default:
-      return state;
-  }
-}
+export const getCategoriesState = state => state.categories;
 
-export const getCategoriesData = state => state.categories;
-
-const getActiveCategoryIds = createSelector(
-  getCategoriesData,
-  categoriesData => categoriesData.get('activeCategoryIds'),
-);
-
-export const getCategoryEntities = createSelector(
-  getActiveCategoryIds,
-  getEntities,
-  (activeCategoryIds, entities) =>
-    denormalize(activeCategoryIds, [categoriesSchema], entities),
-);
+export const {
+  getResourceEntities: getCategoryEntities,
+} = crudSelectorsFactory(getCategoriesState, 'activeCategoryIds', categoriesSchema);
 
 export const getCategoryOptions = createSelector(
   getCategoryEntities,

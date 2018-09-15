@@ -22,12 +22,12 @@ function FeedButtons({
     likesCount,
     enrolledByCurrentUser,
   },
-  baseResourceName,
+  baseCollection,
   disabled,
 }) {
   const common = {
-    baseResourceName,
-    baseResourceId: id,
+    baseCollection,
+    baseId: id,
     size: 'small',
     disabled: disabled || likedByCurrentUser === undefined || enrolledByCurrentUser === undefined,
     style: styles.button,
@@ -49,7 +49,7 @@ FeedButtons.propTypes = {
     enrolledByCurrentUser: PropTypes.bool,
     approved: PropTypes.bool,
   }).isRequired,
-  baseResourceName: PropTypes.string.isRequired,
+  baseCollection: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
 };
 

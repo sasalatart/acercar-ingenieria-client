@@ -9,19 +9,17 @@ export default async function parseResponse(body, headers, payload) {
     ? normalize(camelizedBody, responseSchema)
     : camelizedBody;
 
-  Object.assign(parsedResponse, { request: payload });
+  parsedResponse.request = payload;
 
-  const perPage = +headers.get('per-page');
+  const perPage = +headers.get('x-per-page');
   if (perPage) {
-    const total = +headers.get('total');
-    const pagination = {
-      page: +payload.fetchParams.page,
+    const total = +headers.get('x-total');
+    parsedResponse.paginationInfo = {
+      page: +headers.get('x-page'),
       totalPages: Math.ceil(total / perPage),
       perPage,
       totalRecords: total,
     };
-
-    Object.assign(parsedResponse, { pagination });
   }
 
   return parsedResponse;

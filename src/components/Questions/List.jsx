@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Collapse, Button } from 'antd';
 import Linkify from 'react-linkify';
-import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
 import PaginationControls from '../../containers/Layout/Pagination';
 import DestroyButton from '../../containers/DestroyButton';
 import IconText from '../Icons/IconText';
 import { colors } from '../../theme';
-import { paginationShape, questionShape } from '../../shapes';
-import { getCollectionParams } from '../../lib/questions';
+import { paginationInfoShape, questionShape } from '../../shapes';
+import collections from '../../lib/collections';
 
 const { Panel } = Collapse;
 
@@ -38,26 +36,22 @@ export default class QuestionsList extends Component {
   static propTypes = {
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
-    pending: PropTypes.bool.isRequired,
-    questions: PropTypes.arrayOf(questionShape),
-    pagination: paginationShape,
+    noData: PropTypes.bool.isRequired,
+    unanswered: PropTypes.bool.isRequired,
+    questions: PropTypes.arrayOf(questionShape).isRequired,
+    paginationInfo: paginationInfoShape.isRequired,
     loadQuestions: PropTypes.func.isRequired,
     onEditClicked: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {
-    pagination: undefined,
-    questions: [],
-  }
-
   componentDidUpdate(prevProps) {
-    if (prevProps.pending !== this.props.pending) {
+    if (prevProps.unanswered !== this.props.unanswered) {
       this.props.loadQuestions({ page: 1 });
     }
   }
 
   renderItem = ({
-    id, majorSummary, question, answer, pinned,
+    id, question, answer, pinned,
   }) => {
     const { adminOrMajorAdmin, onEditClicked } = this.props;
 
@@ -76,7 +70,7 @@ export default class QuestionsList extends Component {
             <Button icon="edit" style={styles.editButton} onClick={() => onEditClicked(id)}>
               <FormattedMessage id="forms.edit" />
             </Button>
-            <DestroyButton {...getCollectionParams(get(majorSummary, 'id'), { id })} />
+            <DestroyButton id={id} collection={collections.questions} />
           </div>
         }
       </Panel>
@@ -86,16 +80,17 @@ export default class QuestionsList extends Component {
   render() {
     const {
       loading,
-      pagination,
+      noData,
+      paginationInfo,
       questions,
       loadQuestions,
     } = this.props;
 
     return (
       <PaginationControls
-        pagination={pagination}
+        paginationInfo={paginationInfo}
         loading={loading}
-        noData={!loading && isEmpty(questions)}
+        noData={noData}
         loadFn={loadQuestions}
         render={() => (
           <Collapse bordered={false}>

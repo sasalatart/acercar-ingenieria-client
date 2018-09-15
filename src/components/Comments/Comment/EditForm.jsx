@@ -25,8 +25,8 @@ function EditForm({ comment, onStopEditing }) {
     <div style={styles.wrapper}>
       <div style={styles.form}>
         <Form
-          baseResourceName={`${lowerFirst(comment.commentableType)}s`}
-          baseResourceId={comment.commentableId}
+          baseCollection={`${lowerFirst(comment.commentableType)}s`}
+          baseId={comment.commentableId}
           comment={comment}
           onSubmitSuccess={onStopEditing}
           autoFocus

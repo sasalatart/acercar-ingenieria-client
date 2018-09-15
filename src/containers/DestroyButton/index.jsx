@@ -1,25 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { destroyAccount } from '../../store/ducks/sessions';
-import { destroyUser } from '../../store/ducks/users';
-import { destroyAnnouncement } from '../../store/ducks/announcements';
-import { destroyMajor } from '../../store/ducks/majors';
-import { destroyQuestion } from '../../store/ducks/questions';
-import { destroyArticle } from '../../store/ducks/articles';
-import { destroyDiscussion } from '../../store/ducks/discussions';
-import { destroyComment } from '../../store/ducks/comments';
-import { destroyVideoLink } from '../../store/ducks/video-links';
-import { destroyCredit } from '../../store/ducks/credits';
-import { getIsDestroying } from '../../store/ducks/loading';
+import { destroyAccount, getIsDestroyingAccount } from '../../store/ducks/sessions';
+import { destroyUser, getIsDestroyingUser } from '../../store/ducks/users';
+import { destroyAnnouncement, getIsDestroyingAnnouncement } from '../../store/ducks/announcements';
+import { destroyMajor, getIsDestroyingMajor } from '../../store/ducks/majors';
+import { destroyQuestion, getIsDestroyingQuestion } from '../../store/ducks/questions';
+import { destroyArticle, getIsDestroyingArticle } from '../../store/ducks/articles';
+import { destroyDiscussion, getIsDestroyingDiscussion } from '../../store/ducks/discussions';
+import { destroyComment, getIsDestroyingComment } from '../../store/ducks/comments';
+import { destroyVideoLink, getIsDestroyingVideoLink } from '../../store/ducks/video-links';
+import { destroyCredit, getIsDestroyingCredit } from '../../store/ducks/credits';
 import ImportantDestroyButton from '../../components/DestroyButton/Important';
 import DestroyButton from '../../components/DestroyButton';
 import collections from '../../lib/collections';
 
 function DestroyButtonWrapper(props) {
-  return props.important
-    ? <ImportantDestroyButton {...props} />
-    : <DestroyButton {...props} />;
+  const Component = props.important ? ImportantDestroyButton : DestroyButton;
+  return <Component {...props} />;
 }
 
 DestroyButtonWrapper.propTypes = {
@@ -30,51 +28,76 @@ DestroyButtonWrapper.defaultProps = {
   important: false,
 };
 
-function getDestroyAction(ownProps) {
-  const {
-    collection, id, baseResourceName, baseResourceId,
-  } = ownProps;
-
+function getDestroyFunctions(collection) {
   switch (collection) {
-    case 'auth':
-      return destroyAccount();
     case collections.users:
-      return destroyUser(id, baseResourceId);
+      return {
+        action: destroyUser,
+        selector: getIsDestroyingUser,
+      };
     case collections.announcements:
-      return destroyAnnouncement(id);
+      return {
+        action: destroyAnnouncement,
+        selector: getIsDestroyingAnnouncement,
+      };
     case collections.majors:
-      return destroyMajor(id);
+      return {
+        action: destroyMajor,
+        selector: getIsDestroyingMajor,
+      };
     case collections.questions:
-      return destroyQuestion(id, baseResourceId);
+      return {
+        action: destroyQuestion,
+        selector: getIsDestroyingQuestion,
+      };
     case collections.articles:
-      return destroyArticle(id, baseResourceId);
+      return {
+        action: destroyArticle,
+        selector: getIsDestroyingArticle,
+      };
     case collections.discussions:
-      return destroyDiscussion(id);
+      return {
+        action: destroyDiscussion,
+        selector: getIsDestroyingDiscussion,
+      };
     case collections.comments:
-      return destroyComment(id, baseResourceName, baseResourceId);
+      return {
+        action: destroyComment,
+        selector: getIsDestroyingComment,
+      };
     case collections.videoLinks:
-      return destroyVideoLink(id, baseResourceName, baseResourceId);
+      return {
+        action: destroyVideoLink,
+        selector: getIsDestroyingVideoLink,
+      };
     case collections.credits:
-      return destroyCredit(id);
+      return {
+        action: destroyCredit,
+        selector: getIsDestroyingCredit,
+      };
     default:
-      return undefined;
+      return {
+        action: destroyAccount,
+        selector: getIsDestroyingAccount,
+      };
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state, { collection, id }) {
   return {
-    loading: getIsDestroying(state, ownProps),
+    loading: getDestroyFunctions(collection).selector(state, { id }),
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
+  const {
+    collection, id, baseCollection, baseId, callback,
+  } = ownProps;
+
   return {
-    onDestroy: () => dispatch(getDestroyAction(ownProps))
-      .then(() => ownProps.callback && ownProps.callback()),
+    onDestroy: () => dispatch(getDestroyFunctions(collection).action(id, baseCollection, baseId))
+      .then(() => callback && callback()),
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DestroyButtonWrapper);
+export default connect(mapStateToProps, mapDispatchToProps)(DestroyButtonWrapper);

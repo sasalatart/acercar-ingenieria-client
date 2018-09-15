@@ -1,10 +1,8 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, reset } from 'redux-form';
 import pick from 'lodash/pick';
-import {
-  createComment,
-  updateComment,
-} from '../../store/ducks/comments';
+import { createComment, updateComment } from '../../store/ducks/comments';
 import I18nForm from '../../hoc/I18nForm';
 import CommentForm from '../../components/Comments/Form';
 import commentsValidations from '../../validations/comments';
@@ -12,19 +10,19 @@ import collections from '../../lib/collections';
 
 const FIELDS = ['content'];
 
-function getFormName(baseResourceName, baseResourceId, comment) {
+function getFormName(baseCollection, baseId, comment) {
   if (comment) {
     return `commentEdit${comment.id}`;
   }
 
-  return baseResourceName === collections.comments
-    ? `commentAnswer${baseResourceId}`
+  return baseCollection === collections.comments
+    ? `commentAnswer${baseId}`
     : 'commentNew';
 }
 
-function mapStateToProps(state, { baseResourceName, baseResourceId, comment }) {
+function mapStateToProps(state, { baseCollection, baseId, comment }) {
   return {
-    form: getFormName(baseResourceName, baseResourceId, comment),
+    form: getFormName(baseCollection, baseId, comment),
     initialValues: comment ? pick(comment, FIELDS) : {},
   };
 }
@@ -32,12 +30,12 @@ function mapStateToProps(state, { baseResourceName, baseResourceId, comment }) {
 const form = reduxForm({
   onSubmit: (values, dispatch, props) => {
     const {
-      form: formName, baseResourceName, baseResourceId, comment, reverseList,
+      form: formName, baseCollection, baseId, comment, addToEnd,
     } = props;
 
     const action = comment
-      ? updateComment(comment.id, values, baseResourceName, baseResourceId)
-      : createComment(values, baseResourceName, baseResourceId, reverseList);
+      ? updateComment(comment.id, values)
+      : createComment(values, baseId, baseCollection, addToEnd);
 
     return dispatch(action).then(() => {
       if (!comment) dispatch(reset(formName));
@@ -46,5 +44,7 @@ const form = reduxForm({
   },
 })(CommentForm);
 
-const component = connect(mapStateToProps)(form);
-export default I18nForm(component, commentsValidations);
+export default compose(
+  I18nForm(commentsValidations),
+  connect(mapStateToProps),
+)(form);

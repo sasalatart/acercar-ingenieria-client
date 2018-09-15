@@ -1,8 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  removeQueriesFromCurrentUri,
-  getFiltersActive,
-} from '../../store/ducks/routes';
+import { removeQueriesFromCurrentUri, getFiltersActive } from '../../store/ducks/routes';
 import Buttons from '../../components/Search/Buttons';
 
 function mapStateToProps(state, { extraFilters }) {

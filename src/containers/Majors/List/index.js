@@ -4,20 +4,17 @@ import {
   loadMajors,
   getDisciplinaryMajors,
   getInterdisciplinaryMajors,
+  getIsLoadingMajors,
 } from '../../../store/ducks/majors';
-import { getIsFetching } from '../../../store/ducks/loading';
 import withAuthorization from '../../../hoc/withAuthorization';
 import List from '../../../components/Majors/List';
-import collections from '../../../lib/collections';
 
 function mapStateToProps(state) {
-  const params = { collection: collections.majors, paged: true };
   const disciplinaryMajors = getDisciplinaryMajors(state);
   const interdisciplinaryMajors = getInterdisciplinaryMajors(state);
-  const areEmpty = isEmpty(disciplinaryMajors) && isEmpty(interdisciplinaryMajors);
-
+  const noMajors = isEmpty(disciplinaryMajors) && isEmpty(interdisciplinaryMajors);
   return {
-    loading: areEmpty && getIsFetching(state, params),
+    loading: noMajors && getIsLoadingMajors(state),
     disciplinaryMajors,
     interdisciplinaryMajors,
   };

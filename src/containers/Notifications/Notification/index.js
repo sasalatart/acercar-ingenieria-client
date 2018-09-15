@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import { getCurrentUserId, getIsAdminOrMajorAdmin } from '../../../store/ducks/sessions';
 import Notification from '../../../components/Notifications/Notification';
 
-function mapStateToProps(state, ownProps) {
-  const { majorId, authorId } = ownProps.notification.notifyableMeta;
+function mapStateToProps(state, { notification: { notifyableMeta: { majorId, authorId } } }) {
+  const adminOrMajorAdmin = getIsAdminOrMajorAdmin(state, { majorId });
+  const isAuthor = !!authorId && getCurrentUserId(state) === authorId;
 
   return {
-    seeDisabled: getIsAdminOrMajorAdmin(state, { majorId })
-      || (!!authorId && getCurrentUserId(state) === authorId),
+    seeDisabled: adminOrMajorAdmin || isAuthor,
   };
 }
 

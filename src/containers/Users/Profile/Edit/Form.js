@@ -1,15 +1,9 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import pick from 'lodash/pick';
-import {
-  updateProfile,
-  getCurrentUserEntity,
-} from '../../../../store/ducks/sessions';
-import {
-  loadMajors,
-  getMajorEntities,
-  getMajorOptions,
-} from '../../../../store/ducks/majors';
+import { updateProfile, getCurrentUserEntity } from '../../../../store/ducks/sessions';
+import { loadMajors, getMajorEntities, getMajorOptions } from '../../../../store/ducks/majors';
 import I18nForm from '../../../../hoc/I18nForm';
 import EditForm from '../../../../components/Users/Profile/Edit/Form';
 import usersValidations from '../../../../validations/users';
@@ -59,5 +53,7 @@ const form = reduxForm({
   )),
 })(EditForm);
 
-const component = connect(mapStateToProps, mapDispatchToProps)(form);
-export default I18nForm(component, usersValidations);
+export default compose(
+  I18nForm(usersValidations),
+  connect(mapStateToProps, mapDispatchToProps),
+)(form);

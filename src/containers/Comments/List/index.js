@@ -1,33 +1,29 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import isEmpty from 'lodash/isEmpty';
-import { getPage } from '../../../store/ducks/routes';
 import { getCurrentUserId } from '../../../store/ducks/sessions';
-import { loadComments, getPagingFns } from '../../../store/ducks/comments';
-import { getIsFetching } from '../../../store/ducks/loading';
+import { loadComments, getPaginationData, getIsLoadingComments } from '../../../store/ducks/comments';
+import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withAuthorization from '../../../hoc/withAuthorization';
 import CommentsList from '../../../components/Comments/List';
-import collections from '../../../lib/collections';
 
 function mapStateToProps(state, ownProps) {
-  const params = { ...ownProps, collection: collections.comments, paged: true };
-
-  const pagingFns = getPagingFns(params, true).selectors;
-  const comments = pagingFns.getPagedEntities(state, params);
-
+  const { paginationInfo, pagedEntities: comments } = getPaginationData(state, ownProps);
+  const params = { ...ownProps, ...paginationInfo };
   return {
     currentUserId: getCurrentUserId(state),
-    loading: isEmpty(comments) && getIsFetching(state, params),
-    pagination: pagingFns.getMeta(state, params),
+    ...getPlaceholderFlags(getIsLoadingComments(state, params), comments),
+    paginationInfo,
     comments,
-    currentPage: getPage(state) || 1,
   };
 }
 
-function mapDispatchToProps(dispatch, { baseResourceName, baseResourceId }) {
+function mapDispatchToProps(dispatch, { baseCollection, baseId }) {
   return {
-    loadComments: ({ page }) =>
-      dispatch(loadComments(baseResourceName, baseResourceId, page)),
+    loadComments: query => dispatch(loadComments({ baseCollection, baseId, query })),
   };
 }
 
-export default withAuthorization(connect(mapStateToProps, mapDispatchToProps)(CommentsList));
+export default compose(
+  withAuthorization,
+  connect(mapStateToProps, mapDispatchToProps),
+)(CommentsList);

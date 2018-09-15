@@ -59,8 +59,8 @@ const routes = {
   discussion: id => `/discussions/${id}`,
   discussionEdit: id => `/discussions/${id}/edit`,
 
-  comment: (id, baseResourceName, baseResourceId) => (baseResourceName
-    ? `/${baseResourceName}/${baseResourceId}/comments/${id}`
+  comment: (id, baseCollection, baseId) => (baseCollection
+    ? `/${baseCollection}/${baseId}/comments/${id}`
     : `/comments/${id}`),
 
   aboutUs: '/about-us',
@@ -82,7 +82,7 @@ export const getMajorPaths = (majorId) => {
     questions: '/questions',
     articles: '/articles',
     articlesMine: '/articles/mine',
-    articlesPending: '/articles/pending',
+    articlesUnapproved: '/articles/unapproved',
     article: '/articles/:id',
     articlesNew: '/articles/new',
     articleEdit: '/articles/:id/edit',
