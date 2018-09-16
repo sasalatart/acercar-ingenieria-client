@@ -21,8 +21,8 @@ class PaginationControls extends Component {
     search: PropTypes.string,
     paginationInfo: paginationInfoShape.isRequired,
     addQueryToCurrentUri: PropTypes.func.isRequired,
-    loadFn: PropTypes.func.isRequired,
-    render: PropTypes.func.isRequired,
+    load: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
   }
 
   static defaultProps = {
@@ -30,17 +30,17 @@ class PaginationControls extends Component {
   }
 
   componentDidMount() {
-    this.props.loadFn({ page: this.props.paginationInfo.page });
+    this.props.load({ page: this.props.paginationInfo.page });
   }
 
   componentDidUpdate(prevProps) {
-    const { paginationInfo, search, loadFn } = this.props;
+    const { paginationInfo, search, load } = this.props;
     const pageChanged = prevProps.paginationInfo.page !== paginationInfo.page;
     const searchChanged = prevProps.search !== search;
 
     if (pageChanged || searchChanged) {
       const query = URI.parseQuery(search);
-      loadFn({ ...query, page: query.page || 1 });
+      load({ ...query, page: query.page || 1 });
     }
   }
 
@@ -63,16 +63,16 @@ class PaginationControls extends Component {
     );
   }
 
-  renderContent() {
-    const { loading, noData, render } = this.props;
-    return (loading || noData) ? <DataPlaceholder noData={noData} /> : render();
-  }
-
   render() {
+    const { loading, noData, children } = this.props;
+
     return (
       <Fragment>
         {this.renderPaginationTag()}
-        {this.renderContent()}
+        {loading || noData
+          ? <DataPlaceholder noData={noData} />
+          : children
+        }
         {this.renderPaginationTag()}
       </Fragment>
     );

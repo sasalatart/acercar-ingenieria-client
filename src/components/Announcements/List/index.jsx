@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import PaginationControls from '../../../containers/Layout/Pagination';
+import Pagination from '../../../containers/Layout/Pagination';
 import Form from '../../../containers/Announcements/Form';
 import Title from '../../Layout/Title';
 import Lightbox from '../../Layout/Lightbox';
@@ -71,7 +71,7 @@ export default class Announcements extends Component {
       loading,
       noData,
       paginationInfo,
-      loadAnnouncements,
+      loadAnnouncements: load,
       onModalOpen,
       onModalClose,
       renderModal,
@@ -83,13 +83,9 @@ export default class Announcements extends Component {
         <ActionBar onCreateClicked={onModalOpen} />
         <Title><FormattedMessage id="announcements" /></Title>
 
-        <PaginationControls
-          paginationInfo={paginationInfo}
-          loading={loading}
-          noData={noData}
-          render={() => this.renderAnnouncements()}
-          loadFn={loadAnnouncements}
-        />
+        <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+          {this.renderAnnouncements()}
+        </Pagination>
 
         {!loading &&
           <Lightbox

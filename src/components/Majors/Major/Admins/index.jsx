@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import PaginationControls from '../../../../containers/Layout/Pagination';
+import Pagination from '../../../../containers/Layout/Pagination';
 import Title from '../../../Layout/Title';
 import ActionBar from './ActionBar';
 import ProfileCard from '../../../Users/Profile/Card';
@@ -18,29 +18,13 @@ const styles = {
   },
 };
 
-function renderProfileCards(majorAdmins, goToUser) {
-  return (
-    <div style={styles.cardsWrapper}>
-      {majorAdmins.map(user => (
-        <ProfileCard
-          key={user.id}
-          user={user}
-          onClick={() => goToUser(user.id)}
-          style={styles.adminCard}
-          hoverable
-        />
-      ))}
-    </div>
-  );
-}
-
 function MajorAdmins({
   loading,
   noData,
   majorId,
   majorAdmins,
   paginationInfo,
-  loadAdmins,
+  loadAdmins: load,
   goToUser,
 }) {
   return (
@@ -48,13 +32,19 @@ function MajorAdmins({
       <ActionBar majorId={majorId} hasAdmins={majorAdmins.length > 0} />
       <Title><FormattedMessage id="majors.admins" /></Title>
 
-      <PaginationControls
-        paginationInfo={paginationInfo}
-        loading={loading}
-        noData={noData}
-        loadFn={loadAdmins}
-        render={() => renderProfileCards(majorAdmins, goToUser)}
-      />
+      <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+        <div style={styles.cardsWrapper}>
+          {majorAdmins.map(user => (
+            <ProfileCard
+              key={user.id}
+              user={user}
+              onClick={() => goToUser(user.id)}
+              style={styles.adminCard}
+              hoverable
+            />
+          ))}
+        </div>
+      </Pagination>
     </Fragment>
   );
 }

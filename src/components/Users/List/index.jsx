@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { List, Modal } from 'antd';
-import PaginationControls from '../../../containers/Layout/Pagination';
+import Pagination from '../../../containers/Layout/Pagination';
 import Title from '../../Layout/Title';
 import ActionBar from './ActionBar';
 import UserListItem from './Item';
@@ -68,7 +68,7 @@ export default class UsersList extends Component {
       users,
       selectedUser,
       withTitle,
-      loadUsers,
+      loadUsers: load,
       ...restProps
     } = this.props;
 
@@ -77,19 +77,10 @@ export default class UsersList extends Component {
         {withTitle && <ActionBar {...restProps} />}
         {withTitle && <Title><FormattedMessage id="users" /></Title>}
 
-        <PaginationControls
-          paginationInfo={paginationInfo}
-          loading={loading}
-          noData={noData}
-          loadFn={loadUsers}
-          render={() => (
-            <List
-              itemLayout="horizontal"
-              dataSource={users}
-              renderItem={this.renderUser}
-            />
-          )}
-        />
+        <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+          <List itemLayout="horizontal" dataSource={users} renderItem={this.renderUser} />
+        </Pagination>
+
         {selectedUser && this.renderAdminStatusPanelModal()}
       </Fragment>
     );

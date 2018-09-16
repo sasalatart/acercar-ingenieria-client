@@ -2,8 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
-import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../../containers/Layout/Pagination';
+import Pagination from '../../../containers/Layout/Pagination';
 import Title from '../../Layout/Title';
 import ActionBar from './ActionBar';
 import DiscussionListItem from './Item';
@@ -14,6 +13,7 @@ export default class DiscussionsList extends Component {
     currentUserId: PropTypes.number.isRequired,
     admin: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     paginationInfo: paginationInfoShape.isRequired,
     discussionSummaries: PropTypes.arrayOf(discussionSummaryShape).isRequired,
     mine: PropTypes.bool,
@@ -43,10 +43,11 @@ export default class DiscussionsList extends Component {
   render() {
     const {
       loading,
+      noData,
       paginationInfo,
       discussionSummaries,
       mine,
-      loadDiscussions,
+      loadDiscussions: load,
       ...restProps
     } = this.props;
 
@@ -57,20 +58,14 @@ export default class DiscussionsList extends Component {
           <FormattedMessage id={mine ? 'discussions.mine' : 'discussions'} />
         </Title>
 
-        <PaginationControls
-          paginationInfo={paginationInfo}
-          loading={loading}
-          noData={!loading && isEmpty(discussionSummaries)}
-          loadFn={loadDiscussions}
-          render={() => (
-            <List
-              itemLayout="vertical"
-              size="large"
-              dataSource={discussionSummaries}
-              renderItem={this.renderListItem}
-            />
-          )}
-        />
+        <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+          <List
+            itemLayout="vertical"
+            size="large"
+            dataSource={discussionSummaries}
+            renderItem={this.renderListItem}
+          />
+        </Pagination>
       </Fragment>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider } from 'antd';
-import PaginationControls from '../../containers/Layout/Pagination';
+import Pagination from '../../containers/Layout/Pagination';
 import Notification from '../../containers/Notifications/Notification';
 import { paginationInfoShape, notificationShape } from '../../shapes';
 
@@ -30,17 +30,17 @@ export default class NotificationsList extends Component {
 
   render() {
     const {
-      loading, noData, paginationInfo, notifications, loadNotifications,
+      loading,
+      noData,
+      paginationInfo,
+      notifications,
+      loadNotifications: load,
     } = this.props;
 
     return (
-      <PaginationControls
-        paginationInfo={paginationInfo}
-        loading={loading}
-        noData={noData}
-        loadFn={loadNotifications}
-        render={() => notifications.map(this.renderItem)}
-      />
+      <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+        {notifications.map(this.renderItem)}
+      </Pagination>
     );
   }
 }

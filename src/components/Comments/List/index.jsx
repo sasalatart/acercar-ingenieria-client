@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import isEmpty from 'lodash/isEmpty';
-import PaginationControls from '../../../containers/Layout/Pagination';
+import Pagination from '../../../containers/Layout/Pagination';
 import Comment from './Item/Comment';
 import { paginationInfoShape, commentShape } from '../../../shapes';
 
@@ -10,6 +9,7 @@ export default class CommentsList extends Component {
     adminOrMajorAdmin: PropTypes.bool.isRequired,
     currentUserId: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
+    noData: PropTypes.bool.isRequired,
     paginationInfo: paginationInfoShape.isRequired,
     comments: PropTypes.arrayOf(commentShape).isRequired,
     answeringDisabled: PropTypes.bool,
@@ -28,38 +28,30 @@ export default class CommentsList extends Component {
     }
   }
 
-  renderComments() {
-    const {
-      adminOrMajorAdmin, currentUserId, comments, answeringDisabled,
-    } = this.props;
-
-    return comments.map(comment => (
-      <Comment
-        key={comment.id}
-        adminOrMajorAdmin={adminOrMajorAdmin}
-        currentUserId={currentUserId}
-        comment={comment}
-        answeringDisabled={answeringDisabled}
-      />
-    ));
-  }
-
   render() {
     const {
+      adminOrMajorAdmin,
+      currentUserId,
       loading,
+      noData,
       comments,
       paginationInfo,
-      loadComments,
+      answeringDisabled,
+      loadComments: load,
     } = this.props;
 
     return (
-      <PaginationControls
-        paginationInfo={paginationInfo}
-        loading={loading}
-        noData={!loading && isEmpty(comments)}
-        render={() => this.renderComments()}
-        loadFn={loadComments}
-      />
+      <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+        {comments.map(comment => (
+          <Comment
+            key={comment.id}
+            adminOrMajorAdmin={adminOrMajorAdmin}
+            currentUserId={currentUserId}
+            comment={comment}
+            answeringDisabled={answeringDisabled}
+          />
+        ))}
+      </Pagination>
     );
   }
 }

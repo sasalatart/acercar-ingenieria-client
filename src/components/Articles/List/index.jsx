@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { List } from 'antd';
-import PaginationControls from '../../../containers/Layout/Pagination';
+import Pagination from '../../../containers/Layout/Pagination';
 import Title from '../../Layout/Title';
 import ActionBar from './ActionBar';
 import ListItem from './Item';
@@ -50,7 +50,7 @@ export default class ArticlesList extends Component {
       suffix,
       paginationInfo,
       articleSummaries,
-      loadArticles,
+      loadArticles: load,
       ...restProps
     } = this.props;
 
@@ -64,20 +64,14 @@ export default class ArticlesList extends Component {
           }
         </Title>
 
-        <PaginationControls
-          paginationInfo={paginationInfo}
-          loading={loading}
-          noData={noData}
-          loadFn={loadArticles}
-          render={() => (
-            <List
-              itemLayout="vertical"
-              size="large"
-              dataSource={articleSummaries}
-              renderItem={this.renderListItem}
-            />
-          )}
-        />
+        <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+          <List
+            itemLayout="vertical"
+            size="large"
+            dataSource={articleSummaries}
+            renderItem={this.renderListItem}
+          />
+        </Pagination>
       </Fragment>
     );
   }

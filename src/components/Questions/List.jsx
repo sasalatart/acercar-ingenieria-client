@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Collapse, Button } from 'antd';
 import Linkify from 'react-linkify';
-import PaginationControls from '../../containers/Layout/Pagination';
+import Pagination from '../../containers/Layout/Pagination';
 import DestroyButton from '../../containers/DestroyButton';
 import IconText from '../Icons/IconText';
 import { colors } from '../../theme';
@@ -83,27 +83,21 @@ export default class QuestionsList extends Component {
       noData,
       paginationInfo,
       questions,
-      loadQuestions,
+      loadQuestions: load,
     } = this.props;
 
     return (
-      <PaginationControls
-        paginationInfo={paginationInfo}
-        loading={loading}
-        noData={noData}
-        loadFn={loadQuestions}
-        render={() => (
-          <Collapse bordered={false}>
-            {questions
-              .sort((qA, qB) => {
-                if (qA.pinned && !qB.pinned) return -1;
-                if (!qA.pinned && qB.pinned) return 1;
-                return new Date(qA.createdAt) - new Date(qB.createdAt);
-              })
-              .map(this.renderItem)}
-          </Collapse>
-        )}
-      />
+      <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
+        <Collapse bordered={false}>
+          {questions
+            .sort((qA, qB) => {
+              if (qA.pinned && !qB.pinned) return -1;
+              if (!qA.pinned && qB.pinned) return 1;
+              return new Date(qA.createdAt) - new Date(qB.createdAt);
+            })
+            .map(this.renderItem)}
+        </Collapse>
+      </Pagination>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PaginationControls from '../../../containers/Layout/Pagination';
+import Pagination from '../../../containers/Layout/Pagination';
 import VideoItem from './Item';
 import { paginationInfoShape, videoLinkShape } from '../../../shapes';
 
@@ -12,38 +12,28 @@ const styles = {
   },
 };
 
-function renderVideos(adminOrMajorAdmin, videos, onEditClicked) {
-  return (
-    <div style={styles.itemsContainer}>
-      {videos.map(video => (
-        <VideoItem
-          key={video.id}
-          adminOrMajorAdmin={adminOrMajorAdmin}
-          video={video}
-          onEditClicked={onEditClicked}
-        />
-      ))}
-    </div>
-  );
-}
-
 function VideosList({
   adminOrMajorAdmin,
   loading,
   noData,
   videos,
   paginationInfo,
-  loadVideoLinks,
+  loadVideoLinks: load,
   onEditClicked,
 }) {
   return (
-    <PaginationControls
-      paginationInfo={paginationInfo}
-      loading={loading}
-      noData={noData}
-      loadFn={loadVideoLinks}
-      render={() => renderVideos(adminOrMajorAdmin, videos, onEditClicked)}
-    />
+    <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load} >
+      <div style={styles.itemsContainer}>
+        {videos.map(video => (
+          <VideoItem
+            key={video.id}
+            adminOrMajorAdmin={adminOrMajorAdmin}
+            video={video}
+            onEditClicked={onEditClicked}
+          />
+        ))}
+      </div>
+    </Pagination>
   );
 }
 
