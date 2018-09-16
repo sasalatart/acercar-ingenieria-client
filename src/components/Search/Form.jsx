@@ -1,23 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import noop from 'lodash/noop';
-import {
-  TextField,
-  SubmitButton,
-} from '../Forms';
+import { TextField, SubmitButton } from '../Forms';
 
 function SearchForm({
   searchTextLabel,
   valid,
   submitting,
-  renderExtraFields,
+  extraFields,
   handleSubmit,
   style,
 }) {
   return (
     <form onSubmit={handleSubmit} style={style}>
-      {renderExtraFields()}
+      {extraFields}
       <Field
         name="search"
         component={TextField}
@@ -36,13 +32,13 @@ SearchForm.propTypes = {
   ]).isRequired,
   valid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
-  renderExtraFields: PropTypes.func,
+  extraFields: PropTypes.node,
   handleSubmit: PropTypes.func.isRequired,
   style: PropTypes.shape({}),
 };
 
 SearchForm.defaultProps = {
-  renderExtraFields: noop,
+  extraFields: null,
   style: {},
 };
 

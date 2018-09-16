@@ -10,7 +10,7 @@ function getLoadingKeys(meta = {}) {
 }
 
 function getKeyPath(requestName, meta = {}) {
-  return meta.page && meta.baseId ? [requestName, meta.baseId] : [requestName];
+  return meta.page && meta.baseId ? [requestName, String(meta.baseId)] : [requestName];
 }
 
 export default function loadingReducer(state = INITIAL_STATE, { type, meta }) {

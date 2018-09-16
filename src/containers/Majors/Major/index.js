@@ -10,7 +10,6 @@ function mapStateToProps(state, { match: { params } }) {
   const major = getMajorEntity(state, params);
   return {
     ...getPlaceholderFlags(getIsLoadingMajor(state, params), major),
-    id: +params.id,
     major,
   };
 }

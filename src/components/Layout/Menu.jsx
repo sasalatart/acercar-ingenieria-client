@@ -25,7 +25,7 @@ function renderMenuItem(item, smScreen) {
   return (
     <Item key={item.key}>
       <FontAwesomeIcon icon={item.icon} style={smScreen ? styles.smIcon : styles.icon} />
-      <Hideable breakpoint={breakpointsKeys.xs}>{item.text}</Hideable>
+      <Hideable breakpoint={breakpointsKeys.sm}>{item.text}</Hideable>
       {item.extra}
     </Item>
   );

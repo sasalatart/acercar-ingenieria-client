@@ -17,6 +17,7 @@ import UsersList from '../../../containers/Users/List';
 import ArticlesList from '../../../containers/Articles/List';
 import ArticleForm from '../../../containers/Articles/Form';
 import Article from '../../../containers/Articles/Article';
+import Header from './Header';
 import MajorInfo from './Info';
 import Edit from './Edit';
 import Questions from '../../Questions';
@@ -35,7 +36,6 @@ const styles = {
 export default class Major extends Component {
   static propTypes = {
     loggedIn: PropTypes.bool.isRequired,
-    id: PropTypes.number.isRequired,
     major: majorShape.isRequired,
   };
 
@@ -72,11 +72,17 @@ export default class Major extends Component {
     }];
   }
 
-  majorKeys = getMajorPaths(this.props.id).keys;
-  majorRoutes = getMajorPaths(this.props.id).routes;
+  majorKeys = getMajorPaths(this.props.major.id).keys;
+  majorRoutes = getMajorPaths(this.props.major.id).routes;
+
+  renderHeader = ({ subtitle, actions }) => {
+    const { id, name } = this.props.major;
+    return <Header majorId={id} majorName={name} subtitle={subtitle} actions={actions} />;
+  }
 
   render() {
-    const { loggedIn, id, major } = this.props;
+    const { major } = this.props;
+    const common = { renderHeader: this.renderHeader };
 
     return (
       <Layout style={styles.layout}>
@@ -87,12 +93,12 @@ export default class Major extends Component {
             <Route
               exact
               path={this.majorRoutes.info}
-              render={() => <MajorInfo loggedIn={loggedIn} major={major} />}
+              render={() => <MajorInfo major={major} {...common} />}
             />
 
             <Route
               path={this.majorRoutes.videoLinks}
-              component={VideoLinks}
+              render={() => <VideoLinks {...common} />}
             />
 
             <Route
@@ -102,17 +108,17 @@ export default class Major extends Component {
 
             <Route
               path={this.majorRoutes.admins}
-              render={loggedInRoute(MajorAdmins, { majorId: id })}
+              render={loggedInRoute(MajorAdmins, common)}
             />
 
             <Route
               path={this.majorRoutes.users}
-              render={loggedInRoute(UsersList, { majorId: id, withTitle: true })}
+              render={loggedInRoute(UsersList, { fromMajor: true, ...common })}
             />
 
             <Route
               path={`${this.majorRoutes.questions}/:unanswered?`}
-              render={questionsAdministrationRoute(Questions)}
+              render={questionsAdministrationRoute(Questions, common)}
             />
 
             <Route
@@ -127,12 +133,12 @@ export default class Major extends Component {
 
             <Route
               path={this.majorRoutes.articlesMine}
-              render={articlesAdministrationRoute(ArticlesList, { mine: true })}
+              render={articlesAdministrationRoute(ArticlesList, { mine: true, ...common })}
             />
 
             <Route
               path={this.majorRoutes.articlesUnapproved}
-              render={articlesAdministrationRoute(ArticlesList, { unapproved: true })}
+              render={articlesAdministrationRoute(ArticlesList, { unapproved: true, ...common })}
             />
 
             <Route
@@ -142,7 +148,7 @@ export default class Major extends Component {
 
             <Route
               path={this.majorRoutes.articles}
-              render={articlesAdministrationRoute(ArticlesList)}
+              render={articlesAdministrationRoute(ArticlesList, common)}
             />
           </Switch>
         </Content>

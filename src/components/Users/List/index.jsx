@@ -1,15 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
-import { List, Modal } from 'antd';
+import { List } from 'antd';
+import withModal from '../../../hoc/withModal';
+import EmailForm from '../../../containers/Majors/Major/Email/Form';
+import SearchButtons from '../../../containers/Search/Buttons';
 import Pagination from '../../../containers/Layout/Pagination';
-import Title from '../../Layout/Title';
-import ActionBar from './ActionBar';
 import UserListItem from './Item';
 import AdminStatusPanel from '../AdminStatus/Panel';
+import HideableButton from '../../Icons/HideableButton';
 import { paginationInfoShape, userShape } from '../../../shapes';
 
-export default class UsersList extends Component {
+class UsersList extends Component {
   static propTypes = {
     currentUserId: PropTypes.number.isRequired,
     admin: PropTypes.bool.isRequired,
@@ -17,22 +19,59 @@ export default class UsersList extends Component {
     loading: PropTypes.bool.isRequired,
     noData: PropTypes.bool.isRequired,
     majorId: PropTypes.number,
-    admins: PropTypes.bool,
+    fromMajor: PropTypes.bool,
     paginationInfo: paginationInfoShape.isRequired,
     users: PropTypes.arrayOf(userShape).isRequired,
     selectedUser: userShape,
     loadUsers: PropTypes.func.isRequired,
     setSelectedUser: PropTypes.func.isRequired,
     unsetSelectedUser: PropTypes.func.isRequired,
-    withTitle: PropTypes.bool,
+    renderHeader: PropTypes.func.isRequired,
+    renderModal: PropTypes.func.isRequired,
+    onModalOpen: PropTypes.func.isRequired,
+    resetPagination: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     majorId: undefined,
-    admins: false,
+    fromMajor: false,
     selectedUser: undefined,
-    withTitle: false,
   }
+
+  getActions() {
+    const {
+      adminOrMajorAdmin,
+      majorId,
+      fromMajor,
+      onModalOpen,
+      resetPagination,
+    } = this.props;
+
+    const actions = [
+      <SearchButtons
+        key="search"
+        searchTextLabel={<FormattedMessage id="search.users" />}
+        beforeSearch={resetPagination}
+      />,
+    ];
+
+    if (adminOrMajorAdmin && majorId && fromMajor) {
+      const contactButton = (
+        <HideableButton key="email" onClick={onModalOpen} icon="envelope">
+          <FormattedMessage id="majors.email" />
+        </HideableButton>
+      );
+
+      actions.push(contactButton);
+    }
+
+    return actions;
+  }
+
+  handleRoleButtonClick = (userId) => {
+    this.props.setSelectedUser(userId);
+    this.props.onModalOpen();
+  };
 
   renderUser = user => (
     <UserListItem
@@ -40,49 +79,52 @@ export default class UsersList extends Component {
       admin={this.props.admin}
       adminOrMajorAdmin={this.props.adminOrMajorAdmin}
       user={user}
-      setSelectedUser={() => this.props.setSelectedUser(user.id)}
+      onRoleButtonClick={this.handleRoleButtonClick}
     />
   );
 
   renderAdminStatusPanelModal() {
-    const { selectedUser, unsetSelectedUser } = this.props;
-    const { firstName, lastName } = selectedUser;
+    const { selectedUser, unsetSelectedUser: onCancel, renderModal } = this.props;
+    const userName = `${selectedUser.firstName} ${selectedUser.lastName}`;
+    const title = <FormattedMessage id="admins.changeStatusFor" values={{ userName }} />;
+    return renderModal(title, <AdminStatusPanel user={selectedUser} />, { onCancel });
+  }
 
-    return (
-      <Modal
-        title={<FormattedMessage id="admins.changeStatusFor" values={{ userName: `${firstName} ${lastName}` }} />}
-        onCancel={unsetSelectedUser}
-        footer={null}
-        visible
-      >
-        <AdminStatusPanel user={selectedUser} />
-      </Modal>
-    );
+  renderMajorEmailModal() {
+    const title = <FormattedMessage id="majors.email" />;
+    return this.props.renderModal(title, <EmailForm majorId={this.props.majorId} />);
   }
 
   render() {
     const {
       loading,
       noData,
+      fromMajor,
       paginationInfo,
       users,
       selectedUser,
-      withTitle,
       loadUsers: load,
-      ...restProps
+      renderHeader,
     } = this.props;
 
     return (
       <Fragment>
-        {withTitle && <ActionBar {...restProps} />}
-        {withTitle && <Title><FormattedMessage id="users" /></Title>}
+        {renderHeader({
+          subtitle: fromMajor ? <FormattedMessage id="users" /> : undefined,
+          actions: this.getActions(),
+        })}
 
         <Pagination loading={loading} noData={noData} paginationInfo={paginationInfo} load={load}>
           <List itemLayout="horizontal" dataSource={users} renderItem={this.renderUser} />
         </Pagination>
 
-        {selectedUser && this.renderAdminStatusPanelModal()}
+        {selectedUser
+          ? this.renderAdminStatusPanelModal()
+          : fromMajor && this.renderMajorEmailModal()
+        }
       </Fragment>
     );
   }
 }
+
+export default withModal(UsersList);

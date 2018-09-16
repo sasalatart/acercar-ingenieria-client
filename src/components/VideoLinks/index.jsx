@@ -1,16 +1,34 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import withAuthorization from '../../hoc/withAuthorization';
 import withModalForm from '../../hoc/withModalForm';
 import Form from '../../containers/VideoLinks/Form';
 import VideosList from '../../containers/VideoLinks/List';
-import Title from '../Layout/Title';
-import ActionBar from './ActionBar';
+import HideableButton from '../Icons/HideableButton';
 import { matchShape } from '../../shapes';
 import { parseBaseCollection } from '../../lib/collections';
 
+function getActions(adminOrMajorAdmin, onNewClicked) {
+  const actions = [];
+
+  if (adminOrMajorAdmin) {
+    const newVideoLinkButton = (
+      <HideableButton type="primary" icon="plus" onClick={onNewClicked}>
+        <FormattedMessage id="videoLinks.new" />
+      </HideableButton>
+    );
+
+    actions.push(newVideoLinkButton);
+  }
+
+  return actions;
+}
+
 function VideoLinks({
+  adminOrMajorAdmin,
   match,
+  renderHeader,
   editingId,
   onNewClicked,
   onEditClicked,
@@ -21,8 +39,7 @@ function VideoLinks({
 
   return (
     <Fragment>
-      <ActionBar {...videoLinkableProps} onNewClicked={onNewClicked} />
-      <Title>Videos</Title>
+      {renderHeader({ subtitle: 'Videos', actions: getActions(adminOrMajorAdmin, onNewClicked) })}
 
       <VideosList {...videoLinkableProps} onEditClicked={onEditClicked} />
 
@@ -35,7 +52,9 @@ function VideoLinks({
 }
 
 VideoLinks.propTypes = {
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   match: matchShape.isRequired,
+  renderHeader: PropTypes.func.isRequired,
   formVisible: PropTypes.bool.isRequired,
   editingId: PropTypes.number,
   onNewClicked: PropTypes.func.isRequired,
@@ -48,4 +67,4 @@ VideoLinks.defaultProps = {
   editingId: undefined,
 };
 
-export default withModalForm(VideoLinks);
+export default withAuthorization(withModalForm(VideoLinks));

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { addQueryToCurrentUri } from '../../store/ducks/routes';
-import { resetPagination as resetUsersPagination } from '../../store/ducks/users';
 import { resetPagination as resetAdminsPagination } from '../../store/ducks/admins';
+import { resetPagination as resetUsersPagination } from '../../store/ducks/users';
 import {
   loadMajors,
   getDisciplinaryMajors,
@@ -10,19 +10,17 @@ import {
 import AllUsers from '../../components/Users/All';
 
 function mapStateToProps(state) {
-  const disciplinaryMajors = getDisciplinaryMajors(state);
-  const interdisciplinaryMajors = getInterdisciplinaryMajors(state);
   return {
-    disciplinaryMajors,
-    interdisciplinaryMajors,
+    disciplinaryMajors: getDisciplinaryMajors(state),
+    interdisciplinaryMajors: getInterdisciplinaryMajors(state),
   };
 }
 
 const mapDispatchToProps = {
   loadMajors,
   addQueryToCurrentUri,
-  resetUsersPagination,
   resetAdminsPagination,
+  resetUsersPagination,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllUsers);

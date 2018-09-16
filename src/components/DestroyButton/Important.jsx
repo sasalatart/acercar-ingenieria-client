@@ -97,6 +97,7 @@ class ImportantDestroyButton extends Component {
       renderModal,
     } = this.props;
 
+    const title = <FormattedMessage id="forms.confirm.message" />;
     return (
       <span>
         <DestroyIconOrButton
@@ -105,12 +106,7 @@ class ImportantDestroyButton extends Component {
           label={label}
           onClick={onModalOpen}
         />
-
-        {renderModal(
-          <FormattedMessage id="forms.confirm.message" />,
-          this.renderContents(),
-          this.renderFooter(),
-        )}
+        {renderModal(title, this.renderContents(), { footer: this.renderFooter() })}
       </span>
     );
   }

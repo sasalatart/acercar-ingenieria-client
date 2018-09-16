@@ -7,7 +7,7 @@ import { resourceSuccessNotification } from './notifications';
 import { getEntityFactory } from './entities';
 import { withFulfilledTypes } from './shared';
 import crudReducerFactory, { crudActionsFactory, crudSelectorsFactory } from './shared/crud';
-import { majorsSchema } from '../../schemas';
+import { majorsSchema, usersSchema } from '../../schemas';
 
 export const TYPES = withFulfilledTypes({
   LOAD_INDEX: 'majors/LOAD_INDEX',
@@ -16,6 +16,8 @@ export const TYPES = withFulfilledTypes({
   UPDATE: 'majors/UPDATE',
   DESTROY: 'majors/DESTROY',
   EMAIL: 'majors/EMAIL',
+  SUBSCRIBE: 'majors/SUBSCRIBE',
+  UNSUBSCRIBE: 'majors/UNSUBSCRIBE',
 });
 
 export default combineReducers({
@@ -54,6 +56,21 @@ export function sendEmail(id, body, personal) {
       dispatch(resourceSuccessNotification('email', 'sent'));
       dispatch(goToMajor(id));
     });
+}
+
+export function toggleSubscription(majorId, subscribe, userId) {
+  return {
+    type: subscribe ? TYPES.SUBSCRIBE : TYPES.UNSUBSCRIBE,
+    payload: {
+      method: subscribe ? 'POST' : 'DELETE',
+      url: `/majors/${majorId}/subscription`,
+      responseSchema: usersSchema,
+    },
+    meta: {
+      id: userId,
+      baseId: majorId,
+    },
+  };
 }
 
 const getMajorsState = state => state.majors;
@@ -96,3 +113,5 @@ export function getMajorIdFromProps(props) {
 export const getIsLoadingMajors = getIsRequestingFactory(TYPES.LOAD_INDEX);
 export const getIsLoadingMajor = getIsRequestingFactory(TYPES.LOAD);
 export const getIsDestroyingMajor = getIsRequestingFactory(TYPES.DESTROY);
+export const getIsSubscribing = getIsRequestingFactory(TYPES.SUBSCRIBE);
+export const getIsUnsubscribing = getIsRequestingFactory(TYPES.UNSUBSCRIBE);

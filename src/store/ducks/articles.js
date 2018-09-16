@@ -82,7 +82,7 @@ export function toggleArticleApproval(id, approved, baseId) {
       body: { approved },
       responseSchema: articlesSchema,
     },
-    meta: { id },
+    meta: { id, baseId },
   };
 }
 

@@ -9,17 +9,7 @@ import { TagsField } from '../../Forms';
 import HideableButton from '../../Icons/HideableButton';
 import routes from '../../../lib/routes';
 
-function renderExtraFields() {
-  const defaultTag = 'Acercar Ingeniería';
-  return (
-    <Field
-      name="tagList"
-      component={TagsField}
-      label="Tags"
-      options={[{ key: defaultTag, value: defaultTag, label: defaultTag }]}
-    />
-  );
-}
+const DEFAULT_TAG = 'Acercar Ingeniería';
 
 function DiscussionsActionBar({ mine, resetPagination }) {
   const actions = [
@@ -28,7 +18,14 @@ function DiscussionsActionBar({ mine, resetPagination }) {
       searchTextLabel={<FormattedMessage id="search.discussions" />}
       beforeSearch={resetPagination}
       extraFilters={['tagList']}
-      renderExtraFields={renderExtraFields}
+      extraFields={(
+        <Field
+          name="tagList"
+          component={TagsField}
+          label="Tags"
+          options={[{ key: DEFAULT_TAG, value: DEFAULT_TAG, label: DEFAULT_TAG }]}
+        />
+      )}
     />,
   ];
 

@@ -47,7 +47,7 @@ HideableButton.propTypes = {
 };
 
 HideableButton.defaultProps = {
-  breakpoint: breakpointsKeys.sm,
+  breakpoint: breakpointsKeys.md,
   to: undefined,
   loading: false,
 };

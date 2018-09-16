@@ -4,16 +4,16 @@ import { FormattedMessage } from 'react-intl';
 import { Divider, Row, Col } from 'antd';
 import ReactPlayer from 'react-player';
 import get from 'lodash/get';
-import RichText from '../../../Layout/RichText';
-import Title from '../../../Layout/Title';
-import SubTitle from '../../../Layout/SubTitle';
-import Image from '../../../Layout/Image';
-import ActionBar from './ActionBar';
-import CommentsSection from '../../../Comments/Section';
-import { majorShape } from '../../../../shapes';
-import { themeStyles } from '../../../../theme';
-import collections from '../../../../lib/collections';
-import majorPlaceholder from '../../../../images/major.png';
+import withAuthorization from '../../../hoc/withAuthorization';
+import CommentsSection from '../../Comments/Section';
+import RichText from '../../Layout/RichText';
+import Image from '../../Layout/Image';
+import HideableButton from '../../Icons/HideableButton';
+import { majorShape } from '../../../shapes';
+import { themeStyles } from '../../../theme';
+import routes from '../../../lib/routes';
+import collections from '../../../lib/collections';
+import majorPlaceholder from '../../../images/major.png';
 
 const styles = {
   mediaContainer: themeStyles.mediaContainer,
@@ -22,12 +22,34 @@ const styles = {
   },
 };
 
-function MajorInfo({ loggedIn, major }) {
+function getActions(adminOrMajorAdmin, id) {
+  const actions = [];
+
+  if (adminOrMajorAdmin) {
+    const editButton = (
+      <HideableButton to={routes.majorEdit(id)} icon="edit">
+        <FormattedMessage id="majors.edit" />
+      </HideableButton>
+    );
+
+    actions.push(editButton);
+  }
+
+  return actions;
+}
+
+function MajorInfo({
+  loggedIn,
+  adminOrMajorAdmin,
+  major,
+  renderHeader,
+}) {
+  const subtitle = <FormattedMessage id={`majors.${major.category}`} />;
+  const actions = getActions(adminOrMajorAdmin, major.id);
+
   return (
     <Fragment>
-      <ActionBar id={major.id} />
-      <Title>{major.name}</Title>
-      <SubTitle><FormattedMessage id={`majors.${major.category}`} /></SubTitle>
+      {renderHeader({ subtitle, actions })}
 
       <Divider />
       <Row type="flex" justify="center" align="middle" gutter={24}>
@@ -65,7 +87,9 @@ function MajorInfo({ loggedIn, major }) {
 
 MajorInfo.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
+  adminOrMajorAdmin: PropTypes.bool.isRequired,
   major: majorShape.isRequired,
+  renderHeader: PropTypes.func.isRequired,
 };
 
-export default MajorInfo;
+export default withAuthorization(MajorInfo);

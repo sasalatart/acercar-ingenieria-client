@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 import { getIsRequestingFactory } from './loading';
 import { getEntityFactory } from './entities';
-import { fulfilledType, withFulfilledTypes } from './shared';
+import { TYPES as MAJORS_TYPES } from './majors';
+import { withFulfilledTypes } from './shared';
 import paginationReducerFactory, { paginationDataSelectorFactory } from './shared/paginations';
 import { crudActionsFactory } from './shared/crud';
 import { usersSchema } from '../../schemas';
@@ -19,17 +20,18 @@ function getLoadIndexType(baseId) {
   return baseId ? TYPES.LOAD_INDEX_FROM_MAJOR : TYPES.LOAD_INDEX_FROM_PLATFORM;
 }
 
-function reducerFactory(setType) {
-  return paginationReducerFactory({
-    setPage: fulfilledType(setType),
+export default combineReducers({
+  platformPagination: paginationReducerFactory({
+    setPage: TYPES.LOAD_INDEX_FROM_PLATFORM_FULFILLED,
     removeFromPages: TYPES.DESTROY_FULFILLED,
     resetPagination: TYPES.RESET_PAGINATION,
-  });
-}
-
-export default combineReducers({
-  platformPagination: reducerFactory(TYPES.LOAD_INDEX_FROM_PLATFORM),
-  majorsPagination: reducerFactory(TYPES.LOAD_INDEX_FROM_MAJOR),
+  }),
+  majorsPagination: paginationReducerFactory({
+    setPage: TYPES.LOAD_INDEX_FROM_MAJOR_FULFILLED,
+    addToPage: MAJORS_TYPES.SUBSCRIBE_FULFILLED,
+    removeFromPages: [TYPES.DESTROY_FULFILLED, MAJORS_TYPES.UNSUBSCRIBE_FULFILLED],
+    resetPagination: TYPES.RESET_PAGINATION,
+  }),
 });
 
 export function loadUsers({ baseId, query }) {

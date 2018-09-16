@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { Select } from 'antd';
 import isEmpty from 'lodash/isEmpty';
 import UsersList from '../../containers/Users/List';
+import ActionBar from '../../containers/Layout/ActionBar';
 import Title from '../Layout/Title';
 import DataPlaceholder from '../Layout/DataPlaceholder';
-import ActionBar from './List/ActionBar';
 import { majorShape } from '../../shapes';
 
 const { Option, OptGroup } = Select;
@@ -22,7 +22,7 @@ const styles = {
   },
 };
 
-export default class SearchUsers extends Component {
+export default class AllUsers extends Component {
   static propTypes = {
     disciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
     interdisciplinaryMajors: PropTypes.arrayOf(majorShape).isRequired,
@@ -32,31 +32,19 @@ export default class SearchUsers extends Component {
     resetAdminsPagination: PropTypes.func.isRequired,
   }
 
-  state = {
-    searchFilter: { admins: false, majorId: undefined },
-  };
+  state = { admins: false, majorId: undefined };
 
   componentDidMount() {
     this.props.loadMajors();
   }
 
-  handleResetPagination = () => {
-    const { resetAdminsPagination, resetUsersPagination } = this.props;
-    const { admins, majorId } = this.state.searchFilter;
-    const resetPaginationFn = admins ? resetAdminsPagination : resetUsersPagination;
-    return resetPaginationFn({ baseId: majorId });
-  }
-
   handleChange = (value) => {
-    const searchFilter = {
+    const newState = {
       admins: value !== 'all',
       majorId: Number.isInteger(value) ? value : undefined,
     };
 
-    this.setState(
-      { searchFilter },
-      () => this.props.addQueryToCurrentUri({ page: 1, ...searchFilter }, true),
-    );
+    this.setState(newState, () => this.props.addQueryToCurrentUri({ page: 1, ...newState }, true));
   };
 
   mapMajors = majors => (
@@ -65,6 +53,14 @@ export default class SearchUsers extends Component {
         <FormattedMessage id="admins.ofMajor" values={{ majorName: name }} />
       </Option>
     )))
+
+  renderHeader = ({ actions }) => (
+    <Fragment>
+      <ActionBar actions={actions} />
+      <Title><FormattedMessage id="users" /></Title>
+      {this.renderSelect()}
+    </Fragment>
+  );
 
   renderSelect() {
     const { disciplinaryMajors, interdisciplinaryMajors } = this.props;
@@ -93,16 +89,14 @@ export default class SearchUsers extends Component {
   }
 
   render() {
-    const { searchFilter } = this.state;
+    const { resetAdminsPagination, resetUsersPagination } = this.props;
 
     return (
-      <Fragment>
-        <ActionBar {...searchFilter} resetPagination={this.handleResetPagination} />
-        <Title><FormattedMessage id="users" /></Title>
-
-        {this.renderSelect()}
-        <UsersList {...searchFilter} />
-      </Fragment>
+      <UsersList
+        {...this.state}
+        renderHeader={this.renderHeader}
+        resetPagination={this.state.admins ? resetAdminsPagination : resetUsersPagination}
+      />
     );
   }
 }

@@ -20,14 +20,15 @@ import { getPlaceholderFlags } from '../../../store/ducks/shared';
 import withAuthorization from '../../../hoc/withAuthorization';
 import UsersList from '../../../components/Users/List';
 
-function mapStateToProps(state, { majorId, admins }) {
-  const params = { baseId: majorId };
+function mapStateToProps(state, { match, majorId, admins }) {
+  const params = { baseId: majorId || match.params.majorId };
   const getPaginationData = admins ? getAdminsPaginationData : getUsersPaginationData;
   const getIsLoading = admins ? getIsLoadingAdmins : getIsLoadingUsers;
   const { paginationInfo, pagedEntities: users } = getPaginationData(state, params);
   params.page = paginationInfo.page;
   return {
     ...getPlaceholderFlags(getIsLoading(state, params), users),
+    majorId: +params.baseId,
     currentUserId: getCurrentUserId(state),
     paginationInfo,
     users,
@@ -35,7 +36,7 @@ function mapStateToProps(state, { majorId, admins }) {
   };
 }
 
-function mapDispatchToProps(dispatch, { majorId, admins }) {
+function mapDispatchToProps(dispatch, { match, majorId, admins }) {
   const loadFn = admins ? loadAdmins : loadUsers;
   return {
     ...bindActionCreators({
@@ -43,7 +44,7 @@ function mapDispatchToProps(dispatch, { majorId, admins }) {
       unsetSelectedUser,
       resetPagination: admins ? resetAdminsPagination : resetUsersPagination,
     }, dispatch),
-    loadUsers: query => dispatch(loadFn({ baseId: majorId, query })),
+    loadUsers: query => dispatch(loadFn({ baseId: majorId || match.params.majorId, query })),
   };
 }
 

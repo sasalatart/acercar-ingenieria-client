@@ -5,6 +5,15 @@ export default function HOC(WrappedComponent) {
   return class WithModal extends Component {
     state = { modalVisible: false };
 
+    getHandleCancel(onCancel) {
+      if (!onCancel) return this.handleClose;
+
+      return () => {
+        onCancel();
+        this.handleClose();
+      };
+    }
+
     handleOpen = () => {
       this.setState({ modalVisible: true });
     }
@@ -13,12 +22,12 @@ export default function HOC(WrappedComponent) {
       this.setState({ modalVisible: false });
     }
 
-    renderModal = (title, contents, footer = null) => (
+    renderModal = (title, contents, options = {}) => (
       <Modal
         title={title}
         visible={this.state.modalVisible}
-        footer={footer}
-        onCancel={this.handleClose}
+        footer={options.footer || null}
+        onCancel={this.getHandleCancel(options.onCancel)}
         destroyOnClose
       >
         {contents}

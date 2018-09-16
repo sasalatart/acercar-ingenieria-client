@@ -6,7 +6,15 @@ import compact from 'lodash/compact';
 import { addQueryToCurrentUri, getSearch } from '../routes';
 import { getEntities } from '../entities';
 
+const DEFAULT_PAGINATION_INFO = {
+  totalPages: 1, perPage: 25, totalRecords: 0, page: 1,
+};
+
 const getBaseId = (state, params = {}) => params.baseId;
+
+function stringifiedCompact(toCompact) {
+  return compact(toCompact).map(String);
+}
 
 function matchesType(type, actionType) {
   return type === actionType || (Array.isArray(actionType) && actionType.includes(type));
@@ -30,8 +38,8 @@ export default function paginationReducerFactory(actionTypes) {
       const { paginationInfo } = payload;
 
       return state
-        .setIn(compact([baseId, 'pages', String(paginationInfo.page)]), new OrderedSet(ids))
-        .setIn(compact([baseId, 'info']), new Map(paginationInfo));
+        .setIn(stringifiedCompact([baseId, 'pages', paginationInfo.page]), new OrderedSet(ids))
+        .setIn(stringifiedCompact([baseId, 'info']), new Map(paginationInfo));
     }
 
     if (matchesType(type, actionTypes.removeFromPages)) {
@@ -43,26 +51,30 @@ export default function paginationReducerFactory(actionTypes) {
         : baseId || state.findKey(dataForBaseId => !!dataForBaseId.get('pages').findKey(ids => ids.has(id)));
       if (!noBaseId && !targetBaseId) return state;
 
-      const pages = state.getIn(compact([targetBaseId, 'pages']));
+      const pages = state.getIn(stringifiedCompact([targetBaseId, 'pages']));
       if (!pages) return state;
 
       const pageNumber = pages.findKey(ids => ids.has(id));
       if (!pageNumber) return state;
 
       return state
-        .updateIn(compact([targetBaseId, 'pages', pageNumber]), ids => ids.delete(id))
-        .updateIn(compact([targetBaseId, 'info', 'totalRecords']), totalRecords => totalRecords - 1);
+        .updateIn(stringifiedCompact([targetBaseId, 'pages', pageNumber]), ids => ids.delete(id))
+        .updateIn(stringifiedCompact([targetBaseId, 'info', 'totalRecords']), totalRecords => totalRecords - 1);
     }
 
     if (matchesType(type, actionTypes.addToPage)) {
       const { id, baseId, page } = processAction(payload, meta);
       return state
-        .updateIn(compact([baseId, 'pages', String(page)]), (ids) => {
+        .updateIn(stringifiedCompact([baseId, 'pages', page]), (ids) => {
           const toAdd = new OrderedSet([id]);
           if (!ids) return toAdd;
           return payload.addToEnd ? ids.merge(toAdd) : toAdd.merge(ids);
         })
-        .updateIn(compact([baseId, 'info', 'totalRecords']), totalRecords => totalRecords + 1);
+        .updateIn(stringifiedCompact([baseId, 'info']), paginationInfo => (
+          paginationInfo
+            ? paginationInfo.update('totalRecords', totalRecords => totalRecords + 1)
+            : new Map({ ...DEFAULT_PAGINATION_INFO, totalRecords: 1 })
+        ));
     }
 
     return matchesType(type, actionTypes.resetPagination)
@@ -124,12 +136,8 @@ export function paginationDataSelectorFactory(getData, key, schema) {
     getBaseId,
     getCurrentPage,
     (pagination, baseId, page) => {
-      const paginationInfo = pagination && pagination.getIn(compact([baseId, 'info']));
-      return paginationInfo
-        ? { ...paginationInfo.toJS(), page }
-        : {
-          totalPages: 1, perPage: 25, totalRecords: 0, page: 1,
-        };
+      const paginationInfo = pagination && pagination.getIn(stringifiedCompact([baseId, 'info']));
+      return paginationInfo ? { ...paginationInfo.toJS(), page } : DEFAULT_PAGINATION_INFO;
     },
   );
 
@@ -138,7 +146,7 @@ export function paginationDataSelectorFactory(getData, key, schema) {
     getBaseId,
     getCurrentPage,
     (pagination, baseId, currentPage) => {
-      const pages = pagination && pagination.getIn(compact([baseId, 'pages']));
+      const pages = pagination && pagination.getIn(stringifiedCompact([baseId, 'pages']));
       return pages && pages.toJS()[currentPage];
     },
   );
