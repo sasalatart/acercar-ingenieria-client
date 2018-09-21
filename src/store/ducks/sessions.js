@@ -227,8 +227,9 @@ export const getCanCreateArticles = createSelector(
   getMajorId,
   getIsInterestedInMajor,
   getIsLoggedIn,
-  (majorId, interestedInMajor, loggedIn) =>
-    loggedIn && (!majorId || interestedInMajor),
+  getIsAdmin,
+  (majorId, interestedInMajor, loggedIn, admin) =>
+    loggedIn && (admin || !majorId || interestedInMajor),
 );
 
 export const getMajorOptionsForCurrentUser = createSelector(
