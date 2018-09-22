@@ -4,8 +4,10 @@ import { FormattedMessage } from 'react-intl';
 import IconText from '../Icons/IconText';
 import { colors } from '../../theme';
 import routes from '../../lib/routes';
+import logoCAi from '../../images/logo-cai-sm.png';
+import logoCA from '../../images/logo-ca-sm.png';
 
-const CONTACT_EMAIL = 'acercaringenieria@caiuc.cl';
+export const CONTACT_EMAIL = 'acercaringenieria@caiuc.cl';
 
 const styles = {
   wrapper: {
@@ -17,6 +19,11 @@ const styles = {
     marginTop: '25px',
     padding: '2px 0',
   },
+  contactWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   text: {
     color: colors.primaryTextLight,
     margin: 0,
@@ -27,15 +34,20 @@ const styles = {
 export default function Footer() {
   return (
     <div style={styles.wrapper}>
-      <p style={styles.text}>2014-2018</p>
       <div>
+        <img src={logoCA} alt="logo-ca" />
+        <img src={logoCAi} alt="logo-cai" />
+      </div>
+
+      <div style={styles.contactWrapper}>
         <p style={styles.text}>Acercar Ingeniería</p>
         <a href={`mailto:${CONTACT_EMAIL}`}>
-          <IconText icon="envelope" text={CONTACT_EMAIL} withPointer />
+          <IconText icon="envelope" text={CONTACT_EMAIL} withPointer hideable />
         </a>
       </div>
+
       <Link to={routes.credits} href={routes.credits}>
-        <IconText icon="heart" text={<FormattedMessage id="credits" />} withPointer />
+        <IconText icon="heart" text={<FormattedMessage id="credits" />} withPointer hideable />
       </Link>
     </div>
   );
