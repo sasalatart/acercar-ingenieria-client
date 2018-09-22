@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 import { createSelector } from 'reselect';
 
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 
 const INITIAL_STATE = new Map({
   version: CURRENT_SCHEMA_VERSION,
