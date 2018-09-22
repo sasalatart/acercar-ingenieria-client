@@ -107,6 +107,9 @@ export function getIsLoadingNotifications(state, params) {
 
 export const getIsSettingAllAsSeen = getIsRequestingFactory(TYPES.SET_ALL_AS_SEEN);
 
+const DEFAULT_NOTIFICATION_DURATION = 5;
+const IMPORTANT_NOTIFICATION_DURATION = 30;
+
 export const NOTIFICATION_TYPES = keyMirror({
   success: null, info: null, warning: null, error: null, open: null,
 });
@@ -115,7 +118,7 @@ function displayNotification(
   message,
   description,
   type = NOTIFICATION_TYPES.open,
-  duration = 10,
+  duration = DEFAULT_NOTIFICATION_DURATION,
 ) {
   return {
     type: TYPES.DISPLAY,
@@ -158,7 +161,7 @@ export function confirmationEmailSentNotification() {
     dispatch(displayInfoNotification({
       message: messages[locale]['notifications.justOneMoreStep'],
       description: messages[locale]['notifications.signUpOneMoreStep.description'],
-      duration: 30,
+      duration: IMPORTANT_NOTIFICATION_DURATION,
     }));
   };
 }
@@ -169,7 +172,7 @@ export function recoverPasswordEmailSentNotification() {
     dispatch(displayInfoNotification({
       message: messages[locale]['notifications.justOneMoreStep'],
       description: messages[locale]['notifications.recoverPassword.description'],
-      duration: 30,
+      duration: IMPORTANT_NOTIFICATION_DURATION,
     }));
   };
 }
